@@ -4,7 +4,7 @@ ArrayList <Line> stack = new ArrayList<Line>(); //keep track of the drawBack sta
 float probRandom; //the amount of time that the drawBack will interject randomness
 float degreeRandom; //how much fluctuation is introduced in random interjections
 int i; //iteration count for stack
-boolean drawBack = false; 
+Decision_Engine engine;
 
 void setup() 
 {
@@ -46,10 +46,7 @@ void mouseReleased()
   line(pmouseX, pmouseY, mouseX, mouseY); 
   curLine.setEnd(mouseX, mouseY); 
   //printAllLines();
-  if(drawBack)
-    {
-      drawBack(curLine);
-    }
+
 }
 
 void keyPressed()
@@ -57,6 +54,9 @@ void keyPressed()
   if (key == 'f')
   {
     generateFlowLines(); 
+  } else if (key == 'd'){
+    engine = new Decision_Engine(curLine);
+    engine.decision();
   }
   
 }
@@ -71,36 +71,15 @@ void generateFlowLines()
   }
 }
 
-
-// Random drawback function
-void drawBack(Line line)
-{
-  //take the previous line and cycle through its components and add some noise to it
-  //here, I will just add a 1 * random 0-1 + point to each point, then draw
-  //create a new Line of the current line, then newLine.drawLine(); 
-  Line newLine = new Line(line.startPoint.x, line.startPoint.y); 
-  for (int i = 0; i < line.allPoints.size(); i++)
-  {
-    //cycle through the points and add in a bit of randomness to each points
-
-    //first decide if we should interfere with this point, give it a P of .5 for interfering
-    if (random(0, 1) > (1 - probRandom))
-    {
-      float x = line.allPoints.get(i).x; 
-      float y = line.allPoints.get(i).y; 
-
-      x = x + random(-degreeRandom, degreeRandom); 
-      y = y + random(-degreeRandom, degreeRandom); 
-
-      Point newPoint = new Point(x, y); 
-      newLine.allPoints.add(newPoint);
-    }
-    else 
-      //just add the point to the point array
-    newLine.allPoints.add(line.allPoints.get(i));
+void translation(){
+  for(int i = 0; i < allLines.size(); i++){
+    Line curLine = allLines.get(i);
+   // Line_Mod mod = new Line_Mod(curLine);
+    Line newLine;
+   // newLine = mod.translation();
+    //newLine.drawLine();
   }
-  //render the line
-  stack.add(newLine);
+  
 }
 
 
