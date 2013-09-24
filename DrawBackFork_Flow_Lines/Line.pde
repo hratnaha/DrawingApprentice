@@ -17,7 +17,6 @@ class Line {
   float endTime; 
   boolean isSelected = false; 
   float lineID; 
-  float currentSlope; 
   Rectangle myBoundingBox;
   float xmin = -1; 
   float ymin = -1; 
@@ -84,14 +83,13 @@ class Line {
         {//special case for start and end of line
           //generate the normal point and add to the newLine
           //println("Current i = " + i); 
-          PVector p0 = new PVector(allPoints.get(j).x, allPoints.get(j).y); 
-          PVector p1 = new PVector(allPoints.get(j +1).x, allPoints.get(j+1).y);
+          PVector p0 = new PVector(allPoints.get(j)); 
+          PVector p1 = new PVector(allPoints.get(j +1));
           PVector v = new PVector((p1.x - p0.x), (p1.y - p0.y)); //vector between two points in question
           PVector normal = new PVector(-v.y, v.x); //normal vector to the drawn line (might need to change signs based on slope)
           normal.setMag(i*lineSpacing); 
           PVector normalPoint = PVector.add(p0, normal); //determine the location of new point
-          PVector newPoint = new PVector(normalPoint.x, normalPoint.y); 
-          newLineBelow.addPoint(newPoint);
+          newLineBelow.addPoint(normalPoint);
         }
       }
       //flow lines abolve the line
@@ -101,14 +99,13 @@ class Line {
         {//special case for start and end of line
           //generate the normal point and add to the newLine
           //println("Current i = " + i); 
-          PVector p0 = new PVector(allPoints.get(j).x, allPoints.get(j).y); 
-          PVector p1 = new PVector(allPoints.get(j +1).x, allPoints.get(j+1).y);
+          PVector p0 = new PVector(allPoints.get(j)); 
+          PVector p1 = new PVector(allPoints.get(j +1));
           PVector v = new PVector((p1.x - p0.x), (p1.y - p0.y)); //vector between two points in question
           PVector normal = new PVector(v.y, -v.x); //normal vector to the drawn line (might need to change signs based on slope)
           normal.setMag(i*lineSpacing); 
           PVector normalPoint = PVector.add(p0, normal); //determine the location of new point
-          PVector newPoint = new PVector(normalPoint.x, normalPoint.y); 
-          newLineAbove.addPoint(newPoint);
+          newLineAbove.addPoint(normalPoint);
         }
       }
       newLineAbove.draw();
