@@ -19,19 +19,19 @@ class Decision_Engine {
     if(decision == translate){
       Line_Mod m = new Line_Mod(this.line);
       Line newLine = m.translation();
-      newLine.draw();
+      newLine.drawLine();
     } else if(decision == reflection){
       Line_Mod m = new Line_Mod(this.line);
       Line newLine = m.reflection();
-      newLine.draw();
+      newLine.drawLine();
     } else if(decision == scaling){
       Line_Mod m = new Line_Mod(this.line);
       Line newLine = m.scaling();
-      newLine.draw();
+      newLine.drawLine();
     } else if(decision == drawback){
       Line_Mod m = new Line_Mod(this.line);
       Line newLine = m.drawBack(this.line);
-      newLine.draw();
+      newLine.drawLine();
     }
   }
   

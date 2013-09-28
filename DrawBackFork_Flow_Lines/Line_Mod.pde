@@ -1,6 +1,6 @@
 class Line_Mod{
   Line line;
-  ArrayList<PVector> allPoints;
+  ArrayList<Point> allPoints;
   
   public Line_Mod(Line line){
     this.line = line; //I don't know what am I doing ahhhhh
@@ -17,7 +17,7 @@ class Line_Mod{
           PVector normal = new PVector(-1, 1); //normal vector to the drawn line (might need to change signs based on slope)
           normal.setMag(lineSpacing); 
           PVector normalPoint = PVector.add(p0, normal); //determine the location of new point
-          PVector newPoint = new PVector(normalPoint.x, normalPoint.y); 
+          Point newPoint = new Point(normalPoint.x, normalPoint.y); 
           translatedLine.addPoint(newPoint);
         }
       }
@@ -36,7 +36,7 @@ class Line_Mod{
           PVector normal = new PVector(-1,1); //the reflection axis
           normal.setMag(lineSpacing); 
           PVector normalPoint = PVector.add(p0, normal); //determine the location of new point
-          PVector newPoint = new PVector(normalPoint.y, normalPoint.x); 
+          Point newPoint = new Point(normalPoint.y, normalPoint.x); 
           reflectionLine.addPoint(newPoint);
         }
       }
@@ -55,7 +55,7 @@ class Line_Mod{
           PVector normal = new PVector(1,-1); //line to get a translation point from
           normal.setMag(lineSpacing); 
           PVector normalPoint = PVector.add(p0, normal); //determine the location of new point
-          PVector newPoint = new PVector(normalPoint.x/2+100, normalPoint.y/2+100); 
+          Point newPoint = new Point(normalPoint.x/2+100, normalPoint.y/2+100); 
           //hard-coded the +100 in an attempt to get the scaled line closer to the origional
           //needs actual fixing.
           scaledLine.addPoint(newPoint);
@@ -82,7 +82,7 @@ class Line_Mod{
           PVector normal = new PVector(1,-1); //line to get a translation point from
           normal.setMag(lineSpacing); 
           PVector normalPoint = PVector.add(p0, normal); //determine the location of new point
-          PVector newPoint = new PVector(normalPoint.y, normalPoint.x); 
+          Point newPoint = new Point(normalPoint.y, normalPoint.x); 
           rotatedLine.addPoint(newPoint);
         }
       }
@@ -108,7 +108,7 @@ class Line_Mod{
           x = x + random(-degreeRandom, degreeRandom); 
           y = y + random(-degreeRandom, degreeRandom); 
     
-          PVector newPoint = new PVector(x, y); 
+          Point newPoint = new Point(x, y); 
           newLine.allPoints.add(newPoint);
         }
         else 
