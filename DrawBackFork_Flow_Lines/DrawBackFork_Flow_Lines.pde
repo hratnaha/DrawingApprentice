@@ -13,7 +13,6 @@ ArrayList gPts;
 int gMvCnt = 0;
 LineGroup curLineGroup = new LineGroup();
 ArrayList<LineGroup> lineGroups = new ArrayList<LineGroup>();
-float startX, startY;
 
 void setup() 
 {
@@ -52,8 +51,6 @@ void draw()
 //##### Event Handling
 void mousePressed() 
 {
-  startX = mouseX;
-  startY = mouseY;
   //println(mouseX + " " + mouseY);
   //line(pmouseX, pmouseY, mouseX, mouseY); 
   curLine = new Line(mouseX, mouseY); 
@@ -77,16 +74,12 @@ void mouseReleased()
   line(pmouseX, pmouseY, mouseX, mouseY); 
   curLine.setEnd(mouseX, mouseY); 
   //printAllLines();
-  if(drawBack)
-  {
-    drawBack(curLine);
-  }
   if(drawBezier)
   {
     drawBezier();
   }
   if(curLineGroup.getSize() > 0) {
-    if(curLineGroup.inGroup(startX, startY))
+    if(curLineGroup.inGroup(curLine))
       curLineGroup.addLine(curLine);
     else {
       println("new group");
@@ -103,12 +96,14 @@ void mouseReleased()
   curLineGroup.printLineGroupID();
 }
 
+void clear(){
+    allLines = new ArrayList<Line>(); 
+    //curLineGroup = new LineGroup();
+    lineGroups = new ArrayList<LineGroup>();
+    background(100);}
+
 void keyPressed()
 {
-  if (key == 'f')
-  {
-    generateFlowLines(); 
-  }
   if (key == 'l')
   {
     lineDetection();
@@ -118,6 +113,8 @@ void keyPressed()
     for(i = 0; i < lineGroups.size(); i++)
       lineGroups.get(i).drawCenterLine();
   }
+  if(key == 'c'){
+  clear();}
 }
 
 void generateFlowLines()
@@ -130,68 +127,55 @@ void generateFlowLines()
   }
 }
 
-
-// Random drawback function
-void drawBack(Line line)
-{
-  //take the previous line and cycle through its components and add some noise to it
-  //here, I will just add a 1 * random 0-1 + point to each point, then draw
-  //create a new Line of the current line, then newLine.drawLine(); 
-  Line newLine = new Line(line.startPoint.x, line.startPoint.y); 
-  for (int i = 0; i < line.allPoints.size(); i++)
-  {
-    //cycle through the points and add in a bit of randomness to each points
-
-    //first decide if we should interfere with this point, give it a P of .5 for interfering
-    if (random(0, 1) > (1 - probRandom))
-    {
-      float x = line.allPoints.get(i).x; 
-      float y = line.allPoints.get(i).y; 
-
-      x = x + random(-degreeRandom, degreeRandom); 
-      y = y + random(-degreeRandom, degreeRandom); 
-
-      Point newPoint = new Point(x, y); 
-      newLine.allPoints.add(newPoint);
-    }
-    else 
-      //just add the point to the point array
-    newLine.allPoints.add(line.allPoints.get(i));
+void translation(){
+  for(int i = 0; i < allLines.size(); i++){
+    Line curLine = allLines.get(i);
+   // Line_Mod mod = new Line_Mod(curLine);
+    Line newLine;
+   // newLine = mod.translation();
+    //newLine.drawLine();
   }
-  //render the line
-  stack.add(newLine);
 }
 
-// Random drawback function
-void drawBezier()
-{/*
-  //take the previous line and cycle through its components and add some noise to it
-  //here, I will just add a 1 * random 0-1 + point to each point, then draw
-  //create a new Line of the current line, then newLine.drawLine(); 
-  Line newLine = new Line(line.startPoint.x, line.startPoint.y); 
-  for (int i = 0; i < line.allPoints.size(); i++)
+void changeMode (String mode)
+{
+  //change the mode of the sketch 
+  //this information is coming from the button
+}
+
+//######## Random DrawBack Mode
+void checkStack()
+{
+  if (stack.size() >= 1)
   {
-    //cycle through the points and add in a bit of randomness to each points
-
-    //first decide if we should interfere with this point, give it a P of .5 for interfering
-    if (random(0, 1) > (1 - probRandom))
+    //println("i: " + i + "Size of allPoints: " + stack.get(0).allPoints.size()); 
+    if (i < stack.get(0).allPoints.size())
     {
-      float x = line.allPoints.get(i).x; 
-      float y = line.allPoints.get(i).y; 
+      //println("Size: " + stack.size() + "i: " + i); 
+      //start the i at 0
+      //look at the 
+      float x1 = stack.get(0).allPoints.get(i).x;
+      float y1 = stack.get(0).allPoints.get(i).y;
 
-      x = x + random(-degreeRandom, degreeRandom); 
-      y = y + random(-degreeRandom, degreeRandom); 
+      float x2 = stack.get(0).allPoints.get(i + 1).x;
+      float y2 = stack.get(0).allPoints.get(i + 1).y;
 
-      Point newPoint = new Point(x, y); 
-      newLine.allPoints.add(newPoint);
+      //println("x1: " + x1 + "y1: " + y1 + "x2: " + x2 + "y2: " + y2); 
+      line (x1, y1, x2, y2); 
+      i++; 
+
+      if (i == stack.get(0).allPoints.size() - 1)
+      {
+        println("Completed line response"); 
+        stack.remove(0); 
+        i = 0; //reset the counter
+      }
     }
-    else 
-      //just add the point to the point array
-    newLine.allPoints.add(line.allPoints.get(i));
   }
-  //render the line
-  stack.add(newLine);
-  */
+}
+
+void drawBezier()
+{
   int sz = gPts.size();
   if ( sz == 0)
     return;
@@ -236,42 +220,3 @@ void lineDetection(){
   
   //lines = opencv.findLines(100, 30, 20);
 }
-
-void changeMode (String mode)
-{
-  //change the mode of the sketch 
-  //this information is coming from the button
-}
-
-
-//######## Random DrawBack Mode
-void checkStack()
-{
-  if (stack.size() >= 1)
-  {
-    //println("i: " + i + "Size of allPoints: " + stack.get(0).allPoints.size()); 
-    if (i < stack.get(0).allPoints.size())
-    {
-      //println("Size: " + stack.size() + "i: " + i); 
-      //start the i at 0
-      //look at the 
-      float x1 = stack.get(0).allPoints.get(i).x;
-      float y1 = stack.get(0).allPoints.get(i).y;
-
-      float x2 = stack.get(0).allPoints.get(i + 1).x;
-      float y2 = stack.get(0).allPoints.get(i + 1).y;
-
-      //println("x1: " + x1 + "y1: " + y1 + "x2: " + x2 + "y2: " + y2); 
-      line (x1, y1, x2, y2); 
-      i++; 
-
-      if (i == stack.get(0).allPoints.size() - 1)
-      {
-        println("Completed line response"); 
-        stack.remove(0); 
-        i = 0; //reset the counter
-      }
-    }
-  }
-}
-

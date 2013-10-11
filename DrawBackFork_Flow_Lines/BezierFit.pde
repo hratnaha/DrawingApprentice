@@ -9,7 +9,7 @@ class BezierFit {
    * @param points
    * @return
    */
-  public ArrayList<Point> fit(ArrayList<Point> points){
+  public ArrayList<PVector> fit(ArrayList<PVector> points){
     //Matrix M = M();
     float[][] Minv = new float[4][4];
     Minv = Mat.inverse(M);
@@ -25,19 +25,19 @@ class BezierFit {
     float[][] E = Mat.multiply(D, X);
     float[][] F = Mat.multiply(D, Y);
     
-    ArrayList<Point> P = new ArrayList<Point>();
+    ArrayList<PVector> P = new ArrayList<PVector>();
     for(int i = 0; i < 4; i++){
       float x = E[i][0];
       float y = F[i][0];
       
-      Point p = new Point(x, y);
+      PVector p = new PVector(x, y);
       P.add(p);
     }
     
     return P;
   }
   
-  private float[][] Y(ArrayList<Point> points){
+  private float[][] Y(ArrayList<PVector> points){
     float[][] Y = new float[points.size()][1];
     
     for(int i = 0; i < points.size(); i++)
@@ -46,7 +46,7 @@ class BezierFit {
     return Y;
   }
   
-  private float[][] X(ArrayList<Point> points){
+  private float[][] X(ArrayList<PVector> points){
     float[][] X = new float[points.size()][1];
     
     for(int i = 0; i < points.size(); i++)
@@ -55,7 +55,7 @@ class BezierFit {
     return X;
   }
   
-  private float[][] U(ArrayList<Point> points){
+  private float[][] U(ArrayList<PVector> points){
     float[] npls = normalizedPathLengths(points);
     
     float[][] U = new float[npls.length][4];
@@ -69,7 +69,7 @@ class BezierFit {
     return U;
   }
   
-  private float[][] UT(ArrayList<Point> points){
+  private float[][] UT(ArrayList<PVector> points){
     float[] npls = normalizedPathLengths(points);
     
     float[][] UT = new float[4][npls.length];
@@ -91,8 +91,8 @@ class BezierFit {
    * @param v4
    * @return
    */
-  private Point pointOnCurve(float t, Point v1, Point v2, Point v3, Point v4){
-    Point p;
+  private PVector pointOnCurve(float t, PVector v1, PVector v2, PVector v3, PVector v4){
+    PVector p;
 
     float x1 = v1.x;
     float x2 = v2.x;
@@ -116,20 +116,20 @@ class BezierFit {
         + 3 * y3 * pow(t,2) * (1-t)
         + y4 * pow(t,3);
 
-    p = new Point(xt, yt);
+    p = new PVector(xt, yt);
 
     return p;
   }
 
   /** Computes the percentage of path length at each point. Can directly be used as t-indices into the bezier curve. */
-  private float[] normalizedPathLengths(ArrayList<Point> points){
+  private float[] normalizedPathLengths(ArrayList<PVector> points){
     float pathLength[] = new float[points.size()];
 
     pathLength[0] = 0;
 
     for(int i = 1; i < points.size(); i++){
-      Point p1 = points.get(i);
-      Point p2 = points.get(i-1);
+      PVector p1 = points.get(i);
+      PVector p2 = points.get(i-1);
       float distance = sqrt(pow(p1.x - p2.x,2) + pow(p1.y - p2.y,2));
       pathLength[i] += pathLength[i-1] + distance;
     }

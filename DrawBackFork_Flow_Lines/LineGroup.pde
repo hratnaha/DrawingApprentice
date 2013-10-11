@@ -1,7 +1,7 @@
 class LineGroup {
   Line centerLine;
   ArrayList<Line> groupLines = new ArrayList<Line>(); 
-  Point myPoint; 
+  PVector myPoint; 
   float startTime; 
   float endTime; 
   boolean isSelected = false; 
@@ -28,14 +28,14 @@ class LineGroup {
     //drawCenterLine();
   }
 
-  public boolean inGroup(float x, float y) 
+  public boolean inGroup(Line curLine) 
   {
     boolean in = false;
     float minDistance = 100000;
     int nearestPoint;
     for(int i = 0; i < centerLine.allPoints.size(); i++)
     {
-      float range = abs(centerLine.getPoint(i).x - x) + abs(centerLine.getPoint(i).y - y); 
+      float range = abs(centerLine.getPoint(i).x - curLine.getPoint(0).x) + abs(centerLine.getPoint(i).y - curLine.getPoint(0).y); 
       //println(range);
       if(range < 100)
       {
@@ -113,18 +113,18 @@ class LineGroup {
   public void computeCenterLine() 
   {
     //centerLine = getLine(getSize() - 1); // mock up
-    ArrayList<Point> linePoints = new ArrayList<Point>();
+    ArrayList<PVector> linePoints = new ArrayList<PVector>();
     for(int i = 0; i < getSize(); i++)
       linePoints.addAll(getLine(i).getAllPoints());
-    ArrayList<Point> controlPoints = bezierFit.fit(linePoints);
+    ArrayList<PVector> controlPoints = bezierFit.fit(linePoints);
     //bezier(controlPoints.get(0).x, controlPoints.get(0).y, controlPoints.get(1).x, controlPoints.get(1).y, controlPoints.get(2).x, controlPoints.get(2).y, controlPoints.get(3).x, controlPoints.get(3).y);
     int steps = 10;
-    ArrayList<Point> points = new ArrayList<Point>();
+    ArrayList<PVector> points = new ArrayList<PVector>();
     for (int i = 0; i <= steps; i++) {
       float t = i / float(steps);
       float x = bezierPoint(controlPoints.get(0).x, controlPoints.get(1).x, controlPoints.get(2).x, controlPoints.get(3).x, t);
       float y = bezierPoint(controlPoints.get(0).y, controlPoints.get(1).y, controlPoints.get(2).y, controlPoints.get(3).y, t);
-      points.add(new Point(x, y));
+      points.add(new PVector(x, y));
       //ellipse(x, y, 5, 5);
     }
     centerLine = new Line(points);
@@ -132,7 +132,11 @@ class LineGroup {
   public void drawCenterLine()
   {
     stroke(0, 250, 150);
-    centerLine.drawLine();
+    centerLine.draw();
     stroke(0, 0, 0);
+  }
+  public void clear()
+  {
+    groupLines = new ArrayList<Line>(); 
   }
 }
