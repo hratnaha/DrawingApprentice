@@ -1,16 +1,24 @@
+import gab.opencv.*;
+import papaya.*;
+OpenCV opencv;
 ArrayList <Line> allLines = new ArrayList<Line>(); 
 Line curLine; 
 ArrayList <Line> stack = new ArrayList<Line>(); //keep track of the drawBack stack
 float probRandom; //the amount of time that the drawBack will interject randomness
 float degreeRandom; //how much fluctuation is introduced in random interjections
 int i; //iteration count for stack
-Decision_Engine engine;
+boolean drawBack = false; 
+boolean drawBezier = false; 
+ArrayList gPts;
+int gMvCnt = 0;
+LineGroup curLineGroup = new LineGroup();
+ArrayList<LineGroup> lineGroups = new ArrayList<LineGroup>();
 
 void setup() 
 {
   size(600, 600);
   background(255);
-  fill(0); 
+  noFill(); 
   strokeWeight(1); 
   smooth(); 
   i = 0;// initialize the count for the 
@@ -18,48 +26,96 @@ void setup()
   probRandom = .15; 
   degreeRandom = 5;
   colorMode(HSB, 100, 100, 100);
+  gPts = new ArrayList();
+  //drawBezier = true;
+  //PImage src = loadImage("PUI001.tif");
+  //opencv = new OpenCV(this, src);
+  lineGroups.add(curLineGroup);
 }
 
 void draw() 
 {
   //could have a stack of lines that need to be processed
   checkStack();
+  /*
+  image(opencv.getOutput(), 0, 0);
+  strokeWeight(3);
+  for (Line line : lines) {
+    stroke(0, 255, 0);
+    line.drawLine();
+  }
+  */
 }
+
 
 //##### Event Handling
 void mousePressed() 
 {
+  //println(mouseX + " " + mouseY);
   //line(pmouseX, pmouseY, mouseX, mouseY); 
   curLine = new Line(mouseX, mouseY); 
   allLines.add(curLine);
+  gPts = new ArrayList();
+  gPts.add(new PVector(mouseX,mouseY));
+  gMvCnt = 0;
 }
 void mouseDragged() 
 {
+  //println(mouseX + " " + mouseY);
   line(pmouseX, pmouseY, mouseX, mouseY); 
   //check if the slope has not change by 90 degrees
   //if so set line end to previous point and begin new line with current point add previous line to stack
   curLine.curEnd(mouseX, mouseY);
+  if ( gMvCnt++ % 5 == 0 )
+    gPts.add(new PVector(mouseX,mouseY));
 }
-
 void mouseReleased() 
 {
   line(pmouseX, pmouseY, mouseX, mouseY); 
   curLine.setEnd(mouseX, mouseY); 
-    if (key == 'f')
-      generateFlowLines();
-    engine = new Decision_Engine(curLine);
-    engine.decision();
-    //printAllLines();
+  //printAllLines();
+  if(drawBezier)
+  {
+    drawBezier();
   }
-
-void keyPressed(){
-  if(key == 'c'){
-  clear();}
+  if(curLineGroup.getSize() > 0) {
+    if(curLineGroup.inGroup(curLine))
+      curLineGroup.addLine(curLine);
+    else {
+      println("new group");
+      curLineGroup = new LineGroup();
+      lineGroups.add(curLineGroup);
+      curLineGroup.addLine(curLine);
+      curLineGroup.setLineGroupID(lineGroups.size() - 1);
+    }
+  }
+  else{
+    curLineGroup.addLine(curLine);
+    curLineGroup.setLineGroupID(0);
+  }
+  curLineGroup.printLineGroupID();
 }
 
 void clear(){
     allLines = new ArrayList<Line>(); 
+    //curLineGroup = new LineGroup();
+    lineGroups = new ArrayList<LineGroup>();
     background(100);}
+
+void keyPressed()
+{
+  if (key == 'l')
+  {
+    lineDetection();
+  }
+  if (key == 'd')
+  {
+    for(i = 0; i < lineGroups.size(); i++)
+      lineGroups.get(i).drawCenterLine();
+  }
+  if(key == 'c'){
+  clear();}
+}
 
 void generateFlowLines()
 {
@@ -118,3 +174,49 @@ void checkStack()
   }
 }
 
+void drawBezier()
+{
+  int sz = gPts.size();
+  if ( sz == 0)
+    return;
+  beginShape();
+  stroke(0, 250, 150);
+  float x1 = ((PVector)gPts.get(0)).x;
+  float y1 = ((PVector)gPts.get(0)).y;
+  float xc = 0.0;
+  float yc = 0.0;
+  float x2 = 0.0;
+  float y2 = 0.0;
+  vertex(x1,y1);
+  for ( int i = 1; i< sz - 2; ++i)
+  {
+    xc = ((PVector)gPts.get(i)).x;
+    yc = ((PVector)gPts.get(i)).y;
+    x2 = (xc + ((PVector)gPts.get(i+1)).x)*0.5;
+    y2 = (yc + ((PVector)gPts.get(i+1)).y)*0.5;
+    bezierVertex((x1 + 2.0*xc)/3.0,(y1 + 2.0*yc)/3.0,
+              (2.0*xc + x2)/3.0,(2.0*yc + y2)/3.0,x2,y2);
+    x1 = x2;
+    y1 = y2;
+  }
+  xc = ((PVector)gPts.get(sz-2)).x;
+  yc = ((PVector)gPts.get(sz-2)).y;
+  x2 = ((PVector)gPts.get(sz-1)).x;
+  y2 = ((PVector)gPts.get(sz-1)).y;
+  bezierVertex((x1 + 2.0*xc)/3.0,(y1 + 2.0*yc)/3.0,
+         (2.0*xc + x2)/3.0,(2.0*yc + y2)/3.0,x2,y2);
+  endShape();
+  stroke(0, 0, 0);
+}
+
+void lineDetection(){
+  save("db.jpg");
+  PImage src = loadImage("db.jpg");
+  opencv = new OpenCV(this, src);
+  opencv.findCannyEdges(20, 75);
+
+  // Find lines with Hough line detection
+  // Arguments are: threshold, minLengthLength, maxLineGap
+  
+  //lines = opencv.findLines(100, 30, 20);
+}

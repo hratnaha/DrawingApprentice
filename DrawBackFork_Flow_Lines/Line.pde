@@ -38,6 +38,14 @@ class Line {
     allPoints.add(startPoint);
     startTime = millis();
   }
+  
+  public Line(ArrayList<PVector> all)
+  {
+    //myPoint = new Point(x, y);
+    startPoint = all.get(0);
+    endPoint = all.get(all.size() - 1);
+    allPoints = all;
+  }
 
   public void draw() 
   {
