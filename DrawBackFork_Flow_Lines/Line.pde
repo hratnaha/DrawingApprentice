@@ -244,5 +244,8 @@ class Line {
   public float getLineID() {
     return lineID;
   }
+  public void printLineID() {
+    println(lineID);
+  }
 }
 
