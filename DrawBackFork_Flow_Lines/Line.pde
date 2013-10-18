@@ -180,9 +180,9 @@ class Line {
 
   public void printPoints() 
   {
-    println("The function is not implemented, please code me~!"); 
+    //println("The function is not implemented, please code me~!"); 
     for (int i = 0; i < allPoints.size(); i++) {
-      //println("i = " + i); 
+      println(allPoints.get(i).x + " " + allPoints.get(i).y); 
       //curPoint.printPoint();
     }
   }

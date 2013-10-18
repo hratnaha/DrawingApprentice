@@ -31,24 +31,127 @@ class LineGroup {
   public boolean inGroup(Line curLine) 
   {
     boolean in = false;
-    float minDistance = 100000;
-    int nearestPoint;
+    float num_centerLine_overlap = 0;
+    float num_curLine_overlap = 0;
+    int[] centerLine_overlap = new int[centerLine.allPoints.size()];
+    int[] curLine_overlap = new int[curLine.allPoints.size()];
+    float[] curLine_distance = new float[curLine.allPoints.size()];
+    float centerLine_distance = 100000;
+    boolean at_tail = false;
+    boolean at_head = false;
+    float curAvg = 0;
+    float curStd = -1; // serve as an indicator
+    float centerAvg = 0;
+    float centerStd = 0;
+    
+    for(int j = 0; j < curLine.allPoints.size(); j++)
+    {
+      curLine_overlap[j] = -1;
+      curLine_distance[j] = 100000;
+    }
+      
     for(int i = 0; i < centerLine.allPoints.size(); i++)
     {
-      float range = abs(centerLine.getPoint(i).x - curLine.getPoint(0).x) + abs(centerLine.getPoint(i).y - curLine.getPoint(0).y); 
-      //println(range);
-      if(range < 100)
+      centerLine_distance = 100000;
+      centerLine_overlap[i] = -1;
+      for(int j = 0; j < curLine.allPoints.size(); j++)
       {
-        in = true;
-        if(minDistance > range){
-          minDistance = range;
-          nearestPoint = i;
+        float range = sqrt(sq(centerLine.getPoint(i).x - curLine.getPoint(j).x) + sq(centerLine.getPoint(i).y - curLine.getPoint(j).y)); 
+        if(range < 50)
+        {
+          if(centerLine_distance > range){
+            centerLine_distance = range;
+            centerLine_overlap[i] = j;
+          }
+          if(curLine_distance[j] > range){
+            curLine_distance[j] = range;
+            curLine_overlap[j] = i;
+          }
         }
       }
-      else if(in == true && range >= 10)
-        break;
     }
-    float tangent;
+    for(int i = 0; i < centerLine.allPoints.size(); i++)
+    {
+      println("Center  " + centerLine_overlap[i]);
+      if(centerLine_overlap[i] >= 0)
+        num_centerLine_overlap ++;
+    }
+    for(int i = 0; i < curLine.allPoints.size(); i++)
+    {
+      println("Cur  " + curLine_overlap[i]);
+      if(curLine_overlap[i] >= 0)
+        num_curLine_overlap ++;
+    }
+    //println(num_centerLine_overlap + " " + centerLine.allPoints.size());
+    //println(num_curLine_overlap + " " + curLine.allPoints.size());
+    
+    //Overlapping over 80% of either line is considered in one group
+    if(num_centerLine_overlap / float(centerLine.allPoints.size()) > 0.8 || num_curLine_overlap / float(curLine.allPoints.size()) > 0.8)
+      in = true;
+      
+    //If ends of two lines parallel, which will result in 4 cases. Means and standard deviations computed from line segments are compared.
+    else if(centerLine_overlap[centerLine.allPoints.size() - 1] >= 0 && curLine_overlap[0] >= 0)
+    {
+      ArrayList<Float> tmp = new ArrayList<Float>();
+      for(int i = centerLine.allPoints.size() - 1; centerLine_overlap[i] >= 0; i--)
+        tmp.add(new PVector(centerLine.getPoint(i).y - centerLine.getPoint(i - 1).y, centerLine.getPoint(i).x - centerLine.getPoint(i - 1).x).heading());
+      centerAvg = average(tmp);
+      centerStd = std(tmp);
+      tmp = new ArrayList<Float>();
+      for(int i = 0; curLine_overlap[i] >= 0; i++)
+        tmp.add(new PVector(curLine.getPoint(i + 1).y - curLine.getPoint(i).y, curLine.getPoint(i + 1).x - curLine.getPoint(i).x).heading());
+      curAvg = average(tmp);
+      curStd = std(tmp);
+      println(centerAvg + " " + centerStd);
+      println(curAvg + " " + curStd);
+    }
+    else if(centerLine_overlap[0] >= 0 && curLine_overlap[curLine.allPoints.size() - 1] >= 0)
+    {
+      ArrayList<Float> tmp = new ArrayList<Float>();
+      for(int i = curLine.allPoints.size() - 1; curLine_overlap[i] >= 0; i--)
+        tmp.add(new PVector(curLine.getPoint(i).y - curLine.getPoint(i - 1).y, curLine.getPoint(i).x - curLine.getPoint(i - 1).x).heading());
+      curAvg = average(tmp);
+      curStd = std(tmp);
+      tmp = new ArrayList<Float>();
+      for(int i = 0; centerLine_overlap[i] >= 0; i++)
+        tmp.add(new PVector(centerLine.getPoint(i + 1).y - centerLine.getPoint(i).y, centerLine.getPoint(i + 1).x - centerLine.getPoint(i).x).heading());
+      centerAvg = average(tmp);
+      centerStd = std(tmp);
+      println(centerAvg + " " + centerStd);
+      println(curAvg + " " + curStd);
+    }
+    else if(centerLine_overlap[centerLine.allPoints.size() - 1] >= 0 && curLine_overlap[curLine.allPoints.size() - 1] >= 0)
+    {
+      ArrayList<Float> tmp = new ArrayList<Float>();
+      for(int i = curLine.allPoints.size() - 1; curLine_overlap[i] >= 0; i--)
+        tmp.add(new PVector(curLine.getPoint(i).y - curLine.getPoint(i - 1).y, curLine.getPoint(i).x - curLine.getPoint(i - 1).x).heading());
+      curAvg = average(tmp);
+      curStd = std(tmp);
+      tmp = new ArrayList<Float>();
+      for(int i = centerLine.allPoints.size() - 1; centerLine_overlap[i] >= 0; i--)
+        tmp.add(new PVector(centerLine.getPoint(i - 1).y - centerLine.getPoint(i).y, centerLine.getPoint(i - 1).x - centerLine.getPoint(i).x).heading());
+      centerAvg = average(tmp);
+      centerStd = std(tmp);
+      println(centerAvg + " " + centerStd);
+      println(curAvg + " " + curStd);
+    }
+    else if(centerLine_overlap[0] >= 0 && curLine_overlap[0] >= 0)
+    {
+      ArrayList<Float> tmp = new ArrayList<Float>();
+      for(int i = 0; curLine_overlap[i] >= 0; i++)
+        tmp.add(new PVector(curLine.getPoint(i).y - curLine.getPoint(i + 1).y, curLine.getPoint(i).x - curLine.getPoint(i + 1).x).heading());
+      curAvg = average(tmp);
+      curStd = std(tmp);
+      tmp = new ArrayList<Float>();
+      for(int i = 0; centerLine_overlap[i] >= 0; i++)
+        tmp.add(new PVector(centerLine.getPoint(i + 1).y - centerLine.getPoint(i).y, centerLine.getPoint(i + 1).x - centerLine.getPoint(i).x).heading());
+      centerAvg = average(tmp);
+      centerStd = std(tmp);
+      println(centerAvg + " " + centerStd);
+      println(curAvg + " " + curStd);
+    }
+    if(curStd > 0 && abs(centerAvg - curAvg) < 1 && abs(centerStd - curStd) < 1)
+      in = true;
     return in; 
   }
 
@@ -139,4 +242,23 @@ class LineGroup {
   {
     groupLines = new ArrayList<Line>(); 
   }
+  public float average(ArrayList<Float> numbers)
+  {
+    float total = 0;
+    for (int i = 0; i < numbers.size(); i++) 
+     total += numbers.get(i);
+    return total / numbers.size(); 
+  }
+  public float std(ArrayList<Float> numbers)
+  {
+    float total = 0;
+    for (int i = 0; i < numbers.size(); i++) 
+     total += numbers.get(i);
+    float average = total / numbers.size(); 
+    float totalSquares = 0;
+    for (int i = 0; i < numbers.size(); i++) 
+      totalSquares += (numbers.get(i) - average)*(numbers.get(i) - average);
+    float averageSquare = totalSquares / numbers.size();
+    return sqrt(averageSquare);
+  } 
 }

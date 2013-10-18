@@ -73,7 +73,7 @@ void mouseReleased()
 {
   line(pmouseX, pmouseY, mouseX, mouseY); 
   curLine.setEnd(mouseX, mouseY); 
-  //printAllLines();
+  //curLine.printPoints();
   if(drawBezier)
   {
     drawBezier();
