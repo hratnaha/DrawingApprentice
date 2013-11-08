@@ -118,5 +118,44 @@ class Line_Mod{
       //render the line
       //stack.add(newLine);
       return newLine;
+  }
+    
+    //put a vehicle thing here?
+  
+public Line vehicleDraw(Line line){
+  Vehicle v = new Vehicle (line.startPoint.x, line.startPoint.y);
+  print("in vehicleDraw");
+  Line newline = new Line(0,0);
+  boolean nullFlag = false;
+  while(!nullFlag){
+  if(v!= null){
+    counter += 1;
+    if(line.getSize() > counter){
+      PVector target = new PVector(line.getPoint(counter).x, line.getPoint(counter).y);
+       v.arrive(target);
+       print("following line");
+    } else {
+      PVector target = line.getEndPoint();
+      v.arrive(target);
+      print("reaching end");
     }
-}
+    if(curLine.insideBufferZone(v.loc)){
+      newline = v.drawTrail();
+      //println("car now null");
+      nullFlag = true;
+      v = null;
+      print("car now null");
+    }
+    if(!nullFlag){
+      v.update();
+      }
+    }
+  }
+      //displayAllPrevLines();
+     // Line newline = v.drawTrail();
+      print("at return");
+      return newline;
+} 
+      
+  }
+  

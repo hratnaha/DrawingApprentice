@@ -63,7 +63,7 @@ class Line {
       } 
       else if (i == allPoints.size() - 1) 
       {
-        println("allPoints.size()=" + allPoints.size()); 
+       // println("allPoints.size()=" + allPoints.size()); 
         PVector p1 = allPoints.get(i -1); 
         PVector p2 = allPoints.get(i); 
         line(p1.x, p1.y, p2.x, p2.y);
@@ -71,7 +71,7 @@ class Line {
     }
   }
 
-  public void generateFlowLines()
+/*  public void generateFlowLines()
   {
     float lineSpacing = 4; //distance between flow lines
     int numberOfLines = 10; //number of flow lines in each direction
@@ -122,6 +122,7 @@ class Line {
       stroke(0);
     }
   }
+  */
   public void makeBoundingBox() {
     //creat the bounding box after the end of the line
     for (int i = 0; i < allPoints.size(); i++) {
@@ -153,6 +154,21 @@ class Line {
     float recHeight = ymax - ymin; 
     myBoundingBox = new Rectangle((int)origin.x, (int)origin.y, (int)recWidth, (int)recHeight);
   }
+  
+  public boolean insideBufferZone(PVector loc){
+    int radius = 10; //make a buffer zone raduis of 10 pixels
+    float xDiff = loc.x - endPoint.x;
+    float yDiff = loc.y - endPoint.y;
+    
+    float retInt = sqrt(xDiff*xDiff + yDiff*yDiff);
+    boolean retBool;
+    if(retInt <= radius){
+      retBool = true;
+    } else retBool = false;
+    
+    return retBool;
+  }
+  
   public void addPoint(PVector p)
   {//manually add a point to allPoints
     allPoints.add(p);
@@ -230,6 +246,9 @@ class Line {
   }
   public ArrayList<PVector> getAllPoints() {
     return allPoints;
+  }
+  public PVector getEndPoint(){
+    return endPoint;
   }
   public PVector getPoint(int i) {
     return allPoints.get(i);
