@@ -51,7 +51,7 @@ void draw()
 //##### Event Handling
 void mousePressed() 
 {
-  //println(mouseX + " " + mouseY);
+  println(mouseX + " " + mouseY);
   //line(pmouseX, pmouseY, mouseX, mouseY); 
   curLine = new Line(mouseX, mouseY); 
   allLines.add(curLine);
@@ -61,7 +61,7 @@ void mousePressed()
 }
 void mouseDragged() 
 {
-  //println(mouseX + " " + mouseY);
+  println(mouseX + " " + mouseY);
   line(pmouseX, pmouseY, mouseX, mouseY); 
   //check if the slope has not change by 90 degrees
   //if so set line end to previous point and begin new line with current point add previous line to stack
@@ -71,17 +71,30 @@ void mouseDragged()
 }
 void mouseReleased() 
 {
-  line(pmouseX, pmouseY, mouseX, mouseY); 
+  //Actually the endPoint will be the same with its previous one.
+  //line(pmouseX, pmouseY, mouseX, mouseY); 
   curLine.setEnd(mouseX, mouseY); 
   //curLine.printPoints();
   if(drawBezier)
   {
     drawBezier();
   }
-  if(curLineGroup.getSize() > 0) {
-    if(curLineGroup.inGroup(curLine))
-      curLineGroup.addLine(curLine);
-    else {
+  boolean in = false;
+  if(curLineGroup.getSize() == 0 && lineGroups.size() == 1){
+    curLineGroup.addLine(curLine);
+    curLineGroup.setLineGroupID(0);
+  }
+  else {
+    for(int i = 0; i < lineGroups.size(); i++) {
+      curLineGroup = lineGroups.get(i);
+      //println("c" + i);
+      if(curLineGroup.inGroup(curLine)) {
+        curLineGroup.addLine(curLine);
+        in = true;
+        break;
+      }
+    }
+    if(in == false) {
       println("new group");
       curLineGroup = new LineGroup();
       lineGroups.add(curLineGroup);
@@ -89,10 +102,7 @@ void mouseReleased()
       curLineGroup.setLineGroupID(lineGroups.size() - 1);
     }
   }
-  else{
-    curLineGroup.addLine(curLine);
-    curLineGroup.setLineGroupID(0);
-  }
+  
   curLineGroup.printLineGroupID();
 }
 

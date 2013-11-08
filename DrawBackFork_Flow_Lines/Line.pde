@@ -171,9 +171,10 @@ class Line {
 
   public void setEnd(float x, float y) 
   {
+    //Actually the endPoint will be the same with its previous one.
     myPoint = new PVector(x, y);
     endPoint = myPoint; 
-    allPoints.add(endPoint);
+    //allPoints.add(endPoint);
     endTime = millis();
     makeBoundingBox();
   }

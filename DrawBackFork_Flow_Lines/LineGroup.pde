@@ -57,7 +57,7 @@ class LineGroup {
       for(int j = 0; j < curLine.allPoints.size(); j++)
       {
         float range = sqrt(sq(centerLine.getPoint(i).x - curLine.getPoint(j).x) + sq(centerLine.getPoint(i).y - curLine.getPoint(j).y)); 
-        if(range < 50)
+        if(range < 100)
         {
           if(centerLine_distance > range){
             centerLine_distance = range;
@@ -72,13 +72,13 @@ class LineGroup {
     }
     for(int i = 0; i < centerLine.allPoints.size(); i++)
     {
-      println("Center  " + centerLine_overlap[i]);
+      //println("Center  " + centerLine_overlap[i]);
       if(centerLine_overlap[i] >= 0)
         num_centerLine_overlap ++;
     }
     for(int i = 0; i < curLine.allPoints.size(); i++)
     {
-      println("Cur  " + curLine_overlap[i]);
+      //println("Cur  " + curLine_overlap[i]);
       if(curLine_overlap[i] >= 0)
         num_curLine_overlap ++;
     }
