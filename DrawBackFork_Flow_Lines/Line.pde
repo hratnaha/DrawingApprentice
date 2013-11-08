@@ -38,6 +38,14 @@ class Line {
     allPoints.add(startPoint);
     startTime = millis();
   }
+  
+  public Line(ArrayList<PVector> all)
+  {
+    //myPoint = new Point(x, y);
+    startPoint = all.get(0);
+    endPoint = all.get(all.size() - 1);
+    allPoints = all;
+  }
 
   public void draw() 
   {
@@ -83,8 +91,8 @@ class Line {
         {//special case for start and end of line
           //generate the normal point and add to the newLine
           //println("Current i = " + i); 
-          PVector p0 = new PVector(allPoints.get(j)); 
-          PVector p1 = new PVector(allPoints.get(j +1));
+          PVector p0 = allPoints.get(j); 
+          PVector p1 = allPoints.get(j +1);
           PVector v = new PVector((p1.x - p0.x), (p1.y - p0.y)); //vector between two points in question
           PVector normal = new PVector(-v.y, v.x); //normal vector to the drawn line (might need to change signs based on slope)
           normal.setMag(i*lineSpacing); 
@@ -99,8 +107,8 @@ class Line {
         {//special case for start and end of line
           //generate the normal point and add to the newLine
           //println("Current i = " + i); 
-          PVector p0 = new PVector(allPoints.get(j)); 
-          PVector p1 = new PVector(allPoints.get(j +1));
+          PVector p0 = allPoints.get(j); 
+          PVector p1 = allPoints.get(j +1);
           PVector v = new PVector((p1.x - p0.x), (p1.y - p0.y)); //vector between two points in question
           PVector normal = new PVector(v.y, -v.x); //normal vector to the drawn line (might need to change signs based on slope)
           normal.setMag(i*lineSpacing); 
@@ -262,6 +270,9 @@ class Line {
   }
   public float getLineID() {
     return lineID;
+  }
+  public void printLineID() {
+    println(lineID);
   }
 }
 
