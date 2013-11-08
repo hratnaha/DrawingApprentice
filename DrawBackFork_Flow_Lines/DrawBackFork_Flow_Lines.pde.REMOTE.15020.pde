@@ -1,6 +1,6 @@
-//import gab.opencv.*;
+import gab.opencv.*;
 import papaya.*;
-//OpenCV opencv;
+OpenCV opencv;
 ArrayList <Line> allLines = new ArrayList<Line>(); 
 Line curLine; 
 ArrayList <Line> stack = new ArrayList<Line>(); //keep track of the drawBack stack
@@ -13,10 +13,6 @@ ArrayList gPts;
 int gMvCnt = 0;
 LineGroup curLineGroup = new LineGroup();
 ArrayList<LineGroup> lineGroups = new ArrayList<LineGroup>();
-Decision_Engine engine;
-//vehice's extra instance variables
-Vehicle v;
-int counter;
 
 void setup() 
 {
@@ -37,50 +33,10 @@ void setup()
   lineGroups.add(curLineGroup);
 }
 
-void draw() //veh code copied
+void draw() 
 {
   //could have a stack of lines that need to be processed
   checkStack();
-//<<<<<<< HEAD
-  //added to make vehicle work correctly
-  colorMode(RGB);
-  background(255,255,255);
-  if(allLines.size() > 0){
-   displayAllPrevLines();
- }
- if(curLine != null && curLine.getSize() > 1){
-   curLine.draw();
- } 
- 
- //this updates the vehicle's path:
- /*
- boolean nullFlag = false;
-  if(v!= null){
-    counter += 1;
-    if(curLine.getSize() > counter){
-      PVector target = new PVector(curLine.getPoint(counter).x, curLine.getPoint(counter).y);
-       v.arrive(target);
-    } else {
-      PVector target = curLine.getEndPoint();
-      v.arrive(target);
-    }
-    if(curLine.insideBufferZone(v.loc)){
-      println("car now null");
-      nullFlag = true;
-      v = null;
-      displayAllPrevLines();
-    }
-    if(!nullFlag){
-      v.update();
-     // v.display();
-      if(counter%20 == 0){
-       Line line = v.drawTrail(); 
-       allLines.add(line);
-      }
-    }
-  } */
-
-//=======
   /*
   image(opencv.getOutput(), 0, 0);
   strokeWeight(3);
@@ -89,7 +45,6 @@ void draw() //veh code copied
     line.drawLine();
   }
   */
-//>>>>>>> f1e62ce3073dda09c1305dc9ceba5ef04896ad60
 }
 
 
@@ -118,25 +73,6 @@ void mouseReleased()
 {
   line(pmouseX, pmouseY, mouseX, mouseY); 
   curLine.setEnd(mouseX, mouseY); 
-//<<<<<<< HEAD
-  engine = new Decision_Engine(curLine);
-  Line compLine = engine.decision();
-  //allLines.add(compLine);
-  stack.add(compLine); //not working QQ
-  //displayAllPrevLines();
-  }
-
-void keyPressed(){
-  if(key == 'c'){
-    clear();
-  }
-  if(key == 'v'){
-    v = new Vehicle(curLine.getPoint(0).x, curLine.getPoint(0).y);
-    counter = 0;
-    //create a new veh at the current line's start
-    //will need a better solution for creating the car
-  }
-//=======
   //printAllLines();
   if(drawBezier)
   {
@@ -158,17 +94,10 @@ void keyPressed(){
     curLineGroup.setLineGroupID(0);
   }
   curLineGroup.printLineGroupID();
-//>>>>>>> f1e62ce3073dda09c1305dc9ceba5ef04896ad60
 }
 
 void clear(){
     allLines = new ArrayList<Line>(); 
-//<<<<<<< HEAD
-    background(100);
-}
-
-/*void generateFlowLines()
-=======
     //curLineGroup = new LineGroup();
     lineGroups = new ArrayList<LineGroup>();
     background(100);}
@@ -189,7 +118,6 @@ void keyPressed()
 }
 
 void generateFlowLines()
->>>>>>> f1e62ce3073dda09c1305dc9ceba5ef04896ad60
 {
   //cycle through all lines to determine their flow lines
   for(int i = 0; i < allLines.size(); i++)
@@ -198,7 +126,16 @@ void generateFlowLines()
     curLine.generateFlowLines(); 
   }
 }
-*/
+
+void translation(){
+  for(int i = 0; i < allLines.size(); i++){
+    Line curLine = allLines.get(i);
+   // Line_Mod mod = new Line_Mod(curLine);
+    Line newLine;
+   // newLine = mod.translation();
+    //newLine.drawLine();
+  }
+}
 
 void changeMode (String mode)
 {
@@ -207,10 +144,13 @@ void changeMode (String mode)
 }
 
 //######## Random DrawBack Mode
-void checkStack(){
-  if (stack.size() >= 1){
+void checkStack()
+{
+  if (stack.size() >= 1)
+  {
     //println("i: " + i + "Size of allPoints: " + stack.get(0).allPoints.size()); 
-    if (i < stack.get(0).allPoints.size()){
+    if (i < stack.get(0).allPoints.size())
+    {
       //println("Size: " + stack.size() + "i: " + i); 
       //start the i at 0
       //look at the 
@@ -221,15 +161,11 @@ void checkStack(){
       float y2 = stack.get(0).allPoints.get(i + 1).y;
 
       //println("x1: " + x1 + "y1: " + y1 + "x2: " + x2 + "y2: " + y2); 
-      //line (x1, y1, x2, y2); 
-      PVector point1 = new PVector(x1,y1);
-      PVector point2 = new PVector(x2,y2);
-      Line stackLine = new Line(x1,y1);
-      stackLine.addPoint(point2);
-      allLines.add(stackLine);
+      line (x1, y1, x2, y2); 
       i++; 
 
-      if (i == stack.get(0).allPoints.size() - 1){
+      if (i == stack.get(0).allPoints.size() - 1)
+      {
         println("Completed line response"); 
         stack.remove(0); 
         i = 0; //reset the counter
@@ -238,17 +174,6 @@ void checkStack(){
   }
 }
 
-//<<<<<<< HEAD
-void displayAllPrevLines(){
-  for(int i = 0; i < allLines.size(); i++){
-    if(allLines.get(i).getSize() > 1){
-      Line l = allLines.get(i);
-      l.draw();
-    }
-  } 
-}
-
-//=======
 void drawBezier()
 {
   int sz = gPts.size();
@@ -287,12 +212,11 @@ void drawBezier()
 void lineDetection(){
   save("db.jpg");
   PImage src = loadImage("db.jpg");
- // opencv = new OpenCV(this, src);
- // opencv.findCannyEdges(20, 75);
+  opencv = new OpenCV(this, src);
+  opencv.findCannyEdges(20, 75);
 
   // Find lines with Hough line detection
   // Arguments are: threshold, minLengthLength, maxLineGap
   
   //lines = opencv.findLines(100, 30, 20);
 }
-//>>>>>>> f1e62ce3073dda09c1305dc9ceba5ef04896ad60

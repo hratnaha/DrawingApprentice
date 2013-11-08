@@ -1,6 +1,6 @@
-//import gab.opencv.*;
+import gab.opencv.*;
 import papaya.*;
-//OpenCV opencv;
+OpenCV opencv;
 ArrayList <Line> allLines = new ArrayList<Line>(); 
 Line curLine; 
 ArrayList <Line> stack = new ArrayList<Line>(); //keep track of the drawBack stack
@@ -13,7 +13,7 @@ ArrayList gPts;
 int gMvCnt = 0;
 LineGroup curLineGroup = new LineGroup();
 ArrayList<LineGroup> lineGroups = new ArrayList<LineGroup>();
-Decision_Engine engine;
+
 //vehice's extra instance variables
 Vehicle v;
 int counter;
@@ -41,7 +41,7 @@ void draw() //veh code copied
 {
   //could have a stack of lines that need to be processed
   checkStack();
-//<<<<<<< HEAD
+<<<<<<< HEAD
   //added to make vehicle work correctly
   colorMode(RGB);
   background(255,255,255);
@@ -80,7 +80,7 @@ void draw() //veh code copied
     }
   } */
 
-//=======
+=======
   /*
   image(opencv.getOutput(), 0, 0);
   strokeWeight(3);
@@ -89,7 +89,7 @@ void draw() //veh code copied
     line.drawLine();
   }
   */
-//>>>>>>> f1e62ce3073dda09c1305dc9ceba5ef04896ad60
+>>>>>>> f1e62ce3073dda09c1305dc9ceba5ef04896ad60
 }
 
 
@@ -118,7 +118,7 @@ void mouseReleased()
 {
   line(pmouseX, pmouseY, mouseX, mouseY); 
   curLine.setEnd(mouseX, mouseY); 
-//<<<<<<< HEAD
+<<<<<<< HEAD
   engine = new Decision_Engine(curLine);
   Line compLine = engine.decision();
   //allLines.add(compLine);
@@ -136,7 +136,7 @@ void keyPressed(){
     //create a new veh at the current line's start
     //will need a better solution for creating the car
   }
-//=======
+=======
   //printAllLines();
   if(drawBezier)
   {
@@ -158,12 +158,12 @@ void keyPressed(){
     curLineGroup.setLineGroupID(0);
   }
   curLineGroup.printLineGroupID();
-//>>>>>>> f1e62ce3073dda09c1305dc9ceba5ef04896ad60
+>>>>>>> f1e62ce3073dda09c1305dc9ceba5ef04896ad60
 }
 
 void clear(){
     allLines = new ArrayList<Line>(); 
-//<<<<<<< HEAD
+<<<<<<< HEAD
     background(100);
 }
 
@@ -238,7 +238,7 @@ void checkStack(){
   }
 }
 
-//<<<<<<< HEAD
+<<<<<<< HEAD
 void displayAllPrevLines(){
   for(int i = 0; i < allLines.size(); i++){
     if(allLines.get(i).getSize() > 1){
@@ -248,7 +248,7 @@ void displayAllPrevLines(){
   } 
 }
 
-//=======
+=======
 void drawBezier()
 {
   int sz = gPts.size();
@@ -287,12 +287,12 @@ void drawBezier()
 void lineDetection(){
   save("db.jpg");
   PImage src = loadImage("db.jpg");
- // opencv = new OpenCV(this, src);
- // opencv.findCannyEdges(20, 75);
+  opencv = new OpenCV(this, src);
+  opencv.findCannyEdges(20, 75);
 
   // Find lines with Hough line detection
   // Arguments are: threshold, minLengthLength, maxLineGap
   
   //lines = opencv.findLines(100, 30, 20);
 }
-//>>>>>>> f1e62ce3073dda09c1305dc9ceba5ef04896ad60
+>>>>>>> f1e62ce3073dda09c1305dc9ceba5ef04896ad60
