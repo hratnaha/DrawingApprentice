@@ -1,5 +1,6 @@
 class LineGroup {
   Line centerLine;
+  ArrayList<PVector> allPoints = new ArrayList<PVector>();
   ArrayList<Line> groupLines = new ArrayList<Line>(); 
   PVector myPoint; 
   float startTime; 
@@ -43,6 +44,10 @@ class LineGroup {
     float curStd = -1; // serve as an indicator
     float centerAvg = 0;
     float centerStd = 0;
+    int curLine_overlap_start = -1;
+    int curLine_overlap_end = -1;
+    int centerLine_overlap_start = -1;
+    int centerLine_overlap_end = -1;
     
     for(int j = 0; j < curLine.allPoints.size(); j++)
     {
@@ -74,21 +79,52 @@ class LineGroup {
     {
       //println("Center  " + centerLine_overlap[i]);
       if(centerLine_overlap[i] >= 0)
+      {
         num_centerLine_overlap ++;
+        if(centerLine_overlap_start == -1)
+          centerLine_overlap_start = i;
+        centerLine_overlap_end = i;
+      }
     }
     for(int i = 0; i < curLine.allPoints.size(); i++)
     {
       //println("Cur  " + curLine_overlap[i]);
       if(curLine_overlap[i] >= 0)
+      {
         num_curLine_overlap ++;
+        if(curLine_overlap_start == -1)
+          curLine_overlap_start = i;
+        curLine_overlap_end = i;
+      }
     }
     //println(num_centerLine_overlap + " " + centerLine.allPoints.size());
     //println(num_curLine_overlap + " " + curLine.allPoints.size());
     
     //Overlapping over 80% of either line is considered in one group
-    if(num_centerLine_overlap / float(centerLine.allPoints.size()) > 0.8 || num_curLine_overlap / float(curLine.allPoints.size()) > 0.8)
+    if(num_centerLine_overlap / float(centerLine.allPoints.size()) > 0.8) { 
       in = true;
-      
+      allPoints = curLine.getAllPoints();
+      if(centerLine_overlap[centerLine_overlap_start] > centerLine_overlap[centerLine_overlap_end]) {
+        for(int i = centerLine_overlap_start; i <= centerLine_overlap_end; i ++)
+          allPoints.add(centerLine_overlap[i], centerLine.getPoint(i));
+      }
+      else {
+        for(int i = centerLine_overlap_start; i <= centerLine_overlap_end; i ++)
+          allPoints.add(centerLine_overlap[i] + i - centerLine_overlap_start, centerLine.getPoint(i));
+      } 
+    }
+    else if(num_curLine_overlap / float(curLine.allPoints.size()) > 0.8) {
+      in = true;
+      allPoints = centerLine.getAllPoints();
+      if(curLine_overlap[curLine_overlap_start] > curLine_overlap[curLine_overlap_end]) {
+        for(int i = curLine_overlap_start; i <= curLine_overlap_end; i ++)
+          allPoints.add(curLine_overlap[i], curLine.getPoint(i));
+      }
+      else {
+        for(int i = curLine_overlap_start; i <= curLine_overlap_end; i ++)
+          allPoints.add(curLine_overlap[i] + i - curLine_overlap_start, curLine.getPoint(i));
+      }  
+    }
     //If ends of two lines parallel, which will result in 4 cases. Means and standard deviations computed from line segments are compared.
     else if(centerLine_overlap[centerLine.allPoints.size() - 1] >= 0 && curLine_overlap[0] >= 0)
     {
@@ -104,6 +140,11 @@ class LineGroup {
       curStd = std(tmp);
       println(centerAvg + " " + centerStd);
       println(curAvg + " " + curStd);
+      allPoints = centerLine.getAllPoints();
+      for(int i = curLine_overlap_start; i <= curLine_overlap_end; i ++)
+        allPoints.add(curLine_overlap[i] + i - curLine_overlap_start, curLine.getPoint(i));
+      for(int i = curLine_overlap_end + 1; i < curLine.getSize(); i ++)
+        allPoints.add(allPoints.size(), curLine.getPoint(i));
     }
     else if(centerLine_overlap[0] >= 0 && curLine_overlap[curLine.allPoints.size() - 1] >= 0)
     {
@@ -119,6 +160,11 @@ class LineGroup {
       centerStd = std(tmp);
       println(centerAvg + " " + centerStd);
       println(curAvg + " " + curStd);
+      allPoints = curLine.getAllPoints();
+      for(int i = centerLine_overlap_start; i <= centerLine_overlap_end; i ++)
+        allPoints.add(centerLine_overlap[i] + i - centerLine_overlap_start, centerLine.getPoint(i));
+      for(int i = centerLine_overlap_end + 1; i < centerLine.getSize(); i ++)
+        allPoints.add(allPoints.size(), centerLine.getPoint(i));
     }
     else if(centerLine_overlap[centerLine.allPoints.size() - 1] >= 0 && curLine_overlap[curLine.allPoints.size() - 1] >= 0)
     {
@@ -134,6 +180,11 @@ class LineGroup {
       centerStd = std(tmp);
       println(centerAvg + " " + centerStd);
       println(curAvg + " " + curStd);
+      allPoints = centerLine.getAllPoints();
+      for(int i = curLine_overlap_start; i <= curLine_overlap_end; i ++)
+        allPoints.add(curLine_overlap[i], curLine.getPoint(i));
+      for(int i = curLine_overlap_start - 1; i >= 0; i --)
+        allPoints.add(allPoints.size(), curLine.getPoint(i));
     }
     else if(centerLine_overlap[0] >= 0 && curLine_overlap[0] >= 0)
     {
@@ -149,6 +200,11 @@ class LineGroup {
       centerStd = std(tmp);
       println(centerAvg + " " + centerStd);
       println(curAvg + " " + curStd);
+      allPoints = centerLine.getAllPoints();
+      for(int i = curLine_overlap_start; i <= curLine_overlap_end; i ++)
+        allPoints.add(curLine_overlap[i], curLine.getPoint(i));
+      for(int i = curLine_overlap_end + 1; i < curLine.getSize(); i ++)
+        allPoints.add(0, curLine.getPoint(i));
     }
     if(curStd > 0 && abs(centerAvg - curAvg) < 1 && abs(centerStd - curStd) < 1)
       in = true;
@@ -216,10 +272,11 @@ class LineGroup {
   public void computeCenterLine() 
   {
     //centerLine = getLine(getSize() - 1); // mock up
-    ArrayList<PVector> linePoints = new ArrayList<PVector>();
-    for(int i = 0; i < getSize(); i++)
-      linePoints.addAll(getLine(i).getAllPoints());
-    ArrayList<PVector> controlPoints = bezierFit.fit(linePoints);
+    
+    //for(int i = 0; i < getSize(); i++)
+    if(centerLine == null)
+      allPoints.addAll(getLine(getSize() - 1).getAllPoints());
+    ArrayList<PVector> controlPoints = bezierFit.fit(allPoints);
     //bezier(controlPoints.get(0).x, controlPoints.get(0).y, controlPoints.get(1).x, controlPoints.get(1).y, controlPoints.get(2).x, controlPoints.get(2).y, controlPoints.get(3).x, controlPoints.get(3).y);
     int steps = 10;
     ArrayList<PVector> points = new ArrayList<PVector>();
