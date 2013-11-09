@@ -47,6 +47,15 @@ void draw()
   */
 }
 
+void redraw()
+{
+  background(100);
+  println("allLines.size() = " + allLines.size());
+  for(int i = 0; i < allLines.size(); i++)
+  {
+    allLines.get(i).draw(); 
+  }
+}
 
 //##### Event Handling
 void mousePressed() 
@@ -110,7 +119,8 @@ void clear(){
     allLines = new ArrayList<Line>(); 
     //curLineGroup = new LineGroup();
     lineGroups = new ArrayList<LineGroup>();
-    background(100);}
+    background(100);
+}
 
 void keyPressed()
 {
@@ -121,10 +131,16 @@ void keyPressed()
   if (key == 'd')
   {
     for(i = 0; i < lineGroups.size(); i++)
+    {
       lineGroups.get(i).drawCenterLine();
+    }
   }
   if(key == 'c'){
-  clear();}
+    clear();
+  }
+  if(key == 'r') {
+    redraw();
+  }
 }
 
 void generateFlowLines()

@@ -46,12 +46,21 @@ class Line {
     endPoint = all.get(all.size() - 1);
     allPoints = all;
   }
+  
+  public Line(PVector[] all)
+  {
+    //myPoint = new Point(x, y);
+    startPoint = all[0];
+    endPoint = all[all.length - 1];
+    for(int i = 0; i < all.length; i++)
+      allPoints.add(all[i]);
+  }
 
   public void draw() 
   {
     //println("In drawLine()"); 
     //println("Allpoints.size()" + allPoints.size()); 
-    strokeWeight(.5); 
+    strokeWeight(1); 
     for (int i = 0; i < allPoints.size(); i++) 
     {
       if (i < allPoints.size() - 1) 
@@ -61,13 +70,14 @@ class Line {
         PVector p2 = allPoints.get(i+1); 
         line(p1.x, p1.y, p2.x, p2.y);
       } 
-      else if (i == allPoints.size() - 1) 
+      /*else if (i == allPoints.size() - 1) 
       {
         println("allPoints.size()=" + allPoints.size()); 
         PVector p1 = allPoints.get(i -1); 
         PVector p2 = allPoints.get(i); 
         line(p1.x, p1.y, p2.x, p2.y);
       }
+      */
     }
   }
 
