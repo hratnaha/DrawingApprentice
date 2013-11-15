@@ -17,6 +17,7 @@ Decision_Engine engine;
 //vehice's extra instance variables
 Vehicle v;
 int counter;
+FlowField flowfield;
 
 void setup() 
 {
