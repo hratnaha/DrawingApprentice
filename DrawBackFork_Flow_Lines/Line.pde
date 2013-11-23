@@ -12,7 +12,6 @@ class Line {
   PVector curEnd; 
   PVector endPoint; 
   ArrayList<PVector> allPoints = new ArrayList<PVector>(); 
-
   float startTime; 
   float endTime; 
   boolean isSelected = false; 

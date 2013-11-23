@@ -291,7 +291,7 @@ class LineGroup {
   }
   public void printLineGroupID()
   {
-    println(lineGroupID);
+    println("Group " + lineGroupID);
   }
   public void computeCenterLine() 
   {
@@ -302,7 +302,7 @@ class LineGroup {
       groupPoints.addAll(getLine(getSize() - 1).getAllPoints());
     ArrayList<PVector> controlPoints = bezierFit.fit(groupPoints);
     //bezier(controlPoints.get(0).x, controlPoints.get(0).y, controlPoints.get(1).x, controlPoints.get(1).y, controlPoints.get(2).x, controlPoints.get(2).y, controlPoints.get(3).x, controlPoints.get(3).y);
-    int steps = 10;
+    int steps = 20;
     ArrayList<PVector> points = new ArrayList<PVector>();
     for (int i = 0; i <= steps; i++) {
       float t = i / float(steps);
@@ -318,6 +318,10 @@ class LineGroup {
     stroke(0, 250, 150);
     centerLine.draw();
     stroke(0, 0, 0);
+  }
+  public Line getCenterLine()
+  {
+    return centerLine;
   }
   public void clear()
   {
