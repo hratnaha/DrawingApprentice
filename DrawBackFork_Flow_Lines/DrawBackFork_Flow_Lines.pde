@@ -21,7 +21,11 @@ particle[] Z = new particle[particleSize];
 int[] currentAttractor = new int[particleSize];
 float colour = random(1);
 ArrayList<FoodSeeker> foodSeekers = new ArrayList<FoodSeeker>();
-
+Decision_Engine engine;
+//vehice's extra instance variables
+Vehicle v;
+int counter;
+FlowField flowfield;
 
 void setup() 
 {
