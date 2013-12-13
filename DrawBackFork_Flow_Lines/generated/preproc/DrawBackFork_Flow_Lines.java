@@ -1,7 +1,6 @@
 import processing.core.*; 
 import processing.xml.*; 
 
-import gab.opencv.*; 
 import papaya.*; 
 
 import java.applet.*; 
@@ -266,9 +265,9 @@ class Decision_Engine {
   }
 }
 
+//import gab.opencv.*;
 
-
-OpenCV opencv;
+//OpenCV opencv;
 ArrayList <Line> allLines = new ArrayList<Line>(); 
 Line curLine; 
 ArrayList <Line> stack = new ArrayList<Line>(); //keep track of the drawBack stack
@@ -281,9 +280,11 @@ ArrayList gPts;
 int gMvCnt = 0;
 LineGroup curLineGroup = new LineGroup();
 ArrayList<LineGroup> lineGroups = new ArrayList<LineGroup>();
-
-particle[] Z = new particle[200];
+int particleSize = 2000;
+particle[] Z = new particle[particleSize];
+int[] currentAttractor = new int[particleSize];
 float colour = random(1);
+ArrayList<FoodSeeker> foodSeekers = new ArrayList<FoodSeeker>();
 
 public void setup() 
 {
@@ -320,6 +321,11 @@ public void draw()
   if(keyPressed == true && key == 's') {
     gravitateSwarm();
   }
+  for(int i = 0; i < foodSeekers.size(); i++){
+    foodSeekers.get(i).run(allLines);
+    //println("FoodSeeker " + i + ":");
+  }
+  //println("Number of FoodSeekers: " + foodSeekers.size());
 }
 
 public void redraw()
@@ -336,7 +342,7 @@ public void redraw()
 //##### Event Handling
 public void mousePressed() 
 {
-  println(mouseX + " " + mouseY);
+  //println(mouseX + " " + mouseY);
   //line(pmouseX, pmouseY, mouseX, mouseY); 
   curLine = new Line(mouseX, mouseY); 
   allLines.add(curLine);
@@ -346,7 +352,7 @@ public void mousePressed()
 }
 public void mouseDragged() 
 {
-  println(mouseX + " " + mouseY);
+  //println(mouseX + " " + mouseY);
   line(pmouseX, pmouseY, mouseX, mouseY); 
   //check if the slope has not change by 90 degrees
   //if so set line end to previous point and begin new line with current point add previous line to stack
@@ -360,6 +366,13 @@ public void mouseReleased()
   //line(pmouseX, pmouseY, mouseX, mouseY); 
   curLine.setEnd(mouseX, mouseY); 
   //curLine.printPoints();
+  /*
+  for(int i = 0; i < allLines.size(); i++)
+  {
+    println("Line " + i);
+    allLines.get(i).printPoints(); 
+  }
+  */
   if(drawBezier)
   {
     drawBezier();
@@ -369,11 +382,10 @@ public void mouseReleased()
     curLineGroup.addLine(curLine);
     curLineGroup.setLineGroupID(0);
     
-    //TODO: make every particle only attracted by one point at one time.
     for(int i = 0; i < Z.length; i++) {
       float radius = random(100);
       float angle = random(6.28f);
-      Z[i] = new particle(curLineGroup.centerLine.getPoint(0).x + radius * sin(angle), curLineGroup.centerLine.getPoint(0).y + radius * cos(angle), 0, 0, 1);
+      Z[i] = new particle(curLineGroup.centerLine.getPoint(0).x + radius * cos(angle), curLineGroup.centerLine.getPoint(0).y + radius * sin(angle), 0, 0, 1);
       //Z[i] = new particle( random(width), random(height), 0, 0, 1 );
       //println("Particle " + Z[i].x + " " + Z[i].y);
     }
@@ -396,9 +408,9 @@ public void mouseReleased()
       curLineGroup.setLineGroupID(lineGroups.size() - 1);
       //
       for(int i = 0; i < Z.length; i++) {
-        float radius = random(30);
+        float radius = random(100);
         float angle = random(6.28f);
-        Z[i] = new particle(curLineGroup.centerLine.getPoint(0).x + radius * sin(angle), curLineGroup.centerLine.getPoint(0).y + radius * cos(angle), 0, 0, 1);
+        Z[i] = new particle(curLineGroup.centerLine.getPoint(0).x + radius * cos(angle), curLineGroup.centerLine.getPoint(0).y + radius * sin(angle), 0, 0, 1);
         //Z[i] = new particle( random(width), random(height), 0, 0, 1 );
         //println("Particle " + Z[i].x + " " + Z[i].y);
       }
@@ -416,10 +428,12 @@ public void clear(){
 
 public void keyPressed()
 {
+  /*
   if (key == 'l')
   {
     lineDetection();
   }
+  */
   if (key == 'd')
   {
     redraw();
@@ -434,6 +448,20 @@ public void keyPressed()
   if(key == 'r') {
     redraw();
   }
+  if(key == 'f') {
+    for(int i = 0; i < lineGroups.size(); i++)
+    {
+      int size = lineGroups.get(i).getCenterLine().getSize();
+      PVector position = lineGroups.get(i).getCenterLine().getPoint(round(random(size)));
+      //println(position);
+      
+      //Danger could be out of bounds.
+      //PVector initialVector = new PVector(lineGroups.get(i).getCenterLine().getPoint(1).x - lineGroups.get(i).getCenterLine().getPoint(0).x, lineGroups.get(i).getCenterLine().getPoint(1).y - lineGroups.get(i).getCenterLine().getPoint(0).y);
+      FoodSeeker foodSeeker = new FoodSeeker(position, 1, random(-3.14f, 3.14f), 20, 0.8f);
+      //foodSeeker.render();
+      foodSeekers.add(foodSeeker);
+    }
+  }
 }
 public void gravitateSwarm()
 {
@@ -445,11 +473,12 @@ public void gravitateSwarm()
   rect(0,0,width,height);
   colorMode(HSB,1);
   for(int i = 0; i < Z.length; i++) {
+    /*
     for(int j = 0; j < curLineGroup.getSize(); j++) {
       for(int k = 0; k < curLineGroup.getLine(j).getSize(); k++) {
       //for(int k = 0; k < 1; k++) {
         //println(i + " " + j + " " + k);
-        Z[i].gravitate(new particle(curLineGroup.getLine(j).getPoint(k).x, curLineGroup.getLine(j).getPoint(k).y, 0, 0, 0.001f ) );
+        Z[i].gravitate(new particle(curLineGroup.getLine(j).getPoint(k).x, curLineGroup.getLine(j).getPoint(k).y, 0, 0, 0.001 ) );
         //else {
           //Z[i].deteriorate();
         //}
@@ -457,12 +486,20 @@ public void gravitateSwarm()
           //Z[i].deteriorate();
         //else {
           Z[i].update();
-          r = PApplet.parseFloat(i)/Z.length;
-          stroke(colour, pow(r,0.1f), 1-r, 0.15f );
+          r = float(i)/Z.length;
+          stroke(colour, pow(r,0.1), 1-r, 0.15 );
           Z[i].display();
         //}
       }
-    }
+    }*/
+    if((currentAttractor[i] + 1) < curLineGroup.getCenterLine().getSize() && dist(Z[i].x, Z[i].y, curLineGroup.getCenterLine().getPoint(currentAttractor[i]).x, curLineGroup.getCenterLine().getPoint(currentAttractor[i]).y) < 90)
+      currentAttractor[i]++;
+    //println(i + " attracted by " + currentAttractor[i] + " in " + curLineGroup.getCenterLine().getSize());
+    Z[i].gravitate(new particle(curLineGroup.getCenterLine().getPoint(currentAttractor[i]).x, curLineGroup.getCenterLine().getPoint(currentAttractor[i]).y, 0, 0, 0.1f ) );
+    Z[i].update();
+    r = PApplet.parseFloat(i)/Z.length;
+    stroke(colour, pow(r,0.1f), 1-r, 0.15f );
+    Z[i].display();
   }
   colorMode(RGB,255);
   colour+=random(0.01f);
@@ -563,8 +600,8 @@ public void drawBezier()
   endShape();
   stroke(0, 0, 0);
 }
-
-public void lineDetection(){
+/*
+void lineDetection(){
   save("db.jpg");
   PImage src = loadImage("db.jpg");
   opencv = new OpenCV(this, src);
@@ -574,6 +611,187 @@ public void lineDetection(){
   // Arguments are: threshold, minLengthLength, maxLineGap
   
   //lines = opencv.findLines(100, 30, 20);
+}
+*/
+
+class FoodSeeker {
+  ArrayList <Line> lines;
+  int[] food;
+  PVector position;
+  float velocity;
+  float angle;
+  int maxFood;
+  int curFood;
+  float freedom; // range from 0 to pi
+  
+  FoodSeeker(PVector pos, float vel, float ang, int fd, float fr) {
+    position = new PVector();
+    position.x = pos.x;
+    position.y = pos.y;
+    velocity = vel;
+    angle = ang;
+    maxFood = fd;
+    curFood = fd;
+    freedom = fr;
+  }
+  public boolean isOnLine(Line line) {
+    for(int i = 0; i < line.getAllPoints().size(); i++) {
+      if(dist(position.x, position.y, line.getPoint(i).x, line.getPoint(i).y) < 10)
+        return true;
+      else if(i < line.getAllPoints().size() - 1) {
+        PVector d1 = new PVector(position.x - line.getPoint(i).x, position.y - line.getPoint(i).y);
+        PVector d2 = new PVector(line.getPoint(i + 1).x - position.x, line.getPoint(i + 1).y - position.y);
+        if(abs(d1.heading() - d2.heading()) < 1) {
+          return true;
+        }
+      }
+    }
+    return false;
+  }
+  public boolean isOnPoint(PVector point) {
+    if(dist(position.x, position.y, point.x, point.y) < 10)
+      return true;
+    return false;
+  }
+  public void refillFood(int index) {
+    curFood = curFood + food[index];
+    food[index] = 0;
+    if(curFood > maxFood)
+      curFood = maxFood;
+  }
+  public void updateFood() {
+    
+  }
+  public boolean starve() {
+    if(curFood == 0)
+      return true;
+    else
+      return false;
+  }
+  public PVector getVelocity() {
+    PVector v = new PVector(velocity * cos(angle), velocity * sin(angle));
+    return v;
+  }
+  public void step() {
+    auto();
+    curFood--;
+    /*
+    if(curFood > maxFood / 2) {
+      wander();
+      curFood--;
+    }
+    else {
+      seekFood();
+      curFood--;
+    }
+    */
+  }
+  public void auto() {
+    //auto judge and walk
+    int bestPoint = -1;
+    int bestLine = -1; // the line that the best point is on
+    float bestGain = 0;
+    int count = 0;
+    int savedIndex = 0;
+    for(int i = 0; i < lines.size(); i++){
+      for(int j = 0; j < lines.get(i).getAllPoints().size(); j++) {
+        float distance = dist(position.x, position.y, lines.get(i).getPoint(j).x, lines.get(i).getPoint(j).y);
+        if(distance < 30) {
+          float gain = food[count + j] - distance;
+          //println("Line: " + i + " Point: " + j + " (" + lines.get(i).getPoint(j).x + ", " + lines.get(i).getPoint(j).y + ") Gain: " + gain);
+          if(gain > bestGain){
+            bestGain = gain;
+            bestLine = i;
+            bestPoint = j;
+            savedIndex = count + j;
+          }
+        }
+      }
+      count = count + lines.get(i).getSize();
+    }
+    if(bestPoint != -1){
+      PVector direction = new PVector(lines.get(bestLine).getPoint(bestPoint).x - position.x, lines.get(bestLine).getPoint(bestPoint).y - position.y);
+      //angle = direction.heading();
+      angle = direction.heading() + random(-freedom, freedom);
+      //println("    Attracted by Line: " + bestLine + " Point: " + bestPoint + "( " + lines.get(bestLine).getPoint(bestPoint).x + ", " + lines.get(bestLine).getPoint(bestPoint).y + ") curFood: " + curFood + " current pos: (" + position.x + ", " + position.y + ") heading: " + angle +" velocity " + velocity);
+      if(isOnPoint(lines.get(bestLine).getPoint(bestPoint)) && food[savedIndex] != 0) {
+        refillFood(savedIndex);
+        //println("refill " + savedIndex + " Food " + food[savedIndex]);
+      }  
+  }
+    else
+      wander();
+  }
+  public void wander() {
+    position.add(getVelocity());
+    angle = angle + random(-freedom, freedom);
+  }
+  /*
+  void seekFood() {
+    position.add(getVelocity());
+    float distance = 99999999;
+    int nearestLine = -1;
+    int nearest = -1;
+    for(int i = 0; i < lines.size(); i++){
+      for(int j = 0; j < lines.get(i).getAllPoints().size(); j++) {
+        float temp = dist(position.x, position.y, lines.get(i).getPoint(j).x, lines.get(i).getPoint(j).y);
+        if(temp < 30) {
+          if(temp < distance){
+            distance = temp;
+            nearestLine = i;
+            nearest = j;
+          }
+        }
+      }
+    }
+    if(nearest != -1){
+      PVector direction = new PVector(lines.get(nearestLine).getPoint(nearest).x - position.x, lines.get(nearestLine).getPoint(nearest).y - position.y);
+      angle = direction.heading();
+      //angle = direction.heading() + random(-freedom, freedom);
+    }
+    else
+      wander();
+  }
+  */
+  public void render() {
+    strokeWeight(2);
+    stroke(0);
+    PVector tmp = position;
+    tmp.add(getVelocity());
+    PVector[] tmp2 = {position, tmp};
+    Line l = new Line(tmp2);
+    l.draw();
+    stroke(255,0,0);
+    point(position.x, position.y);
+    stroke(0);
+  }
+  public void run(ArrayList <Line> l) {
+    lines = l;
+    int pointSize = 0;
+    for(int i = 0; i < l.size(); i++)
+      pointSize = pointSize + l.get(i).getSize();
+    // saves previous food value
+    int[] tmp = new int[pointSize];
+    if(food != null) {
+      for(int i = 0; i < food.length; i++)
+        tmp[i] = food[i];
+      for(int i = food.length; i < pointSize; i++)
+        tmp[i] = maxFood; // for now
+    }
+    else
+      for(int i = 1; i < pointSize; i++)
+        tmp[i] = maxFood;
+    food = tmp;
+    if(starve() == false)
+    {
+      render();
+      step();   
+    }
+  }
+  public void printFood() {
+    for(int i = 0; i < food.length; i++)
+      println("Food " + i + " : " + food[i]);
+  }
 }
 
 class Line {
@@ -590,7 +808,6 @@ class Line {
   PVector curEnd; 
   PVector endPoint; 
   ArrayList<PVector> allPoints = new ArrayList<PVector>(); 
-
   float startTime; 
   float endTime; 
   boolean isSelected = false; 
@@ -1140,7 +1357,7 @@ class LineGroup {
   }
   public void printLineGroupID()
   {
-    println(lineGroupID);
+    println("Group " + lineGroupID);
   }
   public void computeCenterLine() 
   {
@@ -1151,7 +1368,7 @@ class LineGroup {
       groupPoints.addAll(getLine(getSize() - 1).getAllPoints());
     ArrayList<PVector> controlPoints = bezierFit.fit(groupPoints);
     //bezier(controlPoints.get(0).x, controlPoints.get(0).y, controlPoints.get(1).x, controlPoints.get(1).y, controlPoints.get(2).x, controlPoints.get(2).y, controlPoints.get(3).x, controlPoints.get(3).y);
-    int steps = 10;
+    int steps = 20;
     ArrayList<PVector> points = new ArrayList<PVector>();
     for (int i = 0; i <= steps; i++) {
       float t = i / PApplet.parseFloat(steps);
@@ -1167,6 +1384,10 @@ class LineGroup {
     stroke(0, 250, 150);
     centerLine.draw();
     stroke(0, 0, 0);
+  }
+  public Line getCenterLine()
+  {
+    return centerLine;
   }
   public void clear()
   {
@@ -1425,44 +1646,6 @@ public float findAngle( float x, float y ) {
   return theta;
 }
 
-
-class Point{
-  float x; 
-  float y; 
-  
-  public Point (float x, float y){
-    this.x = x; 
-    this.y = y; 
-  }
-  public void print(){
-    println( "( "+ x + " , " + y + " )");
-  }
-    public void draw(){
-      fill(30, 50); 
-      color(0,0,255);
-    ellipse(x,y,3,3); 
-    color(0,0,0);
-    fill(0); 
-}
-
-public float getX(){
-  return x; 
-}
-public float getY(){
-  return y; 
-}
-
-public Point calcMidPoint (Point p)
-{
-  return new Point(this.x + p.x / 2, this.y + p.y / 2);
-}
-
-public float calcDistance(Point p)
-{
-  return sqrt(sq(p.x - this.x) + sq(p.y - this.y));
-}
-
-}
 
 class Rectangle{
   int x; 

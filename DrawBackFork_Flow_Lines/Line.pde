@@ -1,4 +1,4 @@
-class Line {
+class Line{
   /*Old using points
   Point startPoint; 
   Point curEnd; 
@@ -59,7 +59,7 @@ class Line {
   {
     //println("In drawLine()"); 
     //println("Allpoints.size()" + allPoints.size()); 
-    strokeWeight(1); 
+    
     for (int i = 0; i < allPoints.size(); i++) 
     {
       if (i < allPoints.size() - 1) 

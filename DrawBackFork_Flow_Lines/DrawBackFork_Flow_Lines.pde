@@ -1,8 +1,11 @@
 //import gab.opencv.*;
 import papaya.*;
 //OpenCV opencv;
+import java.io.*;
 ArrayList <Line> allLines = new ArrayList<Line>(); 
 Line curLine; 
+StringList strings = new StringList();
+int stringsCount = 0; // count how many lines should be written to files
 ArrayList <Line> stack = new ArrayList<Line>(); //keep track of the drawBack stack
 float probRandom; //the amount of time that the drawBack will interject randomness
 float degreeRandom; //how much fluctuation is introduced in random interjections
@@ -18,6 +21,7 @@ particle[] Z = new particle[particleSize];
 int[] currentAttractor = new int[particleSize];
 float colour = random(1);
 ArrayList<FoodSeeker> foodSeekers = new ArrayList<FoodSeeker>();
+
 
 void setup() 
 {
@@ -51,7 +55,7 @@ void draw()
     line.drawLine();
   }
   */
-  if(keyPressed == true && key == 's') {
+  if(keyPressed == true && key == 'g') {
     gravitateSwarm();
   }
   for(int i = 0; i < foodSeekers.size(); i++){
@@ -77,6 +81,10 @@ void mousePressed()
 {
   //println(mouseX + " " + mouseY);
   //line(pmouseX, pmouseY, mouseX, mouseY); 
+  stringsCount++;
+  stringsCount++; //since it is a new line
+  strings.append("newLine");
+  strings.append(mouseX + " " + mouseY);
   curLine = new Line(mouseX, mouseY); 
   allLines.add(curLine);
   gPts = new ArrayList();
@@ -86,6 +94,8 @@ void mousePressed()
 void mouseDragged() 
 {
   //println(mouseX + " " + mouseY);
+  stringsCount++;
+  strings.append(mouseX + " " + mouseY);
   line(pmouseX, pmouseY, mouseX, mouseY); 
   //check if the slope has not change by 90 degrees
   //if so set line end to previous point and begin new line with current point add previous line to stack
@@ -184,18 +194,137 @@ void keyPressed()
   if(key == 'f') {
     for(int i = 0; i < lineGroups.size(); i++)
     {
-      int size = lineGroups.get(i).getCenterLine().getSize();
-      PVector position = lineGroups.get(i).getCenterLine().getPoint(round(random(size)));
+      //int size = lineGroups.get(i).getCenterLine().getSize();
+      //PVector position = lineGroups.get(i).getCenterLine().getPoint(round(random(size - 1)));
+      for(int j = 0; j < lineGroups.get(i).getSize(); j++) {
+        int size = lineGroups.get(i).getLine(j).getSize();
+        PVector position = lineGroups.get(i).getLine(j).getPoint(round(random(size - 1)));
+      
       //println(position);
       
       //Danger could be out of bounds.
       //PVector initialVector = new PVector(lineGroups.get(i).getCenterLine().getPoint(1).x - lineGroups.get(i).getCenterLine().getPoint(0).x, lineGroups.get(i).getCenterLine().getPoint(1).y - lineGroups.get(i).getCenterLine().getPoint(0).y);
-      FoodSeeker foodSeeker = new FoodSeeker(position, 1, random(-3.14, 3.14), 20, 0.8);
+      FoodSeeker foodSeeker = new FoodSeeker(position, 1, random(-3.14, 3.14), 30, 0.3);
       //foodSeeker.render();
       foodSeekers.add(foodSeeker);
+      }
+    }
+  }
+  if(key == 's') {
+    selectOutput("Select a file to write to:", "fileOutputSelected");
+  }
+  if(key == 'l') {
+    selectInput("Select a file to load from:", "fileInputSelected");
+  }
+}
+
+void fileOutputSelected(File selection) {
+  if (selection == null) {
+    println("Window was closed or the user hit cancel.");
+  } else {
+    println("User selected " + selection.getAbsolutePath());
+    SaveStrings(selection.getAbsolutePath(), strings);
+  }
+}
+
+void fileInputSelected(File selection) {
+  if (selection == null) {
+    println("Window was closed or the user hit cancel.");
+  } else {
+    println("User selected " + selection.getAbsolutePath());
+    strings = LoadStrings(selection.getAbsolutePath());
+    allLines = StringsToLines(strings);
+    redraw();
+  }
+}
+
+
+void SaveStrings(String fileName, StringList list)
+{
+  String[] string = list.array();
+  saveStrings(fileName, string);
+}
+
+StringList LoadStrings(String fileName)
+{
+  String string[] = loadStrings(fileName);
+  StringList readVal = new StringList();
+  for(int i = 0; i < string.length; i++)
+    readVal.append(string[i]);
+  return readVal;
+} 
+
+ArrayList<Line> StringsToLines(StringList stringList)
+{
+  ArrayList<Line> readVal = new ArrayList<Line>();
+  for(int i = 0; i < stringList.size(); i++) {
+    String s = stringList.get(i);
+    if(s.equals("newLine")) {
+      curLine = new Line();
+      readVal.add(curLine);
+    }
+    else {
+      float[] tmp = float(splitTokens(s));
+      //println(tmp[0]+ " " + tmp[1]);
+      curLine.curEnd(tmp[0], tmp[1]);
+    }
+  }
+  return readVal;
+} 
+/*
+void SaveObject(String fileName, Object toSave)
+{
+  ObjectOutputStream out = null;
+  try
+  {
+    FileOutputStream fos = new FileOutputStream(fileName);
+    OutputStream os = fos;
+    out = new ObjectOutputStream(os);
+    out.writeObject(toSave);
+    out.flush();
+  }
+  catch (IOException e)
+  {
+    e.printStackTrace();
+  }
+  finally
+  {
+    if (out != null)
+    {
+  try { out.close(); } catch (IOException e) {}
     }
   }
 }
+
+Object LoadObject(String fileName)
+{
+  ObjectInputStream in = null;
+  Object readVal = null;
+  try
+  {
+    FileInputStream fis = new FileInputStream(fileName);
+    InputStream is = fis;
+    in = new ObjectInputStream(is);
+    readVal = in.readObject();
+  }
+  catch (IOException e)
+  {
+    e.printStackTrace();
+  }
+  catch (ClassNotFoundException e)
+  {
+    e.printStackTrace();
+  }
+  finally
+  {
+    if (in != null)
+    {
+  try { in.close(); } catch (IOException e) {}
+    }
+  }
+  return readVal;
+} 
+*/
 void gravitateSwarm()
 {
   //filter(INVERT);
