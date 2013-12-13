@@ -122,13 +122,12 @@ void mouseReleased()
 {
   line(pmouseX, pmouseY, mouseX, mouseY); 
   curLine.setEnd(mouseX, mouseY); 
-//<<<<<<< HEAD
   engine = new Decision_Engine(curLine);
   Line compLine = engine.decision();
   //allLines.add(compLine);
   stack.add(compLine); //not working QQ
   //displayAllPrevLines();
-  }
+}
 
 void keyPressed(){
   if(key == 'c'){
@@ -140,7 +139,6 @@ void keyPressed(){
     //create a new veh at the current line's start
     //will need a better solution for creating the car
   }
-  //printAllLines();
   if(drawBezier)
   {
     drawBezier();
