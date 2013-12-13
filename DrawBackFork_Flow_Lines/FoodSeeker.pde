@@ -1,3 +1,15 @@
+//*********************************************************************************************************
+/* 
+ FoodSeeker is a swarmic intelligence that will automatically do the line thickening job. Each FoodSeeker 
+ carries a certain amount of food, consumes food as it goes and seeks food on road. The food is distributed
+ on each line point, and will grow as in nature. The FoodSeeker will pick the best food spot and head there.
+ Once it reach the food spot it will fill their carried food and decide the next best food spot. If the 
+ FoodSeeker consumes all its food it will starve.
+ Author: "Alan" Dingtian Zhang
+ Date: Dec 13, 2013
+ */
+//*********************************************************************************************************
+
 class FoodSeeker {
   ArrayList <Line> lines;
   int[] food;
@@ -135,7 +147,7 @@ class FoodSeeker {
   }
   */
   void render() {
-    strokeWeight(5);
+    strokeWeight(3);
     stroke(0);
     PVector tmp = position;
     tmp.add(getVelocity());

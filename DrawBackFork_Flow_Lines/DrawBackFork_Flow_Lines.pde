@@ -3,8 +3,8 @@ import papaya.*;
 //OpenCV opencv;
 import java.io.*;
 ArrayList <Line> allLines = new ArrayList<Line>(); 
-Line curLine; 
-StringList strings = new StringList();
+Line curLine; // currant line
+StringList strings = new StringList(); // strings for file output
 int stringsCount = 0; // count how many lines should be written to files
 ArrayList <Line> stack = new ArrayList<Line>(); //keep track of the drawBack stack
 float probRandom; //the amount of time that the drawBack will interject randomness
@@ -58,13 +58,14 @@ void draw()
   if(keyPressed == true && key == 'g') {
     gravitateSwarm();
   }
-  for(int i = 0; i < foodSeekers.size(); i++){
+  for(int i = 0; i < foodSeekers.size(); i++){ // FoodSeeker will automatically run
     foodSeekers.get(i).run(allLines);
     //println("FoodSeeker " + i + ":");
   }
   //println("Number of FoodSeekers: " + foodSeekers.size());
 }
 
+// Redraw all drawn lines
 void redraw()
 {
   background(255);
@@ -177,8 +178,7 @@ void keyPressed()
     lineDetection();
   }
   */
-  if (key == 'd')
-  {
+  if (key == 'd'){ // draw center line
     redraw();
     for(i = 0; i < lineGroups.size(); i++)
     {
@@ -191,7 +191,7 @@ void keyPressed()
   if(key == 'r') {
     redraw();
   }
-  if(key == 'f') {
+  if(key == 'f') { // generate a FoodSeeker and let it run
     for(int i = 0; i < lineGroups.size(); i++)
     {
       //int size = lineGroups.get(i).getCenterLine().getSize();
@@ -202,7 +202,6 @@ void keyPressed()
       
       //println(position);
       
-      //Danger could be out of bounds.
       //PVector initialVector = new PVector(lineGroups.get(i).getCenterLine().getPoint(1).x - lineGroups.get(i).getCenterLine().getPoint(0).x, lineGroups.get(i).getCenterLine().getPoint(1).y - lineGroups.get(i).getCenterLine().getPoint(0).y);
       FoodSeeker foodSeeker = new FoodSeeker(position, 1, random(-3.14, 3.14), 30, 0.3);
       //foodSeeker.render();
@@ -210,10 +209,10 @@ void keyPressed()
       }
     }
   }
-  if(key == 's') {
+  if(key == 's') { // save drawn lines to file
     selectOutput("Select a file to write to:", "fileOutputSelected");
   }
-  if(key == 'l') {
+  if(key == 'l') { // load drawn lines from file
     selectInput("Select a file to load from:", "fileInputSelected");
   }
 }
