@@ -38,7 +38,7 @@ void setup()
   frameRate(20); 
   probRandom = .15; 
   degreeRandom = 5;
-  colorMode(HSB, 100, 100, 100);
+  //colorMode(HSB, 100, 100, 100);
   gPts = new ArrayList();
   //drawBezier = true;
   //PImage src = loadImage("PUI001.tif");
@@ -51,8 +51,8 @@ void draw() //veh code copied
   //could have a stack of lines that need to be processed
   checkStack();
   //added to make vehicle work correctly
-  colorMode(RGB);
-  background(255,255,255);
+  //colorMode(RGB);
+  //background(255,255,255);
   if(allLines.size() > 0){
    displayAllPrevLines();
  }
@@ -96,8 +96,26 @@ void draw() //veh code copied
     line.drawLine();
   }
   */
+  if(keyPressed == true && key == 'g') {
+    gravitateSwarm();
+  }
+  for(int i = 0; i < foodSeekers.size(); i++){ // FoodSeeker will automatically run
+    foodSeekers.get(i).run(allLines);
+    //println("FoodSeeker " + i + ":");
+  }
 }
 
+// Redraw all drawn lines
+void redraw()
+{
+  background(255);
+  println("allLines.size() = " + allLines.size());
+  strokeWeight(1); 
+  for(int i = 0; i < allLines.size(); i++)
+  {
+    allLines.get(i).draw(); 
+  }
+}
 
 //##### Event Handling
 void mousePressed() 
