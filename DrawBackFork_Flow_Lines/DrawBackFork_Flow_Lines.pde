@@ -113,14 +113,6 @@ void mouseReleased()
   //Actually the endPoint will be the same with its previous one.
   //line(pmouseX, pmouseY, mouseX, mouseY); 
   curLine.setEnd(mouseX, mouseY); 
-  //curLine.printPoints();
-  /*
-  for(int i = 0; i < allLines.size(); i++)
-  {
-    println("Line " + i);
-    allLines.get(i).printPoints(); 
-  }
-  */
   if(drawBezier)
   {
     drawBezier();
@@ -165,6 +157,11 @@ void mouseReleased()
     }
   } 
   curLineGroup.printLineGroupID();
+  engine = new Decision_Engine(curLine);
+  Line compLine = engine.decision();
+  //allLines.add(compLine);
+  stack.add(compLine); //not working QQ
+  //displayAllPrevLines();
 }
 
 void clear(){
@@ -218,6 +215,12 @@ void keyPressed()
   }
   if(key == 'l') { // load drawn lines from file
     selectInput("Select a file to load from:", "fileInputSelected");
+  }
+  if(key == 'v'){
+    v = new Vehicle(curLine.getPoint(0).x, curLine.getPoint(0).y);
+    counter = 0;
+    //create a new veh at the current line's start
+    //will need a better solution for creating the car
   }
 }
 
