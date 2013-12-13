@@ -122,6 +122,50 @@ void mouseReleased()
 {
   line(pmouseX, pmouseY, mouseX, mouseY); 
   curLine.setEnd(mouseX, mouseY); 
+  if(drawBezier)
+  {
+    drawBezier();
+  }
+  boolean in = false;
+  if(curLineGroup.getSize() == 0 && lineGroups.size() == 1){
+    curLineGroup.addLine(curLine);
+    curLineGroup.setLineGroupID(0);
+    
+    for(int i = 0; i < Z.length; i++) {
+      float radius = random(100);
+      float angle = random(6.28);
+      Z[i] = new particle(curLineGroup.centerLine.getPoint(0).x + radius * cos(angle), curLineGroup.centerLine.getPoint(0).y + radius * sin(angle), 0, 0, 1);
+      //Z[i] = new particle( random(width), random(height), 0, 0, 1 );
+      //println("Particle " + Z[i].x + " " + Z[i].y);
+    }
+  }
+  else {
+    for(int i = 0; i < lineGroups.size(); i++) {
+      curLineGroup = lineGroups.get(i);
+      //println("c" + i);
+      if(curLineGroup.inGroup(curLine)) {
+        curLineGroup.addLine(curLine);
+        in = true;
+        break;
+      }
+    }
+    if(in == false) {
+      println("new group");
+      curLineGroup = new LineGroup();
+      lineGroups.add(curLineGroup);
+      curLineGroup.addLine(curLine);
+      curLineGroup.setLineGroupID(lineGroups.size() - 1);
+      //
+      for(int i = 0; i < Z.length; i++) {
+        float radius = random(100);
+        float angle = random(6.28);
+        Z[i] = new particle(curLineGroup.centerLine.getPoint(0).x + radius * cos(angle), curLineGroup.centerLine.getPoint(0).y + radius * sin(angle), 0, 0, 1);
+        //Z[i] = new particle( random(width), random(height), 0, 0, 1 );
+        //println("Particle " + Z[i].x + " " + Z[i].y);
+      }
+    }
+  } 
+  curLineGroup.printLineGroupID();
   engine = new Decision_Engine(curLine);
   Line compLine = engine.decision();
   //allLines.add(compLine);
@@ -130,8 +174,48 @@ void mouseReleased()
 }
 
 void keyPressed(){
+/*
+  if (key == 'l')
+  {
+    lineDetection();
+  }
+  */
+  if (key == 'd'){ // draw center line
+    redraw();
+    for(i = 0; i < lineGroups.size(); i++)
+    {
+      lineGroups.get(i).drawCenterLine();
+    }
+  }
   if(key == 'c'){
     clear();
+  }
+  if(key == 'r') {
+    redraw();
+  }
+  if(key == 'f') { // generate a FoodSeeker and let it run
+    for(int i = 0; i < lineGroups.size(); i++)
+    {
+      //int size = lineGroups.get(i).getCenterLine().getSize();
+      //PVector position = lineGroups.get(i).getCenterLine().getPoint(round(random(size - 1)));
+      for(int j = 0; j < lineGroups.get(i).getSize(); j++) {
+        int size = lineGroups.get(i).getLine(j).getSize();
+        PVector position = lineGroups.get(i).getLine(j).getPoint(round(random(size - 1)));
+      
+      //println(position);
+      
+      //PVector initialVector = new PVector(lineGroups.get(i).getCenterLine().getPoint(1).x - lineGroups.get(i).getCenterLine().getPoint(0).x, lineGroups.get(i).getCenterLine().getPoint(1).y - lineGroups.get(i).getCenterLine().getPoint(0).y);
+      FoodSeeker foodSeeker = new FoodSeeker(position, 1, random(-3.14, 3.14), 30, 0.3);
+      //foodSeeker.render();
+      foodSeekers.add(foodSeeker);
+      }
+    }
+  }
+  if(key == 's') { // save drawn lines to file
+    selectOutput("Select a file to write to:", "fileOutputSelected");
+  }
+  if(key == 'l') { // load drawn lines from file
+    selectInput("Select a file to load from:", "fileInputSelected");
   }
   if(key == 'v'){
     v = new Vehicle(curLine.getPoint(0).x, curLine.getPoint(0).y);
