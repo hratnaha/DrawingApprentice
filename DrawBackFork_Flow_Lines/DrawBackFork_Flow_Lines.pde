@@ -42,7 +42,6 @@ void draw() //veh code copied
 {
   //could have a stack of lines that need to be processed
   checkStack();
-//<<<<<<< HEAD
   //added to make vehicle work correctly
   colorMode(RGB);
   background(255,255,255);
@@ -81,7 +80,6 @@ void draw() //veh code copied
     }
   } */
 
-//=======
   /*
   image(opencv.getOutput(), 0, 0);
   strokeWeight(3);
@@ -90,7 +88,6 @@ void draw() //veh code copied
     line.drawLine();
   }
   */
-//>>>>>>> f1e62ce3073dda09c1305dc9ceba5ef04896ad60
 }
 
 
@@ -137,7 +134,6 @@ void keyPressed(){
     //create a new veh at the current line's start
     //will need a better solution for creating the car
   }
-//=======
   //printAllLines();
   if(drawBezier)
   {
@@ -159,17 +155,14 @@ void keyPressed(){
     curLineGroup.setLineGroupID(0);
   }
   curLineGroup.printLineGroupID();
-//>>>>>>> f1e62ce3073dda09c1305dc9ceba5ef04896ad60
 }
 
 void clear(){
     allLines = new ArrayList<Line>(); 
-//<<<<<<< HEAD
     background(100);
 }
 
 /*void generateFlowLines()
-=======
     //curLineGroup = new LineGroup();
     lineGroups = new ArrayList<LineGroup>();
     background(100);}
@@ -190,7 +183,6 @@ void keyPressed()
 }
 
 void generateFlowLines()
->>>>>>> f1e62ce3073dda09c1305dc9ceba5ef04896ad60
 {
   //cycle through all lines to determine their flow lines
   for(int i = 0; i < allLines.size(); i++)
@@ -239,7 +231,6 @@ void checkStack(){
   }
 }
 
-//<<<<<<< HEAD
 void displayAllPrevLines(){
   for(int i = 0; i < allLines.size(); i++){
     if(allLines.get(i).getSize() > 1){
@@ -249,7 +240,6 @@ void displayAllPrevLines(){
   } 
 }
 
-//=======
 void drawBezier()
 {
   int sz = gPts.size();
@@ -296,4 +286,3 @@ void lineDetection(){
   
   //lines = opencv.findLines(100, 30, 20);
 }
-//>>>>>>> f1e62ce3073dda09c1305dc9ceba5ef04896ad60
