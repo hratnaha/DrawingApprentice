@@ -1,4 +1,4 @@
-class Line {
+class Line{
   /*Old using points
   Point startPoint; 
   Point curEnd; 
@@ -12,7 +12,6 @@ class Line {
   PVector curEnd; 
   PVector endPoint; 
   ArrayList<PVector> allPoints = new ArrayList<PVector>(); 
-
   float startTime; 
   float endTime; 
   boolean isSelected = false; 
@@ -46,12 +45,21 @@ class Line {
     endPoint = all.get(all.size() - 1);
     allPoints = all;
   }
+  
+  public Line(PVector[] all)
+  {
+    //myPoint = new Point(x, y);
+    startPoint = all[0];
+    endPoint = all[all.length - 1];
+    for(int i = 0; i < all.length; i++)
+      allPoints.add(all[i]);
+  }
 
   public void draw() 
   {
     //println("In drawLine()"); 
     //println("Allpoints.size()" + allPoints.size()); 
-    strokeWeight(.5); 
+    
     for (int i = 0; i < allPoints.size(); i++) 
     {
       if (i < allPoints.size() - 1) 
@@ -61,13 +69,14 @@ class Line {
         PVector p2 = allPoints.get(i+1); 
         line(p1.x, p1.y, p2.x, p2.y);
       } 
-      else if (i == allPoints.size() - 1) 
+      /*else if (i == allPoints.size() - 1) 
       {
        // println("allPoints.size()=" + allPoints.size()); 
         PVector p1 = allPoints.get(i -1); 
         PVector p2 = allPoints.get(i); 
         line(p1.x, p1.y, p2.x, p2.y);
       }
+      */
     }
   }
 
@@ -187,18 +196,19 @@ class Line {
 
   public void setEnd(float x, float y) 
   {
+    //Actually the endPoint will be the same with its previous one.
     myPoint = new PVector(x, y);
     endPoint = myPoint; 
-    allPoints.add(endPoint);
+    //allPoints.add(endPoint);
     endTime = millis();
     makeBoundingBox();
   }
 
   public void printPoints() 
   {
-    println("The function is not implemented, please code me~!"); 
+    //println("The function is not implemented, please code me~!"); 
     for (int i = 0; i < allPoints.size(); i++) {
-      //println("i = " + i); 
+      println(allPoints.get(i).x + " " + allPoints.get(i).y); 
       //curPoint.printPoint();
     }
   }

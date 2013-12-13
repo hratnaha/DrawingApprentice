@@ -233,6 +233,168 @@ void clear(){
     background(255);
 }
 
+void fileOutputSelected(File selection) {
+  if (selection == null) {
+    println("Window was closed or the user hit cancel.");
+  } else {
+    println("User selected " + selection.getAbsolutePath());
+    SaveStrings(selection.getAbsolutePath(), strings);
+  }
+}
+
+void fileInputSelected(File selection) {
+  if (selection == null) {
+    println("Window was closed or the user hit cancel.");
+  } else {
+    println("User selected " + selection.getAbsolutePath());
+    strings = LoadStrings(selection.getAbsolutePath());
+    allLines = StringsToLines(strings);
+    redraw();
+  }
+}
+
+
+void SaveStrings(String fileName, StringList list)
+{
+  String[] string = list.array();
+  saveStrings(fileName, string);
+}
+
+StringList LoadStrings(String fileName)
+{
+  String string[] = loadStrings(fileName);
+  StringList readVal = new StringList();
+  for(int i = 0; i < string.length; i++)
+    readVal.append(string[i]);
+  return readVal;
+} 
+
+ArrayList<Line> StringsToLines(StringList stringList)
+{
+  ArrayList<Line> readVal = new ArrayList<Line>();
+  for(int i = 0; i < stringList.size(); i++) {
+    String s = stringList.get(i);
+    if(s.equals("newLine")) {
+      curLine = new Line();
+      readVal.add(curLine);
+    }
+    else {
+      float[] tmp = float(splitTokens(s));
+      //println(tmp[0]+ " " + tmp[1]);
+      curLine.curEnd(tmp[0], tmp[1]);
+    }
+  }
+  return readVal;
+} 
+/*
+void SaveObject(String fileName, Object toSave)
+{
+  ObjectOutputStream out = null;
+  try
+  {
+    FileOutputStream fos = new FileOutputStream(fileName);
+    OutputStream os = fos;
+    out = new ObjectOutputStream(os);
+    out.writeObject(toSave);
+    out.flush();
+  }
+  catch (IOException e)
+  {
+    e.printStackTrace();
+  }
+  finally
+  {
+    if (out != null)
+    {
+  try { out.close(); } catch (IOException e) {}
+    }
+  }
+}
+
+Object LoadObject(String fileName)
+{
+  ObjectInputStream in = null;
+  Object readVal = null;
+  try
+  {
+    FileInputStream fis = new FileInputStream(fileName);
+    InputStream is = fis;
+    in = new ObjectInputStream(is);
+    readVal = in.readObject();
+  }
+  catch (IOException e)
+  {
+    e.printStackTrace();
+  }
+  catch (ClassNotFoundException e)
+  {
+    e.printStackTrace();
+  }
+  finally
+  {
+    if (in != null)
+    {
+  try { in.close(); } catch (IOException e) {}
+    }
+  }
+  return readVal;
+} 
+*/
+void gravitateSwarm()
+{
+  //filter(INVERT);
+ 
+  float r;
+  redraw();
+  stroke(0);
+  rect(0,0,width,height);
+  colorMode(HSB,1);
+  for(int i = 0; i < Z.length; i++) {
+    /*
+    for(int j = 0; j < curLineGroup.getSize(); j++) {
+      for(int k = 0; k < curLineGroup.getLine(j).getSize(); k++) {
+      //for(int k = 0; k < 1; k++) {
+        //println(i + " " + j + " " + k);
+        Z[i].gravitate(new particle(curLineGroup.getLine(j).getPoint(k).x, curLineGroup.getLine(j).getPoint(k).y, 0, 0, 0.001 ) );
+        //else {
+          //Z[i].deteriorate();
+        //}
+        //if(sqrt(sq(Z[i].x - curLineGroup.centerLine.getPoint(curLineGroup.centerLine.getSize() - 1).x) + sq(Z[i].y - curLineGroup.centerLine.getPoint(curLineGroup.centerLine.getSize() - 1).y)) < 100)
+          //Z[i].deteriorate();
+        //else {
+          Z[i].update();
+          r = float(i)/Z.length;
+          stroke(colour, pow(r,0.1), 1-r, 0.15 );
+          Z[i].display();
+        //}
+      }
+    }*/
+    if((currentAttractor[i] + 1) < curLineGroup.getCenterLine().getSize() && dist(Z[i].x, Z[i].y, curLineGroup.getCenterLine().getPoint(currentAttractor[i]).x, curLineGroup.getCenterLine().getPoint(currentAttractor[i]).y) < 90)
+      currentAttractor[i]++;
+    //println(i + " attracted by " + currentAttractor[i] + " in " + curLineGroup.getCenterLine().getSize());
+    Z[i].gravitate(new particle(curLineGroup.getCenterLine().getPoint(currentAttractor[i]).x, curLineGroup.getCenterLine().getPoint(currentAttractor[i]).y, 0, 0, 0.1 ) );
+    Z[i].update();
+    r = float(i)/Z.length;
+    stroke(colour, pow(r,0.1), 1-r, 0.15 );
+    Z[i].display();
+  }
+  colorMode(RGB,255);
+  colour+=random(0.01);
+  if( colour > 1 ) {
+    colour = colour%1;
+  }
+  stroke(0, 0, 0);
+  //filter(INVERT);
+}
+void generateFlowLines()
+{
+  //cycle through all lines to determine their flow lines
+  for(int i = 0; i < allLines.size(); i++)
+  {
+    Line curLine = allLines.get(i); 
+    curLine.generateFlowLines(); 
+  }
+}
 void changeMode (String mode)
 {
   //change the mode of the sketch 
