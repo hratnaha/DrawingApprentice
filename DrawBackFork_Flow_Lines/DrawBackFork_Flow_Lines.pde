@@ -139,26 +139,6 @@ void keyPressed(){
     //create a new veh at the current line's start
     //will need a better solution for creating the car
   }
-  if(drawBezier)
-  {
-    drawBezier();
-  }
-  if(curLineGroup.getSize() > 0) {
-    if(curLineGroup.inGroup(curLine))
-      curLineGroup.addLine(curLine);
-    else {
-      println("new group");
-      curLineGroup = new LineGroup();
-      lineGroups.add(curLineGroup);
-      curLineGroup.addLine(curLine);
-      curLineGroup.setLineGroupID(lineGroups.size() - 1);
-    }
-  }
-  else{
-    curLineGroup.addLine(curLine);
-    curLineGroup.setLineGroupID(0);
-  }
-  curLineGroup.printLineGroupID();
 }
 
 void clear(){
