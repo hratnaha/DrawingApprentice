@@ -14,6 +14,11 @@ ArrayList gPts;
 int gMvCnt = 0;
 LineGroup curLineGroup = new LineGroup();
 ArrayList<LineGroup> lineGroups = new ArrayList<LineGroup>();
+int particleSize = 2000;
+particle[] Z = new particle[particleSize];
+int[] currentAttractor = new int[particleSize];
+float colour = random(1);
+ArrayList<FoodSeeker> foodSeekers = new ArrayList<FoodSeeker>();
 Decision_Engine engine;
 //vehice's extra instance variables
 Vehicle v;
