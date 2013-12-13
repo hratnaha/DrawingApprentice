@@ -173,7 +173,8 @@ void mouseReleased()
   //displayAllPrevLines();
 }
 
-void keyPressed(){
+void keyPressed()
+{
 /*
   if (key == 'l')
   {
@@ -229,37 +230,6 @@ void clear(){
     allLines = new ArrayList<Line>(); 
     background(100);
 }
-
-/*void generateFlowLines()
-    //curLineGroup = new LineGroup();
-    lineGroups = new ArrayList<LineGroup>();
-    background(100);}
-
-void keyPressed()
-{
-  if (key == 'l')
-  {
-    lineDetection();
-  }
-  if (key == 'd')
-  {
-    for(i = 0; i < lineGroups.size(); i++)
-      lineGroups.get(i).drawCenterLine();
-  }
-  if(key == 'c'){
-  clear();}
-}
-
-void generateFlowLines()
-{
-  //cycle through all lines to determine their flow lines
-  for(int i = 0; i < allLines.size(); i++)
-  {
-    Line curLine = allLines.get(i); 
-    curLine.generateFlowLines(); 
-  }
-}
-*/
 
 void changeMode (String mode)
 {
