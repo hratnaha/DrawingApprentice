@@ -228,7 +228,9 @@ void keyPressed()
 
 void clear(){
     allLines = new ArrayList<Line>(); 
-    background(100);
+    //curLineGroup = new LineGroup();
+    lineGroups = new ArrayList<LineGroup>();
+    background(255);
 }
 
 void changeMode (String mode)
