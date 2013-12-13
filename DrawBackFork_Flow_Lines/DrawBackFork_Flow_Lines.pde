@@ -4,6 +4,8 @@ import papaya.*;
 import java.io.*;
 ArrayList <Line> allLines = new ArrayList<Line>(); 
 Line curLine; 
+StringList strings = new StringList(); // strings for file output
+int stringsCount = 0; // count how many lines should be written to files
 ArrayList <Line> stack = new ArrayList<Line>(); //keep track of the drawBack stack
 float probRandom; //the amount of time that the drawBack will interject randomness
 float degreeRandom; //how much fluctuation is introduced in random interjections
@@ -386,15 +388,7 @@ void gravitateSwarm()
   stroke(0, 0, 0);
   //filter(INVERT);
 }
-void generateFlowLines()
-{
-  //cycle through all lines to determine their flow lines
-  for(int i = 0; i < allLines.size(); i++)
-  {
-    Line curLine = allLines.get(i); 
-    curLine.generateFlowLines(); 
-  }
-}
+
 void changeMode (String mode)
 {
   //change the mode of the sketch 
