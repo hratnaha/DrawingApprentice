@@ -82,21 +82,21 @@ public void createGUI() {
   G4P.setCursor(ARROW);
   if (frame != null)
     frame.setTitle("Apprentice AI Drawing Partner");
-  teachMeTF = new GTextField(this, 15, 9, 120, 30, G4P.SCROLLBARS_NONE);
+  teachMeTF = new GTextField(this, 15, 10, 120, 30, G4P.SCROLLBARS_NONE);
   teachMeTF.setDefaultText("Teach me!");
   teachMeTF.setLocalColorScheme(GCScheme.CYAN_SCHEME);
   teachMeTF.setOpaque(true);
   teachMeTF.addEventHandler(this, "textfield1_change1");
-  drawMeTF = new GTextField(this, 569, 13, 120, 30, G4P.SCROLLBARS_NONE);
+  drawMeTF = new GTextField(this, 569, 10, 120, 30, G4P.SCROLLBARS_NONE);
   drawMeTF.setDefaultText("[tree]");
   drawMeTF.setLocalColorScheme(GCScheme.CYAN_SCHEME);
   drawMeTF.setOpaque(true);
   drawMeTF.addEventHandler(this, "drawMeTF_change1");
-  teachMeButton = new GButton(this, 147, 8, 80, 30);
+  teachMeButton = new GButton(this, 147, 10, 80, 30);
   teachMeButton.setText("Done!");
   teachMeButton.setLocalColorScheme(GCScheme.CYAN_SCHEME);
   teachMeButton.addEventHandler(this, "teachMeButton_click1");
-  drawMeButton = new GButton(this, 473, 13, 80, 30);
+  drawMeButton = new GButton(this, 473, 10, 80, 30);
   drawMeButton.setText("Draw me a...");
   drawMeButton.setLocalColorScheme(GCScheme.CYAN_SCHEME);
   drawMeButton.addEventHandler(this, "drawMeButton_click1");

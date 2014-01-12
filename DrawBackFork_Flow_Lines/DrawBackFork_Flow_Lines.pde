@@ -83,13 +83,14 @@ void draw() //veh code copied
     foodSeekers.get(i).run(allLines);
     //println("FoodSeeker " + i + ":");
   }
+  textSize(16); 
   if (drawingMode=="teach") {
     fill(0);
-    text("Teach Me! Type label, draw, then done!", 230, 27, 300, 50);
+    text("Teach Me! Type label, draw, then done!", 235, 10, 220, 50);
   }
   if (drawingMode=="drawPos") {
     fill(0); 
-    text("Where do you want me to draw?", 230, 27, 300, 50);
+    text("Where do you want me to draw?", 235, 10, 220, 50);
   }
 }
 
