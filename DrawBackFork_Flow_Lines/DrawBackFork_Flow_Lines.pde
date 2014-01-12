@@ -78,6 +78,12 @@ void draw() //veh code copied
     foodSeekers.get(i).run(allLines);
     //println("FoodSeeker " + i + ":");
   }
+  if(drawingMode=="teach"){
+    fill(0);
+    //rectMode(CENTER); 
+    text("Teach Me! Type label, draw, then done!", 250, 15);
+  }
+  
 }
 
 // Redraw all drawn lines
