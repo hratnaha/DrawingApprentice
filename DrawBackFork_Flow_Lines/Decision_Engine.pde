@@ -15,9 +15,7 @@ class Decision_Engine {
  }
   
   public Line decision(){
-    int decision = (int)random(1,6);
-    //int decision = 5;
-    println(decision);
+    int decision = (int)random(1,5);
     if(decision == translate){
       Line_Mod m = new Line_Mod(this.line);
       Line newLine = m.translation();
@@ -45,7 +43,6 @@ class Decision_Engine {
     } else if(decision == veh){
       Line_Mod m = new Line_Mod(this.line);
       Line newLine = m.vehicleDraw(this.line);
-      print("inside decision engine, vechile");
       //Line newLine  = new Line(0,0);
       return newLine;
       

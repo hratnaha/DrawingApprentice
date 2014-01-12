@@ -100,7 +100,7 @@ class FoodSeeker {
       firstTime = false;
       //println("First Time");
     }
-    println("bestPoint: " + bestPoint + " savedIndex: " + savedIndex);
+    //println("bestPoint: " + bestPoint + " savedIndex: " + savedIndex);
     if(bestPoint != -1){
       PVector direction = new PVector(lines.get(bestLine).getPoint(bestPoint).x - position.x, lines.get(bestLine).getPoint(bestPoint).y - position.y);
       //angle = direction.heading();

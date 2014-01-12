@@ -140,7 +140,7 @@ class LineGroup {
       ArrayList<Float> tmp = new ArrayList<Float>();
       for(int i = centerLine.allPoints.size() - 1; centerLine_overlap[i] >= 0; i--)
         tmp.add(new PVector(centerLine.getPoint(i).y - centerLine.getPoint(i - 1).y, centerLine.getPoint(i).x - centerLine.getPoint(i - 1).x).heading());
-      centerAvg = average(tmp);
+      centerAvg = average(tmp); 
       centerStd = std(tmp);
       tmp = new ArrayList<Float>();
       for(int i = 0; curLine_overlap[i] >= 0; i++)

@@ -1,3 +1,5 @@
+import g4p_controls.*;
+
 //import gab.opencv.*;
 import papaya.*;
 //OpenCV opencv;
@@ -27,9 +29,16 @@ Vehicle v;
 int counter;
 FlowField flowfield;
 
+String drawingMode = "draw";  
+Shape myShape; 
+ArrayList<Shape> allShapes = new ArrayList<Shape>(); 
+
 void setup() 
 {
-  size(600, 600);
+  myShape = new Shape(); 
+  size(700, 700, JAVA2D);
+  createGUI();
+  customGUI();
   background(255);
   noFill(); 
   strokeWeight(1); 
@@ -49,57 +58,21 @@ void setup()
 void draw() //veh code copied
 {
   //could have a stack of lines that need to be processed
+  background(255);
   checkStack();
   //added to make vehicle work correctly
   //colorMode(RGB);
   //background(255,255,255);
-  if(allLines.size() > 0){
-   displayAllPrevLines();
- }
- if(curLine != null && curLine.getSize() > 1){
-   curLine.draw();
- } 
- 
- //this updates the vehicle's path:
- /*
- boolean nullFlag = false;
-  if(v!= null){
-    counter += 1;
-    if(curLine.getSize() > counter){
-      PVector target = new PVector(curLine.getPoint(counter).x, curLine.getPoint(counter).y);
-       v.arrive(target);
-    } else {
-      PVector target = curLine.getEndPoint();
-      v.arrive(target);
-    }
-    if(curLine.insideBufferZone(v.loc)){
-      println("car now null");
-      nullFlag = true;
-      v = null;
-      displayAllPrevLines();
-    }
-    if(!nullFlag){
-      v.update();
-     // v.display();
-      if(counter%20 == 0){
-       Line line = v.drawTrail(); 
-       allLines.add(line);
-      }
-    }
-  } */
-
-  /*
-  image(opencv.getOutput(), 0, 0);
-  strokeWeight(3);
-  for (Line line : lines) {
-    stroke(0, 255, 0);
-    line.drawLine();
+  if (allLines.size() > 0) {
+    displayAllPrevLines();
   }
-  */
-  if(keyPressed == true && key == 'g') {
+  if (curLine != null && curLine.getSize() > 1) {
+    curLine.draw();
+  } 
+  if (keyPressed == true && key == 'g') {
     gravitateSwarm();
   }
-  for(int i = 0; i < foodSeekers.size(); i++){ // FoodSeeker will automatically run
+  for (int i = 0; i < foodSeekers.size(); i++) { // FoodSeeker will automatically run
     foodSeekers.get(i).run(allLines);
     //println("FoodSeeker " + i + ":");
   }
@@ -111,47 +84,44 @@ void redraw()
   background(255);
   println("allLines.size() = " + allLines.size());
   strokeWeight(1); 
-  for(int i = 0; i < allLines.size(); i++)
+  for (int i = 0; i < allLines.size(); i++)
   {
-    allLines.get(i).draw(); 
+    //allLines.get(i).draw();
   }
 }
 
 //##### Event Handling
 void mousePressed() 
 {
-  //println(mouseX + " " + mouseY);
-  //line(pmouseX, pmouseY, mouseX, mouseY); 
   curLine = new Line(mouseX, mouseY); 
   allLines.add(curLine);
   gPts = new ArrayList();
-  gPts.add(new PVector(mouseX,mouseY));
+  gPts.add(new PVector(mouseX, mouseY));
   gMvCnt = 0;
 }
 void mouseDragged() 
 {
-  //println(mouseX + " " + mouseY);
   line(pmouseX, pmouseY, mouseX, mouseY); 
   //check if the slope has not change by 90 degrees
   //if so set line end to previous point and begin new line with current point add previous line to stack
   curLine.curEnd(mouseX, mouseY);
   if ( gMvCnt++ % 5 == 0 )
-    gPts.add(new PVector(mouseX,mouseY));
+    gPts.add(new PVector(mouseX, mouseY));
 }
 void mouseReleased() 
 {
   line(pmouseX, pmouseY, mouseX, mouseY); 
   curLine.setEnd(mouseX, mouseY); 
-  if(drawBezier)
+  if (drawBezier)
   {
     drawBezier();
   }
   boolean in = false;
-  if(curLineGroup.getSize() == 0 && lineGroups.size() == 1){
+  if (curLineGroup.getSize() == 0 && lineGroups.size() == 1) {
     curLineGroup.addLine(curLine);
     curLineGroup.setLineGroupID(0);
-    
-    for(int i = 0; i < Z.length; i++) {
+
+    for (int i = 0; i < Z.length; i++) {
       float radius = random(100);
       float angle = random(6.28);
       Z[i] = new particle(curLineGroup.centerLine.getPoint(0).x + radius * cos(angle), curLineGroup.centerLine.getPoint(0).y + radius * sin(angle), 0, 0, 1);
@@ -160,23 +130,23 @@ void mouseReleased()
     }
   }
   else {
-    for(int i = 0; i < lineGroups.size(); i++) {
+    for (int i = 0; i < lineGroups.size(); i++) {
       curLineGroup = lineGroups.get(i);
       //println("c" + i);
-      if(curLineGroup.inGroup(curLine)) {
+      if (curLineGroup.inGroup(curLine)) {
         curLineGroup.addLine(curLine);
         in = true;
         break;
       }
     }
-    if(in == false) {
-      println("new group");
+    if (in == false) {
+      //println("new group");
       curLineGroup = new LineGroup();
       lineGroups.add(curLineGroup);
       curLineGroup.addLine(curLine);
       curLineGroup.setLineGroupID(lineGroups.size() - 1);
       //
-      for(int i = 0; i < Z.length; i++) {
+      for (int i = 0; i < Z.length; i++) {
         float radius = random(100);
         float angle = random(6.28);
         Z[i] = new particle(curLineGroup.centerLine.getPoint(0).x + radius * cos(angle), curLineGroup.centerLine.getPoint(0).y + radius * sin(angle), 0, 0, 1);
@@ -185,60 +155,73 @@ void mouseReleased()
       }
     }
   } 
-  curLineGroup.printLineGroupID();
-  engine = new Decision_Engine(curLine);
-  Line compLine = engine.decision();
-  //allLines.add(compLine);
-  stack.add(compLine); //not working QQ
-  //displayAllPrevLines();
+  //curLineGroup.printLineGroupID();
+  if (drawingMode == "draw") {
+    engine = new Decision_Engine(curLine);
+    Line compLine = engine.decision();
+    //allLines.add(compLine);
+    stack.add(compLine); //not working QQ
+    //displayAllPrevLines();
+  }
+  else if (drawingMode == "teach")
+  {
+    //println(myShape); 
+    Line tempLine = new Line();  
+    for (int i = 0; i < curLine.allPoints.size(); i++) {
+      tempLine.addPoint(new PVector(curLine.allPoints.get(i).x ,curLine.allPoints.get(i).y));
+    }
+    //need to iterate over the line and populate another one
+
+    myShape.addLine(tempLine);
+  }
 }
 
 void keyPressed()
 {
-/*
+  /*
   if (key == 'l')
-  {
-    lineDetection();
-  }
-  */
-  if (key == 'd'){ // draw center line
+   {
+   lineDetection();
+   }
+   */
+  if (key == 'd') { // draw center line
     redraw();
-    for(i = 0; i < lineGroups.size(); i++)
+    for (i = 0; i < lineGroups.size(); i++)
     {
       lineGroups.get(i).drawCenterLine();
     }
   }
-  if(key == 'c'){
+  if (key == 'c') {
     clear();
   }
-  if(key == 'r') {
+  if (key == 'r') {
     redraw();
   }
-  if(key == 'f') { // generate a FoodSeeker and let it run
-    for(int i = 0; i < lineGroups.size(); i++)
+  if (key == 'f') { // generate a FoodSeeker and let it run
+    for (int i = 0; i < lineGroups.size(); i++)
     {
       //int size = lineGroups.get(i).getCenterLine().getSize();
       //PVector position = lineGroups.get(i).getCenterLine().getPoint(round(random(size - 1)));
-      for(int j = 0; j < lineGroups.get(i).getSize(); j++) {
+      for (int j = 0; j < lineGroups.get(i).getSize(); j++) {
         int size = lineGroups.get(i).getLine(j).getSize();
         PVector position = lineGroups.get(i).getLine(j).getPoint(round(random(size - 1)));
-      
-      //println(position);
-      
-      //PVector initialVector = new PVector(lineGroups.get(i).getCenterLine().getPoint(1).x - lineGroups.get(i).getCenterLine().getPoint(0).x, lineGroups.get(i).getCenterLine().getPoint(1).y - lineGroups.get(i).getCenterLine().getPoint(0).y);
-      FoodSeeker foodSeeker = new FoodSeeker(position, 1, random(-3.14, 3.14), 30, 0.3);
-      //foodSeeker.render();
-      foodSeekers.add(foodSeeker);
+
+        //println(position);
+
+        //PVector initialVector = new PVector(lineGroups.get(i).getCenterLine().getPoint(1).x - lineGroups.get(i).getCenterLine().getPoint(0).x, lineGroups.get(i).getCenterLine().getPoint(1).y - lineGroups.get(i).getCenterLine().getPoint(0).y);
+        FoodSeeker foodSeeker = new FoodSeeker(position, 1, random(-3.14, 3.14), 30, 0.3);
+        //foodSeeker.render();
+        foodSeekers.add(foodSeeker);
       }
     }
   }
-  if(key == 's') { // save drawn lines to file
+  if (key == 's') { // save drawn lines to file
     selectOutput("Select a file to write to:", "fileOutputSelected");
   }
-  if(key == 'l') { // load drawn lines from file
+  if (key == 'l') { // load drawn lines from file
     selectInput("Select a file to load from:", "fileInputSelected");
   }
-  if(key == 'v'){
+  if (key == 'v') {
     v = new Vehicle(curLine.getPoint(0).x, curLine.getPoint(0).y);
     counter = 0;
     //create a new veh at the current line's start
@@ -246,17 +229,18 @@ void keyPressed()
   }
 }
 
-void clear(){
-    allLines = new ArrayList<Line>(); 
-    //curLineGroup = new LineGroup();
-    lineGroups = new ArrayList<LineGroup>();
-    background(255);
+void clear() {
+  allLines = new ArrayList<Line>(); 
+  //curLineGroup = new LineGroup();
+  lineGroups = new ArrayList<LineGroup>();
+  background(255);
 }
 
 void fileOutputSelected(File selection) {
   if (selection == null) {
     println("Window was closed or the user hit cancel.");
-  } else {
+  } 
+  else {
     println("User selected " + selection.getAbsolutePath());
     SaveStrings(selection.getAbsolutePath(), strings);
   }
@@ -265,7 +249,8 @@ void fileOutputSelected(File selection) {
 void fileInputSelected(File selection) {
   if (selection == null) {
     println("Window was closed or the user hit cancel.");
-  } else {
+  } 
+  else {
     println("User selected " + selection.getAbsolutePath());
     strings = LoadStrings(selection.getAbsolutePath());
     allLines = StringsToLines(strings);
@@ -284,7 +269,7 @@ StringList LoadStrings(String fileName)
 {
   String string[] = loadStrings(fileName);
   StringList readVal = new StringList();
-  for(int i = 0; i < string.length; i++)
+  for (int i = 0; i < string.length; i++)
     readVal.append(string[i]);
   return readVal;
 } 
@@ -292,9 +277,9 @@ StringList LoadStrings(String fileName)
 ArrayList<Line> StringsToLines(StringList stringList)
 {
   ArrayList<Line> readVal = new ArrayList<Line>();
-  for(int i = 0; i < stringList.size(); i++) {
+  for (int i = 0; i < stringList.size(); i++) {
     String s = stringList.get(i);
-    if(s.equals("newLine")) {
+    if (s.equals("newLine")) {
       curLine = new Line();
       readVal.add(curLine);
     }
@@ -308,99 +293,99 @@ ArrayList<Line> StringsToLines(StringList stringList)
 } 
 /*
 void SaveObject(String fileName, Object toSave)
-{
-  ObjectOutputStream out = null;
-  try
-  {
-    FileOutputStream fos = new FileOutputStream(fileName);
-    OutputStream os = fos;
-    out = new ObjectOutputStream(os);
-    out.writeObject(toSave);
-    out.flush();
-  }
-  catch (IOException e)
-  {
-    e.printStackTrace();
-  }
-  finally
-  {
-    if (out != null)
-    {
-  try { out.close(); } catch (IOException e) {}
-    }
-  }
-}
-
-Object LoadObject(String fileName)
-{
-  ObjectInputStream in = null;
-  Object readVal = null;
-  try
-  {
-    FileInputStream fis = new FileInputStream(fileName);
-    InputStream is = fis;
-    in = new ObjectInputStream(is);
-    readVal = in.readObject();
-  }
-  catch (IOException e)
-  {
-    e.printStackTrace();
-  }
-  catch (ClassNotFoundException e)
-  {
-    e.printStackTrace();
-  }
-  finally
-  {
-    if (in != null)
-    {
-  try { in.close(); } catch (IOException e) {}
-    }
-  }
-  return readVal;
-} 
-*/
+ {
+ ObjectOutputStream out = null;
+ try
+ {
+ FileOutputStream fos = new FileOutputStream(fileName);
+ OutputStream os = fos;
+ out = new ObjectOutputStream(os);
+ out.writeObject(toSave);
+ out.flush();
+ }
+ catch (IOException e)
+ {
+ e.printStackTrace();
+ }
+ finally
+ {
+ if (out != null)
+ {
+ try { out.close(); } catch (IOException e) {}
+ }
+ }
+ }
+ 
+ Object LoadObject(String fileName)
+ {
+ ObjectInputStream in = null;
+ Object readVal = null;
+ try
+ {
+ FileInputStream fis = new FileInputStream(fileName);
+ InputStream is = fis;
+ in = new ObjectInputStream(is);
+ readVal = in.readObject();
+ }
+ catch (IOException e)
+ {
+ e.printStackTrace();
+ }
+ catch (ClassNotFoundException e)
+ {
+ e.printStackTrace();
+ }
+ finally
+ {
+ if (in != null)
+ {
+ try { in.close(); } catch (IOException e) {}
+ }
+ }
+ return readVal;
+ } 
+ */
 void gravitateSwarm()
 {
   //filter(INVERT);
- 
+
   float r;
   redraw();
   stroke(0);
-  rect(0,0,width,height);
-  colorMode(HSB,1);
-  for(int i = 0; i < Z.length; i++) {
+  rect(0, 0, width, height);
+  colorMode(HSB, 1);
+  for (int i = 0; i < Z.length; i++) {
     /*
     for(int j = 0; j < curLineGroup.getSize(); j++) {
-      for(int k = 0; k < curLineGroup.getLine(j).getSize(); k++) {
-      //for(int k = 0; k < 1; k++) {
-        //println(i + " " + j + " " + k);
-        Z[i].gravitate(new particle(curLineGroup.getLine(j).getPoint(k).x, curLineGroup.getLine(j).getPoint(k).y, 0, 0, 0.001 ) );
-        //else {
-          //Z[i].deteriorate();
-        //}
-        //if(sqrt(sq(Z[i].x - curLineGroup.centerLine.getPoint(curLineGroup.centerLine.getSize() - 1).x) + sq(Z[i].y - curLineGroup.centerLine.getPoint(curLineGroup.centerLine.getSize() - 1).y)) < 100)
-          //Z[i].deteriorate();
-        //else {
-          Z[i].update();
-          r = float(i)/Z.length;
-          stroke(colour, pow(r,0.1), 1-r, 0.15 );
-          Z[i].display();
-        //}
-      }
-    }*/
-    if((currentAttractor[i] + 1) < curLineGroup.getCenterLine().getSize() && dist(Z[i].x, Z[i].y, curLineGroup.getCenterLine().getPoint(currentAttractor[i]).x, curLineGroup.getCenterLine().getPoint(currentAttractor[i]).y) < 90)
+     for(int k = 0; k < curLineGroup.getLine(j).getSize(); k++) {
+     //for(int k = 0; k < 1; k++) {
+     //println(i + " " + j + " " + k);
+     Z[i].gravitate(new particle(curLineGroup.getLine(j).getPoint(k).x, curLineGroup.getLine(j).getPoint(k).y, 0, 0, 0.001 ) );
+     //else {
+     //Z[i].deteriorate();
+     //}
+     //if(sqrt(sq(Z[i].x - curLineGroup.centerLine.getPoint(curLineGroup.centerLine.getSize() - 1).x) + sq(Z[i].y - curLineGroup.centerLine.getPoint(curLineGroup.centerLine.getSize() - 1).y)) < 100)
+     //Z[i].deteriorate();
+     //else {
+     Z[i].update();
+     r = float(i)/Z.length;
+     stroke(colour, pow(r,0.1), 1-r, 0.15 );
+     Z[i].display();
+     //}
+     }
+     }*/
+    if ((currentAttractor[i] + 1) < curLineGroup.getCenterLine().getSize() && dist(Z[i].x, Z[i].y, curLineGroup.getCenterLine().getPoint(currentAttractor[i]).x, curLineGroup.getCenterLine().getPoint(currentAttractor[i]).y) < 90)
       currentAttractor[i]++;
     //println(i + " attracted by " + currentAttractor[i] + " in " + curLineGroup.getCenterLine().getSize());
     Z[i].gravitate(new particle(curLineGroup.getCenterLine().getPoint(currentAttractor[i]).x, curLineGroup.getCenterLine().getPoint(currentAttractor[i]).y, 0, 0, 0.1 ) );
     Z[i].update();
     r = float(i)/Z.length;
-    stroke(colour, pow(r,0.1), 1-r, 0.15 );
+    stroke(colour, pow(r, 0.1), 1-r, 0.15 );
     Z[i].display();
   }
-  colorMode(RGB,255);
+  colorMode(RGB, 255);
   colour+=random(0.01);
-  if( colour > 1 ) {
+  if ( colour > 1 ) {
     colour = colour%1;
   }
   stroke(0, 0, 0);
@@ -414,11 +399,12 @@ void changeMode (String mode)
 }
 
 //######## Random DrawBack Mode
-void checkStack(){
-  if (stack.size() >= 1){
-    //println("i: " + i + "Size of allPoints: " + stack.get(0).allPoints.size()); 
-    if (i < stack.get(0).allPoints.size()){
-      //println("Size: " + stack.size() + "i: " + i); 
+void checkStack() {
+  //println("Stack Size: " + stack.size()); 
+  if (stack.size() >= 1) {
+    if (i < stack.get(0).allPoints.size() - 1) {
+      println("Size = " + stack.size() + "Size of allPoints: " + stack.get(0).allPoints.size()); 
+      //pritln("Size: " + stack.size() + "i: " + i); 
       //start the i at 0
       //look at the 
       float x1 = stack.get(0).allPoints.get(i).x;
@@ -429,29 +415,35 @@ void checkStack(){
 
       //println("x1: " + x1 + "y1: " + y1 + "x2: " + x2 + "y2: " + y2); 
       //line (x1, y1, x2, y2); 
-      PVector point1 = new PVector(x1,y1);
-      PVector point2 = new PVector(x2,y2);
-      Line stackLine = new Line(x1,y1);
+
+      PVector point1 = new PVector(x1, y1);
+      PVector point2 = new PVector(x2, y2);
+      Line stackLine = new Line(x1, y1);
+
       stackLine.addPoint(point2);
+      fill(#7fff00);
+      ellipse(x2, y2, 10, 10);
+      noFill(); 
       allLines.add(stackLine);
       i++; 
-
-      if (i == stack.get(0).allPoints.size() - 1){
+      println("Stack Size: " + stack.size() + " i = " + i + " Size = " + (stack.get(0).allPoints.size()-1)); 
+      if (i == stack.get(0).allPoints.size() - 1) {
         println("Completed line response"); 
         stack.remove(0); 
         i = 0; //reset the counter
       }
     }
+    else stack.remove(0);
   }
 }
 
-void displayAllPrevLines(){
-  for(int i = 0; i < allLines.size(); i++){
-    if(allLines.get(i).getSize() > 1){
+void displayAllPrevLines() {
+  for (int i = 0; i < allLines.size(); i++) {
+    if (allLines.get(i).getSize() > 1) {
       Line l = allLines.get(i);
       l.draw();
     }
-  } 
+  }
 }
 
 void drawBezier()
@@ -467,15 +459,15 @@ void drawBezier()
   float yc = 0.0;
   float x2 = 0.0;
   float y2 = 0.0;
-  vertex(x1,y1);
+  vertex(x1, y1);
   for ( int i = 1; i< sz - 2; ++i)
   {
     xc = ((PVector)gPts.get(i)).x;
     yc = ((PVector)gPts.get(i)).y;
     x2 = (xc + ((PVector)gPts.get(i+1)).x)*0.5;
     y2 = (yc + ((PVector)gPts.get(i+1)).y)*0.5;
-    bezierVertex((x1 + 2.0*xc)/3.0,(y1 + 2.0*yc)/3.0,
-              (2.0*xc + x2)/3.0,(2.0*yc + y2)/3.0,x2,y2);
+    bezierVertex((x1 + 2.0*xc)/3.0, (y1 + 2.0*yc)/3.0, 
+    (2.0*xc + x2)/3.0, (2.0*yc + y2)/3.0, x2, y2);
     x1 = x2;
     y1 = y2;
   }
@@ -483,20 +475,24 @@ void drawBezier()
   yc = ((PVector)gPts.get(sz-2)).y;
   x2 = ((PVector)gPts.get(sz-1)).x;
   y2 = ((PVector)gPts.get(sz-1)).y;
-  bezierVertex((x1 + 2.0*xc)/3.0,(y1 + 2.0*yc)/3.0,
-         (2.0*xc + x2)/3.0,(2.0*yc + y2)/3.0,x2,y2);
+  bezierVertex((x1 + 2.0*xc)/3.0, (y1 + 2.0*yc)/3.0, 
+  (2.0*xc + x2)/3.0, (2.0*yc + y2)/3.0, x2, y2);
   endShape();
   stroke(0, 0, 0);
 }
 
-void lineDetection(){
+void lineDetection() {
   save("db.jpg");
   PImage src = loadImage("db.jpg");
- // opencv = new OpenCV(this, src);
- // opencv.findCannyEdges(20, 75);
+  // opencv = new OpenCV(this, src);
+  // opencv.findCannyEdges(20, 75);
 
   // Find lines with Hough line detection
   // Arguments are: threshold, minLengthLength, maxLineGap
-  
+
   //lines = opencv.findLines(100, 30, 20);
 }
+
+public void customGUI() {
+}
+
