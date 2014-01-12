@@ -28,6 +28,7 @@ Decision_Engine engine;
 Vehicle v;
 int counter;
 FlowField flowfield;
+PImage catIcon; 
 
 String drawingMode = "draw";  
 Shape myShape; 
@@ -35,6 +36,7 @@ ArrayList<Shape> allShapes = new ArrayList<Shape>();
 
 void setup() 
 {
+  catIcon = loadImage("cat.png"); 
   myShape = new Shape(); 
   size(700, 700, JAVA2D);
   createGUI();
@@ -168,7 +170,7 @@ void mouseReleased()
     //println(myShape); 
     Line tempLine = new Line();  
     for (int i = 0; i < curLine.allPoints.size(); i++) {
-      tempLine.addPoint(new PVector(curLine.allPoints.get(i).x ,curLine.allPoints.get(i).y));
+      tempLine.addPoint(new PVector(curLine.allPoints.get(i).x, curLine.allPoints.get(i).y));
     }
     //need to iterate over the line and populate another one
 
@@ -421,9 +423,11 @@ void checkStack() {
       Line stackLine = new Line(x1, y1);
 
       stackLine.addPoint(point2);
-      fill(#7fff00);
-      ellipse(x2, y2, 10, 10);
-      noFill(); 
+      //fill(#7fff00);
+      imageMode(CENTER);
+      image(catIcon, x2,y2); 
+      
+      //noFill(); 
       allLines.add(stackLine);
       i++; 
       println("Stack Size: " + stack.size() + " i = " + i + " Size = " + (stack.get(0).allPoints.size()-1)); 
