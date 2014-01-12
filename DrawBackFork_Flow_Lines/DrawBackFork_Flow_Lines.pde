@@ -30,9 +30,11 @@ int counter;
 FlowField flowfield;
 PImage catIcon; 
 
-String drawingMode = "draw";  
+String drawingMode = "draw";  //draw, teach, drawPos
 Shape myShape; 
+Shape targetShape; 
 ArrayList<Shape> allShapes = new ArrayList<Shape>(); 
+boolean intClick = false; 
 
 void setup() 
 {
@@ -60,7 +62,10 @@ void setup()
 void draw() //veh code copied
 {
   //could have a stack of lines that need to be processed
+  //println("Mode: "+ drawingMode); 
+
   background(255);
+
   checkStack();
   //added to make vehicle work correctly
   //colorMode(RGB);
@@ -78,12 +83,14 @@ void draw() //veh code copied
     foodSeekers.get(i).run(allLines);
     //println("FoodSeeker " + i + ":");
   }
-  if(drawingMode=="teach"){
+  if (drawingMode=="teach") {
     fill(0);
-    //rectMode(CENTER); 
-    text("Teach Me! Type label, draw, then done!", 250, 15);
+    text("Teach Me! Type label, draw, then done!", 230, 27, 300, 50);
   }
-  
+  if (drawingMode=="drawPos") {
+    fill(0); 
+    text("Where do you want me to draw?", 230, 27, 300, 50);
+  }
 }
 
 // Redraw all drawn lines
@@ -101,59 +108,47 @@ void redraw()
 //##### Event Handling
 void mousePressed() 
 {
-  curLine = new Line(mouseX, mouseY); 
-  allLines.add(curLine);
-  gPts = new ArrayList();
-  gPts.add(new PVector(mouseX, mouseY));
-  gMvCnt = 0;
+  checkInterface(new PVector(mouseX, mouseY)); 
+  println("intClick = " + intClick +" Drawing Mode: " + drawingMode); 
+  if (drawingMode=="teach" || drawingMode=="draw" && intClick != true) {
+    println("drawingLine"); 
+    curLine = new Line(mouseX, mouseY); 
+    allLines.add(curLine);
+    gPts = new ArrayList();
+    gPts.add(new PVector(mouseX, mouseY));
+    gMvCnt = 0;
+  }
+  else if (drawingMode=="drawPos" && intClick!=true) {
+    createShape(new PVector(mouseX, mouseY));
+    drawingMode="draw";
+  }
 }
 void mouseDragged() 
 {
-  line(pmouseX, pmouseY, mouseX, mouseY); 
-  //check if the slope has not change by 90 degrees
-  //if so set line end to previous point and begin new line with current point add previous line to stack
-  curLine.curEnd(mouseX, mouseY);
-  if ( gMvCnt++ % 5 == 0 )
-    gPts.add(new PVector(mouseX, mouseY));
+  if (drawingMode=="draw" || drawingMode=="teach" && intClick!=true) {
+    println("dragging drawing"); 
+    line(pmouseX, pmouseY, mouseX, mouseY); 
+    //check if the slope has not change by 90 degrees
+    //if so set line end to previous point and begin new line with current point add previous line to stack
+    curLine.curEnd(mouseX, mouseY);
+    if ( gMvCnt++ % 5 == 0 )
+      gPts.add(new PVector(mouseX, mouseY));
+  }
 }
 void mouseReleased() 
-{
-  line(pmouseX, pmouseY, mouseX, mouseY); 
-  curLine.setEnd(mouseX, mouseY); 
-  if (drawBezier)
-  {
-    drawBezier();
-  }
-  boolean in = false;
-  if (curLineGroup.getSize() == 0 && lineGroups.size() == 1) {
-    curLineGroup.addLine(curLine);
-    curLineGroup.setLineGroupID(0);
-
-    for (int i = 0; i < Z.length; i++) {
-      float radius = random(100);
-      float angle = random(6.28);
-      Z[i] = new particle(curLineGroup.centerLine.getPoint(0).x + radius * cos(angle), curLineGroup.centerLine.getPoint(0).y + radius * sin(angle), 0, 0, 1);
-      //Z[i] = new particle( random(width), random(height), 0, 0, 1 );
-      //println("Particle " + Z[i].x + " " + Z[i].y);
+{ 
+  if (!intClick) {
+    line(pmouseX, pmouseY, mouseX, mouseY); 
+    curLine.setEnd(mouseX, mouseY); 
+    if (drawBezier)
+    {
+      drawBezier();
     }
-  }
-  else {
-    for (int i = 0; i < lineGroups.size(); i++) {
-      curLineGroup = lineGroups.get(i);
-      //println("c" + i);
-      if (curLineGroup.inGroup(curLine)) {
-        curLineGroup.addLine(curLine);
-        in = true;
-        break;
-      }
-    }
-    if (in == false) {
-      //println("new group");
-      curLineGroup = new LineGroup();
-      lineGroups.add(curLineGroup);
+    boolean in = false;
+    if (curLineGroup.getSize() == 0 && lineGroups.size() == 1) {
       curLineGroup.addLine(curLine);
-      curLineGroup.setLineGroupID(lineGroups.size() - 1);
-      //
+      curLineGroup.setLineGroupID(0);
+
       for (int i = 0; i < Z.length; i++) {
         float radius = random(100);
         float angle = random(6.28);
@@ -162,26 +157,53 @@ void mouseReleased()
         //println("Particle " + Z[i].x + " " + Z[i].y);
       }
     }
-  } 
-  //curLineGroup.printLineGroupID();
-  if (drawingMode == "draw") {
-    engine = new Decision_Engine(curLine);
-    Line compLine = engine.decision();
-    //allLines.add(compLine);
-    stack.add(compLine); //not working QQ
-    //displayAllPrevLines();
-  }
-  else if (drawingMode == "teach")
-  {
-    //println(myShape); 
-    Line tempLine = new Line();  
-    for (int i = 0; i < curLine.allPoints.size(); i++) {
-      tempLine.addPoint(new PVector(curLine.allPoints.get(i).x, curLine.allPoints.get(i).y));
+    else {
+      for (int i = 0; i < lineGroups.size(); i++) {
+        curLineGroup = lineGroups.get(i);
+        //println("c" + i);
+        if (curLineGroup.inGroup(curLine)) {
+          curLineGroup.addLine(curLine);
+          in = true;
+          break;
+        }
+      }
+      if (in == false) {
+        //println("new group");
+        curLineGroup = new LineGroup();
+        lineGroups.add(curLineGroup);
+        curLineGroup.addLine(curLine);
+        curLineGroup.setLineGroupID(lineGroups.size() - 1);
+        //
+        for (int i = 0; i < Z.length; i++) {
+          float radius = random(100);
+          float angle = random(6.28);
+          Z[i] = new particle(curLineGroup.centerLine.getPoint(0).x + radius * cos(angle), curLineGroup.centerLine.getPoint(0).y + radius * sin(angle), 0, 0, 1);
+          //Z[i] = new particle( random(width), random(height), 0, 0, 1 );
+          //println("Particle " + Z[i].x + " " + Z[i].y);
+        }
+      }
+    } 
+    //curLineGroup.printLineGroupID();
+    if (drawingMode == "draw") {
+      engine = new Decision_Engine(curLine);
+      Line compLine = engine.decision();
+      //allLines.add(compLine);
+      stack.add(compLine); //not working QQ
+      //displayAllPrevLines();
     }
-    //need to iterate over the line and populate another one
+    else if (drawingMode == "teach")
+    {
+      //println(myShape); 
+      Line tempLine = new Line();  
+      for (int i = 0; i < curLine.allPoints.size(); i++) {
+        tempLine.addPoint(new PVector(curLine.allPoints.get(i).x, curLine.allPoints.get(i).y));
+      }
+      //need to iterate over the line and populate another one
 
-    myShape.addLine(tempLine);
+      myShape.addLine(tempLine);
+    }
   }
+  else intClick=false;
 }
 
 void keyPressed()
@@ -191,50 +213,51 @@ void keyPressed()
    {
    lineDetection();
    }
+   
+   if (key == 'd') { // draw center line
+   redraw();
+   for (i = 0; i < lineGroups.size(); i++)
+   {
+   lineGroups.get(i).drawCenterLine();
+   }
+   }
+   if (key == 'c') {
+   clear();
+   }
+   if (key == 'r') {
+   redraw();
+   }
+   if (key == 'f') { // generate a FoodSeeker and let it run
+   for (int i = 0; i < lineGroups.size(); i++)
+   {
+   //int size = lineGroups.get(i).getCenterLine().getSize();
+   //PVector position = lineGroups.get(i).getCenterLine().getPoint(round(random(size - 1)));
+   for (int j = 0; j < lineGroups.get(i).getSize(); j++) {
+   int size = lineGroups.get(i).getLine(j).getSize();
+   PVector position = lineGroups.get(i).getLine(j).getPoint(round(random(size - 1)));
+   
+   //println(position);
+   
+   //PVector initialVector = new PVector(lineGroups.get(i).getCenterLine().getPoint(1).x - lineGroups.get(i).getCenterLine().getPoint(0).x, lineGroups.get(i).getCenterLine().getPoint(1).y - lineGroups.get(i).getCenterLine().getPoint(0).y);
+   FoodSeeker foodSeeker = new FoodSeeker(position, 1, random(-3.14, 3.14), 30, 0.3);
+   //foodSeeker.render();
+   foodSeekers.add(foodSeeker);
+   }
+   }
+   }
+   if (key == 's') { // save drawn lines to file
+   selectOutput("Select a file to write to:", "fileOutputSelected");
+   }
+   if (key == 'l') { // load drawn lines from file
+   selectInput("Select a file to load from:", "fileInputSelected");
+   }
+   if (key == 'v') {
+   v = new Vehicle(curLine.getPoint(0).x, curLine.getPoint(0).y);
+   counter = 0;
+   //create a new veh at the current line's start
+   //will need a better solution for creating the car
+   }
    */
-  if (key == 'd') { // draw center line
-    redraw();
-    for (i = 0; i < lineGroups.size(); i++)
-    {
-      lineGroups.get(i).drawCenterLine();
-    }
-  }
-  if (key == 'c') {
-    clear();
-  }
-  if (key == 'r') {
-    redraw();
-  }
-  if (key == 'f') { // generate a FoodSeeker and let it run
-    for (int i = 0; i < lineGroups.size(); i++)
-    {
-      //int size = lineGroups.get(i).getCenterLine().getSize();
-      //PVector position = lineGroups.get(i).getCenterLine().getPoint(round(random(size - 1)));
-      for (int j = 0; j < lineGroups.get(i).getSize(); j++) {
-        int size = lineGroups.get(i).getLine(j).getSize();
-        PVector position = lineGroups.get(i).getLine(j).getPoint(round(random(size - 1)));
-
-        //println(position);
-
-        //PVector initialVector = new PVector(lineGroups.get(i).getCenterLine().getPoint(1).x - lineGroups.get(i).getCenterLine().getPoint(0).x, lineGroups.get(i).getCenterLine().getPoint(1).y - lineGroups.get(i).getCenterLine().getPoint(0).y);
-        FoodSeeker foodSeeker = new FoodSeeker(position, 1, random(-3.14, 3.14), 30, 0.3);
-        //foodSeeker.render();
-        foodSeekers.add(foodSeeker);
-      }
-    }
-  }
-  if (key == 's') { // save drawn lines to file
-    selectOutput("Select a file to write to:", "fileOutputSelected");
-  }
-  if (key == 'l') { // load drawn lines from file
-    selectInput("Select a file to load from:", "fileInputSelected");
-  }
-  if (key == 'v') {
-    v = new Vehicle(curLine.getPoint(0).x, curLine.getPoint(0).y);
-    counter = 0;
-    //create a new veh at the current line's start
-    //will need a better solution for creating the car
-  }
 }
 
 void clear() {
@@ -411,7 +434,7 @@ void checkStack() {
   //println("Stack Size: " + stack.size()); 
   if (stack.size() >= 1) {
     if (i < stack.get(0).allPoints.size() - 1) {
-      println("Size = " + stack.size() + "Size of allPoints: " + stack.get(0).allPoints.size()); 
+      //println("Size = " + stack.size() + "Size of allPoints: " + stack.get(0).allPoints.size()); 
       //pritln("Size: " + stack.size() + "i: " + i); 
       //start the i at 0
       //look at the 
@@ -431,12 +454,12 @@ void checkStack() {
       stackLine.addPoint(point2);
       //fill(#7fff00);
       imageMode(CENTER);
-      image(catIcon, x2,y2); 
-      
+      image(catIcon, x2, y2); 
+
       //noFill(); 
       allLines.add(stackLine);
       i++; 
-      println("Stack Size: " + stack.size() + " i = " + i + " Size = " + (stack.get(0).allPoints.size()-1)); 
+      //println("Stack Size: " + stack.size() + " i = " + i + " Size = " + (stack.get(0).allPoints.size()-1)); 
       if (i == stack.get(0).allPoints.size() - 1) {
         println("Completed line response"); 
         stack.remove(0); 
@@ -504,5 +527,51 @@ void lineDetection() {
 }
 
 public void customGUI() {
+}
+
+public void createShape(PVector pos) {
+  //println("In createShape pos: " + pos); 
+  targetShape.setPos(pos); 
+  for (int j = 0; j < targetShape.allLines.size(); j++) {
+    Line line = targetShape.allLines.get(j); 
+    //line.printPoints();
+    //println("Adding line to stack. j= " + j + " size of line = " + line.allPoints.size()) ; 
+    stack.add(line);
+    //println("Stack size = " + stack.size());
+  }
+}
+
+public void checkInterface(PVector pos) {
+  float[][] elements = {
+    {
+      teachMeTF.getX(), teachMeTF.getY(), teachMeTF.getWidth(), teachMeTF.getHeight()
+      }
+      , 
+    {
+      drawMeTF.getX(), drawMeTF.getY(), drawMeTF.getWidth(), drawMeTF.getHeight()
+      }
+      , 
+    {
+      teachMeButton.getX(), teachMeButton.getY(), teachMeButton.getWidth(), teachMeButton.getHeight()
+      }
+      , 
+    {
+      drawMeButton.getX(), drawMeButton.getY(), drawMeButton.getWidth(), drawMeButton.getHeight()
+      }
+    };
+
+    for (int i = 0; i < elements.length; i++) {
+      float[] s = elements[i]; 
+      if (pos.x > s[0] && pos.x < s[0] + s[2]) {
+        //println"Within the bounds");
+        if (pos.y> s[1] && pos.y < s[1] + s[3]) {
+          println("Within bounds"); 
+          intClick = true; 
+          println("Int click detected"); 
+          break;
+        }
+      }
+      else intClick = false;
+    }
 }
 
