@@ -36,8 +36,12 @@ Shape targetShape;
 ArrayList<Shape> allShapes = new ArrayList<Shape>(); 
 boolean intClick = false; 
 
+Rectangle shapeBound; 
+boolean shapeDrag = false; 
+
 void setup() 
 {
+  //shapeBound = new Rectangle(mouseX, mouseY, 0, 0);
   catIcon = loadImage("cat.png"); 
   myShape = new Shape(); 
   size(700, 700, JAVA2D);
@@ -86,13 +90,17 @@ void draw() //veh code copied
   textSize(16); 
   if (drawingMode=="teach") {
     fill(0);
-    text("Teach Me! Type label, draw, then done!", 235, 10, 220, 50);
+    text("Type name of object, draw it, then click done!", 235, 10, 220, 50);
   }
   if (drawingMode=="drawPos") {
     fill(0); 
-    text("Where do you want me to draw?", 235, 10, 220, 50);
+    text("Click where you want me to.", 235, 10, 220, 50);
+  }
+  if (shapeDrag) {
+    shapeBound.drawRect();
   }
 }
+
 
 // Redraw all drawn lines
 void redraw()
@@ -110,9 +118,9 @@ void redraw()
 void mousePressed() 
 {
   checkInterface(new PVector(mouseX, mouseY)); 
-  println("intClick = " + intClick +" Drawing Mode: " + drawingMode); 
+  //println("intClick = " + intClick +" Drawing Mode: " + drawingMode); 
   if (drawingMode=="teach" || drawingMode=="draw" && intClick != true) {
-    println("drawingLine"); 
+    //println("drawingLine"); 
     curLine = new Line(mouseX, mouseY); 
     allLines.add(curLine);
     gPts = new ArrayList();
@@ -120,14 +128,15 @@ void mousePressed()
     gMvCnt = 0;
   }
   else if (drawingMode=="drawPos" && intClick!=true) {
-    createShape(new PVector(mouseX, mouseY));
-    drawingMode="draw";
+    shapeBound = new Rectangle(new PVector(mouseX, mouseY), 0, 0);
+    println(shapeBound.getPos()); 
+    //println("shapeBound w: " + shapeBound.t);
   }
 }
 void mouseDragged() 
 {
   if (drawingMode=="draw" || drawingMode=="teach" && intClick!=true) {
-    println("dragging drawing"); 
+    //println("dragging drawing"); 
     line(pmouseX, pmouseY, mouseX, mouseY); 
     //check if the slope has not change by 90 degrees
     //if so set line end to previous point and begin new line with current point add previous line to stack
@@ -135,10 +144,18 @@ void mouseDragged()
     if ( gMvCnt++ % 5 == 0 )
       gPts.add(new PVector(mouseX, mouseY));
   }
+  if (drawingMode=="drawPos" && !shapeDrag) {
+    shapeDrag = true;
+  }
+  if (shapeDrag) {
+    //println("w = " + shapeBound.w); 
+    shapeBound.setPos2(new PVector(mouseX, mouseY));
+  }
 }
 void mouseReleased() 
 { 
   if (!intClick) {
+    //println("In mouse released"); 
     line(pmouseX, pmouseY, mouseX, mouseY); 
     curLine.setEnd(mouseX, mouseY); 
     if (drawBezier)
@@ -186,11 +203,18 @@ void mouseReleased()
     } 
     //curLineGroup.printLineGroupID();
     if (drawingMode == "draw") {
+      //println("In drawing mode mouseReleased"); 
       engine = new Decision_Engine(curLine);
       Line compLine = engine.decision();
       //allLines.add(compLine);
       stack.add(compLine); //not working QQ
       //displayAllPrevLines();
+    }
+    else if (drawingMode=="drawPos") {
+      createShape(shapeBound.origin);
+      drawingMode = "draw"; 
+      //println("mouseReleased"); 
+      //calculate scale
     }
     else if (drawingMode == "teach")
     {
@@ -202,9 +226,11 @@ void mouseReleased()
       //need to iterate over the line and populate another one
 
       myShape.addLine(tempLine);
+      myShape.completeShape();
     }
   }
   else intClick=false;
+  shapeDrag = false;
 }
 
 void keyPressed()
@@ -532,9 +558,15 @@ public void customGUI() {
 
 public void createShape(PVector pos) {
   //println("In createShape pos: " + pos); 
-  targetShape.setPos(pos); 
-  for (int j = 0; j < targetShape.allLines.size(); j++) {
-    Line line = targetShape.allLines.get(j); 
+  println("In createShape, about to setDimesion of w = " + shapeBound.w + shapeBound.h); 
+  Shape t = targetShape.createInstance(pos, shapeBound.w, shapeBound.h); 
+  println("T: " + t); 
+  //this should return a shape
+
+  for (int j = 0; j < t.allLines.size(); j++) {
+    //println("in for loop"); 
+    Line line = t.allLines.get(j); 
+    //println("Points in this line: "); 
     //line.printPoints();
     //println("Adding line to stack. j= " + j + " size of line = " + line.allPoints.size()) ; 
     stack.add(line);
@@ -566,9 +598,9 @@ public void checkInterface(PVector pos) {
       if (pos.x > s[0] && pos.x < s[0] + s[2]) {
         //println"Within the bounds");
         if (pos.y> s[1] && pos.y < s[1] + s[3]) {
-          println("Within bounds"); 
+          //println("Within bounds"); 
           intClick = true; 
-          println("Int click detected"); 
+          //println("Int click detected"); 
           break;
         }
       }

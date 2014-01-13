@@ -147,6 +147,7 @@ class FoodSeeker {
   }
   */
   void render() {
+    println("In food seeker render"); 
     strokeWeight(3);
     stroke(0);
     PVector tmp = position;

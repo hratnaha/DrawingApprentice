@@ -161,7 +161,7 @@ class Line{
     PVector origin = new PVector(xmin, ymin); 
     float recWidth = xmax - xmin; 
     float recHeight = ymax - ymin; 
-    myBoundingBox = new Rectangle((int)origin.x, (int)origin.y, (int)recWidth, (int)recHeight);
+    myBoundingBox = new Rectangle(origin, recWidth, recHeight);
   }
   
   public boolean insideBufferZone(PVector loc){
@@ -272,8 +272,9 @@ class Line{
   public float getMaxX() {
     return xmax;
   }
-  public int getRectHeight() {
-    return myBoundingBox.getHeight();
+  public float getRectHeight() {
+    float w = myBoundingBox.w; 
+    return myBoundingBox.h;
   }
   public void setLineID(float lineID) {
     this.lineID = lineID;

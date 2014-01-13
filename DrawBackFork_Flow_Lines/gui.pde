@@ -23,7 +23,7 @@ public void textfield1_change1(GTextField source, GEvent event) { //_CODE_:teach
   }
   if (event==event.DRAGGING)
   {
-    println("dragging"); 
+    println("dragging");
   }
 } //_CODE_:teachMeTF:397121:
 
@@ -37,7 +37,7 @@ public void teachMeButton_click1(GButton source, GEvent event) { //_CODE_:teachM
   }
   else {
     myShape.setID(teachMeTF.getText()); 
-    println("My shape ID = "+  myShape.getID()); 
+    //println("My shape ID = "+  myShape.getID()); 
     teachMeTF.setText(""); 
     allShapes.add(myShape); 
     drawingMode = "draw";
@@ -52,24 +52,29 @@ public void drawMeButton_click1(GButton source, GEvent event) { //_CODE_:drawMeB
   else {
     //create shape here
     //then modify pos, and add to stack, after click
-    drawingMode = "drawPos"; 
     for (int i = 0; i < allShapes.size() ; i++) {
       //println("All Shapes: " + allShapes); 
       //println("Shape #: " + i + " ID: " + allShapes.get(i).getID()); 
       String ID = allShapes.get(i).getID(); 
       if (ID.equals(drawMeTF.getText())) {
-        print("in If");
+        //print("in If");
         Shape s = allShapes.get(i); 
         targetShape = new Shape(); 
         targetShape = s; 
+        //println("Points in the shape: "); 
+         for(int j = 0; j < targetShape.allLines.size(); j++){
+          Line l = targetShape.allLines.get(j);
+          //l.printPoints(); 
+        }
         strokeWeight(1);
         //targetShape.shiftHorizontal(50); 
         //println("All Lines size: " + s.allLines.size());
       }
       else println("I don't know the shape");
     }
-  }drawMeTF.setText(""); 
-
+    drawingMode = "drawPos";
+  }
+  drawMeTF.setText("");
 } //_CODE_:drawMeButton:574185:
 
 

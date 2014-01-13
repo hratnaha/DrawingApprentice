@@ -103,8 +103,8 @@ class LineGroup {
     //Overlapping over 80% of either line is considered in one group
     if(num_centerLine_overlap / float(centerLine.allPoints.size()) > 0.8) { 
       in = true;
-      println("before");
-      curLine.printPoints();
+      //println("before");
+      //curLine.printPoints();
       PVector[] tmp = new PVector[curLine.getSize()];
       curLine.getAllPoints().toArray(tmp);
       groupPoints = curLine.getAllPoints();
@@ -119,8 +119,8 @@ class LineGroup {
       curLine.allPoints = new ArrayList<PVector>();
       for(int i = 0; i < tmp.length; i++)
         curLine.allPoints.add(tmp[i]);
-      println("after");
-      curLine.printPoints();
+      //println("after");
+      //curLine.printPoints();
     }
     else if(num_curLine_overlap / float(curLine.allPoints.size()) > 0.8) {
       in = true;
@@ -147,8 +147,8 @@ class LineGroup {
         tmp.add(new PVector(curLine.getPoint(i + 1).y - curLine.getPoint(i).y, curLine.getPoint(i + 1).x - curLine.getPoint(i).x).heading());
       curAvg = average(tmp);
       curStd = std(tmp);
-      println(centerAvg + " " + centerStd);
-      println(curAvg + " " + curStd);
+      //println(centerAvg + " " + centerStd);
+      //println(curAvg + " " + curStd);
       if(curStd > 0 && abs(centerAvg - curAvg) < 1 && abs(centerStd - curStd) < 1)
       {
         in = true;
@@ -171,8 +171,8 @@ class LineGroup {
         tmp.add(new PVector(centerLine.getPoint(i + 1).y - centerLine.getPoint(i).y, centerLine.getPoint(i + 1).x - centerLine.getPoint(i).x).heading());
       centerAvg = average(tmp);
       centerStd = std(tmp);
-      println(centerAvg + " " + centerStd);
-      println(curAvg + " " + curStd);
+      //println(centerAvg + " " + centerStd);
+      //println(curAvg + " " + curStd);
       if(curStd > 0 && abs(centerAvg - curAvg) < 1 && abs(centerStd - curStd) < 1)
       {
         in = true;
@@ -195,8 +195,8 @@ class LineGroup {
         tmp.add(new PVector(centerLine.getPoint(i - 1).y - centerLine.getPoint(i).y, centerLine.getPoint(i - 1).x - centerLine.getPoint(i).x).heading());
       centerAvg = average(tmp);
       centerStd = std(tmp);
-      println(centerAvg + " " + centerStd);
-      println(curAvg + " " + curStd);
+      //println(centerAvg + " " + centerStd);
+      //println(curAvg + " " + curStd);
       if(curStd > 0 && abs(centerAvg - curAvg) < 1 && abs(centerStd - curStd) < 1)
       {
         in = true;
@@ -219,8 +219,8 @@ class LineGroup {
         tmp.add(new PVector(centerLine.getPoint(i + 1).y - centerLine.getPoint(i).y, centerLine.getPoint(i + 1).x - centerLine.getPoint(i).x).heading());
       centerAvg = average(tmp);
       centerStd = std(tmp);
-      println(centerAvg + " " + centerStd);
-      println(curAvg + " " + curStd);
+      //println(centerAvg + " " + centerStd);
+      //println(curAvg + " " + curStd);
       if(curStd > 0 && abs(centerAvg - curAvg) < 1 && abs(centerStd - curStd) < 1)
       {
         in = true;
