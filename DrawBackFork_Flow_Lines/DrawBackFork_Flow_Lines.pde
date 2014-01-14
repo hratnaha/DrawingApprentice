@@ -29,6 +29,8 @@ Vehicle v;
 int counter;
 FlowField flowfield;
 PImage catIcon; 
+PImage dogIcon;
+PImage ratIcon;
 
 String drawingMode = "draw";  //draw, teach, drawPos
 Shape myShape; 
@@ -43,6 +45,8 @@ void setup()
 {
   //shapeBound = new Rectangle(mouseX, mouseY, 0, 0);
   catIcon = loadImage("cat.png"); 
+  dogIcon = loadImage("dog.png"); 
+  ratIcon = loadImage("rat.png"); 
   myShape = new Shape(); 
   size(700, 700, JAVA2D);
   createGUI();
@@ -481,7 +485,13 @@ void checkStack() {
       stackLine.addPoint(point2);
       //fill(#7fff00);
       imageMode(CENTER);
-      image(catIcon, x2, y2); 
+      int rst = floor(random(2.99));
+      if(rst == 2)
+        image(catIcon, x2, y2); 
+      else if(rst == 1)
+        image(dogIcon, x2, y2); 
+      else if(rst == 0)
+        image(ratIcon, x2, y2); 
 
       //noFill(); 
       allLines.add(stackLine);
