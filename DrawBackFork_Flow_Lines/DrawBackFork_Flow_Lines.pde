@@ -1,11 +1,10 @@
 import g4p_controls.*;
 ArrayList <Line> allLines = new ArrayList<Line>(); 
 ArrayList <Line> stack = new ArrayList<Line>(); //keep track of the drawBack stack
-ArrayList gPts;
+ArrayList gPts;//related to current drawing stroke
 ArrayList<Shape> allShapes = new ArrayList<Shape>(); 
 String drawingMode = "draw";  //draw, teach, drawPos
 StringList strings = new StringList(); // strings for file output
-float colour = random(1);
 float probRandom; //the amount of time that the drawBack will interject randomness
 float degreeRandom; //how much fluctuation is introduced in random interjections
 int i; //iteration count for stack
@@ -13,19 +12,18 @@ int gMvCnt = 0;
 int particleSize = 2000;
 int counter;
 int stringsCount = 0; // count how many lines should be written to files
-int[] currentAttractor = new int[particleSize];
-boolean drawBack = false; 
-Line curLine; 
-Decision_Engine engine;
 PImage catIcon; 
 PImage dogIcon;
 PImage ratIcon;
-Shape myShape; 
-Shape targetShape; 
-Rectangle shapeBound; 
 boolean shapeDrag = false; 
 boolean intClick = false; 
 boolean lineGroup = false; 
+boolean drawBack = false; 
+Shape myShape; 
+Shape targetShape; 
+Rectangle shapeBound; 
+Line curLine; 
+Decision_Engine engine;
 
 void setup() 
 {
