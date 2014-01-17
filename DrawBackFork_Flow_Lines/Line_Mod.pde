@@ -98,7 +98,6 @@ class Line_Mod{
       for (int i = 0; i < line.allPoints.size(); i++)
       {
         //cycle through the points and add in a bit of randomness to each points
-    
         //first decide if we should interfere with this point, give it a P of .5 for interfering
         if (random(0, 1) > (1 - probRandom))
         {
@@ -119,43 +118,7 @@ class Line_Mod{
       //stack.add(newLine);
       return newLine;
   }
-    
-    //put a vehicle thing here?
-  
-public Line vehicleDraw(Line line){
-  Vehicle v = new Vehicle (line.startPoint.x, line.startPoint.y);
-  print("in vehicleDraw");
-  Line newline = new Line(0,0);
-  boolean nullFlag = false;
-  while(!nullFlag){
-  if(v!= null){
-    counter += 1;
-    if(line.getSize() > counter){
-      PVector target = new PVector(line.getPoint(counter).x, line.getPoint(counter).y);
-       v.arrive(target);
-       print("following line");
-    } else {
-      PVector target = line.getEndPoint();
-      v.arrive(target);
-      print("reaching end");
-    }
-    if(curLine.insideBufferZone(v.loc)){
-      newline = v.drawTrail();
-      //println("car now null");
-      nullFlag = true;
-      v = null;
-      print("car now null");
-    }
-    if(!nullFlag){
-      v.update();
-      }
-    }
-  }
-      //displayAllPrevLines();
-     // Line newline = v.drawTrail();
-      print("at return");
-      return newline;
-} 
+
       
   }
   

@@ -1,4 +1,5 @@
-class LineGroup {
+/* Re-implement this class in individual drawing algorithms, or after we change how the lines are processed
+  class LineGroup {
   Line centerLine;
   ArrayList<PVector> groupPoints = new ArrayList<PVector>();
   ArrayList<Line> groupLines = new ArrayList<Line>(); 
@@ -8,11 +9,11 @@ class LineGroup {
   boolean isSelected = false; 
   float maxRange = 10; //arbitaryily set range to judge whether a point is in group
   int lineGroupID;
-  BezierFit bezierFit;
+  //BezierFit bezierFit;
   
   public LineGroup() {
      //startTime = millis();
-     bezierFit = new BezierFit();
+     //bezierFit = new BezierFit();
   }
   
   public LineGroup(Line line){
@@ -300,7 +301,7 @@ class LineGroup {
     //for(int i = 0; i < getSize(); i++)
     if(centerLine == null)
       groupPoints.addAll(getLine(getSize() - 1).getAllPoints());
-    ArrayList<PVector> controlPoints = bezierFit.fit(groupPoints);
+    //ArrayList<PVector> controlPoints = bezierFit.fit(groupPoints);
     //bezier(controlPoints.get(0).x, controlPoints.get(0).y, controlPoints.get(1).x, controlPoints.get(1).y, controlPoints.get(2).x, controlPoints.get(2).y, controlPoints.get(3).x, controlPoints.get(3).y);
     int steps = 20;
     ArrayList<PVector> points = new ArrayList<PVector>();
@@ -347,3 +348,51 @@ class LineGroup {
     return sqrt(averageSquare);
   } 
 }
+*/
+
+/*
+This is the code that instantiates the line Group class: 
+if (lineGroup) {
+      boolean in = false;
+      if (curLineGroup.getSize() == 0 && lineGroups.size() == 1) {
+        curLineGroup.addLine(curLine);
+        curLineGroup.setLineGroupID(0);
+
+        for (int i = 0; i < Z.length; i++) {
+          float radius = random(100);
+          float angle = random(6.28);
+          Z[i] = new particle(curLineGroup.centerLine.getPoint(0).x + radius * cos(angle), curLineGroup.centerLine.getPoint(0).y + radius * sin(angle), 0, 0, 1);
+          //Z[i] = new particle( random(width), random(height), 0, 0, 1 );
+          //println("Particle " + Z[i].x + " " + Z[i].y);
+        }
+      }
+      else {
+        for (int i = 0; i < lineGroups.size(); i++) {
+          curLineGroup = lineGroups.get(i);
+          //println("c" + i);
+          if (curLineGroup.inGroup(curLine)) {
+            curLineGroup.addLine(curLine);
+            in = true;
+            break;
+          }
+        }
+        if (in == false) {
+          //println("new group");
+          curLineGroup = new LineGroup();
+          lineGroups.add(curLineGroup);
+          curLineGroup.addLine(curLine);
+          curLineGroup.setLineGroupID(lineGroups.size() - 1);
+          //
+          for (int i = 0; i < Z.length; i++) {
+            float radius = random(100);
+            float angle = random(6.28);
+            Z[i] = new particle(curLineGroup.centerLine.getPoint(0).x + radius * cos(angle), curLineGroup.centerLine.getPoint(0).y + radius * sin(angle), 0, 0, 1);
+            //Z[i] = new particle( random(width), random(height), 0, 0, 1 );
+            //println("Particle " + Z[i].x + " " + Z[i].y);
+          }
+        }
+      }
+    }
+    //curLineGroup.printLineGroupID();
+    
+    */

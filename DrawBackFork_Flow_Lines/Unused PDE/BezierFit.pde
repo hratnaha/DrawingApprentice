@@ -1,3 +1,4 @@
+/* This class doesn't need to be implemented right now. We are working on a diff line analysis mechanisms that might change how this works. 
 class BezierFit {
   //ArrayList<Point> points;
   float[][] M = new float[][] {
@@ -21,7 +22,7 @@ class BezierFit {
    * Returns a list of 4 points, the control points
    * @param points
    * @return
-   */
+   
   public ArrayList<PVector> fit(ArrayList<PVector> points) {
     //Matrix M = M();
     float[][] Minv = new float[4][4];
@@ -103,7 +104,7 @@ class BezierFit {
    * @param v3
    * @param v4
    * @return
-   */
+   *
   private PVector pointOnCurve(float t, PVector v1, PVector v2, PVector v3, PVector v4) {
     PVector p;
 
@@ -134,7 +135,7 @@ class BezierFit {
     return p;
   }
 
-  /** Computes the percentage of path length at each point. Can directly be used as t-indices into the bezier curve. */
+//Computes the percentage of path length at each point. Can directly be used as t-indices into the bezier curve. 
   private float[] normalizedPathLengths(ArrayList<PVector> points) {
     float pathLength[] = new float[points.size()];
 
@@ -154,4 +155,43 @@ class BezierFit {
     return zpl;
   }
 }
+
+
+// This code should somehow be made into a function and not located in the main class. It should probably be in the BezierFit class I would guess. 
+void drawBezier()
+{
+  int sz = gPts.size();
+  if ( sz == 0)
+    return;
+  beginShape();
+  stroke(0, 250, 150);
+  float x1 = ((PVector)gPts.get(0)).x;
+  float y1 = ((PVector)gPts.get(0)).y;
+  float xc = 0.0;
+  float yc = 0.0;
+  float x2 = 0.0;
+  float y2 = 0.0;
+  vertex(x1, y1);
+  for ( int i = 1; i< sz - 2; ++i)
+  {
+    xc = ((PVector)gPts.get(i)).x;
+    yc = ((PVector)gPts.get(i)).y;
+    x2 = (xc + ((PVector)gPts.get(i+1)).x)*0.5;
+    y2 = (yc + ((PVector)gPts.get(i+1)).y)*0.5;
+    bezierVertex((x1 + 2.0*xc)/3.0, (y1 + 2.0*yc)/3.0, 
+    (2.0*xc + x2)/3.0, (2.0*yc + y2)/3.0, x2, y2);
+    x1 = x2;
+    y1 = y2;
+  }
+  xc = ((PVector)gPts.get(sz-2)).x;
+  yc = ((PVector)gPts.get(sz-2)).y;
+  x2 = ((PVector)gPts.get(sz-1)).x;
+  y2 = ((PVector)gPts.get(sz-1)).y;
+  bezierVertex((x1 + 2.0*xc)/3.0, (y1 + 2.0*yc)/3.0, 
+  (2.0*xc + x2)/3.0, (2.0*yc + y2)/3.0, x2, y2);
+  endShape();
+  stroke(0, 0, 0);
+}
+
+*/
 

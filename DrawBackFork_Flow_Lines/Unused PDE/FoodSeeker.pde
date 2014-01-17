@@ -9,7 +9,7 @@
  Date: Dec 13, 2013
  */
 //*********************************************************************************************************
-
+/*
 class FoodSeeker {
   ArrayList <Line> lines;
   int[] food;
@@ -92,7 +92,7 @@ class FoodSeeker {
       seekFood();
       curFood--;
     }
-    */
+    
   }
   void auto() {
     if(firstTime) {
@@ -145,7 +145,7 @@ class FoodSeeker {
     else
       wander();
   }
-  */
+  
   void render() {
     println("In food seeker render"); 
     strokeWeight(3);
@@ -213,3 +213,4 @@ class FoodSeeker {
       println("Food " + i + " : " + food[i]);
   }
 }
+*/ //re-implement this when we do the swarm drawing algo

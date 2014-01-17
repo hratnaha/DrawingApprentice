@@ -1,12 +1,4 @@
 class Line{
-  /*Old using points
-  Point startPoint; 
-  Point curEnd; 
-  Point endPoint; 
-  ArrayList<Point> allPoints = new ArrayList<Point>(); 
-  Point myPoint; 
-*/
-  //new using PVector
   PVector myPoint;
   PVector startPoint; 
   PVector curEnd; 
@@ -21,9 +13,6 @@ class Line{
   float ymin = -1; 
   float xmax = -1; 
   float ymax = -1; 
-
-  //convert all reference of ponts to pvec
-
   public Line()
   {
     startTime = millis();
@@ -31,7 +20,6 @@ class Line{
 
   public Line(float x, float y)
   {
-    //myPoint = new Point(x, y);
     myPoint = new PVector(x, y); 
     startPoint = myPoint;
     allPoints.add(startPoint);
@@ -40,7 +28,6 @@ class Line{
   
   public Line(ArrayList<PVector> all)
   {
-    //myPoint = new Point(x, y);
     startPoint = all.get(0);
     endPoint = all.get(all.size() - 1);
     allPoints = all;
@@ -48,7 +35,6 @@ class Line{
   
   public Line(PVector[] all)
   {
-    //myPoint = new Point(x, y);
     startPoint = all[0];
     endPoint = all[all.length - 1];
     for(int i = 0; i < all.length; i++)
@@ -57,9 +43,6 @@ class Line{
 
   public void draw() 
   {
-    //println("In drawLine()"); 
-    //println("Allpoints.size()" + allPoints.size()); 
-    
     for (int i = 0; i < allPoints.size(); i++) 
     {
       if (i < allPoints.size() - 1) 
@@ -69,69 +52,8 @@ class Line{
         PVector p2 = allPoints.get(i+1); 
         line(p1.x, p1.y, p2.x, p2.y);
       } 
-      /*else if (i == allPoints.size() - 1) 
-      {
-       // println("allPoints.size()=" + allPoints.size()); 
-        PVector p1 = allPoints.get(i -1); 
-        PVector p2 = allPoints.get(i); 
-        line(p1.x, p1.y, p2.x, p2.y);
-      }
-      */
     }
   }
-
-/*  public void generateFlowLines()
-  {
-    float lineSpacing = 4; //distance between flow lines
-    int numberOfLines = 10; //number of flow lines in each direction
-    int increment = 100/numberOfLines; //for controlling color gradient HSB
-    int curHue = 0; //tracking current hue
-    for (int i = 0; i < numberOfLines; i++)
-    {
-      Line newLineAbove = new Line(); //create new Line objects for each of the flow lines
-      Line newLineBelow = new Line(); 
-      colorMode(HSB);
-      stroke(curHue, 100, 50); 
-      curHue += increment; 
-      //flow lines below the line
-      for (int j = 0; j< allPoints.size(); j++)
-      {//cycle through all points of line, exclude beginning and end point
-        if (j < allPoints.size() - 2)
-        {//special case for start and end of line
-          //generate the normal point and add to the newLine
-          //println("Current i = " + i); 
-          PVector p0 = allPoints.get(j); 
-          PVector p1 = allPoints.get(j +1);
-          PVector v = new PVector((p1.x - p0.x), (p1.y - p0.y)); //vector between two points in question
-          PVector normal = new PVector(-v.y, v.x); //normal vector to the drawn line (might need to change signs based on slope)
-          normal.setMag(i*lineSpacing); 
-          PVector normalPoint = PVector.add(p0, normal); //determine the location of new point
-          newLineBelow.addPoint(normalPoint);
-        }
-      }
-      //flow lines abolve the line
-      for (int j = 0; j< allPoints.size(); j++)
-      {//cycle through all points of line, exclude beginning and end point
-        if (j < allPoints.size() - 2)
-        {//special case for start and end of line
-          //generate the normal point and add to the newLine
-          //println("Current i = " + i); 
-          PVector p0 = allPoints.get(j); 
-          PVector p1 = allPoints.get(j +1);
-          PVector v = new PVector((p1.x - p0.x), (p1.y - p0.y)); //vector between two points in question
-          PVector normal = new PVector(v.y, -v.x); //normal vector to the drawn line (might need to change signs based on slope)
-          normal.setMag(i*lineSpacing); 
-          PVector normalPoint = PVector.add(p0, normal); //determine the location of new point
-          newLineAbove.addPoint(normalPoint);
-        }
-      }
-      newLineAbove.draw();
-      newLineBelow.draw(); 
-      colorMode(RGB); 
-      stroke(0);
-    }
-  }
-  */
   public void makeBoundingBox() {
     //creat the bounding box after the end of the line
     for (int i = 0; i < allPoints.size(); i++) {
@@ -168,13 +90,11 @@ class Line{
     int radius = 10; //make a buffer zone raduis of 10 pixels
     float xDiff = loc.x - endPoint.x;
     float yDiff = loc.y - endPoint.y;
-    
     float retInt = sqrt(xDiff*xDiff + yDiff*yDiff);
     boolean retBool;
     if(retInt <= radius){
       retBool = true;
     } else retBool = false;
-    
     return retBool;
   }
   

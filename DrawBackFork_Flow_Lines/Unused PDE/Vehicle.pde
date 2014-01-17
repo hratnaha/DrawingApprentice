@@ -1,3 +1,4 @@
+/* Needs to be updated in order to be integrated into the drawing algorithms
 class Vehicle{
   PVector loc;
   PVector vel;
@@ -102,3 +103,8 @@ class Vehicle{
   }
     
 }
+*/
+
+
+
+/*This is the code from the line_Mode class that was designed to call the vehicles up. This needs to be worked on additionally. Something was off with the agents and we might have better approaches*/
