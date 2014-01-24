@@ -1,4 +1,5 @@
 class Rectangle {
+  //Rectangle can take a array list of lines and create a bounding rectangle around those lines
   float w; 
   float h; 
   PVector pos2;// = pos;  
@@ -62,7 +63,7 @@ class Rectangle {
     this.w = max.x - min.x; 
     this.h = max.y - min.y; 
     this.origin = new PVector(min.x, max.y); 
-    println("Final Min-Mix. Min.x: " + min.x + "min.y: " + min.y + " max.x: " + max.x + "max.y: " + max.y);
+    //println("Final Min-Mix. Min.x: " + min.x + "min.y: " + min.y + " max.x: " + max.x + "max.y: " + max.y);
   }
 
   public void setPos2(PVector pos2) {
@@ -75,7 +76,7 @@ class Rectangle {
     w = x1 - x2; 
     h = y1 - y2; 
     this.origin = new PVector(x2, y1); 
-    println("In Rectangle class- new w: " + w + " h: " + h); 
+    //println("In Rectangle class- new w: " + w + " h: " + h); 
     //here is the bug
   }
   public void setHeight(float height) {
