@@ -36,10 +36,8 @@ class Shape {
 
   public Shape createInstance(PVector pos, float w, float h) {
     //create a new array list and width, etc. right here, don't keep it up
-    //do everything, the draw and everything right form within this function, all the variables are local
     ArrayList<Line> editLines = new ArrayList<Line>(); 
-    //when it scales the lines, it should recalc the origin
-    //setDimensions 
+    //###setDimensions 
     println("w: " + this.w + " h: " + this.h + " input W: " + w+ " input H: " + h); 
     float xScale = w/this.w; 
     float yScale = h/this.h;
@@ -61,20 +59,15 @@ class Shape {
     calculateBounds();
     //setPosition
     PVector pt1 = new PVector(pos.x, pos.y);
-    //this.pos is not getting set.
     PVector pt2 = testRec.origin;
     PVector diff = PVector.sub(pt2, pt1);
-    //println("Diff: " + diff); 
     println("Pt1: "+pt1+ " +  Pt2: " + pt2 + " Diff: " + diff);
     for (int i=0; i < editLines.size(); i++) {
       Line l = editLines.get(i); 
       for (int j=0; j < l.allPoints.size(); j++) {
         PVector pt = l.allPoints.get(j); 
-        //println("Pt before transform: " + pt); 
         pt.sub(diff);
-        //println("Pt after transform: " + pt);
       }
-      //l.printPoints();
     }
     Shape myShape = new Shape(); 
     myShape.allLines = editLines; 
@@ -86,15 +79,11 @@ class Shape {
   }
 
   public void calculateBounds() {
-    //calculateBounds copy: 
-    //get new origin point
     for (int i = 0; i < allLines.size(); i++) {
       Line l = allLines.get(i); 
       PVector s = l.allPoints.get(0); 
       min = new PVector(s.x, s.y); 
       max = new PVector(s.x, s.y);
-      //println("Number 2 Min: " + min + " Max: " + max); 
-      //println("Allpoints size: " +l.allPoints.size()); 
       for (int j =0; j<l.allPoints.size(); j++) {
         PVector p = l.allPoints.get(j); 
         //println("Current point p= " + p + "MinX = " + min.x + " maxX: " + max.x); 
@@ -112,7 +101,6 @@ class Shape {
         }
       }
     }
-
     this.pos = new PVector(min.x, max.y); 
     println("In shape, calc bounds. Final Min.x: " + min.x + "min.y: " + min.y + " max.x: " + max.x + "max.y: " + max.y + "Origin: " + new PVector(min.x, max.y));
   }

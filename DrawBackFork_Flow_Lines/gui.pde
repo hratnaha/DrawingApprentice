@@ -53,22 +53,15 @@ public void drawMeButton_click1(GButton source, GEvent event) { //_CODE_:drawMeB
     //create shape here
     //then modify pos, and add to stack, after click
     for (int i = 0; i < allShapes.size() ; i++) {
-      //println("All Shapes: " + allShapes); 
-      //println("Shape #: " + i + " ID: " + allShapes.get(i).getID()); 
       String ID = allShapes.get(i).getID(); 
       if (ID.equals(drawMeTF.getText())) {
-        //print("in If");
         Shape s = allShapes.get(i); 
         targetShape = new Shape(); 
         targetShape = s; 
-        //println("Points in the shape: "); 
          for(int j = 0; j < targetShape.allLines.size(); j++){
           Line l = targetShape.allLines.get(j);
-          //l.printPoints(); 
         }
         strokeWeight(1);
-        //targetShape.shiftHorizontal(50); 
-        //println("All Lines size: " + s.allLines.size());
       }
       else println("I don't know the shape");
     }

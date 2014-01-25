@@ -71,7 +71,8 @@ void mousePressed()
   checkInterface(new PVector(mouseX, mouseY)); 
   //println("intClick = " + intClick +" Drawing Mode: " + drawingMode); 
   if (drawingMode=="teach" || drawingMode=="draw" && intClick != true) {
-    curLine = new Line(mouseX, mouseY); 
+    curLine = new Line(); 
+    curLine.setStart(new PVector(mouseX, mouseY)); 
     curLine.col = humanColor; 
     allLines.add(curLine);
   }
@@ -84,13 +85,11 @@ void mousePressed()
 void mouseDragged() 
 {
   if (drawingMode=="draw" || drawingMode=="teach" && intClick!=true) {
-    //line(pmouseX, pmouseY, mouseX, mouseY); 
     LineSegment l = new LineSegment(new PVector(pmouseX, pmouseY), new PVector(mouseX, mouseY)); 
-    
     curLine.addSegment(l); 
+    curLine.addPoint(new PVector(mouseX, mouseY)); 
     line(l.start.x, l.start.y, l.end.x, l.end.y); 
     buffer.addSegment(l); 
-    curLine.curEnd(mouseX, mouseY);
   }
   if (drawingMode=="drawPos" && !shapeDrag) {
     shapeDrag = true;
@@ -104,14 +103,12 @@ void mouseReleased()
   if (!intClick) {
     line(pmouseX, pmouseY, mouseX, mouseY); 
     if (drawingMode == "draw") {
-      curLine.setEnd(mouseX, mouseY); 
+      curLine.setEnd(new PVector(mouseX, mouseY)); 
       engine = new Decision_Engine(curLine);
       curLine = null;  
       Line l = engine.decision();
-      l.col = computerColor; 
       l.calculateSegments(); 
       stack.add(l);
-      println("computerColor: "+ l.col); 
       compLines.add(l);
     }
     else if (drawingMode=="drawPos") {
@@ -131,11 +128,7 @@ void mouseReleased()
 void clear() {
   allLines = new ArrayList<Line>(); 
   background(255);
-  //clear the buffer
-}
-void lineDetection() {
-  save("db.jpg");
-  PImage src = loadImage("db.jpg");
+  buffer.clear();
 }
 
 public void customGUI() {
@@ -145,29 +138,18 @@ public void createShape(PVector pos) {
   println("Creating shape. Target: " + targetShape); 
   Shape s = targetShape.createInstance(pos, shapeBound.w, shapeBound.h); 
   for (int i = 0; i < s.allLines.size(); i++) {
-    stack.add(s.allLines.get(i)); 
+    stack.add(s.allLines.get(i));
   }
 }
 
+
 public void checkInterface(PVector pos) {
   float[][] elements = {
-    {
-      teachMeTF.getX(), teachMeTF.getY(), teachMeTF.getWidth(), teachMeTF.getHeight()
-      }
-      , 
-    {
-      drawMeTF.getX(), drawMeTF.getY(), drawMeTF.getWidth(), drawMeTF.getHeight()
-      }
-      , 
-    {
-      teachMeButton.getX(), teachMeButton.getY(), teachMeButton.getWidth(), teachMeButton.getHeight()
-      }
-      , 
-    {
-      drawMeButton.getX(), drawMeButton.getY(), drawMeButton.getWidth(), drawMeButton.getHeight()
-      }
+    {teachMeTF.getX(), teachMeTF.getY(), teachMeTF.getWidth(), teachMeTF.getHeight()}, 
+    {drawMeTF.getX(), drawMeTF.getY(), drawMeTF.getWidth(), drawMeTF.getHeight()}, 
+    {teachMeButton.getX(), teachMeButton.getY(), teachMeButton.getWidth(), teachMeButton.getHeight()}, 
+    {drawMeButton.getX(), drawMeButton.getY(), drawMeButton.getWidth(), drawMeButton.getHeight()}
     };
-
     for (int i = 0; i < elements.length; i++) {
       float[] s = elements[i]; 
       if (pos.x > s[0] && pos.x < s[0] + s[2]) {
@@ -191,13 +173,8 @@ public void checkStack() {
     else if (stackCount >= l.segments.size()) {
       stack.remove(0); 
       stackCount = 0;
-      if(stack.size() ==0)
-        println("Stack emptied"); 
+      if (stack.size() ==0)
+        println("Stack emptied");
     }
   }
 }
-
-static public void main(String args[]) {
-  PApplet.main("DrawBackFork_Flow_Lines");
-}
-

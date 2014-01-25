@@ -1,8 +1,7 @@
 class Line {
   PVector myPoint;
-  PVector startPoint; 
-  PVector curEnd; 
-  PVector endPoint; 
+  PVector start; 
+  PVector end; 
   ArrayList<PVector> allPoints = new ArrayList<PVector>(); 
   ArrayList<LineSegment> segments = new ArrayList<LineSegment>(); 
   float startTime; 
@@ -16,39 +15,19 @@ class Line {
   {
     startTime = millis();
   }
-  public Line(float x, float y)
-  {
-    myPoint = new PVector(x, y); 
-    startPoint = myPoint;
-    allPoints.add(startPoint);
-    startTime = millis();
-  }
   public Line(ArrayList<PVector> all)
   {
-    startPoint = all.get(0);
-    endPoint = all.get(all.size() - 1);
+    start = all.get(0);
+    end = all.get(all.size() - 1);
     allPoints = all;
   }
+
   public Line(PVector[] all)
   {
-    startPoint = all[0];
-    endPoint = all[all.length - 1];
+    start = all[0];
+    end = all[all.length - 1];
     for (int i = 0; i < all.length; i++)
       allPoints.add(all[i]);
-  }
-  public void draw() 
-  {
-    for (int i = 0; i < allPoints.size() - 1; i++) 
-    {
-        PVector p1 = allPoints.get(i); 
-        PVector p2 = allPoints.get(i+1); 
-       stroke(204, 102, 0);
-
-        //stroke(col); 
-        //line(p1.x, p1.y, p2.x, p2.y);
-        //println("P1: " + p1 + " P2: " + p2); 
-        stroke(0); 
-    }
   }
   
   public void addSegment(LineSegment l){
@@ -60,23 +39,21 @@ class Line {
       println("calc segs"); 
       for (int i = 0; i < allPoints.size() - 1; i++){
         LineSegment seg = new LineSegment(allPoints.get(i), allPoints.get(i+1)); 
-        //println("Adding segment: " + seg); 
         segments.add(seg); 
       }
     }
   }
     
-  /*
   public void makeBoundingBox() {
     println("Making Bounding Box. Alllines = " + allLines); 
     myBoundingBox = new Rectangle(allLines); 
     myBoundingBox.calculateBounds();
   }
-  */
+  
   public boolean insideBufferZone(PVector loc) {
     int radius = 10; //make a buffer zone raduis of 10 pixels
-    float xDiff = loc.x - endPoint.x;
-    float yDiff = loc.y - endPoint.y;
+    float xDiff = loc.x - end.x;
+    float yDiff = loc.y - end.y;
     float retInt = sqrt(xDiff*xDiff + yDiff*yDiff);
     boolean retBool;
     if (retInt <= radius) {
@@ -89,24 +66,18 @@ class Line {
   {//manually add a point to allPoints
     allPoints.add(p);
   }
-  public void curEnd(float x, float y) 
+  
+  public void setEnd(PVector p) 
   {
-    myPoint = new PVector(x, y);
-    if (startPoint == null)
-    {
-      startPoint = myPoint;
-    }
-    //myPoint.printPoint(); 
-    allPoints.add(myPoint);
-  }
-  public void setEnd(float x, float y) 
-  {
-    //Actually the endPoint will be the same with its previous one.
-    myPoint = new PVector(x, y);
-    endPoint = myPoint; 
-    //allPoints.add(endPoint);
+    end = p; 
+    allPoints.add(end);
     endTime = millis();
     //makeBoundingBox();
+  }
+
+  public void setStart(PVector p){
+    start = p; 
+    allPoints.add(start); 
   }
   public void printPoints() 
   {
@@ -119,7 +90,6 @@ class Line {
   public float getTotalDistance() 
   {
     float totalDistance = 0; 
-    //println("In getTotalDistance()"); 
     for (int i = 0; i < allPoints.size(); i++) {
       if (i < allPoints.size() - 1) {
         PVector p1 = allPoints.get(i); 
@@ -138,7 +108,6 @@ class Line {
   }
   public float getTotalTime() 
   {
-    //println("In getTotalTime()" ); 
     float totalTime = endTime - startTime; 
     return totalTime;
   }
@@ -157,7 +126,7 @@ class Line {
     return allPoints;
   }
   public PVector getEndPoint() {
-    return endPoint;
+    return end;
   }
   public PVector getPoint(int i) {
     return allPoints.get(i);
