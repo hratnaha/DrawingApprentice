@@ -30,7 +30,7 @@ Buffer buffer;
 void setup() 
 {
   buffer = new Buffer(); 
-  //catIcon = loadImage("cat.png"); 
+  catIcon = loadImage("catIcon.png"); 
   myShape = new Shape(); 
   size(700, 700, JAVA2D);
   createGUI();
@@ -183,10 +183,8 @@ public void checkInterface(PVector pos) {
 public void checkStack() {
   if (stack.size() > 0) {
     Line l = stack.get(0); 
-    println("Found something in stack. StackCount = " + stackCount + "Segments size: " + l.segments.size()); 
     if (stackCount < l.segments.size()) {
       l.segments.get(stackCount).render(); 
-      l.segments.get(stackCount).printPoints(); 
       buffer.addSegment(l.segments.get(stackCount)); 
       stackCount++;
     }
