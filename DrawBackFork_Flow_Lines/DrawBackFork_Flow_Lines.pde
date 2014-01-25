@@ -1,6 +1,8 @@
 import g4p_controls.*;
 ArrayList <Line> allLines = new ArrayList<Line>(); //keeps track of all human lines
 ArrayList <Line> compLines = new ArrayList<Line>(); //keeps track of all comp lines
+ArrayList <LineSegment> curLineSeg = new ArrayList<LineSegment>(); //tracking dragged segment to add to buffer
+ArrayList <Line> stack = new ArrayList<Line>();
 ArrayList<Shape> allShapes = new ArrayList<Shape>(); 
 String drawingMode = "draw";  //draw, teach, drawPos
 StringList strings = new StringList(); // strings for file output
@@ -8,6 +10,7 @@ float probRandom; //the amount of time that the drawBack will interject randomne
 float degreeRandom; //how much fluctuation is introduced in random interjections
 int i; //iteration count for stack
 int lineSpeed = 25; 
+int stackCount = 0; 
 PImage catIcon; 
 PImage img;
 boolean shapeDrag = false; 
@@ -27,7 +30,7 @@ Buffer buffer;
 void setup() 
 {
   buffer = new Buffer(); 
-  catIcon = loadImage("cat.png"); 
+  //catIcon = loadImage("cat.png"); 
   myShape = new Shape(); 
   size(700, 700, JAVA2D);
   createGUI();
@@ -42,12 +45,12 @@ void setup()
 
 void draw() 
 {
-  if (buffer.getImage() != null) {
+  //println("Draw.."); 
+  if (buffer.getImage()!=null) {
     image(buffer.getImage(), 0, 0);
   }
-  if (curLine != null && curLine.getSize() > 1) {
-    curLine.draw();
-  } 
+  checkStack(); 
+
   textSize(16); 
   if (drawingMode=="teach") {
     fill(0);
@@ -81,7 +84,12 @@ void mousePressed()
 void mouseDragged() 
 {
   if (drawingMode=="draw" || drawingMode=="teach" && intClick!=true) {
-    line(pmouseX, pmouseY, mouseX, mouseY); 
+    //line(pmouseX, pmouseY, mouseX, mouseY); 
+    LineSegment l = new LineSegment(new PVector(pmouseX, pmouseY), new PVector(mouseX, mouseY)); 
+    
+    curLine.addSegment(l); 
+    line(l.start.x, l.start.y, l.end.x, l.end.y); 
+    buffer.addSegment(l); 
     curLine.curEnd(mouseX, mouseY);
   }
   if (drawingMode=="drawPos" && !shapeDrag) {
@@ -96,16 +104,15 @@ void mouseReleased()
   if (!intClick) {
     line(pmouseX, pmouseY, mouseX, mouseY); 
     if (drawingMode == "draw") {
-      buffer.addToBuffer(curLine); 
       curLine.setEnd(mouseX, mouseY); 
       engine = new Decision_Engine(curLine);
       curLine = null;  
       Line l = engine.decision();
       l.col = computerColor; 
+      l.calculateSegments(); 
+      stack.add(l);
       println("computerColor: "+ l.col); 
-      SimpleThread compDraw = new SimpleThread(25, l, buffer);
-      compDraw.start();
-      compLines.add(l); 
+      compLines.add(l);
     }
     else if (drawingMode=="drawPos") {
       createShape(shapeBound.origin);
@@ -113,12 +120,7 @@ void mouseReleased()
     }
     else if (drawingMode == "teach")
     {
-      Line tempLine = new Line();  
-      for (int i = 0; i < curLine.allPoints.size(); i++) {
-        tempLine.addPoint(new PVector(curLine.allPoints.get(i).x, curLine.allPoints.get(i).y));
-      }
-      //need to iterate over the line and populate another one
-      myShape.addLine(tempLine);
+      myShape.addLine(curLine);
       myShape.completeShape();
     }
   }
@@ -140,9 +142,11 @@ public void customGUI() {
 }
 
 public void createShape(PVector pos) {
-  Shape t = targetShape.createInstance(pos, shapeBound.w, shapeBound.h); 
-  SimpleThread s = new SimpleThread(25, t, buffer); 
-  s.start();
+  println("Creating shape. Target: " + targetShape); 
+  Shape s = targetShape.createInstance(pos, shapeBound.w, shapeBound.h); 
+  for (int i = 0; i < s.allLines.size(); i++) {
+    stack.add(s.allLines.get(i)); 
+  }
 }
 
 public void checkInterface(PVector pos) {
@@ -167,16 +171,32 @@ public void checkInterface(PVector pos) {
     for (int i = 0; i < elements.length; i++) {
       float[] s = elements[i]; 
       if (pos.x > s[0] && pos.x < s[0] + s[2]) {
-        //println"Within the bounds");
         if (pos.y> s[1] && pos.y < s[1] + s[3]) {
-          //println("Within bounds"); 
           intClick = true; 
-          //println("Int click detected"); 
           break;
         }
       }
       else intClick = false;
     }
+}
+
+public void checkStack() {
+  if (stack.size() > 0) {
+    Line l = stack.get(0); 
+    println("Found something in stack. StackCount = " + stackCount + "Segments size: " + l.segments.size()); 
+    if (stackCount < l.segments.size()) {
+      l.segments.get(stackCount).render(); 
+      l.segments.get(stackCount).printPoints(); 
+      buffer.addSegment(l.segments.get(stackCount)); 
+      stackCount++;
+    }
+    else if (stackCount >= l.segments.size()) {
+      stack.remove(0); 
+      stackCount = 0;
+      if(stack.size() ==0)
+        println("Stack emptied"); 
+    }
+  }
 }
 
 static public void main(String args[]) {

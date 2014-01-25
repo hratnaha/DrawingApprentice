@@ -4,6 +4,7 @@ class Line {
   PVector curEnd; 
   PVector endPoint; 
   ArrayList<PVector> allPoints = new ArrayList<PVector>(); 
+  ArrayList<LineSegment> segments = new ArrayList<LineSegment>(); 
   float startTime; 
   float endTime; 
   boolean isSelected = false; 
@@ -37,21 +38,34 @@ class Line {
   }
   public void draw() 
   {
-    for (int i = 0; i < allPoints.size(); i++) 
+    for (int i = 0; i < allPoints.size() - 1; i++) 
     {
-      if (i < allPoints.size() - 1) 
-      {
-        //println("line.draw()");
         PVector p1 = allPoints.get(i); 
         PVector p2 = allPoints.get(i+1); 
-        stroke(0); 
+       stroke(204, 102, 0);
+
         //stroke(col); 
-        line(p1.x, p1.y, p2.x, p2.y);
+        //line(p1.x, p1.y, p2.x, p2.y);
         //println("P1: " + p1 + " P2: " + p2); 
         stroke(0); 
+    }
+  }
+  
+  public void addSegment(LineSegment l){
+    segments.add(l); 
+  }
+  
+  public void calculateSegments(){
+    if(segments.size()==0){
+      println("calc segs"); 
+      for (int i = 0; i < allPoints.size() - 1; i++){
+        LineSegment seg = new LineSegment(allPoints.get(i), allPoints.get(i+1)); 
+        //println("Adding segment: " + seg); 
+        segments.add(seg); 
       }
     }
   }
+    
   /*
   public void makeBoundingBox() {
     println("Making Bounding Box. Alllines = " + allLines); 

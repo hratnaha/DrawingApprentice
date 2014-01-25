@@ -12,6 +12,7 @@ class Shape {
   }
   public void addLine(Line line) {
     this.allLines.add(line);
+    //line.calculateSegments(); 
   }
 
   public void setID(String ID) {
@@ -24,6 +25,12 @@ class Shape {
     calculateBounds(); 
     w = max.x - min.x; 
     h = max.y - min.y;
+  }
+  
+  public void calculateSegments(){
+    for(int i = 0; i < allLines.size(); i++){
+      allLines.get(i).calculateSegments(); 
+    }
   }
 
 
@@ -71,6 +78,7 @@ class Shape {
     }
     Shape myShape = new Shape(); 
     myShape.allLines = editLines; 
+    myShape.calculateSegments(); 
     myShape.pos = pos; 
     myShape.w = w; 
     myShape.h = h; 
