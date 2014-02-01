@@ -3,7 +3,7 @@ package jcocosketch;
 import processing.core.*;
 import java.util.*;
 
-class Buffer {
+public class Buffer {
 	ArrayList<Line> allLines = new ArrayList<Line>();
 	PImage img;
 	PGraphics buffer;

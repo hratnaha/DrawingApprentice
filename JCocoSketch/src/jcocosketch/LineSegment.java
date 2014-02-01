@@ -3,7 +3,7 @@ package jcocosketch;
 import processing.core.*;
 import java.util.*;
 
-class LineSegment{
+public class LineSegment{
   PVector start; 
   PVector end; 
   public LineSegment(PVector s, PVector e){

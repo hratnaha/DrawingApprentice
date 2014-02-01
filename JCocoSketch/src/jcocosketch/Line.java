@@ -6,7 +6,7 @@ import java.util.*;
 
 import utilities.PVecUtilities;
 
-class Line {
+public class Line {
 	ArrayList<PVector> allPoints = new ArrayList<PVector>();
 	ArrayList<Float> parameter = new ArrayList<Float>();
 	float startTime;

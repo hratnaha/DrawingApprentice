@@ -3,7 +3,7 @@ package jcocosketch;
 import processing.core.*;
 import java.util.*;
 
-class Line_Mod {
+public class Line_Mod {
 	private static final float PROB_RANDOM = 0.15f;
 	private static final float DEGREE_RANDOM = 5.0f;
 	
