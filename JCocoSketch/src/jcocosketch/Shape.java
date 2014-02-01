@@ -3,7 +3,7 @@ package jcocosketch;
 import processing.core.*;
 import java.util.*;
 
-class Shape {
+public class Shape {
 	// A Shape is a collection of lines the user draws and assigns a label to
 	// Shapes are associated with the TeachMe/DrawMe features
 	public ArrayList<Line> allLines = new ArrayList<Line>();

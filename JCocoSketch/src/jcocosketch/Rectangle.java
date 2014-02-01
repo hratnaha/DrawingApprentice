@@ -3,7 +3,7 @@ package jcocosketch;
 import processing.core.*;
 import java.util.*;
 
-class Rectangle {
+public class Rectangle {
 	// Rectangle can take a array list of lines and create a bounding rectangle
 	// around those lines
 	float w;
