@@ -9,16 +9,18 @@ import utilities.PVecUtilities;
 public class Line {
 	ArrayList<PVector> allPoints = new ArrayList<PVector>();
 	ArrayList<Float> parameter = new ArrayList<Float>();
+	Rectangle myBoundingBox;
 	float startTime;
 	float endTime;
-	boolean isSelected = false;
 	float lineID;
-	Rectangle myBoundingBox;
 	float xmin = -1;
 	float ymin = -1;
 	float xmax = -1;
 	float ymax = -1;
 	int color = 0;
+	boolean compGenerated = false; 
+	boolean isSelected = false;
+
 
 	// convert all reference of ponts to pvec
 
