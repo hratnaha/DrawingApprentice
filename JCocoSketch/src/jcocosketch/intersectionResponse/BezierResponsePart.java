@@ -7,6 +7,7 @@ import jcocosketch.*;
 public class BezierResponsePart {
 	private Line xLine[] = {null, null};
 	private float xParam[] = {-1.0f, -1.0f};
+	private float range[] = {0.0f, 1.0f};
 	private PVector xpt[] = {null, null};
 	private PVector cpt[] = {null, null};
 	
@@ -81,14 +82,20 @@ public class BezierResponsePart {
 		buffer.bezier(p1.x, p1.y, p2.x, p2.y, p3.x, p3.y, p4.x, p4.y);
 	}
 	
+	public void setRange(int k, float limit) {
+		range[k] = limit;
+	}
+	
 	public BezierResponsePart reversed() {
 		BezierResponsePart theReversed = new BezierResponsePart(xLine[1], xLine[0]);
 		float newXParam[] = {xParam[1], xParam[0]};
+		float newRange[]  = {1.0f - range[1], 1.0f - range[0]};
 		PVector newXpt[] = {xpt[1], xpt[0]};
 		PVector newCpt[] = {cpt[1], cpt[0]};
 		theReversed.xParam = newXParam;
 		theReversed.xpt = newXpt;
 		theReversed.cpt = newCpt;
+		theReversed.range = newRange;
 		return theReversed;
 	}
 	
@@ -107,13 +114,18 @@ public class BezierResponsePart {
 	
 	public void buildUpApproximation(int k, Line approximation) {
 		if (0 == approximation.getTotalDistance()) {
-			approximation.addPoint(xpt[0].get());
+			approximation.addPoint(atT(range[0]));
 		}
-		float delta = 1.0f / k;
-		float t = delta;
-		for (int i = 0; i < k - 1; i++, t += delta) {
+		float delta = (range[1] - range[0]) / k;
+		float t = range[0] + delta;
+		for (int i = 0; i < k; i++, t += delta) {
 			approximation.addPoint(atT(t));
 		}
-		approximation.addPoint(xpt[1].get());
+	}
+	
+	public float approximateLength(int k) {
+		Line approximation = new Line();
+		buildUpApproximation(k, approximation);
+		return approximation.getTotalDistance();
 	}
 }

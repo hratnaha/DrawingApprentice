@@ -102,19 +102,21 @@ public class IntersectionResponseMaster {
 				tipPart = seed;
 			} else if (null != seed) {
 				tipPart = seed.reversed();
-				tipPart = createResponseContinuation(tipPart, splitters,
-						visitedSegments);
 			}
 			for (int i = 0; null != tipPart; i++) {
-				response.addPart(tipPart, side);
+				if (side == 1 || i > 0) {
+					response.addPart(tipPart, side);
+				}
 				if (i >= 5)
 					break;
 				BezierResponsePart next = createResponseContinuation(tipPart,
 						splitters, visitedSegments);
-				if (null == next) {
-					response.addPart(createEnding(tipPart), side);
-				}
+				if (null == next)
+					break;
 				tipPart = next;
+			}
+			if (null != tipPart) {
+				response.addPart(createEnding(tipPart), side);
 			}
 		}
 		response.spliceLeftRight();
@@ -222,23 +224,17 @@ public class IntersectionResponseMaster {
 		PVector idealtip = PVector.mult(control2, 2);
 		idealtip.sub(control1);
 		ending.setEndPoint(1, idealtip);
+		adjustEndingLength(ending, predecessor);
 		return ending;
-		/*Line line = predecessor.getXLine(1);
-		BezierResponsePart ending = new BezierResponsePart(line, line);
-		ending.setXParam(0, predecessor.getXParam(1));
-		PVector basePoint = predecessor.getXPoint(1);
-		PVector continuationVector = predecessor.getOwnTan(1);
-		PVector delta = predecessor.getStraight(1);
-		PVector mirrDelta = PVecUtilities.reflectVec(delta, continuationVector);
-		mirrDelta.mult(INV_GOLDEN_RATIO);
-		PVector tip = PVector.add(basePoint, mirrDelta);
-		ending.setEndPoint(1, tip);
-		PVector midpoint = PVector.add(basePoint,
-				PVector.mult(continuationVector, 0.3f * mirrDelta.mag()));
-		PVector endDir = PVector.sub(midpoint, tip);
-		endDir.normalize();
-		decideSag(ending, continuationVector, endDir);
-		return ending;*/
+	}
+	
+	private void adjustEndingLength(BezierResponsePart ending, BezierResponsePart predecessor) {
+		float predecessorLength = predecessor.approximateLength(30);
+		float endingLength = ending.approximateLength(30);
+		float desiredLength = predecessorLength * INV_GOLDEN_RATIO;
+		if (desiredLength < endingLength) {
+			ending.setRange(1, desiredLength / endingLength);
+		}
 	}
 
 	private ArrayList<PVector> directionCandidates(PVector tangent,
