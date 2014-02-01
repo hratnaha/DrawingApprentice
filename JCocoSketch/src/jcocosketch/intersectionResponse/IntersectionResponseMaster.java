@@ -208,6 +208,24 @@ public class IntersectionResponseMaster {
 		Line line = predecessor.getXLine(1);
 		BezierResponsePart ending = new BezierResponsePart(line, line);
 		ending.setXParam(0, predecessor.getXParam(1));
+		PVector scaledSecondDerivative = PVector.mult(predecessor.getControlPoint(1), -2);
+		scaledSecondDerivative.add(predecessor.getControlPoint(0));
+		scaledSecondDerivative.add(predecessor.getXPoint(1));
+		PVector delta = predecessor.getStraight(1);
+		PVector control1 = PVector.mult(predecessor.getOwnTan(1), 0.4f * INV_GOLDEN_RATIO * delta.mag());
+		control1.add(predecessor.getXPoint(1));
+		ending.setControlPoint(0, control1);
+		PVector control2 = PVector.mult(control1, 2);
+		control2.add(scaledSecondDerivative);
+		control2.sub(predecessor.getXPoint(1));
+		ending.setControlPoint(1, control2);
+		PVector idealtip = PVector.mult(control2, 2);
+		idealtip.sub(control1);
+		ending.setEndPoint(1, idealtip);
+		return ending;
+		/*Line line = predecessor.getXLine(1);
+		BezierResponsePart ending = new BezierResponsePart(line, line);
+		ending.setXParam(0, predecessor.getXParam(1));
 		PVector basePoint = predecessor.getXPoint(1);
 		PVector continuationVector = predecessor.getOwnTan(1);
 		PVector delta = predecessor.getStraight(1);
@@ -220,7 +238,7 @@ public class IntersectionResponseMaster {
 		PVector endDir = PVector.sub(midpoint, tip);
 		endDir.normalize();
 		decideSag(ending, continuationVector, endDir);
-		return ending;
+		return ending;*/
 	}
 
 	private ArrayList<PVector> directionCandidates(PVector tangent,
