@@ -1,6 +1,9 @@
 package jcocosketch;
 
 import processing.core.*;
+import processing.data.StringList;
+
+import java.awt.Color;
 import java.util.*;
 
 class Buffer {
@@ -9,28 +12,44 @@ class Buffer {
 	PGraphics buffer;
 	boolean diff = false;
 	boolean transparent = false;
+	boolean showComp = false; 
 
 	public Buffer(PApplet master) {
 		buffer = master.createGraphics(700, 700, PApplet.JAVA2D);
 	}
 
-	/*
-	 * Need to integrate this for color. Keep a record of all the lines
-	 * independent from the segments that have been printed. public void
-	 * update() { buffer.beginDraw(); if (!transparent) buffer.background(255);
-	 * if (transparent) buffer.background(0, 0); buffer.smooth();
-	 * buffer.noFill(); println("Preparing to update the buffer"); for (int i =
-	 * 0; i < allLines.size(); i++) { println("In all lines, size is: " +
-	 * allLines.size()); Line l = allLines.get(i); //l.printPoints(); for (int j
-	 * = 0; j < l.allPoints.size() - 1; j++) {
-	 * //println("Less than allPoints.size()"); //println("j = " + j); PVector
-	 * p1 = l.allPoints.get(j); PVector p2 = l.allPoints.get(j+1);
-	 * //println("Color: " + l.col); stroke(0); buffer.line(p1.x, p1.y, p2.x,
-	 * p2.y); println("Drawing lines to buffer. p1.x = " + p1.x + " p1y = " +
-	 * p1.y + " p2x =" + p2.x + " p2y = " + p2.y); stroke(0); } }
-	 * buffer.endDraw(); img = buffer.get(0, 0, buffer.width, buffer.height);
-	 * diff=true; }
-	 */
+
+	// Need to integrate this for color. Keep a record of all the lines
+	//independent from the segments that have been printed. 
+	public void update() { 
+		buffer.beginDraw(); 
+		buffer.background(255);
+		buffer.smooth();
+		buffer.noFill(); 
+		System.out.print("Preparing to update the buffer" +allLines.size()); 
+		for (int i = 0; i < allLines.size(); i++) 
+		{ 
+			//println("In all lines, size is: " + allLines.size()); 
+			Line l = allLines.get(i); 
+			buffer.strokeWeight(2);
+			//l.printPoints(); 
+			if(showComp && l.compGenerated)
+				buffer.stroke(0,0,255);
+			else buffer.stroke(0); 
+			for (int j= 0; j < l.allPoints.size() - 1; j++) {
+				//println("Less than allPoints.size()"); //println("j = " + j); 
+				PVector p1 = l.allPoints.get(j); 
+				PVector p2 = l.allPoints.get(j+1);
+				//println("Color: " + l.col); 
+				buffer.line(p1.x, p1.y, p2.x,p2.y); 
+				//println("Drawing lines to buffer. p1.x = " + p1.x + " p1y = " +p1.y + " p2x =" + p2.x + " p2y = " + p2.y); 
+			} 
+		}
+		buffer.endDraw(); 
+		img = buffer.get(0, 0, buffer.width, buffer.height);
+		diff=true; 
+	}
+
 
 	public void addToBuffer(Line l) {
 		allLines.add(l);

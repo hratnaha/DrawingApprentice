@@ -14,16 +14,16 @@ public class DrawBackFork_Flow_Lines extends PApplet {
 	GButton drawMeButton;
 
 	ArrayList<Line> allLines = new ArrayList<Line>(); // keeps track of all
-														// human lines
+	// human lines
 	ArrayList<Line> compLines = new ArrayList<Line>(); // keeps track of all
-														// comp lines
+	// comp lines
 	ArrayList<LineSegment> curLineSeg = new ArrayList<LineSegment>(); // tracking
-																		// dragged
-																		// segment
-																		// to
-																		// add
-																		// to
-																		// buffer
+	// dragged
+	// segment
+	// to
+	// add
+	// to
+	// buffer
 	ArrayList<Line> stack = new ArrayList<Line>();
 	ArrayList<Shape> allShapes = new ArrayList<Shape>();
 	String drawingMode = "draw"; // draw, teach, drawPos
@@ -118,9 +118,12 @@ public class DrawBackFork_Flow_Lines extends PApplet {
 			line(pmouseX, pmouseY, mouseX, mouseY);
 			if (drawingMode == "draw") {
 				engine = new Decision_Engine(curLine);
+				buffer.allLines.add(curLine); //add human line to buffer storage
 				curLine = null;
 				Line l = engine.decision();
+				l.compGenerated = true; 
 				stack.add(l);
+				buffer.allLines.add(l); //add comp line to buffer storage
 				compLines.add(l);
 			} else if (drawingMode == "drawPos") {
 				createShape(shapeBound.origin);
@@ -132,6 +135,19 @@ public class DrawBackFork_Flow_Lines extends PApplet {
 		} else
 			intClick = false;
 		shapeDrag = false;
+	}
+
+	public void keyPressed(){
+		if(key=='z')
+		{
+			buffer.showComp = true; 
+			buffer.update(); 
+		}
+		if(key=='x')
+		{
+			buffer.showComp = false; 
+			buffer.update(); 
+		}
 	}
 
 	public void clear() {
@@ -154,13 +170,13 @@ public class DrawBackFork_Flow_Lines extends PApplet {
 	public void checkInterface(PVector pos) {
 		float[][] elements = {
 				{ teachMeTF.getX(), teachMeTF.getY(), teachMeTF.getWidth(),
-						teachMeTF.getHeight() },
-				{ drawMeTF.getX(), drawMeTF.getY(), drawMeTF.getWidth(),
+					teachMeTF.getHeight() },
+					{ drawMeTF.getX(), drawMeTF.getY(), drawMeTF.getWidth(),
 						drawMeTF.getHeight() },
-				{ teachMeButton.getX(), teachMeButton.getY(),
-						teachMeButton.getWidth(), teachMeButton.getHeight() },
-				{ drawMeButton.getX(), drawMeButton.getY(),
-						drawMeButton.getWidth(), drawMeButton.getHeight() } };
+						{ teachMeButton.getX(), teachMeButton.getY(),
+							teachMeButton.getWidth(), teachMeButton.getHeight() },
+							{ drawMeButton.getX(), drawMeButton.getY(),
+								drawMeButton.getWidth(), drawMeButton.getHeight() } };
 		for (int i = 0; i < elements.length; i++) {
 			float[] s = elements[i];
 			if (pos.x > s[0] && pos.x < s[0] + s[2]) {
