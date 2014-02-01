@@ -23,6 +23,10 @@ class Rectangle {
 		calculateBounds();
 	}
 
+	public Rectangle(int x, int y, int recWidth, int recHeight) {
+		// TODO Auto-generated constructor stub
+	}
+
 	public void drawRect(PGraphics buffer) {
 		// need to draw the rect, but it is not added to stack, maybe it is
 		// about the placement before background.

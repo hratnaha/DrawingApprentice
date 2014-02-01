@@ -87,8 +87,8 @@ public class DrawBackFork_Flow_Lines extends PApplet {
 		// println("intClick = " + intClick +" Drawing Mode: " + drawingMode);
 		if (drawingMode == "teach" || drawingMode == "draw" && intClick != true) {
 			curLine = new Line();
-			curLine.setStart(new PVector(mouseX, mouseY));
-			curLine.col = humanColor;
+			//curLine.setStart(new PVector(mouseX, mouseY));
+			curLine.setColor(humanColor);
 			allLines.add(curLine);
 		} else if (drawingMode == "drawPos" && intClick != true) {
 			shapeBound = new Rectangle(new PVector(mouseX, mouseY), 0, 0);
@@ -101,7 +101,6 @@ public class DrawBackFork_Flow_Lines extends PApplet {
 		if (drawingMode == "draw" || drawingMode == "teach" && intClick != true) {
 			LineSegment l = new LineSegment(new PVector(pmouseX, pmouseY),
 					new PVector(mouseX, mouseY));
-			curLine.addSegment(l);
 			curLine.addPoint(new PVector(mouseX, mouseY));
 			line(l.start.x, l.start.y, l.end.x, l.end.y);
 			buffer.addSegment(l);
@@ -118,11 +117,9 @@ public class DrawBackFork_Flow_Lines extends PApplet {
 		if (!intClick) {
 			line(pmouseX, pmouseY, mouseX, mouseY);
 			if (drawingMode == "draw") {
-				curLine.setEnd(new PVector(mouseX, mouseY));
 				engine = new Decision_Engine(curLine);
 				curLine = null;
 				Line l = engine.decision();
-				l.calculateSegments();
 				stack.add(l);
 				compLines.add(l);
 			} else if (drawingMode == "drawPos") {
@@ -179,11 +176,13 @@ public class DrawBackFork_Flow_Lines extends PApplet {
 	public void checkStack() {
 		if (stack.size() > 0) {
 			Line l = stack.get(0);
-			if (stackCount < l.segments.size()) {
-				l.segments.get(stackCount).render(this.g);
-				buffer.addSegment(l.segments.get(stackCount));
+
+			if (stackCount < l.segmentsTotal()) {
+				LineSegment currentSegment = l.getSegment(stackCount);
+				currentSegment.render(this.g);
+				buffer.addSegment(currentSegment);
 				stackCount++;
-			} else if (stackCount >= l.segments.size()) {
+			} else {
 				stack.remove(0);
 				stackCount = 0;
 				if (stack.size() == 0)

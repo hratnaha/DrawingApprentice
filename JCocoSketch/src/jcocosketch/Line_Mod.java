@@ -134,7 +134,6 @@ class Line_Mod {
 		// draw
 		// create a new Line of the current line, then newLine.drawLine();
 		Line newLine = new Line();
-		newLine.setStart(line.start);
 		for (int i = 0; i < line.allPoints.size(); i++) {
 			// cycle through the points and add in a bit of randomness to each
 			// points

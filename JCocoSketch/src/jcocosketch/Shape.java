@@ -36,12 +36,6 @@ class Shape {
 		h = max.y - min.y;
 	}
 
-	public void calculateSegments() {
-		for (int i = 0; i < allLines.size(); i++) {
-			allLines.get(i).calculateSegments();
-		}
-	}
-
 	public Shape createInstance(PVector pos, float w, float h) {
 		// create a new array list and width, etc. right here, don't keep it up
 		ArrayList<Line> editLines = new ArrayList<Line>();
@@ -81,7 +75,6 @@ class Shape {
 		}
 		Shape myShape = new Shape();
 		myShape.allLines = editLines;
-		myShape.calculateSegments();
 		myShape.pos = pos;
 		myShape.w = w;
 		myShape.h = h;
