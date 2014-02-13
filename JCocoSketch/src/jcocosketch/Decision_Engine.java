@@ -7,24 +7,23 @@ import java.util.*;
 import jcocosketch.intersectionResponse.IntersectionResponseMaster;
 
 public class Decision_Engine {
-	private final static float ELEMENTARY_DECISION_PROBABILITY = 0.5f;
+	private final static float ELEMENTARY_DECISION_PROBABILITY = 0.0f;
 	
 	Random random = new Random();
 	IntersectionResponseMaster xResponseMaster = new IntersectionResponseMaster();
-	Line line;
 
-	public Decision_Engine(Line line) {
-		this.line = line;
+	public Decision_Engine() {
 	}
 
-	public Line decision() {
+	public Line decision(List<Line> lines) {
+		Line line = lines.get(lines.size() - 1);
 		if (ELEMENTARY_DECISION_PROBABILITY < random.nextFloat()) {
-			Line response = xResponseMaster.response(this.line);
+			Line response = xResponseMaster.response(lines);
 			if (null != response)
 				return response;
 		}
 		int decision = 1 + random.nextInt(4);
-		Line_Mod m = new Line_Mod(this.line, random);
+		Line_Mod m = new Line_Mod(line, random);
 		Line newLine = new Line();
 		switch (decision) {
 		case 1:
@@ -37,13 +36,9 @@ public class Decision_Engine {
 			newLine = m.scaling();
 			break;
 		case 4:
-			newLine = m.drawBack(this.line);
+			newLine = m.drawBack(line);
 			break;
 		}
 		return newLine;
-	}
-
-	public void setLine(Line line) {
-		this.line = line;
 	}
 }

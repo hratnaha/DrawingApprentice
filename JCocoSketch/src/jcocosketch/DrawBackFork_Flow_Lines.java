@@ -13,10 +13,11 @@ public class DrawBackFork_Flow_Lines extends PApplet {
 	GButton teachMeButton;
 	GButton drawMeButton;
 
-	ArrayList<Line> allLines = new ArrayList<Line>(); // keeps track of all
+	ArrayList<Line> humanLines = new ArrayList<Line>(); // keeps track of all
 	// human lines
 	ArrayList<Line> compLines = new ArrayList<Line>(); // keeps track of all
 	// comp lines
+	ArrayList<Line> allLines = new ArrayList<Line>(); // human and computer lines together
 	ArrayList<LineSegment> curLineSeg = new ArrayList<LineSegment>(); // tracking
 	// dragged
 	// segment
@@ -41,7 +42,7 @@ public class DrawBackFork_Flow_Lines extends PApplet {
 	Shape targetShape;
 	Rectangle shapeBound;
 	Line curLine;
-	Decision_Engine engine;
+	Decision_Engine engine = new Decision_Engine();
 	int computerColor = color(253, 52, 91);
 	int humanColor = color(0);
 	Buffer buffer;
@@ -89,6 +90,7 @@ public class DrawBackFork_Flow_Lines extends PApplet {
 			curLine = new Line();
 			//curLine.setStart(new PVector(mouseX, mouseY));
 			curLine.setColor(humanColor);
+			humanLines.add(curLine);
 			allLines.add(curLine);
 		} else if (drawingMode == "drawPos" && intClick != true) {
 			shapeBound = new Rectangle(new PVector(mouseX, mouseY), 0, 0);
@@ -117,14 +119,14 @@ public class DrawBackFork_Flow_Lines extends PApplet {
 		if (!intClick) {
 			line(pmouseX, pmouseY, mouseX, mouseY);
 			if (drawingMode == "draw") {
-				engine = new Decision_Engine(curLine);
 				buffer.allLines.add(curLine); //add human line to buffer storage
 				curLine = null;
-				Line l = engine.decision();
+				Line l = engine.decision(allLines);
 				l.compGenerated = true; 
 				stack.add(l);
 				buffer.allLines.add(l); //add comp line to buffer storage
 				compLines.add(l);
+				allLines.add(l);
 			} else if (drawingMode == "drawPos") {
 				createShape(shapeBound.origin);
 				drawingMode = "draw";
@@ -151,7 +153,7 @@ public class DrawBackFork_Flow_Lines extends PApplet {
 	}
 
 	public void clear() {
-		allLines = new ArrayList<Line>();
+		humanLines = new ArrayList<Line>();
 		background(255);
 		buffer.clear();
 	}
