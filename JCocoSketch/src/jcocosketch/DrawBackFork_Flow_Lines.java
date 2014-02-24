@@ -117,7 +117,7 @@ public class DrawBackFork_Flow_Lines extends PApplet {
 		if (!intClick) {
 			line(pmouseX, pmouseY, mouseX, mouseY);
 			if (drawingMode == "draw") {
-				engine = new Decision_Engine(curLine);
+				engine = new Decision_Engine(curLine, (float)Math.sqrt(Math.pow(width, 2) + Math.pow(height, 2)));
 				buffer.allLines.add(curLine); //add human line to buffer storage
 				curLine = null;
 				Line l = engine.decision();

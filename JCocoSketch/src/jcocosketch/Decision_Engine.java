@@ -12,13 +12,15 @@ public class Decision_Engine {
 	Random random = new Random();
 	IntersectionResponseMaster xResponseMaster = new IntersectionResponseMaster();
 	Line line;
+	float screenDiag = 0.0f;
 
-	public Decision_Engine(Line line) {
+	public Decision_Engine(Line line, float screenDiag) {
 		this.line = line;
+		this.screenDiag = screenDiag;
 	}
 
 	public Line decision() {
-		if (ELEMENTARY_DECISION_PROBABILITY < random.nextFloat()) {
+		if (this.line.getTotalDistance() < 2 * screenDiag && ELEMENTARY_DECISION_PROBABILITY < random.nextFloat()) {
 			Line response = xResponseMaster.response(this.line);
 			if (null != response)
 				return response;
