@@ -26,12 +26,15 @@ public class DrawBackStack {
 			passedSegments += redrawSpeed;
 			int end = Math.min((int) passedSegments, l.segmentsTotal());
 
+			LineSegment currentSegment = null; 
 			for (int i = start; i < end; i++) {
-				LineSegment currentSegment = l.getSegment(i);
+				currentSegment = l.getSegment(i);
 				currentSegment.render(graphics);
 				buffer.addSegment(currentSegment);
 			} 
-			
+			graphics.fill(255,255,0); 
+			graphics.ellipse(currentSegment.end.x, currentSegment.end.y, 15, 15); 
+			graphics.fill(0); 
 			if (l.segmentsTotal() == end) {
 				stack.remove(0);
 				passedSegments = 0.0f;

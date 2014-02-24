@@ -26,7 +26,6 @@ public class DrawBackFork_Flow_Lines extends PApplet {
 	int i; // iteration count for stack
 	int lineSpeed = 25;
 	PImage catIcon;
-	PImage img;
 	boolean shapeDrag = false;
 	boolean intClick = false;
 	boolean lineGroup = false;
