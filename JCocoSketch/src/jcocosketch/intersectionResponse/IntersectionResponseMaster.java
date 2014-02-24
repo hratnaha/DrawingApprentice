@@ -93,6 +93,8 @@ public class IntersectionResponseMaster {
 	private BezierResponse createResponse(Line line) {
 		BezierResponse response = new BezierResponse();
 		ArrayList<Float> splitters = lineSplitters(line);
+		if (splitters.size() < 3)
+			return null;
 		Set<Integer> visitedSegments = new HashSet<Integer>();
 		BezierResponsePart seed = createResponseSeed(line, splitters,
 				visitedSegments);

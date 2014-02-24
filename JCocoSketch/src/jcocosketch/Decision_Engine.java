@@ -7,7 +7,7 @@ import java.util.*;
 import jcocosketch.intersectionResponse.IntersectionResponseMaster;
 
 public class Decision_Engine {
-	private final static float ELEMENTARY_DECISION_PROBABILITY = 0.5f;
+	private final static float ELEMENTARY_DECISION_PROBABILITY = 0.2f;
 	
 	Random random = new Random();
 	IntersectionResponseMaster xResponseMaster = new IntersectionResponseMaster();
