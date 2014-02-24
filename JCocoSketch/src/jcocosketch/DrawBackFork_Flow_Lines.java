@@ -17,20 +17,14 @@ public class DrawBackFork_Flow_Lines extends PApplet {
 	// human lines
 	ArrayList<Line> compLines = new ArrayList<Line>(); // keeps track of all
 	// comp lines
-	ArrayList<LineSegment> curLineSeg = new ArrayList<LineSegment>(); // tracking
-	// dragged
-	// segment
-	// to
-	// add
-	// to
-	// buffer
-	ArrayList<Line> stack = new ArrayList<Line>();
+	
+	DrawBackStack stack = new DrawBackStack();
+	
 	ArrayList<Shape> allShapes = new ArrayList<Shape>();
 	String drawingMode = "draw"; // draw, teach, drawPos
 	StringList strings = new StringList(); // strings for file output
 	int i; // iteration count for stack
 	int lineSpeed = 25;
-	int stackCount = 0;
 	PImage catIcon;
 	PImage img;
 	boolean shapeDrag = false;
@@ -64,7 +58,8 @@ public class DrawBackFork_Flow_Lines extends PApplet {
 		if (null != bufimage) {
 			image(bufimage, 0, 0);
 		}
-		checkStack();
+		
+		stack.draw(this.g, buffer);
 
 		textSize(16);
 		if (drawingMode == "teach") {
@@ -122,7 +117,7 @@ public class DrawBackFork_Flow_Lines extends PApplet {
 				curLine = null;
 				Line l = engine.decision();
 				l.compGenerated = true; 
-				stack.add(l);
+				stack.push(l);
 				buffer.allLines.add(l); //add comp line to buffer storage
 				compLines.add(l);
 			} else if (drawingMode == "drawPos") {
@@ -163,7 +158,7 @@ public class DrawBackFork_Flow_Lines extends PApplet {
 		println("Creating shape. Target: " + targetShape);
 		Shape s = targetShape.createInstance(pos, shapeBound.w, shapeBound.h);
 		for (int i = 0; i < s.allLines.size(); i++) {
-			stack.add(s.allLines.get(i));
+			stack.push(s.allLines.get(i));
 		}
 	}
 
@@ -186,24 +181,6 @@ public class DrawBackFork_Flow_Lines extends PApplet {
 				}
 			} else
 				intClick = false;
-		}
-	}
-
-	public void checkStack() {
-		if (stack.size() > 0) {
-			Line l = stack.get(0);
-
-			if (stackCount < l.segmentsTotal()) {
-				LineSegment currentSegment = l.getSegment(stackCount);
-				currentSegment.render(this.g);
-				buffer.addSegment(currentSegment);
-				stackCount++;
-			} else {
-				stack.remove(0);
-				stackCount = 0;
-				if (stack.size() == 0)
-					println("Stack emptied");
-			}
 		}
 	}
 
