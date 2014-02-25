@@ -20,7 +20,9 @@ public class DrawBackStack {
 			Line l = stack.get(0);
 			
 			float suggestedSpeed = suggestedSpeed();
-			if (redrawSpeed < suggestedSpeed || 0.0f == passedSegments) redrawSpeed = suggestedSpeed;
+			if (redrawSpeed < suggestedSpeed || 0.0f == passedSegments) {
+				redrawSpeed = suggestedSpeed;
+			}
 			
 			int start = (int) passedSegments;
 			passedSegments += redrawSpeed;
@@ -31,6 +33,8 @@ public class DrawBackStack {
 				currentSegment.render(graphics);
 				buffer.addSegment(currentSegment);
 			} 
+			
+			totalSegments -= end - start;
 			
 			if (l.segmentsTotal() == end) {
 				stack.remove(0);
