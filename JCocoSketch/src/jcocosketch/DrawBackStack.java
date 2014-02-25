@@ -1,14 +1,15 @@
 package jcocosketch;
 
 import java.util.ArrayList;
-
-import processing.core.PGraphics;
+import processing.core.*; 
 
 public class DrawBackStack {
 	private ArrayList<Line> stack = new ArrayList<Line>();
 	private float passedSegments = 0.0f;
 	private int totalSegments = 0;
 	private float redrawSpeed = 1.0f;
+	private PGraphics graphics; 
+
 	
 	public void push(Line line) {
 		stack.add(line);
@@ -29,8 +30,9 @@ public class DrawBackStack {
 			LineSegment currentSegment = null; 
 			for (int i = start; i < end; i++) {
 				currentSegment = l.getSegment(i);
-				currentSegment.render(graphics);
-				buffer.addSegment(currentSegment);
+				//currentSegment.render(graphics);
+				//buffer.addSegment(currentSegment);
+				buffer.addSegment(currentSegment); 
 			} 
 			graphics.fill(255,255,0); 
 			graphics.ellipse(currentSegment.end.x, currentSegment.end.y, 15, 15); 
@@ -38,8 +40,8 @@ public class DrawBackStack {
 			if (l.segmentsTotal() == end) {
 				stack.remove(0);
 				passedSegments = 0.0f;
-				if (stack.size() == 0)
-					System.out.println("Stack emptied");
+				//if (stack.size() == 0)
+					buffer.update(); 
 			}
 		}
 	}
