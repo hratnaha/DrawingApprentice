@@ -14,4 +14,16 @@
 	<natures>
 		<nature>org.eclipse.jdt.core.javanature</nature>
 	</natures>
+	<linkedResources>
+		<link>
+			<name>src/images/bot.png</name>
+			<type>1</type>
+			<location>/Users/nickdavis/repos/coco_sketch/JCocoSketch/res/bot.png</location>
+		</link>
+		<link>
+			<name>src/images/robot.png</name>
+			<type>1</type>
+			<location>/Users/nickdavis/repos/coco_sketch/JCocoSketch/res/robot.png</location>
+		</link>
+	</linkedResources>
 </projectDescription>

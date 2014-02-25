@@ -1,6 +1,7 @@
 package jcocosketch;
 
 import java.util.ArrayList;
+
 import processing.core.*; 
 
 public class DrawBackStack {
@@ -8,7 +9,7 @@ public class DrawBackStack {
 	private float passedSegments = 0.0f;
 	private int totalSegments = 0;
 	private float redrawSpeed = 1.0f;
-	private PGraphics graphics; 
+	private PImage icon;  
 
 	
 	public void push(Line line) {
@@ -17,6 +18,7 @@ public class DrawBackStack {
 	}
 	
 	public void draw(PGraphics graphics, Buffer buffer) {
+		int segsDrawn = 0; 
 		if (stack.size() > 0) {
 			Line l = stack.get(0);
 			
@@ -30,15 +32,19 @@ public class DrawBackStack {
 			LineSegment currentSegment = null; 
 			for (int i = start; i < end; i++) {
 				currentSegment = l.getSegment(i);
-				//currentSegment.render(graphics);
-				//buffer.addSegment(currentSegment);
 				buffer.addSegment(currentSegment); 
+				segsDrawn = i; 
 			} 
 			graphics.fill(255,255,0); 
-			graphics.ellipse(currentSegment.end.x, currentSegment.end.y, 15, 15); 
+			graphics.imageMode(PConstants.CENTER); 
+			graphics.image(icon,currentSegment.end.x, currentSegment.end.y);
+			graphics.imageMode(PConstants.CORNER); 
+			
 			graphics.fill(0); 
 			if (l.segmentsTotal() == end) {
 				stack.remove(0);
+				totalSegments -= segsDrawn; 
+				segsDrawn = 0; 
 				passedSegments = 0.0f;
 				//if (stack.size() == 0)
 					buffer.update(); 
@@ -48,5 +54,9 @@ public class DrawBackStack {
 	
 	public float suggestedSpeed() {
 		return Math.max(totalSegments / 100.0f, 1.0f);
+	}
+	
+	public void setIcon(PImage img){
+		icon = img; 
 	}
 }

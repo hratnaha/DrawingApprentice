@@ -32,23 +32,17 @@ public class Buffer {
 		buffer.background(255);
 		buffer.smooth();
 		buffer.noFill(); 
-		System.out.print("Preparing to update the buffer" +allLines.size()); 
 		for (int i = 0; i < allLines.size(); i++) 
 		{ 
-			//println("In all lines, size is: " + allLines.size()); 
 			Line l = allLines.get(i); 
 			buffer.strokeWeight(1);
-			//l.printPoints(); 
 			if(showComp && l.compGenerated)
 				buffer.stroke(0,0,255);
 			else buffer.stroke(0); 
 			for (int j= 0; j < l.allPoints.size() - 1; j++) {
-				//println("Less than allPoints.size()"); //println("j = " + j); 
 				PVector p1 = l.allPoints.get(j); 
 				PVector p2 = l.allPoints.get(j+1);
-				//println("Color: " + l.col); 
 				buffer.line(p1.x, p1.y, p2.x,p2.y); 
-				//println("Drawing lines to buffer. p1.x = " + p1.x + " p1y = " +p1.y + " p2x =" + p2.x + " p2y = " + p2.y); 
 			} 
 		}
 		buffer.endDraw(); 

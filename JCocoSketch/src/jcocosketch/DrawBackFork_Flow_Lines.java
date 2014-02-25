@@ -25,8 +25,7 @@ public class DrawBackFork_Flow_Lines extends PApplet {
 	StringList strings = new StringList(); // strings for file output
 	int i; // iteration count for stack
 	int lineSpeed = 25;
-	PImage catIcon;
-	PImage canvasImage;//this is a record of the last buffer update
+	PImage roboIcon;
 	boolean shapeDrag = false;
 	boolean activeDrawing = false; 
 	boolean intClick = false;
@@ -43,7 +42,8 @@ public class DrawBackFork_Flow_Lines extends PApplet {
 
 	public void setup() {
 		buffer = new Buffer(this, this.g);
-		catIcon = loadImage("../../res/catIcon.png");
+		roboIcon = loadImage("images/robot.png");
+		stack.setIcon(roboIcon); 
 		myShape = new Shape();
 		size(700, 700, JAVA2D);
 		createGUI();
@@ -133,7 +133,6 @@ public class DrawBackFork_Flow_Lines extends PApplet {
 		if (!intClick) {
 			//line(pmouseX, pmouseY, mouseX, mouseY);
 			if (drawingMode == "draw" && activeDrawing) {
-				System.out.println("Drawing mode. executing line seg stuff."); 
 				engine = new Decision_Engine(curLine, (float)Math.sqrt(Math.pow(width, 2) + Math.pow(height, 2)));
 				buffer.allLines.add(curLine); //add human line to buffer storage
 				buffer.update(); 
