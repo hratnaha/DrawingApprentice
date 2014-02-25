@@ -37,7 +37,8 @@ public class DrawBackStack {
 			} 
 			graphics.fill(255,255,0); 
 			graphics.imageMode(PConstants.CENTER); 
-			graphics.image(icon,currentSegment.end.x, currentSegment.end.y);
+			if(currentSegment!= null)
+					graphics.image(icon,currentSegment.end.x, currentSegment.end.y);
 			graphics.imageMode(PConstants.CORNER); 
 			
 			graphics.fill(0); 

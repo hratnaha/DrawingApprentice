@@ -12,7 +12,7 @@ public class Buffer {
 	PGraphics buffer;
 	PGraphics buffer2; 
 	PGraphics graphics; 
-	boolean diff = false;
+	boolean diff = true;
 	boolean transparent = false;
 	boolean showComp = false; 
 	PApplet master; 
