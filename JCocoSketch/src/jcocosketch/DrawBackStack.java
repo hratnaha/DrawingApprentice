@@ -42,12 +42,13 @@ public class DrawBackStack {
 			
 			graphics.fill(0); 
 			if (l.segmentsTotal() == end) {
+				buffer.addToBuffer(stack.get(0)); 
 				stack.remove(0);
 				totalSegments -= segsDrawn; 
 				segsDrawn = 0; 
 				passedSegments = 0.0f;
 				//if (stack.size() == 0)
-					buffer.update(); 
+					//buffer.update(); 
 			}
 		}
 	}
@@ -59,4 +60,8 @@ public class DrawBackStack {
 	public void setIcon(PImage img){
 		icon = img; 
 	}
+	public double getSize(){
+		return stack.size(); 
+	}
+	
 }
