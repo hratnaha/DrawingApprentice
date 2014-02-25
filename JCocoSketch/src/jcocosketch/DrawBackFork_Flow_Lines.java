@@ -1,5 +1,5 @@
 package jcocosketch;
-
+//made a change
 import processing.core.*;
 import processing.data.StringList;
 
@@ -25,9 +25,9 @@ public class DrawBackFork_Flow_Lines extends PApplet {
 	StringList strings = new StringList(); // strings for file output
 	int i; // iteration count for stack
 	int lineSpeed = 25;
-	PImage catIcon;
-	PImage img;
+	PImage roboIcon;
 	boolean shapeDrag = false;
+	boolean activeDrawing = false; 
 	boolean intClick = false;
 	boolean lineGroup = false;
 	boolean bufferChanged = false;
@@ -41,8 +41,9 @@ public class DrawBackFork_Flow_Lines extends PApplet {
 	Buffer buffer;
 
 	public void setup() {
-		buffer = new Buffer(this);
-		catIcon = loadImage("../../res/catIcon.png");
+		buffer = new Buffer(this, this.g);
+		roboIcon = loadImage("images/robot.png");
+		stack.setIcon(roboIcon); 
 		myShape = new Shape();
 		size(700, 700, JAVA2D);
 		createGUI();
@@ -54,10 +55,15 @@ public class DrawBackFork_Flow_Lines extends PApplet {
 	}
 
 	public void draw() {
-		PImage bufimage = buffer.getImage();
-		if (null != bufimage) {
-			image(bufimage, 0, 0);
+		
+		PImage buffImage = buffer.getImage();
+		if (null != buffImage) {
+			image(buffImage, 0, 0);
+			//canvasImage = buffImage
 		}
+		
+		
+		//say check if the buffImage has changed
 		
 		stack.draw(this.g, buffer);
 
@@ -93,7 +99,21 @@ public class DrawBackFork_Flow_Lines extends PApplet {
 	}
 
 	public void mouseDragged() {
-		if (drawingMode == "draw" || drawingMode == "teach" && intClick != true) {
+		
+		//if it is draw mode
+		//have to define that we are in draw mode here if we are not already in shapeDrag
+		//it is either one or the other, but drawMode is not being set or happens by default
+		
+		if(!intClick){
+		if (drawingMode == "draw") {
+			LineSegment l = new LineSegment(new PVector(pmouseX, pmouseY),
+					new PVector(mouseX, mouseY));
+			curLine.addPoint(new PVector(mouseX, mouseY));
+			//line(l.start.x, l.start.y, l.end.x, l.end.y);
+			buffer.addSegment(l);
+			activeDrawing = true; 
+		}
+		if (drawingMode == "teach") {
 			LineSegment l = new LineSegment(new PVector(pmouseX, pmouseY),
 					new PVector(mouseX, mouseY));
 			curLine.addPoint(new PVector(mouseX, mouseY));
@@ -106,20 +126,23 @@ public class DrawBackFork_Flow_Lines extends PApplet {
 		if (shapeDrag) {
 			shapeBound.setPos2(new PVector(mouseX, mouseY));
 		}
+		}
 	}
 
 	public void mouseReleased() {
 		if (!intClick) {
-			line(pmouseX, pmouseY, mouseX, mouseY);
-			if (drawingMode == "draw") {
+			//line(pmouseX, pmouseY, mouseX, mouseY);
+			if (drawingMode == "draw" && activeDrawing) {
 				engine = new Decision_Engine(curLine, (float)Math.sqrt(Math.pow(width, 2) + Math.pow(height, 2)));
 				buffer.allLines.add(curLine); //add human line to buffer storage
+				buffer.update(); 
 				curLine = null;
 				Line l = engine.decision();
 				l.compGenerated = true; 
 				stack.push(l);
 				buffer.allLines.add(l); //add comp line to buffer storage
 				compLines.add(l);
+				activeDrawing = false; 
 			} else if (drawingMode == "drawPos") {
 				createShape(shapeBound.origin);
 				drawingMode = "draw";

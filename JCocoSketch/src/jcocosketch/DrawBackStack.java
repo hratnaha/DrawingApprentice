@@ -9,6 +9,8 @@ public class DrawBackStack {
 	private float passedSegments = 0.0f;
 	private int totalSegments = 0;
 	private float redrawSpeed = 1.0f;
+	private PImage icon;  
+
 	
 	public void push(Line line) {
 		stack.add(line);
@@ -28,24 +30,35 @@ public class DrawBackStack {
 			passedSegments += redrawSpeed;
 			int end = Math.min((int) passedSegments, l.segmentsTotal());
 
+			LineSegment currentSegment = null; 
 			for (int i = start; i < end; i++) {
-				LineSegment currentSegment = l.getSegment(i);
-				currentSegment.render(graphics);
-				buffer.addSegment(currentSegment);
+				currentSegment = l.getSegment(i);
+				buffer.addSegment(currentSegment); 
 			} 
+			graphics.fill(255,255,0); 
+			graphics.imageMode(PConstants.CENTER); 
+			graphics.image(icon,currentSegment.end.x, currentSegment.end.y);
+			graphics.imageMode(PConstants.CORNER); 
 			
 			totalSegments -= end - start;
 			
+			graphics.fill(0); 
 			if (l.segmentsTotal() == end) {
 				stack.remove(0);
+				totalSegments -= segsDrawn; 
+				segsDrawn = 0; 
 				passedSegments = 0.0f;
-				if (stack.size() == 0)
-					System.out.println("Stack emptied");
+				//if (stack.size() == 0)
+				buffer.update(); 
 			}
 		}
 	}
 	
 	public float suggestedSpeed() {
 		return Math.max(totalSegments / 100.0f, 1.0f);
+	}
+	
+	public void setIcon(PImage img){
+		icon = img; 
 	}
 }
