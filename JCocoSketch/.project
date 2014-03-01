@@ -14,4 +14,10 @@
 	<natures>
 		<nature>org.eclipse.jdt.core.javanature</nature>
 	</natures>
+	<variableList>
+		<variable>
+			<name>LIB</name>
+			<value>file:/Users/AlanZhang/Documents/workspace/JCocoSketch/lib</value>
+		</variable>
+	</variableList>
 </projectDescription>

@@ -2,6 +2,7 @@ package jcocosketch;
 
 import processing.core.*;
 import processing.data.StringList;
+import utilities.Cornucopia;
 
 import java.util.*;
 
@@ -46,7 +47,9 @@ public class DrawBackFork_Flow_Lines extends PApplet {
 	int computerColor = color(253, 52, 91);
 	int humanColor = color(0);
 	Buffer buffer;
-
+	
+	Cornucopia cornu = new Cornucopia();
+	
 	public void setup() {
 		buffer = new Buffer(this);
 		catIcon = loadImage("../../res/catIcon.png");
@@ -116,6 +119,9 @@ public class DrawBackFork_Flow_Lines extends PApplet {
 	}
 
 	public void mouseReleased() {
+		Line line = cornu.getPrimitives(curLine, 2);
+		System.out.println(line.getSize());
+		stack.add(line);
 		if (!intClick) {
 			line(pmouseX, pmouseY, mouseX, mouseY);
 			if (drawingMode == "draw") {
@@ -123,7 +129,7 @@ public class DrawBackFork_Flow_Lines extends PApplet {
 				curLine = null;
 				Line l = engine.decision(allLines);
 				l.compGenerated = true; 
-				stack.add(l);
+				//stack.add(l);
 				buffer.allLines.add(l); //add comp line to buffer storage
 				compLines.add(l);
 				allLines.add(l);
