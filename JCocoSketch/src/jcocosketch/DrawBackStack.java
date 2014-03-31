@@ -2,7 +2,7 @@ package jcocosketch;
 
 import java.util.ArrayList;
 
-import processing.core.PGraphics;
+import processing.core.*; 
 
 public class DrawBackStack {
 	private ArrayList<Line> stack = new ArrayList<Line>();
@@ -37,19 +37,19 @@ public class DrawBackStack {
 			} 
 			graphics.fill(255,255,0); 
 			graphics.imageMode(PConstants.CENTER); 
-			graphics.image(icon,currentSegment.end.x, currentSegment.end.y);
+			if(currentSegment!= null)
+					graphics.image(icon,currentSegment.end.x, currentSegment.end.y);
 			graphics.imageMode(PConstants.CORNER); 
 			
 			totalSegments -= end - start;
 			
 			graphics.fill(0); 
 			if (l.segmentsTotal() == end) {
+				buffer.addToBuffer(stack.get(0)); 
 				stack.remove(0);
-				totalSegments -= segsDrawn; 
-				segsDrawn = 0; 
 				passedSegments = 0.0f;
 				//if (stack.size() == 0)
-				buffer.update(); 
+					//buffer.update(); 
 			}
 		}
 	}
@@ -61,4 +61,8 @@ public class DrawBackStack {
 	public void setIcon(PImage img){
 		icon = img; 
 	}
+	public double getSize(){
+		return stack.size(); 
+	}
+	
 }

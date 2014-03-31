@@ -45,7 +45,7 @@ public class DrawBackFork_Flow_Lines extends PApplet {
 		roboIcon = loadImage("images/robot.png");
 		stack.setIcon(roboIcon); 
 		myShape = new Shape();
-		size(700, 700, JAVA2D);
+		size(1200, 700, JAVA2D);
 		createGUI();
 		customGUI();
 		background(255);
@@ -109,6 +109,7 @@ public class DrawBackFork_Flow_Lines extends PApplet {
 			LineSegment l = new LineSegment(new PVector(pmouseX, pmouseY),
 					new PVector(mouseX, mouseY));
 			curLine.addPoint(new PVector(mouseX, mouseY));
+			ellipse(mouseX, mouseY, 10, 10); 
 			//line(l.start.x, l.start.y, l.end.x, l.end.y);
 			buffer.addSegment(l);
 			activeDrawing = true; 
@@ -117,7 +118,7 @@ public class DrawBackFork_Flow_Lines extends PApplet {
 			LineSegment l = new LineSegment(new PVector(pmouseX, pmouseY),
 					new PVector(mouseX, mouseY));
 			curLine.addPoint(new PVector(mouseX, mouseY));
-			line(l.start.x, l.start.y, l.end.x, l.end.y);
+			//line(l.start.x, l.start.y, l.end.x, l.end.y);
 			buffer.addSegment(l);
 		}
 		if (drawingMode == "drawPos" && !shapeDrag) {
@@ -133,14 +134,15 @@ public class DrawBackFork_Flow_Lines extends PApplet {
 		if (!intClick) {
 			//line(pmouseX, pmouseY, mouseX, mouseY);
 			if (drawingMode == "draw" && activeDrawing) {
+				buffer.addToBuffer(curLine); 
+				if(stack.getSize() ==0) buffer.update(); 
 				engine = new Decision_Engine(curLine, (float)Math.sqrt(Math.pow(width, 2) + Math.pow(height, 2)));
 				buffer.allLines.add(curLine); //add human line to buffer storage
-				buffer.update(); 
 				curLine = null;
 				Line l = engine.decision();
 				l.compGenerated = true; 
 				stack.push(l);
-				buffer.allLines.add(l); //add comp line to buffer storage
+				//buffer.allLines.add(l); //add comp line to buffer storage
 				compLines.add(l);
 				activeDrawing = false; 
 			} else if (drawingMode == "drawPos") {

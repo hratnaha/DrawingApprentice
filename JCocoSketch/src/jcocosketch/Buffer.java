@@ -12,7 +12,7 @@ public class Buffer {
 	PGraphics buffer;
 	PGraphics buffer2; 
 	PGraphics graphics; 
-	boolean diff = false;
+	boolean diff = true;
 	boolean transparent = false;
 	boolean showComp = false; 
 	PApplet master; 
@@ -20,7 +20,7 @@ public class Buffer {
 
 	public Buffer(PApplet master, PGraphics graphics) {
 		this.master = master; 
-		buffer = master.createGraphics(700, 700, PApplet.JAVA2D);
+		buffer = master.createGraphics(1200, 700, PApplet.JAVA2D);
 		this.graphics = graphics; 
 	}
 
@@ -86,6 +86,7 @@ public class Buffer {
 		//get the background image of the buffer to paste over
 		PImage backgroundImage = buffer.get((int)buffPos.x, (int)buffPos.y,buffer2.width, buffer2.height); 
 		buffer2.beginDraw(); 
+		buffer2.smooth(); 
 		buffer2.background(0,0); 
 		buffer2.image(backgroundImage, buffer2.width, buffer2.height ); 
 		buffer2.strokeWeight(1);
@@ -97,7 +98,9 @@ public class Buffer {
 		
 		buffer.beginDraw();
 		buffer.image(tempImage, (float)(buffPos.x  + deltaW), (float)(buffPos.y  + deltaH)); 
+		buffer.endDraw(); 
 		img = buffer.get(0,0,buffer.width,buffer.height); 
+		diff = true; 
 	}
 	/*
 	public void addSegment(LineSegment l) {
