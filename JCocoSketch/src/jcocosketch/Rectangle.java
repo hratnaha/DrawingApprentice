@@ -17,16 +17,6 @@ public class Rectangle {
 		this.h = height;
 		this.pos = pos;
 	}
-	
-	public Rectangle(PVector p1, PVector p2){
-		w = Math.abs(p1.x - p2.x); 
-		h = Math.abs(p1.y - p2.y); 
-		if(p1.x > p2.x)
-			pos2 = new PVector(p1.x, p1.y - h); 
-		else pos2 = p1; 
-		
-	}
-
 
 	public Rectangle(ArrayList<Line> lines) {
 		this.lines = lines;
@@ -36,7 +26,6 @@ public class Rectangle {
 	public Rectangle(int x, int y, int recWidth, int recHeight) {
 		// TODO Auto-generated constructor stub
 	}
-
 
 	public void drawRect(PGraphics buffer) {
 		// need to draw the rect, but it is not added to stack, maybe it is

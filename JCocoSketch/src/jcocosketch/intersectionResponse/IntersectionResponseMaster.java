@@ -19,7 +19,13 @@ public class IntersectionResponseMaster {
 	private Random random = new Random();
 	
 	public Line response(Line userLine) {
-		BezierResponse rawResponse = createResponse(userLine);
+		List<Line> targetLines = new ArrayList<Line>();
+		targetLines.add(userLine);
+		return response(targetLines);
+	}
+	
+	public Line response(List<Line> targetLines) {
+		BezierResponse rawResponse = createResponse(targetLines);
 		if (null == rawResponse)
 			return null;
 		return rawResponse.approximation(30);
@@ -33,7 +39,7 @@ public class IntersectionResponseMaster {
 		}
 	}
 
-	private ArrayList<Float> lineSplitters(Line line) {
+	private void computeLineSplitters(Line line) {
 		// ArrayList<Float> radii = new ArrayList<Float>();
 		ArrayList<Float> splitters = new ArrayList<Float>();
 		splitters.add(0.0f);
@@ -66,7 +72,7 @@ public class IntersectionResponseMaster {
 			considerSplitter(paramRange, roundingMin, roundingArgmin, splitters);
 		}
 		splitters.add(paramRange);
-		return splitters;
+		line.setSplitters(splitters);
 	}
 
 	private CanonicXRatio randomXRatio() {
@@ -74,8 +80,7 @@ public class IntersectionResponseMaster {
 		return canonicRatios[random.nextInt(canonicRatios.length)];
 	}
 
-	private float getXParameter(int segmentN, CanonicXRatio xRatio,
-			ArrayList<Float> splitters) {
+	private float getXParameter(int segmentN, CanonicXRatio xRatio, List<Float> splitters) {
 		float segmentStart = splitters.get(segmentN);
 		float segmentEnd = splitters.get(segmentN + 1);
 		switch (xRatio) {
@@ -90,14 +95,15 @@ public class IntersectionResponseMaster {
 		}
 	}
 
-	private BezierResponse createResponse(Line line) {
+	private BezierResponse createResponse(List<Line> lines) {
 		BezierResponse response = new BezierResponse();
-		ArrayList<Float> splitters = lineSplitters(line);
-		if (splitters.size() < 3)
-			return null;
-		Set<Integer> visitedSegments = new HashSet<Integer>();
-		BezierResponsePart seed = createResponseSeed(line, splitters,
-				visitedSegments);
+		for (Line line : lines) {
+			if (!line.isSplitted()) {
+				computeLineSplitters(line);
+			}
+		}
+		Set<InflectionSegmentId> visitedSegments = new HashSet<InflectionSegmentId>();
+		BezierResponsePart seed = createResponseSeed(lines.get(lines.size() - 1), visitedSegments);
 		for (int side = 1; side >= 0; side--) {
 			BezierResponsePart tipPart = null;
 			if (1 == side) {
@@ -111,8 +117,7 @@ public class IntersectionResponseMaster {
 				}
 				if (i >= 5)
 					break;
-				BezierResponsePart next = createResponseContinuation(tipPart,
-						splitters, visitedSegments);
+				BezierResponsePart next = createResponseContinuation(tipPart, lines, visitedSegments);
 				if (null == next)
 					break;
 				tipPart = next;
@@ -125,14 +130,14 @@ public class IntersectionResponseMaster {
 		return response;
 	}
 
-	private BezierResponsePart createResponseSeed(Line line,
-			ArrayList<Float> splitters, Set<Integer> visitedSegments) {
+	private BezierResponsePart createResponseSeed(Line line, Set<InflectionSegmentId> visitedSegments) {
+		List<Float> splitters = line.getSplitters();
 		if (splitters.size() < 3)
 			return null;
 		BezierResponsePart theSeed = new BezierResponsePart(line, line);
 		int seedSplitter = 1 + random.nextInt(splitters.size() - 2);
-		visitedSegments.add(seedSplitter - 1);
-		visitedSegments.add(seedSplitter);
+		visitedSegments.add(new InflectionSegmentId(line.getLineID(), seedSplitter - 1));
+		visitedSegments.add(new InflectionSegmentId(line.getLineID(), seedSplitter));
 		theSeed.setXParam(0,
 				getXParameter(seedSplitter - 1, randomXRatio(), splitters));
 		theSeed.setXParam(1,
@@ -144,50 +149,74 @@ public class IntersectionResponseMaster {
 		// if (random.nextBoolean()) {theSeed.reverse();}
 		return theSeed;
 	}
+	
+	private Pair<Line, Float> intersectLines(PVector rayStart, PVector rayDir, List<Line> targets) {
+		Line bestLine = null;
+		float bestX = 0.0f;
+		float bestDistance = Float.MAX_VALUE;
+		for (Line target : targets) {
+			float xParam = target.intersectRay(rayStart, rayDir);
+			if (xParam < 0)
+				continue;
+			float distance = PVector.sub(target.getPointAt(xParam), rayStart).mag();
+			if (distance < bestDistance) {
+				bestLine = target;
+				bestX = xParam;
+				bestDistance = distance;
+			}
+		}
+		if (null == bestLine) {
+			return null;
+		} else {
+			return Pair.of(bestLine, bestX);
+		}
+	}
 
-	private float eyescanIntersection(PVector rayStart, PVector rayDir,
-			Line target, float angle) {
-		// float xParam = target.intersectRay(rayStart, rayDir);
-		// if (xParam > 0)
-		// return xParam;
+	private Pair<Line, Float> eyescanIntersection(PVector rayStart, PVector rayDir,
+			List<Line> targets, float deviationAngle) {
 		PVector rayOrt = new PVector(-rayDir.y, rayDir.x, 0);
-		ArrayList<Float> sideIntersections = new ArrayList<Float>();
-		float deviationAngles[] = { -angle, 0.0f, angle };
+		ArrayList<Pair<Line, Float>> sideIntersections = new ArrayList<Pair<Line, Float>>();
+		float deviationAngles[] = { -deviationAngle, 0.0f, deviationAngle };
 		for (int i = 0; i < deviationAngles.length; i++) {
 			float devAngle = deviationAngles[i];
 			PVector deviatedDir = PVector.mult(rayDir, (float)Math.cos(devAngle));
 			deviatedDir.add(PVector.mult(rayOrt, (float)Math.sin(devAngle)));
-			float xParam = target.intersectRay(rayStart, deviatedDir);
-			if (xParam > 0)
-				sideIntersections.add(xParam);
+			Pair<Line, Float> intersection = intersectLines(rayStart, deviatedDir, targets);
+			if (null != intersection)
+				sideIntersections.add(intersection);
 		}
 		if (sideIntersections.isEmpty())
-			return -1.0f;
+			return null;
 		else
-			return sideIntersections.get(random.nextInt(sideIntersections
-					.size()));
+			return sideIntersections.get(random.nextInt(sideIntersections.size()));
 	}
 
-	private BezierResponsePart createResponseContinuation(
-			BezierResponsePart predecessor, ArrayList<Float> splitters,
-			Set<Integer> visitedSegments) {
-		Line line = predecessor.getXLine(1);
+	private BezierResponsePart createResponseContinuation
+			(BezierResponsePart predecessor,
+			List<Line> targetLines,
+			Set<InflectionSegmentId> visitedSegments) {
+		//Line line = predecessor.getXLine(1);
+		//List<Float> splitters = line.getSplitters();
 		PVector continuationVector = predecessor.getOwnTan(1);
-		float xParam = eyescanIntersection(predecessor.getXPoint(1),
-				continuationVector, line, (float) Math.PI / 12);
-		if (xParam < 0) {
+		Pair<Line, Float> eyescanResult = eyescanIntersection(predecessor.getXPoint(1),
+															 continuationVector, targetLines, (float) Math.PI / 12);
+		if (null == eyescanResult) {
 			return null;
 		}
+		Line target = eyescanResult.first;
+		float xParam = eyescanResult.second;
+		List<Float> splitters = target.getSplitters();
 		int segmentN = Collections.binarySearch(splitters, xParam);
 		if (segmentN > 0) {
 			return null;
 		}
 		segmentN = -(segmentN + 2);
-		if (visitedSegments.contains(segmentN)) {
+		InflectionSegmentId segmentId = new InflectionSegmentId(target.getLineID(), segmentN);
+		if (visitedSegments.contains(segmentId)) {
 			return null;
 		}
-		visitedSegments.add(segmentN);
-		BezierResponsePart response = new BezierResponsePart(line, line);
+		visitedSegments.add(segmentId);
+		BezierResponsePart response = new BezierResponsePart(predecessor.getXLine(1), target);
 		response.setXParam(0, predecessor.getXParam(1));
 		float minXPtDist = Float.MAX_VALUE;
 		float bestCanonicXParam = -1.0f;

@@ -1,5 +1,5 @@
 package jcocosketch;
-//made a change
+
 import processing.core.*;
 import processing.data.StringList;
 
@@ -13,21 +13,28 @@ public class DrawBackFork_Flow_Lines extends PApplet {
 	GButton teachMeButton;
 	GButton drawMeButton;
 
-	ArrayList<Line> allLines = new ArrayList<Line>(); // keeps track of all
+	ArrayList<Line> humanLines = new ArrayList<Line>(); // keeps track of all
 	// human lines
 	ArrayList<Line> compLines = new ArrayList<Line>(); // keeps track of all
 	// comp lines
-	
-	DrawBackStack stack = new DrawBackStack();
-	
+	ArrayList<Line> allLines = new ArrayList<Line>(); // human and computer lines together
+	ArrayList<LineSegment> curLineSeg = new ArrayList<LineSegment>(); // tracking
+	// dragged
+	// segment
+	// to
+	// add
+	// to
+	// buffer
+	ArrayList<Line> stack = new ArrayList<Line>();
 	ArrayList<Shape> allShapes = new ArrayList<Shape>();
 	String drawingMode = "draw"; // draw, teach, drawPos
 	StringList strings = new StringList(); // strings for file output
 	int i; // iteration count for stack
 	int lineSpeed = 25;
-	PImage roboIcon;
+	int stackCount = 0;
+	PImage catIcon;
+	PImage img;
 	boolean shapeDrag = false;
-	boolean activeDrawing = false; 
 	boolean intClick = false;
 	boolean lineGroup = false;
 	boolean bufferChanged = false;
@@ -35,17 +42,16 @@ public class DrawBackFork_Flow_Lines extends PApplet {
 	Shape targetShape;
 	Rectangle shapeBound;
 	Line curLine;
-	Decision_Engine engine;
+	Decision_Engine engine = new Decision_Engine();
 	int computerColor = color(253, 52, 91);
 	int humanColor = color(0);
 	Buffer buffer;
 
 	public void setup() {
-		buffer = new Buffer(this, this.g);
-		roboIcon = loadImage("images/robot.png");
-		stack.setIcon(roboIcon); 
+		buffer = new Buffer(this);
+		catIcon = loadImage("../../res/catIcon.png");
 		myShape = new Shape();
-		size(1200, 700, JAVA2D);
+		size(700, 700, JAVA2D);
 		createGUI();
 		customGUI();
 		background(255);
@@ -55,17 +61,11 @@ public class DrawBackFork_Flow_Lines extends PApplet {
 	}
 
 	public void draw() {
-		
-		PImage buffImage = buffer.getImage();
-		if (null != buffImage) {
-			image(buffImage, 0, 0);
-			//canvasImage = buffImage
+		PImage bufimage = buffer.getImage();
+		if (null != bufimage) {
+			image(bufimage, 0, 0);
 		}
-		
-		
-		//say check if the buffImage has changed
-		
-		stack.draw(this.g, buffer);
+		checkStack();
 
 		textSize(16);
 		if (drawingMode == "teach") {
@@ -90,6 +90,7 @@ public class DrawBackFork_Flow_Lines extends PApplet {
 			curLine = new Line();
 			//curLine.setStart(new PVector(mouseX, mouseY));
 			curLine.setColor(humanColor);
+			humanLines.add(curLine);
 			allLines.add(curLine);
 		} else if (drawingMode == "drawPos" && intClick != true) {
 			shapeBound = new Rectangle(new PVector(mouseX, mouseY), 0, 0);
@@ -99,26 +100,11 @@ public class DrawBackFork_Flow_Lines extends PApplet {
 	}
 
 	public void mouseDragged() {
-		
-		//if it is draw mode
-		//have to define that we are in draw mode here if we are not already in shapeDrag
-		//it is either one or the other, but drawMode is not being set or happens by default
-		
-		if(!intClick){
-		if (drawingMode == "draw") {
+		if (drawingMode == "draw" || drawingMode == "teach" && intClick != true) {
 			LineSegment l = new LineSegment(new PVector(pmouseX, pmouseY),
 					new PVector(mouseX, mouseY));
 			curLine.addPoint(new PVector(mouseX, mouseY));
-			ellipse(mouseX, mouseY, 10, 10); 
-			//line(l.start.x, l.start.y, l.end.x, l.end.y);
-			buffer.addSegment(l);
-			activeDrawing = true; 
-		}
-		if (drawingMode == "teach") {
-			LineSegment l = new LineSegment(new PVector(pmouseX, pmouseY),
-					new PVector(mouseX, mouseY));
-			curLine.addPoint(new PVector(mouseX, mouseY));
-			//line(l.start.x, l.start.y, l.end.x, l.end.y);
+			line(l.start.x, l.start.y, l.end.x, l.end.y);
 			buffer.addSegment(l);
 		}
 		if (drawingMode == "drawPos" && !shapeDrag) {
@@ -127,24 +113,20 @@ public class DrawBackFork_Flow_Lines extends PApplet {
 		if (shapeDrag) {
 			shapeBound.setPos2(new PVector(mouseX, mouseY));
 		}
-		}
 	}
 
 	public void mouseReleased() {
 		if (!intClick) {
-			//line(pmouseX, pmouseY, mouseX, mouseY);
-			if (drawingMode == "draw" && activeDrawing) {
-				buffer.addToBuffer(curLine); 
-				if(stack.getSize() ==0) buffer.update(); 
-				engine = new Decision_Engine(curLine, (float)Math.sqrt(Math.pow(width, 2) + Math.pow(height, 2)));
+			line(pmouseX, pmouseY, mouseX, mouseY);
+			if (drawingMode == "draw") {
 				buffer.allLines.add(curLine); //add human line to buffer storage
 				curLine = null;
-				Line l = engine.decision();
+				Line l = engine.decision(allLines);
 				l.compGenerated = true; 
-				stack.push(l);
-				//buffer.allLines.add(l); //add comp line to buffer storage
+				stack.add(l);
+				buffer.allLines.add(l); //add comp line to buffer storage
 				compLines.add(l);
-				activeDrawing = false; 
+				allLines.add(l);
 			} else if (drawingMode == "drawPos") {
 				createShape(shapeBound.origin);
 				drawingMode = "draw";
@@ -171,7 +153,7 @@ public class DrawBackFork_Flow_Lines extends PApplet {
 	}
 
 	public void clear() {
-		allLines = new ArrayList<Line>();
+		humanLines = new ArrayList<Line>();
 		background(255);
 		buffer.clear();
 	}
@@ -183,7 +165,7 @@ public class DrawBackFork_Flow_Lines extends PApplet {
 		println("Creating shape. Target: " + targetShape);
 		Shape s = targetShape.createInstance(pos, shapeBound.w, shapeBound.h);
 		for (int i = 0; i < s.allLines.size(); i++) {
-			stack.push(s.allLines.get(i));
+			stack.add(s.allLines.get(i));
 		}
 	}
 
@@ -206,6 +188,24 @@ public class DrawBackFork_Flow_Lines extends PApplet {
 				}
 			} else
 				intClick = false;
+		}
+	}
+
+	public void checkStack() {
+		if (stack.size() > 0) {
+			Line l = stack.get(0);
+
+			if (stackCount < l.segmentsTotal()) {
+				LineSegment currentSegment = l.getSegment(stackCount);
+				currentSegment.render(this.g);
+				buffer.addSegment(currentSegment);
+				stackCount++;
+			} else {
+				stack.remove(0);
+				stackCount = 0;
+				if (stack.size() == 0)
+					println("Stack emptied");
+			}
 		}
 	}
 

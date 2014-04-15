@@ -9,10 +9,11 @@ import utilities.PVecUtilities;
 public class Line {
 	ArrayList<PVector> allPoints = new ArrayList<PVector>();
 	ArrayList<Float> parameter = new ArrayList<Float>();
+	List<Float> splitters = null;
 	Rectangle myBoundingBox;
 	float startTime;
 	float endTime;
-	float lineID;
+	int lineID;
 	float xmin = -1;
 	float ymin = -1;
 	float xmax = -1;
@@ -20,24 +21,30 @@ public class Line {
 	int color = 0;
 	boolean compGenerated = false; 
 	boolean isSelected = false;
+	
+	static int lineCounter = 0;
 
 
 	// convert all reference of ponts to pvec
 
 	public Line() {
+		lineID = lineCounter++;
 		startTime = System.currentTimeMillis() / 1000.0f;
 	}
 
 	public Line(float x, float y) {
+		lineID = lineCounter++;
 		allPoints.add(new PVector(x, y));
 		startTime = System.currentTimeMillis() / 1000.0f;
 	}
 
 	public Line(ArrayList<PVector> all) {
+		lineID = lineCounter++;
 		initFromPoints(all);
 	}
 
 	public Line(PVector[] all) {
+		lineID = lineCounter++;
 		ArrayList<PVector> allVec = new ArrayList<PVector>();
 		for (int i = 0; i < all.length; i++) {
 			allVec.add(all[i]);
@@ -259,12 +266,8 @@ public class Line {
 	public float getRectHeight() {
 		return myBoundingBox.getHeight();
 	}
-
-	public void setLineID(float lineID) {
-		this.lineID = lineID;
-	}
-
-	public float getLineID() {
+	
+	public int getLineID() {
 		return lineID;
 	}
 
@@ -286,5 +289,19 @@ public class Line {
 	
 	public LineSegment getSegment(int i) {
 		return new LineSegment(allPoints.get(i), allPoints.get(i+1));
+	}
+	
+	public boolean isSplitted() {
+		return null != splitters;
+	}
+	
+	public void setSplitters(List<Float> splitters) {
+		if (!isSplitted()) {
+			this.splitters = splitters;
+		}
+	}
+	
+	public List<Float> getSplitters() {
+		return Collections.unmodifiableList(this.splitters);
 	}
 }
