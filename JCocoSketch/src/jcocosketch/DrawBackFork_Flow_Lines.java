@@ -168,6 +168,10 @@ public class DrawBackFork_Flow_Lines extends PApplet {
 			buffer.showComp = false; 
 			buffer.update(); 
 		}
+		if(key=='c')
+		{
+			buffer.clear();
+		}
 	}
 
 	public void clear() {

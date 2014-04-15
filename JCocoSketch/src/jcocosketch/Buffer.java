@@ -28,6 +28,7 @@ public class Buffer {
 	// Need to integrate this for color. Keep a record of all the lines
 	//independent from the segments that have been printed. 
 	public void update() { 
+		System.out.println("Update Called"); 
 		buffer.beginDraw(); 
 		buffer.background(255);
 		buffer.smooth();
@@ -125,6 +126,6 @@ public class Buffer {
 	public void clear() {
 		allLines = new ArrayList<Line>();
 		img = new PImage();
-		// update();
+		update();
 	}
 }

@@ -84,9 +84,11 @@ public class Shape {
 	public void calculateBounds() {
 		for (int i = 0; i < allLines.size(); i++) {
 			Line l = allLines.get(i);
+			if (min == null && max == null){
 			PVector s = l.allPoints.get(0);
 			min = new PVector(s.x, s.y);
 			max = new PVector(s.x, s.y);
+			}
 			for (int j = 0; j < l.allPoints.size(); j++) {
 				PVector p = l.allPoints.get(j);
 				// println("Current point p= " + p + "MinX = " + min.x +
@@ -106,7 +108,9 @@ public class Shape {
 		this.pos = new PVector(min.x, max.y);
 		System.out.println("In shape, calc bounds. Final Min.x: " + min.x + "min.y: "
 				+ min.y + " max.x: " + max.x + "max.y: " + max.y + "Origin: "
-				+ new PVector(min.x, max.y));
+				+ new PVector(min.x, max.y)); 
+		System.out.println("Height = "  + (max.y - min.y) + " Width = " + (max.x - min.x)); 
+		
 	}
 
 	public float getWidth() {
