@@ -1,0 +1,205 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Jni|Win32">
+      <Configuration>Jni</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{4B35192A-5105-47F3-A490-9DC12CFD9D01}</ProjectGuid>
+    <Keyword>Win32Proj</Keyword>
+    <RootNamespace>cornucopia</RootNamespace>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v110</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v110</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Jni|Win32'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v110</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Jni|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <LinkIncremental>true</LinkIncremental>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <LinkIncremental>false</LinkIncremental>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Jni|Win32'">
+    <LinkIncremental>false</LinkIncremental>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;_USRDLL;CORNUCOPIA_EXPORTS;MYAPI=__declspec(dllexport);%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <SDLCheck>true</SDLCheck>
+      <AdditionalIncludeDirectories>C:\Users\chipi_000\Desktop\Proposal Project\cornucopia\cornucopia-lib\eigen;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+    <PostBuildEvent>
+      <Command>Copy "$(TargetDir)$(TargetName).*" "$(SolutionDir)..\..\Sketch2BIM\Canvas3D\bin\Debug\"</Command>
+    </PostBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;_USRDLL;CORNUCOPIA_EXPORTS;MYAPI=__declspec(dllexport);%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <SDLCheck>true</SDLCheck>
+      <AdditionalIncludeDirectories>E:\Dropbox\cornucopia\cornucopia-lib\eigen;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+    </Link>
+    <PreBuildEvent>
+      <Command>
+      </Command>
+    </PreBuildEvent>
+    <PostBuildEvent>
+      <Command>Copy "$(TargetDir)$(TargetName).*" "$(USERPROFILE)\Desktop\sketch2bim\library\"</Command>
+    </PostBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Jni|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;_USRDLL;CORNUCOPIA_EXPORTS;MYAPI=__declspec(dllexport);%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <SDLCheck>true</SDLCheck>
+      <AdditionalIncludeDirectories>C:\Program Files\Java\jdk1.8.0\include\win32;C:\Program Files\Java\jdk1.8.0\include;E:\Dropbox\cornucopia\cornucopia-lib\eigen;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+    </Link>
+    <PreBuildEvent>
+      <Command>
+      </Command>
+    </PreBuildEvent>
+    <PostBuildEvent>
+      <Command>Copy "$(TargetDir)$(TargetName).*" "E:\workspace\JniTest\bin"</Command>
+    </PostBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\cornucopia-lib\Cornucopia\Algorithm.cpp" />
+    <ClCompile Include="..\..\cornucopia-lib\Cornucopia\Arc.cpp" />
+    <ClCompile Include="..\..\cornucopia-lib\Cornucopia\Bezier.cpp" />
+    <ClCompile Include="..\..\cornucopia-lib\Cornucopia\Clothoid.cpp" />
+    <ClCompile Include="..\..\cornucopia-lib\Cornucopia\ClothoidProjector.cpp" />
+    <ClCompile Include="..\..\cornucopia-lib\Cornucopia\Combiner.cpp" />
+    <ClCompile Include="..\..\cornucopia-lib\Cornucopia\CornerDetector.cpp" />
+    <ClCompile Include="..\..\cornucopia-lib\Cornucopia\CurvePrimitive.cpp" />
+    <ClCompile Include="..\..\cornucopia-lib\Cornucopia\Debugging.cpp" />
+    <ClCompile Include="..\..\cornucopia-lib\Cornucopia\ErrorComputer.cpp" />
+    <ClCompile Include="..\..\cornucopia-lib\Cornucopia\Fitter.cpp" />
+    <ClCompile Include="..\..\cornucopia-lib\Cornucopia\Fresnel.cpp" />
+    <ClCompile Include="..\..\cornucopia-lib\Cornucopia\GraphConstructor.cpp" />
+    <ClCompile Include="..\..\cornucopia-lib\Cornucopia\jni_Cornucopia.cpp" />
+    <ClCompile Include="..\..\cornucopia-lib\Cornucopia\Line.cpp" />
+    <ClCompile Include="..\..\cornucopia-lib\Cornucopia\NativeLib.cpp" />
+    <ClCompile Include="..\..\cornucopia-lib\Cornucopia\Oversketcher.cpp" />
+    <ClCompile Include="..\..\cornucopia-lib\Cornucopia\Parameters.cpp" />
+    <ClCompile Include="..\..\cornucopia-lib\Cornucopia\PathFinder.cpp" />
+    <ClCompile Include="..\..\cornucopia-lib\Cornucopia\PiecewiseLinearUtils.cpp" />
+    <ClCompile Include="..\..\cornucopia-lib\Cornucopia\Polyline.cpp" />
+    <ClCompile Include="..\..\cornucopia-lib\Cornucopia\Preprocessing.cpp" />
+    <ClCompile Include="..\..\cornucopia-lib\Cornucopia\PrimitiveFitter.cpp" />
+    <ClCompile Include="..\..\cornucopia-lib\Cornucopia\PrimitiveFitUtils.cpp" />
+    <ClCompile Include="..\..\cornucopia-lib\Cornucopia\PrimitiveSequence.cpp" />
+    <ClCompile Include="..\..\cornucopia-lib\Cornucopia\Resampler.cpp" />
+    <ClCompile Include="..\..\cornucopia-lib\Cornucopia\SimpleAPI.cpp" />
+    <ClCompile Include="..\..\cornucopia-lib\Cornucopia\Solver.cpp" />
+    <ClCompile Include="..\..\cornucopia-lib\Cornucopia\TwoCurveCombine.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\cornucopia-lib\Cornucopia\Algorithm.h" />
+    <ClInclude Include="..\..\cornucopia-lib\Cornucopia\AngleUtils.h" />
+    <ClInclude Include="..\..\cornucopia-lib\Cornucopia\Arc.h" />
+    <ClInclude Include="..\..\cornucopia-lib\Cornucopia\Bezier.h" />
+    <ClInclude Include="..\..\cornucopia-lib\Cornucopia\Clothoid.h" />
+    <ClInclude Include="..\..\cornucopia-lib\Cornucopia\Combiner.h" />
+    <ClInclude Include="..\..\cornucopia-lib\Cornucopia\CornerDetector.h" />
+    <ClInclude Include="..\..\cornucopia-lib\Cornucopia\Cornucopia.h" />
+    <ClInclude Include="..\..\cornucopia-lib\Cornucopia\Curve.h" />
+    <ClInclude Include="..\..\cornucopia-lib\Cornucopia\CurvePrimitive.h" />
+    <ClInclude Include="..\..\cornucopia-lib\Cornucopia\Debugging.h" />
+    <ClInclude Include="..\..\cornucopia-lib\Cornucopia\defs.h" />
+    <ClInclude Include="..\..\cornucopia-lib\Cornucopia\ErrorComputer.h" />
+    <ClInclude Include="..\..\cornucopia-lib\Cornucopia\Fitter.h" />
+    <ClInclude Include="..\..\cornucopia-lib\Cornucopia\Fresnel.h" />
+    <ClInclude Include="..\..\cornucopia-lib\Cornucopia\GraphConstructor.h" />
+    <ClInclude Include="..\..\cornucopia-lib\Cornucopia\jni_Cornucopia.h" />
+    <ClInclude Include="..\..\cornucopia-lib\Cornucopia\Line.h" />
+    <ClInclude Include="..\..\cornucopia-lib\Cornucopia\NativeLib.h" />
+    <ClInclude Include="..\..\cornucopia-lib\Cornucopia\Oversketcher.h" />
+    <ClInclude Include="..\..\cornucopia-lib\Cornucopia\Parameters.h" />
+    <ClInclude Include="..\..\cornucopia-lib\Cornucopia\PathFinder.h" />
+    <ClInclude Include="..\..\cornucopia-lib\Cornucopia\PiecewiseLinearUtils.h" />
+    <ClInclude Include="..\..\cornucopia-lib\Cornucopia\Polyline.h" />
+    <ClInclude Include="..\..\cornucopia-lib\Cornucopia\Preprocessing.h" />
+    <ClInclude Include="..\..\cornucopia-lib\Cornucopia\PrimitiveFitter.h" />
+    <ClInclude Include="..\..\cornucopia-lib\Cornucopia\PrimitiveFitUtils.h" />
+    <ClInclude Include="..\..\cornucopia-lib\Cornucopia\PrimitiveSequence.h" />
+    <ClInclude Include="..\..\cornucopia-lib\Cornucopia\Resampler.h" />
+    <ClInclude Include="..\..\cornucopia-lib\Cornucopia\SimpleAPI.h" />
+    <ClInclude Include="..\..\cornucopia-lib\Cornucopia\smart_ptr.h" />
+    <ClInclude Include="..\..\cornucopia-lib\Cornucopia\Solver.h" />
+    <ClInclude Include="..\..\cornucopia-lib\Cornucopia\TwoCurveCombine.h" />
+    <ClInclude Include="..\..\cornucopia-lib\Cornucopia\VectorC.h" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

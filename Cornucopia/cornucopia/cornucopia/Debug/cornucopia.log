@@ -1,0 +1,49 @@
+﻿Build started 10/21/2013 11:47:47 PM.
+     1>Project "C:\Users\chipi_000\Desktop\Proposal Project\cornucopia\cornucopia\cornucopia\cornucopia.vcxproj" on node 2 (Build target(s)).
+     1>ClCompile:
+         C:\Program Files (x86)\Microsoft Visual Studio 11.0\VC\bin\CL.exe /c /I"C:\Users\chipi_000\Desktop\Proposal Project\cornucopia\cornucopia-lib\eigen" /ZI /nologo /W3 /WX- /sdl /Od /Oy- /D WIN32 /D _DEBUG /D _WINDOWS /D _USRDLL /D CORNUCOPIA_EXPORTS /D "MYAPI=__declspec(dllexport)" /D _WINDLL /D _UNICODE /D UNICODE /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc110.pdb" /Gd /TP /analyze- /errorReport:prompt "..\..\cornucopia-lib\Cornucopia\NativeLib.cpp"
+         NativeLib.cpp
+       Link:
+         C:\Program Files (x86)\Microsoft Visual Studio 11.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"C:\Users\chipi_000\Desktop\Proposal Project\cornucopia\cornucopia\Debug\cornucopia.dll" /INCREMENTAL /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"C:\Users\chipi_000\Desktop\Proposal Project\cornucopia\cornucopia\Debug\cornucopia.pdb" /SUBSYSTEM:WINDOWS /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:\Users\chipi_000\Desktop\Proposal Project\cornucopia\cornucopia\Debug\cornucopia.lib" /MACHINE:X86 /DLL Debug\Algorithm.obj
+         Debug\Arc.obj
+         Debug\Bezier.obj
+         Debug\Clothoid.obj
+         Debug\ClothoidProjector.obj
+         Debug\Combiner.obj
+         Debug\CornerDetector.obj
+         Debug\CurvePrimitive.obj
+         Debug\Debugging.obj
+         Debug\ErrorComputer.obj
+         Debug\Fitter.obj
+         Debug\Fresnel.obj
+         Debug\GraphConstructor.obj
+         Debug\Line.obj
+         Debug\NativeLib.obj
+         Debug\Oversketcher.obj
+         Debug\Parameters.obj
+         Debug\PathFinder.obj
+         Debug\PiecewiseLinearUtils.obj
+         Debug\Polyline.obj
+         Debug\Preprocessing.obj
+         Debug\PrimitiveFitter.obj
+         Debug\PrimitiveFitUtils.obj
+         Debug\PrimitiveSequence.obj
+         Debug\Resampler.obj
+         Debug\SimpleAPI.obj
+         Debug\Solver.obj
+         Debug\TwoCurveCombine.obj
+         cornucopia.vcxproj -> C:\Users\chipi_000\Desktop\Proposal Project\cornucopia\cornucopia\Debug\cornucopia.dll
+       PostBuildEvent:
+         Copy "C:\Users\chipi_000\Desktop\Proposal Project\cornucopia\cornucopia\Debug\cornucopia.*" "C:\Users\chipi_000\Desktop\Proposal Project\cornucopia\cornucopia\..\..\Sketch2BIM\Canvas3D\bin\Debug\"
+         :VCEnd
+         C:\Users\chipi_000\Desktop\Proposal Project\cornucopia\cornucopia\Debug\cornucopia.dll
+         C:\Users\chipi_000\Desktop\Proposal Project\cornucopia\cornucopia\Debug\cornucopia.exp
+         C:\Users\chipi_000\Desktop\Proposal Project\cornucopia\cornucopia\Debug\cornucopia.ilk
+         C:\Users\chipi_000\Desktop\Proposal Project\cornucopia\cornucopia\Debug\cornucopia.lib
+         C:\Users\chipi_000\Desktop\Proposal Project\cornucopia\cornucopia\Debug\cornucopia.pdb
+                 5 file(s) copied.
+     1>Done Building Project "C:\Users\chipi_000\Desktop\Proposal Project\cornucopia\cornucopia\cornucopia\cornucopia.vcxproj" (Build target(s)).
+
+Build succeeded.
+
+Time Elapsed 00:00:03.85
