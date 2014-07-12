@@ -2,7 +2,6 @@
 <classpath>
 	<classpathentry kind="src" path="src"/>
 	<classpathentry exported="true" kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
-	<classpathentry exported="true" kind="lib" path="lib/processing-base/core/core.jar"/>
 	<classpathentry kind="lib" path="lib/processing-base/core/gluegen-rt-natives-linux-amd64.jar"/>
 	<classpathentry kind="lib" path="lib/processing-base/core/gluegen-rt-natives-linux-armv6hf.jar"/>
 	<classpathentry kind="lib" path="lib/processing-base/core/gluegen-rt-natives-linux-i586.jar"/>
@@ -19,5 +18,6 @@
 	<classpathentry kind="lib" path="lib/processing-base/core/jogl-all.jar"/>
 	<classpathentry kind="lib" path="lib/G4P/library/G4P.jar"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/4"/>
+	<classpathentry exported="true" kind="lib" path="core.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
