@@ -112,6 +112,7 @@ public class DrawBackFork_Flow_Lines extends PApplet {
 			ellipse(mouseX, mouseY, 10, 10); 
 			//line(l.start.x, l.start.y, l.end.x, l.end.y);
 			buffer.addSegment(l);
+			
 			activeDrawing = true; 
 		}
 		if (drawingMode == "teach") {
@@ -129,15 +130,25 @@ public class DrawBackFork_Flow_Lines extends PApplet {
 		}
 		}
 	}
-
+Line line2;
 	public void mouseReleased() {
 		if (!intClick) {
 			//line(pmouseX, pmouseY, mouseX, mouseY);
 			if (drawingMode == "draw" && activeDrawing) {
 				buffer.addToBuffer(curLine); 
 				if(stack.getSize() ==0) buffer.update(); 
-				engine = new Decision_Engine(curLine, (float)Math.sqrt(Math.pow(width, 2) + Math.pow(height, 2)));
+				int offset = 3;
+				if(allLines.size()>offset){
+					
+					line2 = allLines.get(allLines.size()-offset);
+				}
+				else
+				{
+					line2 = curLine; ///can add other shapes to mutate with
+				}
+				engine = new Decision_Engine(curLine, line2, (float)Math.sqrt(Math.pow(width, 2) + Math.pow(height, 2)));
 				buffer.allLines.add(curLine); //add human line to buffer storage
+				
 				curLine = null;
 				Line l = engine.decision();
 				l.compGenerated = true; 

@@ -31,7 +31,7 @@ public class shiftpts {
 			}
 			
 //			System.out.println("here2!!");
-			Decision_Engine engine = new Decision_Engine(curline, (float)Math.sqrt(Math.pow(500, 2) + Math.pow(400, 2)));
+			Decision_Engine engine = new Decision_Engine(curline, null, (float)Math.sqrt(Math.pow(500, 2) + Math.pow(400, 2)));
 			Line newline = engine.decision();
 			
 			ArrayList<PVector> pts = newline.getAllPoints();
