@@ -82,7 +82,7 @@ public class Rectangle {
 		}
 		this.w = max.x - min.x;
 		this.h = max.y - min.y;
-		this.origin = new PVector(min.x, max.y);
+		this.origin = new PVector(min.x, min.y);
 		// println("Final Min-Mix. Min.x: " + min.x + "min.y: " + min.y +
 		// " max.x: " + max.x + "max.y: " + max.y);
 	}
