@@ -154,4 +154,80 @@ public class Line_Mod {
 		}
 		return newLine;
 	}
+	//************************************************************************
+	//Actual Mutation Algorithm
+	//Author: Kunwar Yashraj Singh
+	//Added: Monday, September 8, 2014.
+	//************************************************************************
+	public Line drawMutation(Line line, Line line2) {
+		if(line2==null){
+			line2 = line;
+		}
+		float scale_factor = 1.2f;
+		// create a new Line of the current line, then newLine.drawLine();
+		Line newLine = new Line();
+		int index_start = random.nextInt(line.allPoints.size());
+		int index_end = index_start + random.nextInt(line.allPoints.size() - index_start);
+		for (int i = 0; i < line.allPoints.size(); i++) {
+			// cycle through the points and add in a bit of randomness to each
+			// points
+			// first decide if we should interfere with this point, give it a P
+			// of .5 for interfering
+			
+			//Do mutation
+			//by flipping bits -- its just one of several possible operations
+			if (i >=index_start && i<=index_end) {
+		
+				float x1 = line2.allPoints.get(i).x;
+				float y1 = line2.allPoints.get(i).y;
+				
+				PVector newPoint = new PVector(scale_factor*x1, y1);
+				newLine.allPoints.add(newPoint);
+			} else
+				// just add the point to the point array
+				newLine.allPoints.add(line.allPoints.get(i));
+		}
+		
+		
+		return newLine;
+	}
+	
+	
+	//************************************************************************
+	//Experimental Mutation Algorithm -- It acts really bizzare sometimes.
+	//NOTE : Can remove this if not required.
+	//Author: Kunwar Yashraj Singh
+	//Added: Monday, September 8, 2014.
+	//************************************************************************
+	public Line drawMutation(Line line, Line line2, boolean useRandom) {
+		if(line2==null){
+			line2 = line;
+		}
+		java.util.Random rand = new java.util.Random();
+		float scale_factor = 1.2f;
+		float offset = 10;
+		// create a new Line of the current line, then newLine.drawLine();
+		Line newLine = new Line();
+		int index_start = random.nextInt(line.allPoints.size());
+		int index_end = index_start + random.nextInt(line.allPoints.size() - index_start);
+		for (int i = 0; i < line.allPoints.size(); i++) {
+			
+			
+			//Do mutation
+			//by flipping bits -- its just one of several possible operations
+			if (i >=index_start && i<=index_end) {
+		
+				float x1 = line.allPoints.get(i).x + rand.nextInt((int)line2.allPoints.get(i).x) - offset;
+				float y1 = line.allPoints.get(i).y + rand.nextInt((int)line2.allPoints.get(i).y) - offset;
+				
+				PVector newPoint = new PVector(scale_factor*x1, y1);
+				newLine.allPoints.add(newPoint);
+			} else
+				// just add the point to the point array
+				newLine.allPoints.add(line2.allPoints.get(i));
+		}
+		
+		
+		return newLine;
+	}
 }
