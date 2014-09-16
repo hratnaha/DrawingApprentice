@@ -19,5 +19,7 @@
 	<classpathentry kind="lib" path="lib/G4P/library/G4P.jar"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/4"/>
 	<classpathentry exported="true" kind="lib" path="core.jar"/>
+	<classpathentry kind="lib" path="lib/ApacheMath/commons-math3-3.3.jar"/>
+	<classpathentry kind="lib" path="lib/ApacheMath/commons-math3-3.3-javadoc.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
