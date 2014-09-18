@@ -63,7 +63,10 @@ public class Shape {
 		calculateBounds();
 		// setPosition
 		PVector pt1 = new PVector(pos.x, pos.y);
-		PVector pt2 = testRec.origin;
+		PVector pt2 = testRec.origin;;
+		
+		//this is where the error is. 
+		//the origin is always going to be the smalles point
 		PVector diff = PVector.sub(pt2, pt1);
 		System.out.println("Pt1: " + pt1 + " +  Pt2: " + pt2 + " Diff: " + diff);
 		for (int i = 0; i < editLines.size(); i++) {
@@ -108,7 +111,7 @@ public class Shape {
 		this.pos = new PVector(min.x, max.y);
 		System.out.println("In shape, calc bounds. Final Min.x: " + min.x + "min.y: "
 				+ min.y + " max.x: " + max.x + "max.y: " + max.y + "Origin: "
-				+ new PVector(min.x, max.y)); 
+				+ new PVector(min.x, min.y)); 
 		System.out.println("Height = "  + (max.y - min.y) + " Width = " + (max.x - min.x)); 
 		
 	}
