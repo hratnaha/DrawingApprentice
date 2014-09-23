@@ -15,27 +15,29 @@ public class Buffer {
 	boolean diff = true;
 	boolean transparent = false;
 	boolean showComp = false; 
-	PApplet master; 
+	PApplet master;
+	QuadTree mainTree;
 
 
 	public Buffer(PApplet master, PGraphics graphics) {
 		this.master = master; 
 		buffer = master.createGraphics(1200, 700, PApplet.JAVA2D);
-		this.graphics = graphics; 
+		this.graphics = graphics;
+		mainTree = new QuadTree(0, 0, 1200, 1200);
 	}
 
 
 	// Need to integrate this for color. Keep a record of all the lines
 	//independent from the segments that have been printed. 
 	public void update() { 
-		System.out.println("Update Called"); 
+		System.out.println("Update Called");
 		buffer.beginDraw(); 
 		buffer.background(255);
 		buffer.smooth();
 		buffer.noFill(); 
 		for (int i = 0; i < allLines.size(); i++) 
 		{ 
-			Line l = allLines.get(i); 
+			Line l = allLines.get(i);
 			buffer.strokeWeight(1);
 			if(showComp && l.compGenerated)
 				buffer.stroke(0,0,255);
@@ -43,10 +45,31 @@ public class Buffer {
 			for (int j= 0; j < l.allPoints.size() - 1; j++) {
 				PVector p1 = l.allPoints.get(j); 
 				PVector p2 = l.allPoints.get(j+1);
-				buffer.line(p1.x, p1.y, p2.x,p2.y); 
-			} 
+				buffer.line(p1.x, p1.y, p2.x,p2.y);
+				mainTree.set(p1.x,p1.y,l.lineID);
+				mainTree.set(p2.x,p2.y,l.lineID);
+				//System.out.println("QuadTree: " + mainTree.getCount());
+			}
 		}
-		buffer.endDraw(); 
+		Point[] keys = mainTree.getKeys();
+		
+		//Testing the Quad Tree
+//		for(int i=0; i<keys.length;i++){
+//			//System.out.println("Keys(Points): " + keys[i]);
+//			//Getting the main nodes for root (the largest nodes)
+//			Node temp = mainTree.getQuadrantForPoint(mainTree.getRootNode(), keys[i].getX(), keys[i].getY());
+//			//Prints out these nodes with it's children depending on the point. There can be more children if necessary
+//			System.out.println(" Point: (" + keys[i].getX() + "," + keys[i].getY() +") Subnodes: "
+//					+ temp.toString() + " NE " + temp.getNe().toString()+ " NW " + temp.getNw().toString()
+//					+ " SE " + temp.getSe().toString()+ " SW " + temp.getSw().toString());
+//		}
+		//Testing out Point Class and QuadTree interaction
+//		ArrayList<PVector> linePoints = allLines.get(allLines.size()-1).allPoints;
+//		for(int i = 0; i < linePoints.size(); i++){
+//			Point testPoint = new Point(linePoints.get(i).x,linePoints.get(i).y,allLines.get(allLines.size()-1).lineID);
+//		}
+		//System.out.println(mainTree.getIndex(new Point(linePoints.get(0).x,linePoints.get(0).y,allLines.get(allLines.size()-1).lineID)));
+		buffer.endDraw();
 		img = buffer.get(0, 0, buffer.width, buffer.height);
 		diff=true; 
 	}
