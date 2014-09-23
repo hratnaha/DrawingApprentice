@@ -13,19 +13,20 @@ public class Decision_Engine {
 	IntersectionResponseMaster xResponseMaster = new IntersectionResponseMaster();
 	Line line;
 	float screenDiag = 0.0f;
-
-	public Decision_Engine(Line line, float screenDiag) {
+	Line line2;
+	public Decision_Engine(Line line, Line line2, float screenDiag) {
 		this.line = line;
+		this.line2 = line;
 		this.screenDiag = screenDiag;
 	}
 
 	public Line decision() {
-		if (this.line.getTotalDistance() < 2 * screenDiag && ELEMENTARY_DECISION_PROBABILITY < random.nextFloat()) {
+		/*if (this.line.getTotalDistance() < 2 * screenDiag && ELEMENTARY_DECISION_PROBABILITY < random.nextFloat()) {
 			Line response = xResponseMaster.response(this.line);
 			if (null != response)
 				return response;
-		}
-		int decision = 1 + random.nextInt(4);
+		}*/
+		int decision = 1 + random.nextInt(10); //was 4 before default case, its just to increase probability of mutation
 		Line_Mod m = new Line_Mod(this.line, random);
 		Line newLine = new Line();
 		switch (decision) {
@@ -41,6 +42,29 @@ public class Decision_Engine {
 		case 4:
 			newLine = m.drawBack(this.line);
 			break;
+			
+			//Added new Decision cases, Sept8, 2014 by Kunwar Yashraj Singh
+		/*case 5:
+			newLine = m.drawMutation(this.line, this.line2, true);
+			System.out.println("Invoked the Second Experimental Mutation Function");
+			break;
+			*/
+		case 6:
+			newLine = m.drawApproximation(this.line, true);
+			System.out.println("Cauchy Approximation");
+			break;
+			
+		case 7:
+			newLine = m.drawPolynomial(false);
+			System.out.println("Random Polynomial");
+			break;
+			
+		default:
+			newLine = m.drawMutation(this.line, this.line2);
+			System.out.println("Invoked the Main Mutation Algorithm");
+			//Fix this cause it sometimes throws NullPointer Exception
+			break;
+			//newLine = 
 		}
 		return newLine;
 	}
