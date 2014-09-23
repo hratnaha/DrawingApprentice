@@ -1,0 +1,24 @@
+{
+  "name": "SketchServer",
+  "version": "0.1.0",
+  "description": "SketchServer",
+  "main": "hello-world-server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified! Configure in package.json\" && exit 1"
+  },
+  "repository": "",
+  "keywords": [
+    "Node.js",
+    "Eclipse",
+    "Nodeclipse"
+  ],
+  "dependencies" : {
+    "express" : "3.x",
+    "socket.io" : "1.0.6",
+    "java" : "0.3.4",
+    "websocket" : "1.0.8"
+  },
+  "author": "Chih-Pin Hsiao",
+  "license": "BSD",
+  "readmeFilename": "README.md"
+}
