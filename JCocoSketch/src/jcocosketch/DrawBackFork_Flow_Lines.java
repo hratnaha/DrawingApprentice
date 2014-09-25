@@ -45,7 +45,7 @@ public class DrawBackFork_Flow_Lines extends PApplet {
 		roboIcon = loadImage("images/robot.png");
 		stack.setIcon(roboIcon); 
 		myShape = new Shape();
-		size(1200, 700, JAVA2D);
+		size(2160, 1440, JAVA2D);
 		createGUI();
 		customGUI();
 		background(255);

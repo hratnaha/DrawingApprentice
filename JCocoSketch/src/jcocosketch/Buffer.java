@@ -20,7 +20,7 @@ public class Buffer {
 
 	public Buffer(PApplet master, PGraphics graphics) {
 		this.master = master; 
-		buffer = master.createGraphics(1200, 700, PApplet.JAVA2D);
+		buffer = master.createGraphics(2160, 1440, PApplet.JAVA2D);
 		this.graphics = graphics; 
 	}
 
