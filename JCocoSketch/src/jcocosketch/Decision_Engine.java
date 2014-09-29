@@ -54,16 +54,19 @@ public class Decision_Engine {
 			*/
 		case 6:
 			newLine = m.drawApproximation(this.line, true);
+			newLine = m.Trim(newLine, 2160, 1440);
 			System.out.println("Cauchy Approximation");
 			break;
 			
 		case 7:
 			newLine = m.drawPolynomial(false);
+			newLine = m.Trim(newLine, 2160, 1440);
 			System.out.println("Random Polynomial");
 			break;
 			
 		default:
 			newLine = m.drawMutation(this.line, this.line2);
+			newLine = m.Trim(newLine, 2160, 1440);
 			System.out.println("Invoked the Main Mutation Algorithm");
 			//Fix this cause it sometimes throws NullPointer Exception
 			break;
@@ -72,6 +75,7 @@ public class Decision_Engine {
 		return newLine;
 	}
 
+	
 	public void setLine(Line line) {
 		this.line = line;
 	}

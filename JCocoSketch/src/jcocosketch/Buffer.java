@@ -19,13 +19,16 @@ public class Buffer {
 	QuadTree mainTree;
 
 
-	public Buffer(PApplet master, PGraphics graphics) {
+	public Buffer(PApplet master, PGraphics graphics, int width, int height) {
 		this.master = master; 
-
+		
+		buffer = master.createGraphics(width, height, PApplet.JAVA2D);
+		System.out.println("Width: " + width + " Height: " + height); 
 		//buffer = master.createGraphics(2160, 1440, PApplet.JAVA2D);
-		buffer = master.createGraphics(1200, 700, PApplet.JAVA2D);
 		this.graphics = graphics;
-		mainTree = new QuadTree(0, 0, 1200, 1200);
+		//mainTree = new QuadTree(0, 0, 2160+200, 1440+200);
+		mainTree = new QuadTree(0, 0, width, height);
+
 	}
 
 
@@ -35,7 +38,7 @@ public class Buffer {
 		System.out.println("Update Called");
 		buffer.beginDraw(); 
 		buffer.background(255);
-		buffer.smooth();
+		//buffer.smooth();
 		buffer.noFill(); 
 		for (int i = 0; i < allLines.size(); i++) 
 		{ 

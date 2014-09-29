@@ -39,19 +39,23 @@ public class DrawBackFork_Flow_Lines extends PApplet {
 	int computerColor = color(253, 52, 91);
 	int humanColor = color(0);
 	Buffer buffer;
-
+	int width = 2160;
+	int height= 1440;
+	
 	public void setup() {
-		buffer = new Buffer(this, this.g);
+		buffer = new Buffer(this, this.g, width, height);
 		roboIcon = loadImage("images/robot.png");
 		stack.setIcon(roboIcon); 
 		myShape = new Shape();
+		
+		//size(PApplet.WIDTH, PApplet.HEIGHT, JAVA2D); 
 		size(2160, 1440, JAVA2D);
 		createGUI();
 		customGUI();
 		background(255);
 		noFill();
 		strokeWeight(1);
-		smooth();
+		//smooth();
 	}
 
 	public void draw() {

@@ -172,6 +172,25 @@ public class Line_Mod {
 		}
 		return newLine;
 	}
+	public Line Trim(Line line, int width, int height) {
+		
+		Line newLine = new Line();
+		for (int i = 0; i < line.allPoints.size(); i++) {
+			// cycle through the points and add in a bit of randomness to each
+			// points
+			// first decide if we should interfere with this point, give it a P
+			// of .5 for interfering
+			
+				float x = line.allPoints.get(i).x;
+				float y = line.allPoints.get(i).y;
+				if (x >= width || y >=height) {
+				
+			} else
+				// just add the point to the point array
+				newLine.allPoints.add(line.allPoints.get(i));
+		}
+		return newLine;
+	}
 	//************************************************************************
 	//Actual Mutation Algorithm
 	//Author: Kunwar Yashraj Singh
