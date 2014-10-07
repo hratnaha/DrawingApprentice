@@ -8,6 +8,7 @@ import java.util.*;
 
 public class Buffer {
 	ArrayList<Line> allLines = new ArrayList<Line>();
+	ArrayList<ArrayList<Line>> allGroups = new ArrayList<ArrayList<Line>>();
 	PImage img;
 	PGraphics buffer;
 	PGraphics buffer2; 
@@ -17,6 +18,7 @@ public class Buffer {
 	boolean showComp = false; 
 	PApplet master;
 	QuadTree mainTree;
+	Line lassoLine;
 
 
 	public Buffer(PApplet master, PGraphics graphics, int width, int height) {
@@ -50,9 +52,14 @@ public class Buffer {
 			for (int j= 0; j < l.allPoints.size() - 1; j++) {
 				PVector p1 = l.allPoints.get(j); 
 				PVector p2 = l.allPoints.get(j+1);
+				
+				//Create points from PVector points
+				Point point1 = new Point(p1.x,p1.y,l.lineID);
+				Point point2 = new Point(p2.x,p2.y,l.lineID);
+				
 				buffer.line(p1.x, p1.y, p2.x,p2.y);
-				mainTree.set(p1.x,p1.y,l.lineID);
-				mainTree.set(p2.x,p2.y,l.lineID);
+				mainTree.set(point1.getX(),point1.getY(),point1);
+				mainTree.set(point2.getX(),point2.getY(),point2);
 				//System.out.println("QuadTree: " + mainTree.getCount());
 			}
 		}
@@ -77,6 +84,47 @@ public class Buffer {
 		buffer.endDraw();
 		img = buffer.get(0, 0, buffer.width, buffer.height);
 		diff=true; 
+		Random randy = new Random();
+		int numLines = 0;
+		
+		//Lasso recognition and contains happens here
+		if(lassoLine == null){
+			System.out.println("No Lasso Line");
+		}
+		else{
+			float groupID = randy.nextFloat();
+			boolean isInLasso = false;
+			ArrayList<Line> linesInGroup = new ArrayList<Line>();
+			for (int i = 0; i < allLines.size(); i++) 
+			{ 
+				Line l = allLines.get(i);
+				isInLasso = false;
+				for (int j= 0; j < l.allPoints.size(); j++) {
+					PVector tempPoint = l.allPoints.get(j);
+					if(!lassoLine.contains(tempPoint.x, tempPoint.y)){
+						isInLasso = false;
+						j = l.allPoints.size();
+					}
+					else{
+						isInLasso = true;
+						//System.out.println(tempPoint.x + " " + tempPoint.y);
+					}
+				}
+				if(isInLasso){
+					l.setGroupID(groupID);
+					numLines++;
+					linesInGroup.add(l);
+					isInLasso = false;
+				}
+			}
+			//Adds new group of lines if there is at least one line 100% contained in the lasso
+			if(linesInGroup.size() > 0){
+				allGroups.add(linesInGroup);
+			}
+			lassoLine = null;
+		}
+		//Number of groups with lines completely in it
+		System.out.println(allGroups.size());
 	}
 
 

@@ -350,7 +350,7 @@ public class Line_Mod {
 			}
 			
 			}
-			System.out.println(X[i] + " " + Y[i]);
+			//System.out.println(X[i] + " " + Y[i]);
 			
 		}
 		Arrays.sort(X);

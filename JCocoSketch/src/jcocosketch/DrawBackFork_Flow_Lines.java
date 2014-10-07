@@ -31,10 +31,12 @@ public class DrawBackFork_Flow_Lines extends PApplet {
 	boolean intClick = false;
 	boolean lineGroup = false;
 	boolean bufferChanged = false;
+	boolean lassoOn = false;
 	Shape myShape;
 	Shape targetShape;
 	Rectangle shapeBound;
 	Line curLine;
+	Line curLasso;
 	Decision_Engine engine;
 	int computerColor = color(253, 52, 91);
 	int humanColor = color(0);
@@ -91,10 +93,18 @@ public class DrawBackFork_Flow_Lines extends PApplet {
 		checkInterface(new PVector(mouseX, mouseY));
 		// println("intClick = " + intClick +" Drawing Mode: " + drawingMode);
 		if (drawingMode == "teach" || drawingMode == "draw" && intClick != true) {
-			curLine = new Line();
-			//curLine.setStart(new PVector(mouseX, mouseY));
-			curLine.setColor(humanColor);
-			allLines.add(curLine);
+			if(mouseButton == LEFT){
+				curLine = new Line();
+				//curLine.setStart(new PVector(mouseX, mouseY));
+				curLine.setColor(humanColor);
+				allLines.add(curLine);
+			}
+			if(mouseButton == RIGHT){
+				System.out.println("Right Button Pressed");
+				curLasso = new Line();
+				//curLine.setStart(new PVector(mouseX, mouseY));
+				allLines.add(curLasso);
+			}
 		} else if (drawingMode == "drawPos" && intClick != true) {
 			shapeBound = new Rectangle(new PVector(mouseX, mouseY), 0, 0);
 			println(shapeBound.getPos());
@@ -109,7 +119,7 @@ public class DrawBackFork_Flow_Lines extends PApplet {
 		//it is either one or the other, but drawMode is not being set or happens by default
 		
 		if(!intClick){
-		if (drawingMode == "draw") {
+		if (drawingMode == "draw" && this.mouseButton == LEFT) {
 			LineSegment l = new LineSegment(new PVector(pmouseX, pmouseY),
 					new PVector(mouseX, mouseY));
 			curLine.addPoint(new PVector(mouseX, mouseY));
@@ -117,6 +127,19 @@ public class DrawBackFork_Flow_Lines extends PApplet {
 			//line(l.start.x, l.start.y, l.end.x, l.end.y);
 			buffer.addSegment(l);
 			
+			activeDrawing = true; 
+		}
+		//Lasso Tool with right click
+		if (drawingMode == "draw" && mouseButton == RIGHT ) {
+			//System.out.println("Right Button Dragged");
+			lassoOn = true;
+			LineSegment l = new LineSegment(new PVector(pmouseX, pmouseY),
+					new PVector(mouseX, mouseY));
+			curLasso.addPoint(new PVector(mouseX, mouseY));
+			ellipse(mouseX, mouseY, 10, 10); 
+			//line(l.start.x, l.start.y, l.end.x, l.end.y);
+			//Need to figure out how to get lasso to work without adding it to the segment and being accounted for as an extra line
+			buffer.addSegment(l);	
 			activeDrawing = true; 
 		}
 		if (drawingMode == "teach") {
@@ -138,7 +161,7 @@ Line line2;
 	public void mouseReleased() {
 		if (!intClick) {
 			//line(pmouseX, pmouseY, mouseX, mouseY);
-			if (drawingMode == "draw" && activeDrawing) {
+			if (drawingMode == "draw" && activeDrawing && lassoOn == false) {
 				buffer.addToBuffer(curLine); 
 				if(stack.getSize() ==0) buffer.update(); 
 				int offset = 3;
@@ -160,6 +183,12 @@ Line line2;
 				//buffer.allLines.add(l); //add comp line to buffer storage
 				compLines.add(l);
 				activeDrawing = false; 
+			} else if (drawingMode == "draw" && lassoOn == true) {
+				System.out.println("Right Button Released");
+				buffer.lassoLine = curLasso;
+				curLasso = null;
+				lassoOn = false;
+				buffer.update();
 			} else if (drawingMode == "drawPos") {
 				createShape(shapeBound.origin);
 				drawingMode = "draw";
