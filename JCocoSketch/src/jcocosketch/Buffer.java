@@ -41,7 +41,7 @@ public class Buffer {
 		buffer.beginDraw(); 
 		buffer.background(255);
 		//buffer.smooth();
-		buffer.noFill(); 
+		buffer.noFill();
 		for (int i = 0; i < allLines.size(); i++) 
 		{ 
 			Line l = allLines.get(i);
@@ -56,7 +56,12 @@ public class Buffer {
 				//Create points from PVector points
 				Point point1 = new Point(p1.x,p1.y,l.lineID);
 				Point point2 = new Point(p2.x,p2.y,l.lineID);
-				
+				if(l.getGroupID() != 1){
+					point1.setGroupID(l.getGroupID());
+					point2.setGroupID(l.getGroupID());
+					//System.out.println(point1.getGroupID());
+					//System.out.println(point2.getGroupID());
+				}
 				buffer.line(p1.x, p1.y, p2.x,p2.y);
 				mainTree.set(point1.getX(),point1.getY(),point1);
 				mainTree.set(point2.getX(),point2.getY(),point2);

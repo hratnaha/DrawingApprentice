@@ -63,6 +63,10 @@ public class Point extends PVector implements Comparable{
     public void setGroupID(float groupID){
     	this.groupID = groupID;
     }
+    
+    public float getGroupID(){
+		return this.groupID;
+	}
 
     @Override
     public String toString() {

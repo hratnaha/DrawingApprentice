@@ -13,7 +13,7 @@ public class Line {
 	float startTime;
 	float endTime;
 	float lineID;
-	float groupID;
+	float groupID = 1;
 	float xmin = -1;
 	float ymin = -1;
 	float xmax = -1;
@@ -187,6 +187,10 @@ public class Line {
 	
 	public void setGroupID(float groupID){
 		this.groupID = groupID;
+	}
+	
+	public float getGroupID(){
+		return this.groupID;
 	}
 
 	public void printPoints() {
