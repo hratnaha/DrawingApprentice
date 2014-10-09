@@ -66,6 +66,26 @@ public class SandPainter extends PApplet {
 		}
 	}
 	
+	public void render(float x, float y, float ox, float oy, Line line, PApplet cur) {
+		// modulate gain
+		g+=cur.random(-0.050f,0.050f);
+		float maxg = 1.0f;
+		if (g<0) g=0;
+		if (g>maxg) g=maxg;
+
+		// calculate grains by distance
+		//int grains = int(sqrt((ox-x)*(ox-x)+(oy-y)*(oy-y)));
+		int grains = 64;
+
+		// lay down grains of sand (transparent pixels)
+		float w = g/(grains-1);
+		for (int i=0;i<grains;i++) {
+			float a = (float) (0.1-i/(grains*10.0f));
+			stroke(cur.red(cur.color(200)),cur.green(cur.color(200)),cur.blue(cur.color(200)),a*256);
+			point(ox+(x-ox)*sin(sin(i*w)),oy+(y-oy)*sin(sin(i*w)));
+		}
+	}
+	
 	public void render(float x, float y, float ox, float oy, 
 			Buffer buffer) {
 		// modulate gain

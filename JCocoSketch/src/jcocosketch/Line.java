@@ -9,6 +9,7 @@ import utilities.PVecUtilities;
 public class Line {
 	ArrayList<PVector> allPoints = new ArrayList<PVector>();
 	ArrayList<Float> parameter = new ArrayList<Float>();
+	public boolean isPoint = false;
 	Rectangle myBoundingBox;
 	float startTime;
 	float endTime;
@@ -64,7 +65,10 @@ public class Line {
 			if (i < allPoints.size() - 1) {
 				PVector p1 = allPoints.get(i);
 				PVector p2 = allPoints.get(i + 1);
-				buffer.line(p1.x, p1.y, p2.x, p2.y);
+				
+				
+					buffer.line(p1.x, p1.y, p2.x, p2.y);
+				
 			}
 		}
 	}

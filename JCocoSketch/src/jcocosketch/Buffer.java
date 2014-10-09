@@ -47,19 +47,13 @@ public class Buffer {
 				PVector p1 = l.allPoints.get(j); 
 				PVector p2 = l.allPoints.get(j+1);
 				buffer.line(p1.x, p1.y, p2.x,p2.y); 
-				//add sketch
-			//	float t = 60;
-			//	float rx =0;
-			//	rx += 0.81*sin(t*PApplet.PI/180);
-			 //     float ry=0;
-			  //   ry -= 0.81*PApplet.cos(t*PApplet.PI/180);
-			     //for(int ih = 0; ih<20; ih++)
-			    //	 sketch(p1.x  , p1.y , p2.x, p2.y);
+				
 				
 		}
 		buffer.endDraw(); 
 		img = buffer.get(0, 0, buffer.width, buffer.height);
-		diff=true; 
+		//diff=true; 
+		diff = false;
 	}
 	}
 
@@ -106,7 +100,44 @@ public class Buffer {
 		buffer2.stroke(0);
 		buffer2.smooth();
 		buffer2.line(newP1.x , newP1.y, newP2.x, newP2.y);
+		//SKETCH FUNCTION TEST
+		//add sketch
+		/*float t =this.random(10f, 80f);
+		float rx = 30f;
+		float ry = 35f;
+		//new SandPainter(this).regionColor(30f, 35f, 180);
+		for(int k=0 ;k<50;++k){
+			
+			rx+=0.81*PApplet.sin(t*PApplet.PI/180);
+		      ry-=0.81*PApplet.cos(t*PApplet.PI/180);
+		      int cx = (int)(rx);
+		      int cy = (int)(ry);
+		      float x = rx;
+		      float y = ry;
+		      buffer.ellipse(p1.x, p1.y, 50f, 50f);
+		      float ox = p1.x + k;
+		      float oy = p1.y + master.random(0, 3) ;
+		      float g = master.random(-0.050f,0.050f);
+				float maxg = 1.0f;
+				if (g<0) g=0;
+				if (g>maxg) g=maxg;
+
+				// calculate grains by distance
+				//int grains = int(sqrt((ox-x)*(ox-x)+(oy-y)*(oy-y)));
+				int grains = 64;
+
+				// lay down grains of sand (transparent pixels)
+				float w = g/(grains-1);
+				for (int f=0;f<grains;f++) {
+					float a = (float) (0.1-f/(grains*10.0f));
+					buffer.stroke(master.red(master.color(200)),master.green(master.color(200)),master.blue(master.color(200)),a*256);
+					buffer.point(ox+(x-ox)*sin(sin(f*w)),oy+(y-oy)*sin(sin(f*w)));
+				}
+		}
+		//SKETCH FUNCTION END
+		*/
 		buffer2.endDraw();
+		
 		PImage tempImage = buffer2.get(0, 0, buffer2.width, buffer2.height); 
 		
 		buffer.beginDraw();

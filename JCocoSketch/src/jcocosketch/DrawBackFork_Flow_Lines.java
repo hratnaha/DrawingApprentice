@@ -85,20 +85,7 @@ public class DrawBackFork_Flow_Lines extends PApplet {
 		 * shading stuff
 		 * By: Kunwar Yashraj Singh
 		 */
-		float t =this.random(10f, 80f);
-		float rx = 30f;
-		float ry = 35f;
-		//new SandPainter(this).regionColor(30f, 35f, 180);
-		for(int i=0;i<500;++i){
-			
-			rx+=0.81*sin(t*PI/180);
-		      ry-=0.81*cos(t*PI/180);
-		      int cx = (int)(rx);
-		      int cy = (int)(ry);
-		//	new SandPainter(this).render(30f, 50f, 500+2*i, 400+2*i);
-		     
-			new SandPainter(this).render(rx, ry, 500+2*i, 400);
-		}
+		
 		
 	}
 
