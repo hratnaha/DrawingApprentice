@@ -67,6 +67,7 @@ public class Buffer {
 				mainTree.set(point2.getX(),point2.getY(),point2);
 				//System.out.println("QuadTree: " + mainTree.getCount());
 			}
+			diff=false;
 		}
 		Point[] keys = mainTree.getKeys();
 		
