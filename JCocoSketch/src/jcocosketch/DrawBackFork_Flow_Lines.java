@@ -51,10 +51,11 @@ public class DrawBackFork_Flow_Lines extends PApplet {
 		background(255);
 		noFill();
 		strokeWeight(1);
-		smooth();
+		//smooth();
 	}
 
 	public void draw() {
+		//new SandPainter(this).render(30f, 50f, 500, 400);
 		
 		PImage buffImage = buffer.getImage();
 		if (null != buffImage) {
@@ -80,6 +81,25 @@ public class DrawBackFork_Flow_Lines extends PApplet {
 		if (shapeDrag) {
 			shapeBound.drawRect(this.g);
 		}
+		/* Added Oct 9, 2014
+		 * shading stuff
+		 * By: Kunwar Yashraj Singh
+		 */
+		float t =this.random(10f, 80f);
+		float rx = 30f;
+		float ry = 35f;
+		//new SandPainter(this).regionColor(30f, 35f, 180);
+		for(int i=0;i<500;++i){
+			
+			rx+=0.81*sin(t*PI/180);
+		      ry-=0.81*cos(t*PI/180);
+		      int cx = (int)(rx);
+		      int cy = (int)(ry);
+		//	new SandPainter(this).render(30f, 50f, 500+2*i, 400+2*i);
+		     
+			new SandPainter(this).render(rx, ry, 500+2*i, 400);
+		}
+		
 	}
 
 	// ##### Event Handling
@@ -137,7 +157,7 @@ Line line2;
 			if (drawingMode == "draw" && activeDrawing) {
 				buffer.addToBuffer(curLine); 
 				if(stack.getSize() ==0) buffer.update(); 
-				int offset = 3;
+				int offset = 3; //was 3 before
 				if(allLines.size()>offset){
 					
 					line2 = allLines.get(allLines.size()-offset);
@@ -145,6 +165,7 @@ Line line2;
 				else
 				{
 					line2 = curLine; ///can add other shapes to mutate with
+					
 				}
 				engine = new Decision_Engine(curLine, line2, (float)Math.sqrt(Math.pow(width, 2) + Math.pow(height, 2)));
 				buffer.allLines.add(curLine); //add human line to buffer storage
@@ -156,6 +177,7 @@ Line line2;
 				//buffer.allLines.add(l); //add comp line to buffer storage
 				compLines.add(l);
 				activeDrawing = false; 
+				
 			} else if (drawingMode == "drawPos") {
 				createShape(shapeBound.origin);
 				drawingMode = "draw";

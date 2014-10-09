@@ -16,12 +16,15 @@ public class Buffer {
 	boolean transparent = false;
 	boolean showComp = false; 
 	PApplet master; 
-
-
+	private PApplet papp;
+	
+	private SandPainter sp;
 	public Buffer(PApplet master, PGraphics graphics) {
 		this.master = master; 
+		this.papp = master;
 		buffer = master.createGraphics(1200, 700, PApplet.JAVA2D);
 		this.graphics = graphics; 
+		sp = new SandPainter(master);
 	}
 
 
@@ -44,11 +47,20 @@ public class Buffer {
 				PVector p1 = l.allPoints.get(j); 
 				PVector p2 = l.allPoints.get(j+1);
 				buffer.line(p1.x, p1.y, p2.x,p2.y); 
-			} 
+				//add sketch
+			//	float t = 60;
+			//	float rx =0;
+			//	rx += 0.81*sin(t*PApplet.PI/180);
+			 //     float ry=0;
+			  //   ry -= 0.81*PApplet.cos(t*PApplet.PI/180);
+			     //for(int ih = 0; ih<20; ih++)
+			    //	 sketch(p1.x  , p1.y , p2.x, p2.y);
+				
 		}
 		buffer.endDraw(); 
 		img = buffer.get(0, 0, buffer.width, buffer.height);
 		diff=true; 
+	}
 	}
 
 
@@ -99,6 +111,11 @@ public class Buffer {
 		
 		buffer.beginDraw();
 		buffer.image(tempImage, (float)(buffPos.x  + deltaW), (float)(buffPos.y  + deltaH)); 
+		//sketch
+		//for(int ih = 0; ih<30; ih++)
+	    //	sketch(newP1.x  , newP1.y, newP2.x , newP2.y );
+		//end sketch
+		
 		buffer.endDraw(); 
 		img = buffer.get(0,0,buffer.width,buffer.height); 
 		diff = true; 
@@ -128,4 +145,41 @@ public class Buffer {
 		img = new PImage();
 		update();
 	}
+	
+	public void sketch(float x, float y, float ox, float oy) {
+	 	int c = (int)random(100, 250);
+	 
+	    // modulate gain
+	    float g=random(-0.050,0.050);
+	    float maxg = (float) 1.0;
+	    if (g<0) g=0;
+	    if (g>maxg) g=maxg;
+	    
+	    // calculate grains by distance
+	    //int grains = int(sqrt((ox-x)*(ox-x)+(oy-y)*(oy-y)));
+	    int grains = 64;
+	    
+	    // lay down grains of sand (transparent pixels)
+	    float w = g/(grains-1);
+	    for (int i=0;i<grains;i++) {
+	      float a = (float) (0.1-i/(grains*10.0));
+	     // 	master.strokeWeight(1);
+	     
+			buffer.stroke(master.red(c),master.green(c),master.blue(c),a*256);
+	      buffer.point(ox+(x-ox)*sin(sin(i*w)),oy+(y-oy)*sin(sin(i*w)));
+	    }
+	  
+}
+
+
+private float sin(float f) {
+	// TODO Auto-generated method stub
+	return PApplet.sin(f);
+}
+
+private float random(double d, double e) {
+	// TODO Auto-generated method stub
+	return master.random((float)d, (float)e);
+}
+
 }

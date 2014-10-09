@@ -42,6 +42,7 @@ public class DrawBackStack {
 			graphics.imageMode(PConstants.CORNER); 
 			
 			graphics.fill(0); 
+			
 			if (l.segmentsTotal() == end) {
 				buffer.addToBuffer(stack.get(0)); 
 				stack.remove(0);
@@ -64,5 +65,6 @@ public class DrawBackStack {
 	public double getSize(){
 		return stack.size(); 
 	}
+	
 	
 }
