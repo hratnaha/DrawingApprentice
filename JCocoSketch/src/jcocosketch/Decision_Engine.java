@@ -29,7 +29,8 @@ public class Decision_Engine {
 		int decision = 1 + random.nextInt(6); //was 4 before default case, its just to increase probability of mutation
 		}*/
 		int decision = 1 + random.nextInt(10); //was 4 before default case, its just to increase probability of mutation
-
+		//System.out.println("here1!!");
+		//System.out.println(random);
 		Line_Mod m = new Line_Mod(this.line, random);
 		Line newLine = new Line();
 		switch (decision) {

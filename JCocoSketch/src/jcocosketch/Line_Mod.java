@@ -2,25 +2,16 @@ package jcocosketch;
 
 import processing.core.*;
 
-import org.apache.commons.math3.analysis.*;
-import org.apache.commons.math3.analysis.interpolation.BicubicSplineInterpolatingFunction;
-import org.apache.commons.math3.analysis.interpolation.BicubicSplineInterpolator;
 import org.apache.commons.math3.analysis.interpolation.SplineInterpolator;
-import org.apache.commons.math3.analysis.interpolation.UnivariateInterpolator;
 import org.apache.commons.math3.analysis.polynomials.PolynomialFunction;
-import org.apache.commons.math3.analysis.polynomials.PolynomialFunctionLagrangeForm;
 import org.apache.commons.math3.analysis.polynomials.PolynomialSplineFunction;
-import org.apache.commons.math3.fitting.CurveFitter;
-import org.apache.commons.math3.fitting.PolynomialCurveFitter;
-import org.apache.commons.math3.fitting.WeightedObservedPoints;
-import org.apache.commons.math3.fitting.leastsquares.LevenbergMarquardtOptimizer;
 import org.apache.commons.math3.linear.MatrixUtils;
 import org.apache.commons.math3.linear.RealMatrix;
 
-import java.awt.Canvas;
 import java.util.*;
 
 import org.apache.commons.math3.random.*;
+
 public class Line_Mod {
 	private static final float PROB_RANDOM = 0.15f;
 	private static final float DEGREE_RANDOM = 5.0f;
@@ -30,6 +21,7 @@ public class Line_Mod {
 	Random random;
 
 	public Line_Mod(Line line, Random random) {
+		System.out.println("here2!!");
 		this.line = line;
 		this.allPoints = line.getAllPoints();
 		this.random = random;
