@@ -36,7 +36,7 @@ public class DrawBackFork_Flow_Lines extends PApplet {
 	Shape targetShape;
 	Rectangle shapeBound;
 	Line curLine;
-	Line curLasso;
+	LassoLine curLasso;
 	Decision_Engine engine;
 	int computerColor = color(253, 52, 91);
 	int humanColor = color(0);
@@ -101,7 +101,7 @@ public class DrawBackFork_Flow_Lines extends PApplet {
 			}
 			if(mouseButton == RIGHT){
 				System.out.println("Right Button Pressed");
-				curLasso = new Line();
+				curLasso = new LassoLine();
 				//curLine.setStart(new PVector(mouseX, mouseY));
 				allLines.add(curLasso);
 			}

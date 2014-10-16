@@ -18,7 +18,7 @@ public class Buffer {
 	boolean showComp = false; 
 	PApplet master;
 	QuadTree mainTree;
-	Line lassoLine;
+	LassoLine lassoLine;
 
 
 	public Buffer(PApplet master, PGraphics graphics, int width, int height) {
@@ -62,6 +62,7 @@ public class Buffer {
 					//System.out.println(point1.getGroupID());
 					//System.out.println(point2.getGroupID());
 				}
+				
 				buffer.line(p1.x, p1.y, p2.x,p2.y);
 				mainTree.set(point1.getX(),point1.getY(),point1);
 				mainTree.set(point2.getX(),point2.getY(),point2);
@@ -71,62 +72,16 @@ public class Buffer {
 		}
 		Point[] keys = mainTree.getKeys();
 		
-		//Testing the Quad Tree
-//		for(int i=0; i<keys.length;i++){
-//			//System.out.println("Keys(Points): " + keys[i]);
-//			//Getting the main nodes for root (the largest nodes)
-//			Node temp = mainTree.getQuadrantForPoint(mainTree.getRootNode(), keys[i].getX(), keys[i].getY());
-//			//Prints out these nodes with it's children depending on the point. There can be more children if necessary
-//			System.out.println(" Point: (" + keys[i].getX() + "," + keys[i].getY() +") Subnodes: "
-//					+ temp.toString() + " NE " + temp.getNe().toString()+ " NW " + temp.getNw().toString()
-//					+ " SE " + temp.getSe().toString()+ " SW " + temp.getSw().toString());
-//		}
-		//Testing out Point Class and QuadTree interaction
-//		ArrayList<PVector> linePoints = allLines.get(allLines.size()-1).allPoints;
-//		for(int i = 0; i < linePoints.size(); i++){
-//			Point testPoint = new Point(linePoints.get(i).x,linePoints.get(i).y,allLines.get(allLines.size()-1).lineID);
-//		}
-		//System.out.println(mainTree.getIndex(new Point(linePoints.get(0).x,linePoints.get(0).y,allLines.get(allLines.size()-1).lineID)));
 		buffer.endDraw();
 		img = buffer.get(0, 0, buffer.width, buffer.height);
 		diff=true; 
-		Random randy = new Random();
-		int numLines = 0;
-		
-		//Lasso recognition and contains happens here
+
+		//Lasso recognition and contains happens here	
 		if(lassoLine == null){
 			System.out.println("No Lasso Line");
 		}
 		else{
-			float groupID = randy.nextFloat();
-			boolean isInLasso = false;
-			ArrayList<Line> linesInGroup = new ArrayList<Line>();
-			for (int i = 0; i < allLines.size(); i++) 
-			{ 
-				Line l = allLines.get(i);
-				isInLasso = false;
-				for (int j= 0; j < l.allPoints.size(); j++) {
-					PVector tempPoint = l.allPoints.get(j);
-					if(!lassoLine.contains(tempPoint.x, tempPoint.y)){
-						isInLasso = false;
-						j = l.allPoints.size();
-					}
-					else{
-						isInLasso = true;
-						//System.out.println(tempPoint.x + " " + tempPoint.y);
-					}
-				}
-				if(isInLasso){
-					l.setGroupID(groupID);
-					numLines++;
-					linesInGroup.add(l);
-					isInLasso = false;
-				}
-			}
-			//Adds new group of lines if there is at least one line 100% contained in the lasso
-			if(linesInGroup.size() > 0){
-				allGroups.add(linesInGroup);
-			}
+			lassoLine.action(this);
 			lassoLine = null;
 		}
 		//Number of groups with lines completely in it
