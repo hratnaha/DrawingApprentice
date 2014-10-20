@@ -85,7 +85,8 @@ public class Buffer {
 			lassoLine = null;
 		}
 		//Number of groups with lines completely in it
-		System.out.println(allGroups.size());
+		//System.out.println(allGroups.size());
+		System.out.println(mainTree.leastDenseNode().pointsCount);
 	}
 
 
