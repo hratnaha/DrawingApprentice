@@ -86,7 +86,7 @@ public class Buffer {
 		}
 		//Number of groups with lines completely in it
 		//System.out.println(allGroups.size());
-		System.out.println(mainTree.leastDenseNode().pointsCount);
+		//System.out.println(mainTree.leastDenseNode().pointsCount);
 	}
 
 
