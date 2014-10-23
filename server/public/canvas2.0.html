@@ -1,12 +1,13 @@
 <html>
 <body>
+    
     <div id="container">
-      <canvas id="sketchpad" width="350" height="360">Sorry, your browser is not supported.</canvas>
-      <div id= "buttons">
-        
+        <canvas id="botpad">Sorry, your browser is not supported.</canvas>
+        <canvas id="sketchpad">Sorry, your browser is not supported.</canvas>
+    </div>
+    <div id="buttons">
         <input type="color" name="background" id="background" value="#ff0000" />
-        <input type="button" id="clear" value="Clear" />  
-      </div>
+        <input type="button" id="clear" value="Clear" />
     </div>
 </body>
 <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
@@ -36,30 +37,39 @@ window.addEventListener('load', sketchUtil, false);
 </script>
 <div id="output"></div>
 <style type="text/css">
-body {
-    margin:0;
-    padding:0;
-    font-family:Arial;
-}
-#container {
-    position:relative;
-   	border:1px solid black;
-   	top: 10;
-    height:360px;
-    width:350px;
-	-webkit-border-radius: 80px;
-	-moz-border-radius: 160px;
-	border-radius: 500px;
-}
-#sketchpad {
-    border: 1px solid #000;
-
-}
-#buttons {
-	
-	padding-left: 200;
-	padding-top: 10;
-}
+    body {
+        margin:0;
+        padding:0;
+        font-family:Arial;
+    }
+    #container {
+        position: relative;
+        /*border:1px solid black;*/
+        top: 0px;
+        height: 95%;
+        width: 100%;
+        /*-webkit-border-radius: 80px;*/
+        /*-moz-border-radius: 160px;*/
+        /*border-radius: 500px;*/
+    }
+    #sketchpad {
+        border: 1px solid #000;
+        position: absolute;
+        left: 0;
+        top: 0;
+        z-index: 1;
+    }
+    #botpad {
+        border: 1px solid #000;
+        position: absolute;
+        left: 0;
+        top: 0;
+        z-index: 0;
+    }
+    #buttons {
+	    padding-left: 10px;
+	    padding-top: 10px;
+    }
     
 </style>
 

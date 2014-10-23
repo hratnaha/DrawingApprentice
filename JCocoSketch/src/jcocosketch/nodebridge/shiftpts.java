@@ -1,11 +1,14 @@
 package jcocosketch.nodebridge;
 
 import processing.core.*;
+
 import java.util.*;
+
 import jcocosketch.*;
 
 public class shiftpts {
 	ArrayList<SketchPoint> allPoints = new ArrayList<SketchPoint>();
+	ArrayList<Line> allLines = new ArrayList<Line>();
 	long startTime;
 	public shiftpts(long strokeTime){
 		this.startTime = strokeTime;
@@ -17,26 +20,34 @@ public class shiftpts {
 	public ArrayList<SketchPoint> shiftTen(){
 		ArrayList<SketchPoint> result = new ArrayList<SketchPoint>();
 		try{
-			//System.out.println("here1!!");
 			Line curline = new Line();
-			//System.out.println("here2!!");
+
 			for(SketchPoint pt : this.allPoints){
 				PVector newpt = new PVector();
 				newpt.x = pt.x + 10;
 				newpt.y = pt.y + 10;
-	//			System.out.println("java: " + pt.timestamp);
 				
 				curline.addPoint(newpt);
-				
 			}
 			
-//			System.out.println("here2!!");
-			Decision_Engine engine = new Decision_Engine(curline, null, (float)Math.sqrt(Math.pow(500, 2) + Math.pow(400, 2)));
+			int offset = 3;
+			Line line2;
+			if(allLines.size()>offset){
+				line2 = allLines.get(allLines.size()-offset);
+			}
+			else
+			{
+				line2 = curline; ///can add other shapes to mutate with
+			}
+			
+			Decision_Engine engine = new Decision_Engine(curline, line2, (float)Math.sqrt(Math.pow(500, 2) + Math.pow(400, 2)));
+			allLines.add(curline);
+			
 			Line newline = engine.decision();
 			
+			
 			ArrayList<PVector> pts = newline.getAllPoints();
-//			System.out.println("here3!!");
-//			System.out.println(pts.size());
+			System.out.println(pts.size());
 			int i=0;
 			for(PVector pt : pts){
 				SketchPoint newpt = new SketchPoint();
@@ -52,8 +63,9 @@ public class shiftpts {
 			return result;
 //			return this.allPoints;
 		}catch(Exception e){
-		
+			System.out.println(e.toString());
 		}
+		System.out.println("return nothing");
 		return null;
 	}
 	public int PtCount(){
