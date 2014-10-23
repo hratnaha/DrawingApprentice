@@ -8,6 +8,7 @@ import java.util.*;
 
 public class Buffer {
 	ArrayList<Line> allLines = new ArrayList<Line>();
+	ArrayList<ArrayList<Line>> allGroups = new ArrayList<ArrayList<Line>>();
 	PImage img;
 	PGraphics buffer;
 	PGraphics buffer2; 
@@ -15,30 +16,35 @@ public class Buffer {
 	boolean diff = true;
 	boolean transparent = false;
 	boolean showComp = false; 
-	PApplet master; 
-	private PApplet papp;
-	
-	private SandPainter sp;
-	public Buffer(PApplet master, PGraphics graphics) {
+	PApplet master;
+	QuadTree mainTree;
+	LassoLine lassoLine;
+
+
+	public Buffer(PApplet master, PGraphics graphics, int width, int height) {
 		this.master = master; 
-		this.papp = master;
-		buffer = master.createGraphics(1200, 700, PApplet.JAVA2D);
-		this.graphics = graphics; 
-		sp = new SandPainter(master);
+		
+		buffer = master.createGraphics(width, height, PApplet.JAVA2D);
+		System.out.println("Width: " + width + " Height: " + height); 
+		//buffer = master.createGraphics(2160, 1440, PApplet.JAVA2D);
+		this.graphics = graphics;
+		//mainTree = new QuadTree(0, 0, 2160+200, 1440+200);
+		mainTree = new QuadTree(0, 0, width, height);
+
 	}
 
 
 	// Need to integrate this for color. Keep a record of all the lines
 	//independent from the segments that have been printed. 
 	public void update() { 
-		System.out.println("Update Called"); 
+		System.out.println("Update Called");
 		buffer.beginDraw(); 
 		buffer.background(255);
-		buffer.smooth();
-		buffer.noFill(); 
+		//buffer.smooth();
+		buffer.noFill();
 		for (int i = 0; i < allLines.size(); i++) 
 		{ 
-			Line l = allLines.get(i); 
+			Line l = allLines.get(i);
 			buffer.strokeWeight(1);
 			if(showComp && l.compGenerated)
 				buffer.stroke(0,0,255);
@@ -46,15 +52,40 @@ public class Buffer {
 			for (int j= 0; j < l.allPoints.size() - 1; j++) {
 				PVector p1 = l.allPoints.get(j); 
 				PVector p2 = l.allPoints.get(j+1);
-				buffer.line(p1.x, p1.y, p2.x,p2.y); 
 				
+				//Create points from PVector points
+				Point point1 = new Point(p1.x,p1.y,l.lineID);
+				Point point2 = new Point(p2.x,p2.y,l.lineID);
+				if(l.getGroupID() != 1){
+					point1.setGroupID(l.getGroupID());
+					point2.setGroupID(l.getGroupID());
+					//System.out.println(point1.getGroupID());
+					//System.out.println(point2.getGroupID());
+				}
 				
+				buffer.line(p1.x, p1.y, p2.x,p2.y);
+				mainTree.set(point1.getX(),point1.getY(),point1);
+				mainTree.set(point2.getX(),point2.getY(),point2);
+				//System.out.println("QuadTree: " + mainTree.getCount());
+			}
+			diff=false;
 		}
-		buffer.endDraw(); 
+		Point[] keys = mainTree.getKeys();
+		
+		buffer.endDraw();
 		img = buffer.get(0, 0, buffer.width, buffer.height);
-		//diff=true; 
-		diff = false;
-	}
+		diff=true; 
+
+		//Lasso recognition and contains happens here	
+		if(lassoLine == null){
+			System.out.println("No Lasso Line");
+		}
+		else{
+			lassoLine.action(this);
+			lassoLine = null;
+		}
+		//Number of groups with lines completely in it
+		System.out.println(allGroups.size());
 	}
 
 
@@ -100,53 +131,11 @@ public class Buffer {
 		buffer2.stroke(0);
 		buffer2.smooth();
 		buffer2.line(newP1.x , newP1.y, newP2.x, newP2.y);
-		//SKETCH FUNCTION TEST
-		//add sketch
-		/*float t =this.random(10f, 80f);
-		float rx = 30f;
-		float ry = 35f;
-		//new SandPainter(this).regionColor(30f, 35f, 180);
-		for(int k=0 ;k<50;++k){
-			
-			rx+=0.81*PApplet.sin(t*PApplet.PI/180);
-		      ry-=0.81*PApplet.cos(t*PApplet.PI/180);
-		      int cx = (int)(rx);
-		      int cy = (int)(ry);
-		      float x = rx;
-		      float y = ry;
-		      buffer.ellipse(p1.x, p1.y, 50f, 50f);
-		      float ox = p1.x + k;
-		      float oy = p1.y + master.random(0, 3) ;
-		      float g = master.random(-0.050f,0.050f);
-				float maxg = 1.0f;
-				if (g<0) g=0;
-				if (g>maxg) g=maxg;
-
-				// calculate grains by distance
-				//int grains = int(sqrt((ox-x)*(ox-x)+(oy-y)*(oy-y)));
-				int grains = 64;
-
-				// lay down grains of sand (transparent pixels)
-				float w = g/(grains-1);
-				for (int f=0;f<grains;f++) {
-					float a = (float) (0.1-f/(grains*10.0f));
-					buffer.stroke(master.red(master.color(200)),master.green(master.color(200)),master.blue(master.color(200)),a*256);
-					buffer.point(ox+(x-ox)*sin(sin(f*w)),oy+(y-oy)*sin(sin(f*w)));
-				}
-		}
-		//SKETCH FUNCTION END
-		*/
 		buffer2.endDraw();
-		
 		PImage tempImage = buffer2.get(0, 0, buffer2.width, buffer2.height); 
 		
 		buffer.beginDraw();
 		buffer.image(tempImage, (float)(buffPos.x  + deltaW), (float)(buffPos.y  + deltaH)); 
-		//sketch
-		//for(int ih = 0; ih<30; ih++)
-	    //	sketch(newP1.x  , newP1.y, newP2.x , newP2.y );
-		//end sketch
-		
 		buffer.endDraw(); 
 		img = buffer.get(0,0,buffer.width,buffer.height); 
 		diff = true; 
@@ -176,41 +165,4 @@ public class Buffer {
 		img = new PImage();
 		update();
 	}
-	
-	public void sketch(float x, float y, float ox, float oy) {
-	 	int c = (int)random(100, 250);
-	 
-	    // modulate gain
-	    float g=random(-0.050,0.050);
-	    float maxg = (float) 1.0;
-	    if (g<0) g=0;
-	    if (g>maxg) g=maxg;
-	    
-	    // calculate grains by distance
-	    //int grains = int(sqrt((ox-x)*(ox-x)+(oy-y)*(oy-y)));
-	    int grains = 64;
-	    
-	    // lay down grains of sand (transparent pixels)
-	    float w = g/(grains-1);
-	    for (int i=0;i<grains;i++) {
-	      float a = (float) (0.1-i/(grains*10.0));
-	     // 	master.strokeWeight(1);
-	     
-			buffer.stroke(master.red(c),master.green(c),master.blue(c),a*256);
-	      buffer.point(ox+(x-ox)*sin(sin(i*w)),oy+(y-oy)*sin(sin(i*w)));
-	    }
-	  
-}
-
-
-private float sin(float f) {
-	// TODO Auto-generated method stub
-	return PApplet.sin(f);
-}
-
-private float random(double d, double e) {
-	// TODO Auto-generated method stub
-	return master.random((float)d, (float)e);
-}
-
 }

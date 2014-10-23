@@ -31,21 +31,27 @@ public class DrawBackFork_Flow_Lines extends PApplet {
 	boolean intClick = false;
 	boolean lineGroup = false;
 	boolean bufferChanged = false;
+	boolean lassoOn = false;
 	Shape myShape;
 	Shape targetShape;
 	Rectangle shapeBound;
 	Line curLine;
+	LassoLine curLasso;
 	Decision_Engine engine;
 	int computerColor = color(253, 52, 91);
 	int humanColor = color(0);
 	Buffer buffer;
-
+	int width = 2160;
+	int height= 1440;
+	
 	public void setup() {
-		buffer = new Buffer(this, this.g);
+		buffer = new Buffer(this, this.g, width, height);
 		roboIcon = loadImage("images/robot.png");
 		stack.setIcon(roboIcon); 
 		myShape = new Shape();
-		size(1200, 700, JAVA2D);
+		
+		//size(PApplet.WIDTH, PApplet.HEIGHT, JAVA2D); 
+		size(2160, 1440, JAVA2D);
 		createGUI();
 		customGUI();
 		background(255);
@@ -55,7 +61,6 @@ public class DrawBackFork_Flow_Lines extends PApplet {
 	}
 
 	public void draw() {
-		//new SandPainter(this).render(30f, 50f, 500, 400);
 		
 		PImage buffImage = buffer.getImage();
 		if (null != buffImage) {
@@ -81,12 +86,6 @@ public class DrawBackFork_Flow_Lines extends PApplet {
 		if (shapeDrag) {
 			shapeBound.drawRect(this.g);
 		}
-		/* Added Oct 9, 2014
-		 * shading stuff
-		 * By: Kunwar Yashraj Singh
-		 */
-		
-		
 	}
 
 	// ##### Event Handling
@@ -94,10 +93,18 @@ public class DrawBackFork_Flow_Lines extends PApplet {
 		checkInterface(new PVector(mouseX, mouseY));
 		// println("intClick = " + intClick +" Drawing Mode: " + drawingMode);
 		if (drawingMode == "teach" || drawingMode == "draw" && intClick != true) {
-			curLine = new Line();
-			//curLine.setStart(new PVector(mouseX, mouseY));
-			curLine.setColor(humanColor);
-			allLines.add(curLine);
+			if(mouseButton == LEFT){
+				curLine = new Line();
+				//curLine.setStart(new PVector(mouseX, mouseY));
+				curLine.setColor(humanColor);
+				allLines.add(curLine);
+			}
+			if(mouseButton == RIGHT){
+				System.out.println("Right Button Pressed");
+				curLasso = new LassoLine();
+				//curLine.setStart(new PVector(mouseX, mouseY));
+				allLines.add(curLasso);
+			}
 		} else if (drawingMode == "drawPos" && intClick != true) {
 			shapeBound = new Rectangle(new PVector(mouseX, mouseY), 0, 0);
 			println(shapeBound.getPos());
@@ -112,7 +119,7 @@ public class DrawBackFork_Flow_Lines extends PApplet {
 		//it is either one or the other, but drawMode is not being set or happens by default
 		
 		if(!intClick){
-		if (drawingMode == "draw") {
+		if (drawingMode == "draw" && this.mouseButton == LEFT) {
 			LineSegment l = new LineSegment(new PVector(pmouseX, pmouseY),
 					new PVector(mouseX, mouseY));
 			curLine.addPoint(new PVector(mouseX, mouseY));
@@ -120,6 +127,19 @@ public class DrawBackFork_Flow_Lines extends PApplet {
 			//line(l.start.x, l.start.y, l.end.x, l.end.y);
 			buffer.addSegment(l);
 			
+			activeDrawing = true; 
+		}
+		//Lasso Tool with right click
+		if (drawingMode == "draw" && mouseButton == RIGHT ) {
+			//System.out.println("Right Button Dragged");
+			lassoOn = true;
+			LineSegment l = new LineSegment(new PVector(pmouseX, pmouseY),
+					new PVector(mouseX, mouseY));
+			curLasso.addPoint(new PVector(mouseX, mouseY));
+			ellipse(mouseX, mouseY, 10, 10); 
+			//line(l.start.x, l.start.y, l.end.x, l.end.y);
+			//Need to figure out how to get lasso to work without adding it to the segment and being accounted for as an extra line
+			buffer.addSegment(l);	
 			activeDrawing = true; 
 		}
 		if (drawingMode == "teach") {
@@ -141,10 +161,10 @@ Line line2;
 	public void mouseReleased() {
 		if (!intClick) {
 			//line(pmouseX, pmouseY, mouseX, mouseY);
-			if (drawingMode == "draw" && activeDrawing) {
+			if (drawingMode == "draw" && activeDrawing && lassoOn == false) {
 				buffer.addToBuffer(curLine); 
 				if(stack.getSize() ==0) buffer.update(); 
-				int offset = 3; //was 3 before
+				int offset = 3;
 				if(allLines.size()>offset){
 					
 					line2 = allLines.get(allLines.size()-offset);
@@ -152,9 +172,15 @@ Line line2;
 				else
 				{
 					line2 = curLine; ///can add other shapes to mutate with
-					
 				}
+				//Added new stuff here - KYS
+			//	if (buffer.allGroups.size() > 0) {
+			//		Line l1 = buffer.allGroups.get(0).get(0);
+		//			engine = new Decision_Engine(l1, line2, (float)Math.sqrt(Math.pow(width, 2) + Math.pow(height, 2)));
+			//		System.out.println("Added line from lasso");
+		//		}else {
 				engine = new Decision_Engine(curLine, line2, (float)Math.sqrt(Math.pow(width, 2) + Math.pow(height, 2)));
+		//		}
 				buffer.allLines.add(curLine); //add human line to buffer storage
 				
 				curLine = null;
@@ -164,6 +190,13 @@ Line line2;
 				//buffer.allLines.add(l); //add comp line to buffer storage
 				compLines.add(l);
 				activeDrawing = false; 
+			} else if (drawingMode == "draw" && lassoOn == true) {
+				System.out.println("Right Button Released");
+				buffer.lassoLine = curLasso;
+				curLasso = null;
+				lassoOn = false;
+				buffer.update();
+				this.drawAfterLasso();
 				
 			} else if (drawingMode == "drawPos") {
 				createShape(shapeBound.origin);
@@ -177,6 +210,36 @@ Line line2;
 		shapeDrag = false;
 	}
 
+	/**
+	 * Added new funciton to draw in a region after lasso is done
+	 */
+	public void drawAfterLasso() {
+		System.out.println("Added line from lasso");
+		if (buffer.allGroups.size() > 0) {
+			int size_main = buffer.allGroups.size() -1;
+			int size_lines = buffer.allGroups.get(size_main).size() -1;
+			for (int i = 0; i< buffer.allGroups.get(size_main).size(); ++i )
+			{
+			
+			Line l1 = buffer.allGroups.get(size_main).get(size_lines);
+			engine = new Decision_Engine(l1, line2, (float)Math.sqrt(Math.pow(width, 2) + Math.pow(height, 2)));
+			curLine = null;
+			Line l = engine.decision();
+			l.compGenerated = true; 
+			stack.push(l);
+			//buffer.allLines.add(l); //add comp line to buffer storage
+			compLines.add(l);
+			activeDrawing = false; 
+			System.out.println("Added line from lasso");
+			}
+			
+		}else {
+		engine = new Decision_Engine(curLine, line2, (float)Math.sqrt(Math.pow(width, 2) + Math.pow(height, 2)));
+		}
+		
+		
+		
+	}
 	public void keyPressed(){
 		if(key=='z')
 		{

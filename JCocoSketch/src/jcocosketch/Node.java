@@ -1,7 +1,5 @@
 package jcocosketch;
 
-
-
 public class Node {
 	private double x;
     private double y;

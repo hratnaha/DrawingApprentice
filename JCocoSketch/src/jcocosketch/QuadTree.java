@@ -307,7 +307,9 @@ public class QuadTree {
     private boolean insert(Node parent, Point point) {
         Boolean result = false;
         parent.pointsCount++;
-        System.out.println( (parent.pointsCount/2));
+
+//        System.out.println( (parent.pointsCount/2));
+
         switch (parent.getNodeType()) {
             case EMPTY:
                 this.setPointForNode(parent, point);
