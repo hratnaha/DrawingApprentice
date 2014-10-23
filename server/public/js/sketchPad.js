@@ -1,6 +1,11 @@
-function sketchUtil () {
+var canvas = "{}";
+   
+function sketchUtil() {
     // get the canvas element and its context
-    var canvas = document.getElementById('sketchpad');
+    var container = document.getElementById('container');
+    canvas = document.getElementById('sketchpad');
+    canvas.setAttribute('width', container.offsetWidth * 0.95);
+    canvas.setAttribute('height', container.offsetHeight * 0.90);
     var context = canvas.getContext('2d');
     var curstroke;
     var strCounter = 0, pkptCounter = 0;
@@ -52,7 +57,6 @@ function sketchUtil () {
             context.beginPath();
             context.moveTo(coors.x, coors.y);
             this.isDrawing = true;
-
         },
         touchmove: function (coors) {
             if (this.isDrawing) {
@@ -157,26 +161,23 @@ function sketchUtil () {
     }, false); // end body.onTouchMove
 
 }
-
-
-
 //Pressure implementation
-    var pressurevalue = 0;
-    var log = function(msg) {
-        $("<div>").text(msg).appendTo($("#log"));
-        console.log(msg);
-    };
-    var logtouch = function(evtype, t) {
-       
-        pressurevalue = t.webkitForce;
-    }
-   
-    var mouseIsDown = false;
+var pressurevalue = 0;
+var log = function (msg) {
+    $("<div>").text(msg).appendTo($("#log"));
+    console.log(msg);
+};
+var logtouch = function (evtype, t) {
     
-    function pressure1 () {
+    pressurevalue = t.webkitForce;
+}
+
+var mouseIsDown = false;
+
+function pressure1() {
     
     $(document).on("mousemove", function () { log("mousemove"); });
-    $(document).on("touchstart touchmove touchend touchcancel", function(ev) {
+    $(document).on("touchstart touchmove touchend touchcancel", function (ev) {
         $.each(ev.originalEvent.touches, function (i, t) { logtouch(ev.type + "-touches", t); });
         $.each(ev.originalEvent.changedTouches, function (i, t) { logtouch(ev.type + "-changed", t); });
         $.each(ev.originalEvent.targetTouches, function (i, t) { logtouch(ev.type + "-target", t); });

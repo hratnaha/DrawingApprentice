@@ -11,6 +11,7 @@ var java = require("java");
 
 java.classpath.push("commons-lang3-3.1.jar");
 java.classpath.push("commons-io.jar");
+java.classpath.push("commons-math3-3.3.jar");
 java.classpath.push("apprentice.jar");      // test library
 java.classpath.push("core.jar");        // processing
 
@@ -39,35 +40,36 @@ io.on('connection', function (socket) {
 });
 
 function newStrokeReceived(data){
-  var d = JSON.parse(data);
+    var d = JSON.parse(data);
 
-  var stroke = d.data;
-  // shift the packet points in the data
-  var stroketime = java.newLong(stroke.timestamp);
-  var shift = new ShiftPt(stroketime);
-  var pts = stroke.packetPoints;
-  for(var i=0;i<pts.length;i++){
-    var pt = pts[i];
-    var pttime = java.newLong(pt.timestamp);
-    shift.addPointSync(pt.x, pt.y, pttime, pt.id);
-  }
-  var returnSt = [];
-  // Todo: reconstruct the message to send out
-  shift.shiftTen(function(err, result){
-    var newpkpts = [];
-    for(var i=0;i<result.sizeSync();i++){
-      var newpt = result.getSync(i);
+    var stroke = d.data;
+    // shift the packet points in the data
+    var stroketime = java.newLong(stroke.timestamp);
+    var shift = new ShiftPt(stroketime);
+    var pts = stroke.packetPoints;
+    var returnSt = [];
 
-      newpkpts.push(CreatePacketPoint(newpt));
+    for (var i = 0; i < pts.length; i++) {
+        var pt = pts[i];
+        var pttime = java.newLong(pt.timestamp);
+            shift.addPointSync(parseInt(pt.x, 10), parseInt(pt.y, 10), pttime, pt.id);
+        }
+        // Todo: reconstruct the message to send out
+        shift.shiftTen(function (err, result) {
+            var newpkpts = [];
+            for (var i = 0; i < result.sizeSync(); i++) {
+                var newpt = result.getSync(i);
+            
+                newpkpts.push(CreatePacketPoint(newpt));
+            }
+            stroke.packetPoints = newpkpts;
+        
+            // decode to JSON and send the message
+            var resultmsg = JSON.stringify(stroke);
+            io.emit('respondStroke', resultmsg);
+            console.log("sending: " + resultmsg);
+        });
     }
-    stroke.packetPoints = newpkpts;
-
-    // decode to JSON and send the message
-    var resultmsg = JSON.stringify(stroke);
-    io.emit('respondStroke', resultmsg);
-    console.log("sending: " + resultmsg);
-  });
-}
 
 function submitResult(d){
   submit(d, function(error, result){
