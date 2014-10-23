@@ -15,7 +15,7 @@ public class LassoLine extends Line{
 	
 	public void action(Buffer currentBuffer){
 		boolean isInLasso = false;
-		Group currentGroup = new Group();
+		ArrayList<Line> linesInGroup = new ArrayList<Line>();
 		for (int i = 0; i < currentBuffer.allLines.size(); i++) 
 		{ 
 			Line l = currentBuffer.allLines.get(i);
@@ -34,15 +34,13 @@ public class LassoLine extends Line{
 			if(isInLasso){
 				l.setGroupID(currentBuffer.allGroups.size());
 				numLines++;
-				currentGroup.addLine(l);
+				linesInGroup.add(l);
 				isInLasso = false;
 			}
 		}
 		//Adds new group of lines if there is at least one line 100% contained in the lasso
-		if(currentGroup.getSize() > 0){
-			currentGroup.setGroupID(currentBuffer.allGroups.size());
-			currentBuffer.allGroups.add(currentGroup);
-			currentBuffer.normalizedGroups.add(currentGroup.normalizedGroup());
+		if(linesInGroup.size() > 0){
+			currentBuffer.allGroups.add(linesInGroup);
 		}
 	}
 }

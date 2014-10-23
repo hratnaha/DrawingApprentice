@@ -51,25 +51,6 @@ public class QuadTree {
             this.count_++;
         }
     }
-    
-    public Node leastDenseNode(){
-    	System.out.println("Node SE: " + this.root_.getSe().pointsCount);
-    	System.out.println("Node SW: " + this.root_.getSw().pointsCount);
-    	System.out.println("Node NE: " + this.root_.getNe().pointsCount);
-    	System.out.println("Node NW: " + this.root_.getNw().pointsCount);
-    	if(this.root_.getSe().pointsCount < this.root_.getSw().pointsCount && this.root_.getSe().pointsCount < this.root_.getNw().pointsCount
-    			&& this.root_.getSe().pointsCount < this.root_.getNe().pointsCount){
-    		return this.root_.getSe();
-    	} else if(this.root_.getSw().pointsCount < this.root_.getSe().pointsCount && this.root_.getSw().pointsCount < this.root_.getNe().pointsCount
-    			&& this.root_.getSw().pointsCount < this.root_.getNw().pointsCount){
-    		return this.root_.getSw();
-    	} else if(this.root_.getNw().pointsCount < this.root_.getSe().pointsCount && this.root_.getNw().pointsCount < this.root_.getNe().pointsCount
-    			&& this.root_.getNw().pointsCount < this.root_.getSw().pointsCount){
-    		return this.root_.getNw();
-    	} else{
-    		return this.root_.getNe();
-    	}
-    }
 
     /**
      * Gets the value of the point at (x, y) or null if the point is empty.

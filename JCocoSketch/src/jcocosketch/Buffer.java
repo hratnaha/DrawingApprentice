@@ -8,8 +8,7 @@ import java.util.*;
 
 public class Buffer {
 	ArrayList<Line> allLines = new ArrayList<Line>();
-	ArrayList<Group> allGroups = new ArrayList<Group>();
-	ArrayList<Group> normalizedGroups = new ArrayList<Group>();
+	ArrayList<ArrayList<Line>> allGroups = new ArrayList<ArrayList<Line>>();
 	PImage img;
 	PGraphics buffer;
 	PGraphics buffer2; 
@@ -35,7 +34,7 @@ public class Buffer {
 	}
 
 
-	//Need to integrate this for color. Keep a record of all the lines
+	// Need to integrate this for color. Keep a record of all the lines
 	//independent from the segments that have been printed. 
 	public void update() { 
 		System.out.println("Update Called");
@@ -71,17 +70,6 @@ public class Buffer {
 			}
 			diff=false;
 		}
-		//Test normalized Groups
-//		if(normalizedGroups.size() > 0){
-//			for(int b = 0; b < normalizedGroups.get(0).lines.size(); b++){
-//				for(int c = 0; c < normalizedGroups.get(0).lines.get(b).allPoints.size() - 1; c++){
-//					PVector n1 = normalizedGroups.get(0).lines.get(b).allPoints.get(c); 
-//					PVector n2 = normalizedGroups.get(0).lines.get(b).allPoints.get(c+1);
-//					buffer.line(n1.x, n1.y, n2.x,n2.y);
-//					System.out.println(n1.x + n1.y + n2.x + n2.y);
-//				}
-//			}
-//		}
 		Point[] keys = mainTree.getKeys();
 		
 		buffer.endDraw();
@@ -98,7 +86,6 @@ public class Buffer {
 		}
 		//Number of groups with lines completely in it
 		System.out.println(allGroups.size());
-		//System.out.println(mainTree.leastDenseNode().pointsCount);
 	}
 
 
