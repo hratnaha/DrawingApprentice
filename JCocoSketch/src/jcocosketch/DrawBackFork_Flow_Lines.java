@@ -241,6 +241,10 @@ Line line2;
 		
 	}
 	public void keyPressed(){
+		if(key=='u')
+		{
+			System.out.println("U has been pressed");
+		}
 		if(key=='z')
 		{
 			buffer.showComp = true; 
