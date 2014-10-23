@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Generator: Adobe Illustrator 16.0.0, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+	 width="129.5px" height="19px" viewBox="0 0 129.5 19" enable-background="new 0 0 129.5 19" xml:space="preserve">
+<g id="axislabel">
+	<line clip-path="url(#SVGID_2_)" fill="none" stroke="#000000" stroke-width="0.5" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" x1="14.762" y1="2.5" x2="115.531" y2="2.5"/>
+	<polygon clip-path="url(#SVGID_2_)" points="117.931,2 115.531,1.1 115.531,2.9 	"/>
+	<polygon clip-path="url(#SVGID_2_)" fill="none" stroke="#000000" stroke-width="0.5" stroke-miterlimit="10" points="117.931,2 
+		115.531,1.1 115.531,2.9 	"/>
+	<polygon clip-path="url(#SVGID_2_)" points="12.362,2 14.762,2.9 14.762,1.1 	"/>
+	<polygon clip-path="url(#SVGID_2_)" fill="none" stroke="#000000" stroke-width="0.5" stroke-miterlimit="10" points="12.362,2 
+		14.762,2.9 14.762,1.1 	"/>
+	<g clip-path="url(#SVGID_2_)">
+		<text transform="matrix(1 0 0 1 47.6914 8)" fill="#404040" font-family="'HelveticaNeue'" font-size="4">Everyday Cognition</text>
+	</g>
+	<g clip-path="url(#SVGID_2_)">
+		<text transform="matrix(1 0 0 1 55.9497 12.5)" fill="#404040" font-family="'HelveticaNeue'" font-size="4">(Clamped)</text>
+	</g>
+	<g clip-path="url(#SVGID_2_)">
+		<text transform="matrix(1 0 0 1 107.4268 8)" fill="#404040" font-family="'HelveticaNeue'" font-size="4">Inspecting</text>
+	</g>
+	<g clip-path="url(#SVGID_2_)">
+		<text transform="matrix(1 0 0 1 105.3887 12.5)" fill="#404040" font-family="'HelveticaNeue'" font-size="4">(Unclamped)</text>
+	</g>
+	<g clip-path="url(#SVGID_2_)">
+		<text transform="matrix(1 0 0 1 5.1665 8)" fill="#404040" font-family="'HelveticaNeue'" font-size="4">Thinking</text>
+	</g>
+	<g clip-path="url(#SVGID_2_)">
+		<text transform="matrix(1 0 0 1 1.3887 12.5)" fill="#404040" font-family="'HelveticaNeue'" font-size="4">(Unclamped)</text>
+	</g>
+</g>
+</svg>
