@@ -2,25 +2,16 @@ package jcocosketch;
 
 import processing.core.*;
 
-import org.apache.commons.math3.analysis.*;
-import org.apache.commons.math3.analysis.interpolation.BicubicSplineInterpolatingFunction;
-import org.apache.commons.math3.analysis.interpolation.BicubicSplineInterpolator;
 import org.apache.commons.math3.analysis.interpolation.SplineInterpolator;
-import org.apache.commons.math3.analysis.interpolation.UnivariateInterpolator;
 import org.apache.commons.math3.analysis.polynomials.PolynomialFunction;
-import org.apache.commons.math3.analysis.polynomials.PolynomialFunctionLagrangeForm;
 import org.apache.commons.math3.analysis.polynomials.PolynomialSplineFunction;
-import org.apache.commons.math3.fitting.CurveFitter;
-import org.apache.commons.math3.fitting.PolynomialCurveFitter;
-import org.apache.commons.math3.fitting.WeightedObservedPoints;
-import org.apache.commons.math3.fitting.leastsquares.LevenbergMarquardtOptimizer;
 import org.apache.commons.math3.linear.MatrixUtils;
 import org.apache.commons.math3.linear.RealMatrix;
 
-import java.awt.Canvas;
 import java.util.*;
 
 import org.apache.commons.math3.random.*;
+
 public class Line_Mod {
 	private static final float PROB_RANDOM = 0.15f;
 	private static final float DEGREE_RANDOM = 5.0f;
@@ -30,6 +21,7 @@ public class Line_Mod {
 	Random random;
 
 	public Line_Mod(Line line, Random random) {
+		System.out.println("here2!!");
 		this.line = line;
 		this.allPoints = line.getAllPoints();
 		this.random = random;
@@ -166,6 +158,25 @@ public class Line_Mod {
 
 				PVector newPoint = new PVector(x, y);
 				newLine.allPoints.add(newPoint);
+			} else
+				// just add the point to the point array
+				newLine.allPoints.add(line.allPoints.get(i));
+		}
+		return newLine;
+	}
+	public Line Trim(Line line, int width, int height) {
+		
+		Line newLine = new Line();
+		for (int i = 0; i < line.allPoints.size(); i++) {
+			// cycle through the points and add in a bit of randomness to each
+			// points
+			// first decide if we should interfere with this point, give it a P
+			// of .5 for interfering
+			
+				float x = line.allPoints.get(i).x;
+				float y = line.allPoints.get(i).y;
+				if (x >= width || y >=height) {
+				
 			} else
 				// just add the point to the point array
 				newLine.allPoints.add(line.allPoints.get(i));
@@ -447,7 +458,7 @@ public class Line_Mod {
 			}
 			
 			}
-			System.out.println(X[i] + " " + Y[i]);
+			//System.out.println(X[i] + " " + Y[i]);
 			
 		}
 		Arrays.sort(X);
