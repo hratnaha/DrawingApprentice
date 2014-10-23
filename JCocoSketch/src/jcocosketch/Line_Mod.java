@@ -2,25 +2,16 @@ package jcocosketch;
 
 import processing.core.*;
 
-import org.apache.commons.math3.analysis.*;
-import org.apache.commons.math3.analysis.interpolation.BicubicSplineInterpolatingFunction;
-import org.apache.commons.math3.analysis.interpolation.BicubicSplineInterpolator;
 import org.apache.commons.math3.analysis.interpolation.SplineInterpolator;
-import org.apache.commons.math3.analysis.interpolation.UnivariateInterpolator;
 import org.apache.commons.math3.analysis.polynomials.PolynomialFunction;
-import org.apache.commons.math3.analysis.polynomials.PolynomialFunctionLagrangeForm;
 import org.apache.commons.math3.analysis.polynomials.PolynomialSplineFunction;
-import org.apache.commons.math3.fitting.CurveFitter;
-import org.apache.commons.math3.fitting.PolynomialCurveFitter;
-import org.apache.commons.math3.fitting.WeightedObservedPoints;
-import org.apache.commons.math3.fitting.leastsquares.LevenbergMarquardtOptimizer;
 import org.apache.commons.math3.linear.MatrixUtils;
 import org.apache.commons.math3.linear.RealMatrix;
 
-import java.awt.Canvas;
 import java.util.*;
 
 import org.apache.commons.math3.random.*;
+
 public class Line_Mod {
 	private static final float PROB_RANDOM = 0.15f;
 	private static final float DEGREE_RANDOM = 5.0f;
@@ -30,6 +21,7 @@ public class Line_Mod {
 	Random random;
 
 	public Line_Mod(Line line, Random random) {
+		System.out.println("here2!!");
 		this.line = line;
 		this.allPoints = line.getAllPoints();
 		this.random = random;
@@ -191,6 +183,76 @@ public class Line_Mod {
 		}
 		return newLine;
 	}
+	
+
+	public Line drawBackNoisy(Line line) {
+		// take the previous line and cycle through its components and add some
+		// noise to it
+		// here, I will just add a 1 * random 0-1 + point to each point, then
+		// draw
+		// create a new Line of the current line, then newLine.drawLine();
+		Line newLine = new Line();
+		for (int i = 0; i < line.allPoints.size(); i++) {
+			// cycle through the points and add in a bit of randomness to each
+			// points
+			// first decide if we should interfere with this point, give it a P
+			// of .5 for interfering
+			
+				float x = line.allPoints.get(i).x;
+				float y = line.allPoints.get(i).y;
+
+				x = x - DEGREE_RANDOM + 2 * DEGREE_RANDOM * random.nextFloat() + (float)random.nextGaussian();
+				y = y - DEGREE_RANDOM + 2 * DEGREE_RANDOM * random.nextFloat() + (float)random.nextGaussian();
+				PVector newPoint = new PVector(x, y);
+				newLine.allPoints.add(newPoint);
+				x = x - DEGREE_RANDOM + 1.3f * (DEGREE_RANDOM +2) * random.nextFloat() + (float)random.nextGaussian();
+				y = y - DEGREE_RANDOM + 1.9f * (DEGREE_RANDOM + 2) * random.nextFloat() + (float)random.nextGaussian();
+				newPoint = new PVector(x, y);
+				newLine.allPoints.add(newPoint);
+			/*	x = x - DEGREE_RANDOM + 1.3f * (DEGREE_RANDOM +3) * random.nextFloat() + (float)random.nextGaussian();
+				y = y - DEGREE_RANDOM + 1.9f * (DEGREE_RANDOM + 3) * random.nextFloat() + (float)random.nextGaussian();
+				newPoint = new PVector(x, y);
+				newLine.allPoints.add(newPoint);
+			*/
+				// just add the point to the point array
+				//newLine.allPoints.add(line.allPoints.get(i));
+		}
+		return newLine;
+	}
+	
+	public Line drawBackShade(Line line) {
+		// take the previous line and cycle through its components and add some
+		// noise to it
+		// here, I will just add a 1 * random 0-1 + point to each point, then
+		// draw
+		// create a new Line of the current line, then newLine.drawLine();
+		Line newLine = new Line();
+		for (int i = 0; i < line.allPoints.size()-1; i++) {
+			// cycle through the points and add in a bit of randomness to each
+			// points
+			// first decide if we should interfere with this point, give it a P
+			// of .5 for interfering
+			
+				float x = line.allPoints.get(i).x;
+				float y = line.allPoints.get(i).y;
+				float nextY = line.allPoints.get(i+1).y;
+				float nextX = line.allPoints.get(i+1).x;
+				//x = x - DEGREE_RANDOM + 2 * DEGREE_RANDOM * random.nextFloat() + (float)random.nextGaussian();
+				//y = y - DEGREE_RANDOM + 2 * DEGREE_RANDOM * random.nextFloat() + (float)random.nextGaussian();
+				//PVector newPoint = new PVector(x, y);
+				for(int i1 = 0; i1< (int) (nextY-y); ++i1) {
+					float ynew = y - (random.nextInt(5)*random.nextFloat()); 
+					x += 1;//random.nextInt(2)*random.nextFloat();
+					PVector newPoint = new PVector(x, ynew);
+					newLine.allPoints.add(newPoint);
+				}
+				
+				
+				
+		}
+		return newLine;
+	}
+	
 	//************************************************************************
 	//Actual Mutation Algorithm
 	//Author: Kunwar Yashraj Singh
@@ -235,6 +297,52 @@ public class Line_Mod {
 			} else
 				// just add the point to the point array
 				newLine.allPoints.add(line.allPoints.get(i));
+		}
+
+
+		return newLine;
+	}
+
+	public Line drawOnlyMutation(Line line, Line line2) {
+		if(line2==null){
+			line2 = line;
+		}
+		boolean reverse = true;
+		int reverse_offset = 50;
+		float scale_factor = 1.2f;
+		// create a new Line of the current line, then newLine.drawLine();
+		Line newLine = new Line();
+		
+		int index_start = random.nextInt(line.allPoints.size());
+		int index_end = index_start + random.nextInt(line.allPoints.size() - index_start);
+		for (int i = 0; i < line.allPoints.size(); i++) {
+			// cycle through the points and add in a bit of randomness to each
+			// points
+			// first decide if we should interfere with this point, give it a P
+			// of .5 for interfering
+
+			//Do mutation
+			//by flipping bits -- its just one of several possible operations
+			if (i >=index_start && i<=index_end) {
+				
+				if(!reverse) {
+				float x1 = line2.allPoints.get(i).x;
+				float y1 = line2.allPoints.get(i).y;
+				PVector newPoint = new PVector(scale_factor*x1, y1);
+				newLine.allPoints.add(newPoint);
+				}
+				else {
+					float x1 = line2.allPoints.get(i).x - (reverse_offset)  ;
+					float y1 =  line2.allPoints.get(i).y - (reverse_offset) ;
+					PVector newPoint = new PVector(x1, y1);
+					newLine.allPoints.add(newPoint);
+				}
+
+				//PVector newPoint = new PVector(scale_factor*x1, y1);
+				//newLine.allPoints.add(newPoint);
+			} else{}
+				// just add the point to the point array
+				//newLine.allPoints.add(line.allPoints.get(i));
 		}
 
 
@@ -350,7 +458,7 @@ public class Line_Mod {
 			}
 			
 			}
-			System.out.println(X[i] + " " + Y[i]);
+			//System.out.println(X[i] + " " + Y[i]);
 			
 		}
 		Arrays.sort(X);

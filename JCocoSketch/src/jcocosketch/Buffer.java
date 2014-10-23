@@ -8,6 +8,8 @@ import java.util.*;
 
 public class Buffer {
 	ArrayList<Line> allLines = new ArrayList<Line>();
+	ArrayList<Group> allGroups = new ArrayList<Group>();
+	ArrayList<Group> normalizedGroups = new ArrayList<Group>();
 	PImage img;
 	PGraphics buffer;
 	PGraphics buffer2; 
@@ -17,6 +19,7 @@ public class Buffer {
 	boolean showComp = false; 
 	PApplet master;
 	QuadTree mainTree;
+	LassoLine lassoLine;
 
 
 	public Buffer(PApplet master, PGraphics graphics, int width, int height) {
@@ -32,14 +35,14 @@ public class Buffer {
 	}
 
 
-	// Need to integrate this for color. Keep a record of all the lines
+	//Need to integrate this for color. Keep a record of all the lines
 	//independent from the segments that have been printed. 
 	public void update() { 
 		System.out.println("Update Called");
 		buffer.beginDraw(); 
 		buffer.background(255);
 		//buffer.smooth();
-		buffer.noFill(); 
+		buffer.noFill();
 		for (int i = 0; i < allLines.size(); i++) 
 		{ 
 			Line l = allLines.get(i);
@@ -50,33 +53,52 @@ public class Buffer {
 			for (int j= 0; j < l.allPoints.size() - 1; j++) {
 				PVector p1 = l.allPoints.get(j); 
 				PVector p2 = l.allPoints.get(j+1);
+				
+				//Create points from PVector points
+				Point point1 = new Point(p1.x,p1.y,l.lineID);
+				Point point2 = new Point(p2.x,p2.y,l.lineID);
+				if(l.getGroupID() != 1){
+					point1.setGroupID(l.getGroupID());
+					point2.setGroupID(l.getGroupID());
+					//System.out.println(point1.getGroupID());
+					//System.out.println(point2.getGroupID());
+				}
+				
 				buffer.line(p1.x, p1.y, p2.x,p2.y);
-				mainTree.set(p1.x,p1.y,l.lineID);
-				mainTree.set(p2.x,p2.y,l.lineID);
+				mainTree.set(point1.getX(),point1.getY(),point1);
+				mainTree.set(point2.getX(),point2.getY(),point2);
 				//System.out.println("QuadTree: " + mainTree.getCount());
 			}
+			diff=false;
 		}
+		//Test normalized Groups
+//		if(normalizedGroups.size() > 0){
+//			for(int b = 0; b < normalizedGroups.get(0).lines.size(); b++){
+//				for(int c = 0; c < normalizedGroups.get(0).lines.get(b).allPoints.size() - 1; c++){
+//					PVector n1 = normalizedGroups.get(0).lines.get(b).allPoints.get(c); 
+//					PVector n2 = normalizedGroups.get(0).lines.get(b).allPoints.get(c+1);
+//					buffer.line(n1.x, n1.y, n2.x,n2.y);
+//					System.out.println(n1.x + n1.y + n2.x + n2.y);
+//				}
+//			}
+//		}
 		Point[] keys = mainTree.getKeys();
 		
-		//Testing the Quad Tree
-//		for(int i=0; i<keys.length;i++){
-//			//System.out.println("Keys(Points): " + keys[i]);
-//			//Getting the main nodes for root (the largest nodes)
-//			Node temp = mainTree.getQuadrantForPoint(mainTree.getRootNode(), keys[i].getX(), keys[i].getY());
-//			//Prints out these nodes with it's children depending on the point. There can be more children if necessary
-//			System.out.println(" Point: (" + keys[i].getX() + "," + keys[i].getY() +") Subnodes: "
-//					+ temp.toString() + " NE " + temp.getNe().toString()+ " NW " + temp.getNw().toString()
-//					+ " SE " + temp.getSe().toString()+ " SW " + temp.getSw().toString());
-//		}
-		//Testing out Point Class and QuadTree interaction
-//		ArrayList<PVector> linePoints = allLines.get(allLines.size()-1).allPoints;
-//		for(int i = 0; i < linePoints.size(); i++){
-//			Point testPoint = new Point(linePoints.get(i).x,linePoints.get(i).y,allLines.get(allLines.size()-1).lineID);
-//		}
-		//System.out.println(mainTree.getIndex(new Point(linePoints.get(0).x,linePoints.get(0).y,allLines.get(allLines.size()-1).lineID)));
 		buffer.endDraw();
 		img = buffer.get(0, 0, buffer.width, buffer.height);
 		diff=true; 
+
+		//Lasso recognition and contains happens here	
+		if(lassoLine == null){
+			System.out.println("No Lasso Line");
+		}
+		else{
+			lassoLine.action(this);
+			lassoLine = null;
+		}
+		//Number of groups with lines completely in it
+		System.out.println(allGroups.size());
+		//System.out.println(mainTree.leastDenseNode().pointsCount);
 	}
 
 

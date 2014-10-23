@@ -13,6 +13,7 @@ public class Line {
 	float startTime;
 	float endTime;
 	float lineID;
+	float groupID = 1;
 	float xmin = -1;
 	float ymin = -1;
 	float xmax = -1;
@@ -20,21 +21,42 @@ public class Line {
 	int color = 0;
 	boolean compGenerated = false; 
 	boolean isSelected = false;
+	Random rand = new Random();
 
 
 	// convert all reference of ponts to pvec
 
 	public Line() {
 		startTime = System.currentTimeMillis() / 1000.0f;
+		this.lineID = rand.nextFloat();
 	}
 
 	public Line(float x, float y) {
 		allPoints.add(new PVector(x, y));
+		if (xmin == -1 && ymin == -1 && xmax == -1 && ymax == -1) {
+			xmin = x;
+			xmax = x;
+			ymin = y;
+			ymax = y;
+		} else {
+			if (x < xmin) {
+				xmin = x;
+			} else if (x > xmax) {
+				xmax = x;
+			}
+			if (y < ymin) {
+				ymin = y;
+			} else if (y > ymax) {
+				ymax = y;
+			}
+		}
 		startTime = System.currentTimeMillis() / 1000.0f;
+		this.lineID = rand.nextFloat();
 	}
 
 	public Line(ArrayList<PVector> all) {
 		initFromPoints(all);
+		this.lineID = rand.nextFloat();
 	}
 
 	public Line(PVector[] all) {
@@ -43,6 +65,7 @@ public class Line {
 			allVec.add(all[i]);
 		}
 		initFromPoints(allVec);
+		this.lineID = rand.nextFloat();
 	}
 
 	private void initFromPoints(ArrayList<PVector> all) {
@@ -54,6 +77,23 @@ public class Line {
 		parameter.clear();
 		parameter.add(0.0f);
 		for (int i = 1; i < allPoints.size(); i++) {
+			if (xmin == -1 && ymin == -1 && xmax == -1 && ymax == -1) {
+				xmin = allPoints.get(i).x;
+				xmax = allPoints.get(i).x;
+				ymin = allPoints.get(i).y;
+				ymax = allPoints.get(i).y;
+			} else {
+				if (allPoints.get(i).x < xmin) {
+					xmin = allPoints.get(i).x;
+				} else if (allPoints.get(i).x > xmax) {
+					xmax = allPoints.get(i).x;
+				}
+				if (allPoints.get(i).y < ymin) {
+					ymin = allPoints.get(i).y;
+				} else if (allPoints.get(i).y > ymax) {
+					ymax = allPoints.get(i).y;
+				}
+			}
 			PVector d = PVector.sub(allPoints.get(i), allPoints.get(i - 1));
 			parameter.add(parameter.get(parameter.size() - 1) + d.mag());
 		}
@@ -96,6 +136,15 @@ public class Line {
 		float recHeight = ymax - ymin;
 		myBoundingBox = new Rectangle((int) origin.x, (int) origin.y, (int) recWidth, (int) recHeight);
 	}
+	
+	public boolean contains(double x, double y){
+		if(x >= xmin && x <= xmax && y >= ymin && y <= ymax){
+			return true;
+		}
+		else{
+			return false;
+		}
+	}
 
 	public boolean insideBufferZone(PVector loc) {
 		if (allPoints.isEmpty())
@@ -115,8 +164,33 @@ public class Line {
 		} else {
 			lastP = p;
 		}
+		if (xmin == -1 && ymin == -1 && xmax == -1 && ymax == -1) {
+			xmin = p.x;
+			xmax = p.x;
+			ymin = p.y;
+			ymax = p.y;
+		} else {
+			if (p.x < xmin) {
+				xmin = p.x;
+			} else if (p.x > xmax) {
+				xmax = p.x;
+			}
+			if (p.y < ymin) {
+				ymin = p.y;
+			} else if (p.y > ymax) {
+				ymax = p.y;
+			}
+		}
 		allPoints.add(p);
 		parameter.add(lastParam + PVector.sub(lastP, p).mag());
+	}
+	
+	public void setGroupID(float groupID){
+		this.groupID = groupID;
+	}
+	
+	public float getGroupID(){
+		return this.groupID;
 	}
 
 	public void printPoints() {

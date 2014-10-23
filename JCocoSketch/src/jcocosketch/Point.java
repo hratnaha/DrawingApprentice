@@ -13,6 +13,8 @@ public class Point extends PVector implements Comparable{
     private double y;
     private Object opt_value;
 
+    private float groupID;
+
     /**
      * Creates a new point object.
      *
@@ -23,7 +25,6 @@ public class Point extends PVector implements Comparable{
     public Point(double x, double y, float lineID) {
     	this.x = x;
         this.y = y;
-        this.opt_value = opt_value;
         this.lineID = lineID;
     }
     public Point(double x, double y, Object opt_value) {
@@ -59,6 +60,14 @@ public class Point extends PVector implements Comparable{
     public void setLineID(float lineID){
     	this.lineID = lineID;
     }
+    
+    public void setGroupID(float groupID){
+    	this.groupID = groupID;
+    }
+    
+    public float getGroupID(){
+		return this.groupID;
+	}
 
     @Override
     public String toString() {

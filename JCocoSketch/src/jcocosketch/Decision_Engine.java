@@ -28,7 +28,8 @@ public class Decision_Engine {
 		}
 		int decision = 1 + random.nextInt(6); //was 4 before default case, its just to increase probability of mutation
 		}*/
-		int decision = 1 + random.nextInt(10); //was 4 before default case, its just to increase probability of mutation
+
+		int decision = 1 + random.nextInt(11); //was 4 before default case, its just to increase probability of mutation
 
 		Line_Mod m = new Line_Mod(this.line, random);
 		Line newLine = new Line();
@@ -46,6 +47,9 @@ public class Decision_Engine {
 			newLine = m.drawBack(this.line);
 			break;
 			
+		case 5:
+			newLine = m.drawBackNoisy(this.line);
+			break;
 			//Added new Decision cases, Sept8, 2014 by Kunwar Yashraj Singh
 		/*case 5:
 			newLine = m.drawMutation(this.line, this.line2, true);
@@ -62,6 +66,15 @@ public class Decision_Engine {
 			newLine = m.drawPolynomial(false);
 		//	newLine = m.Trim(newLine, 2160, 1440);
 			System.out.println("Random Polynomial");
+			break;
+			
+		case 8:
+			newLine = m.drawOnlyMutation(this.line, this.line2);
+			System.out.println("Invoked Only Mutation Algorithm");
+			break;
+		
+		case 9:
+			newLine = m.drawBackShade(this.line);
 			break;
 			
 		default:
