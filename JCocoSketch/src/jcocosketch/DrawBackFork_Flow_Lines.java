@@ -117,7 +117,8 @@ public class DrawBackFork_Flow_Lines extends PApplet {
 		//if it is draw mode
 		//have to define that we are in draw mode here if we are not already in shapeDrag
 		//it is either one or the other, but drawMode is not being set or happens by default
-		
+		mouseX = mouseX < 0 ? 0 : mouseX;
+		mouseY = mouseY < 0 ? 0 : mouseY;
 		if(!intClick){
 		if (drawingMode == "draw" && this.mouseButton == LEFT) {
 			LineSegment l = new LineSegment(new PVector(pmouseX, pmouseY),
