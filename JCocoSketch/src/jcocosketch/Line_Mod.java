@@ -175,7 +175,7 @@ public class Line_Mod {
 			
 				float x = line.allPoints.get(i).x;
 				float y = line.allPoints.get(i).y;
-				if (x >= width || y >=height) {
+				if (x >= width || y >= height || x< 0 || y < 0) {
 				
 			} else
 				// just add the point to the point array
