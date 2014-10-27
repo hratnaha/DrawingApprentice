@@ -216,13 +216,15 @@ Line line2;
 	 */
 	public void drawAfterLasso() {
 		System.out.println("Added line from lasso");
+		
 		if (buffer.allGroups.size() > 0) {
-			int size_main = buffer.allGroups.size() -1;
+			//for (int k =0; k<buffer.allGroups.size(); ++k) {
+			int size_main = buffer.allGroups.size() -1; //k;//
 			int size_lines = buffer.allGroups.get(size_main).size() -1;
 			for (int i = 0; i< buffer.allGroups.get(size_main).size(); ++i )
 			{
 			
-			Line l1 = buffer.allGroups.get(size_main).get(size_lines);
+			Line l1 = buffer.allGroups.get(size_main).get(/*size_lines*/i);
 			engine = new Decision_Engine(l1, line2, (float)Math.sqrt(Math.pow(width, 2) + Math.pow(height, 2)));
 			curLine = null;
 			Line l = engine.decision();
@@ -233,6 +235,7 @@ Line line2;
 			activeDrawing = false; 
 			System.out.println("Added line from lasso");
 			}
+			//}
 			
 		}else {
 		engine = new Decision_Engine(curLine, line2, (float)Math.sqrt(Math.pow(width, 2) + Math.pow(height, 2)));
