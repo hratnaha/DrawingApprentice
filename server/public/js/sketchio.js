@@ -57,7 +57,7 @@ function onOpen(data){
 }
 function doSend(message)
 {
-	//writeToScreen("SENT: " + message);
+    //writeToScreen("SENT: " + message);
 	socket.emit('newStroke', message);
 }
 function writeToScreen(message)
@@ -66,4 +66,32 @@ function writeToScreen(message)
 	pre.style.wordWrap = "break-word";
 	pre.innerHTML = message;
 	output.appendChild(pre);
+}
+// save a image to the client's computer
+function saveToImage() {
+
+}
+// clear the canvas
+function clearCanvas() {
+    socket.emit('clear', 'all');
+}
+// change the mode base on the UI changes
+function setMode(mode) {
+	var m = 0;
+	switch($(this).val()){
+		case 'local':
+			m = 0;
+			break;
+		case 'region':
+			m = 1;
+			break;
+		case 'global':
+			m = 2;
+			break;	
+	}
+
+    socket.emit('setMode', m);
+}
+function groupingMode(modenum) {
+
 }

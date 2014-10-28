@@ -1,14 +1,19 @@
 <html>
 <body>
-    
+    <div id="buttons">
+        <input type="color" name="background" id="background" value="#ff0000" />
+        <input type="button" id="clear" value="Clear" />
+        <select id="mode">
+            <option value="local">Local</option>
+            <option value="region">Region</option>
+            <option value="global">Global</option>
+        </select>
+    </div>
     <div id="container">
         <canvas id="botpad">Sorry, your browser is not supported.</canvas>
         <canvas id="sketchpad">Sorry, your browser is not supported.</canvas>
     </div>
-    <div id="buttons">
-        <input type="color" name="background" id="background" value="#ff0000" />
-        <input type="button" id="clear" value="Clear" />
-    </div>
+
 </body>
 <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
 <script src="https://cdn.socket.io/socket.io-1.0.6.js"></script>
@@ -30,10 +35,11 @@ ctx.stroke();
 window.addEventListener("load", initWebSocket, false);
 window.addEventListener('load', sketchUtil, false);
 
-  document.getElementById('clear').addEventListener('click', function() {
-        sketchpad.width = sketchpad.width;
-      }, false);
-
+document.getElementById('clear').addEventListener('click', function() {
+    sketchpad.width = sketchpad.width;
+    clearCanvas();
+}, false);
+$("#mode").change(setMode);
 </script>
 <div id="output"></div>
 <style type="text/css">

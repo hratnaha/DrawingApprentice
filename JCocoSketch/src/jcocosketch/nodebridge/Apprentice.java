@@ -6,18 +6,35 @@ import java.util.*;
 
 import jcocosketch.*;
 
-public class shiftpts {
+public class Apprentice {
 	ArrayList<SketchPoint> allPoints = new ArrayList<SketchPoint>();
 	ArrayList<Line> allLines = new ArrayList<Line>();
 	long startTime;
-	public shiftpts(long strokeTime){
-		this.startTime = strokeTime;
+	int currentMode = 0;
+	Boolean isGrouping = false;
+	public Apprentice(){
+		
+	}
+	public void setMode(int mode_code){
+		System.out.println("change to mode: " + mode_code);
+		currentMode = mode_code;
+	}
+	public void clear(){
+		System.out.println("clear");
+	}
+	public void startGrouping(long strokeTimeStamp){
+		this.startTime = strokeTimeStamp;
+		isGrouping = true;
+	}
+	public void addNewStroke(long strokeTimeStamp){
+		isGrouping = false;
+		this.startTime = strokeTimeStamp;
 	}
 	public void addPoint(int x, int y, long timestamp, String id){
 		SketchPoint pt = new SketchPoint(x, y, timestamp, id);
 		this.allPoints.add(pt);
 	}
-	public ArrayList<SketchPoint> shiftTen(){
+	public ArrayList<SketchPoint> decision(){
 		ArrayList<SketchPoint> result = new ArrayList<SketchPoint>();
 		try{
 			Line curline = new Line();
@@ -48,24 +65,24 @@ public class shiftpts {
 			
 			ArrayList<PVector> pts = newline.getAllPoints();
 			System.out.println(pts.size());
-			int i=0;
-			for(PVector pt : pts){
+			//for(PVector pt : pts){
+			for(int i=0;i<pts.size(); i++){
 				SketchPoint newpt = new SketchPoint();
-				newpt.x = pt.x;
-				newpt.y = pt.y;
+				newpt.x = pts.get(i).x;
+				newpt.y = pts.get(i).y;
 				newpt.id = this.allPoints.get(i).id;
 				newpt.timestamp = this.allPoints.get(i).timestamp;
 				result.add(newpt);
-				i++;
 			}
 			
-			
+			this.allPoints = new ArrayList<SketchPoint>();
 			return result;
 //			return this.allPoints;
 		}catch(Exception e){
 			System.out.println(e.toString());
 		}
 		System.out.println("return nothing");
+		this.allPoints = new ArrayList<SketchPoint>();
 		return null;
 	}
 	public int PtCount(){

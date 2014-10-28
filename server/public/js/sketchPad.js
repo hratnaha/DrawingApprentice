@@ -123,15 +123,15 @@ function sketchUtil() {
         var coors;
         if(event.type === "touchend") {
             coors = {
-                x: event.changedTouches[0].pageX,
-                y: event.changedTouches[0].pageY
+                x: event.changedTouches[0].pageX - this.parentElement.offsetLeft,
+                y: event.changedTouches[0].pageY - this.parentElement.offsetTop
             };
         }
         else {
             // get the touch coordinates
             coors = {
-                x: event.touches[0].pageX,
-                y: event.touches[0].pageY
+                x: event.touches[0].pageX - this.parentElement.offsetLeft,
+                y: event.touches[0].pageY - this.parentElement.offsetTop
             };
         }
         type = type || event.type;
