@@ -117,7 +117,8 @@ public class DrawBackFork_Flow_Lines extends PApplet {
 		//if it is draw mode
 		//have to define that we are in draw mode here if we are not already in shapeDrag
 		//it is either one or the other, but drawMode is not being set or happens by default
-		
+		mouseX = mouseX < 0 ? 0 : mouseX;
+		mouseY = mouseY < 0 ? 0 : mouseY;
 		if(!intClick){
 		if (drawingMode == "draw" && this.mouseButton == LEFT) {
 			LineSegment l = new LineSegment(new PVector(pmouseX, pmouseY),
@@ -215,13 +216,15 @@ Line line2;
 	 */
 	public void drawAfterLasso() {
 		System.out.println("Added line from lasso");
+		
 		if (buffer.allGroups.size() > 0) {
-			int size_main = buffer.allGroups.size() -1;
+			//for (int k =0; k<buffer.allGroups.size(); ++k) {
+			int size_main = buffer.allGroups.size() -1; //k;//
 			int size_lines = buffer.allGroups.get(size_main).size() -1;
 			for (int i = 0; i< buffer.allGroups.get(size_main).size(); ++i )
 			{
 			
-			Line l1 = buffer.allGroups.get(size_main).get(size_lines);
+			Line l1 = buffer.allGroups.get(size_main).get(/*size_lines*/i);
 			engine = new Decision_Engine(l1, line2, (float)Math.sqrt(Math.pow(width, 2) + Math.pow(height, 2)));
 			curLine = null;
 			Line l = engine.decision();
@@ -232,6 +235,7 @@ Line line2;
 			activeDrawing = false; 
 			System.out.println("Added line from lasso");
 			}
+			//}
 			
 		}else {
 		engine = new Decision_Engine(curLine, line2, (float)Math.sqrt(Math.pow(width, 2) + Math.pow(height, 2)));

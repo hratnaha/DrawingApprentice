@@ -501,7 +501,7 @@ public class Line_Mod {
 		// Create a GassianRandomGenerator using rg as its source of randomness
 		//Old stuff gaussian
 		GaussianRandomGenerator rawGenerator = new GaussianRandomGenerator(rg);
-		int offset = 50;
+		int offset = 2;
 		// new generator 
 		/*org.apache.commons.math3.random.UniformRandomGenerator
 		 rawGenerator = new UniformRandomGenerator(rg);*/
@@ -510,9 +510,9 @@ public class Line_Mod {
 		double c = 3;
 		double[][] cov = {{9, c}, {c, 16}};*/
 		// new leaf values 
-		double[] mean = {2, 7};
-		double c = 15;
-		double[][] cov = {{22, c}, {c, 55}};
+		double[] mean = {1, 2};
+		double c =4;
+		double[][] cov = {{5, c}, {c, 10}};
 		RealMatrix covariance = MatrixUtils.createRealMatrix(cov); 
 		// Create a CorrelatedRandomVectorGenerator using rawGenerator for the components
 		CorrelatedRandomVectorGenerator generator = 
@@ -531,9 +531,12 @@ public class Line_Mod {
 		for(int i =0; i<line.allPoints.size();++i) {
 			
 			// (float)pf.value((double)i)
-			
+			if ((float)pf.value((double)i) > line.allPoints.get(/*0*/i).y + 20 ) {
+				
+			} else {
 			PVector newPoint = new PVector(line.allPoints.get(i).x, (float)pf.value((double)i) + line.allPoints.get(/*0*/i).y - offset );
 			newLine.allPoints.add(newPoint);
+			}
 		}
 		return newLine;
 		
