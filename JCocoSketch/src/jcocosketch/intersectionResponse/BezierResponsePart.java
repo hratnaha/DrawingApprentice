@@ -99,7 +99,7 @@ public class BezierResponsePart {
 		return theReversed;
 	}
 	
-	public PVector atT(float t) {
+	public Point atT(float t) {
 		float tsq = t * t;
 		float tcb = tsq * t;
 		float f = 1 - t;
@@ -109,7 +109,7 @@ public class BezierResponsePart {
 		target.add(PVector.mult(cpt[0], 3 * fsq * t));
 		target.add(PVector.mult(cpt[1], 3 * f * tsq));
 		target.add(PVector.mult(xpt[1], tcb));
-		return target;
+		return new Point(target.x, target.y);
 	}
 	
 	public void buildUpApproximation(int k, Line approximation) {

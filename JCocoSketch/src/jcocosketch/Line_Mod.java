@@ -17,11 +17,10 @@ public class Line_Mod {
 	private static final float DEGREE_RANDOM = 5.0f;
 
 	Line line;
-	ArrayList<PVector> allPoints;
+	ArrayList<Point> allPoints;
 	Random random;
 
 	public Line_Mod(Line line, Random random) {
-		System.out.println("here2!!");
 		this.line = line;
 		this.allPoints = line.getAllPoints();
 		this.random = random;
@@ -36,7 +35,7 @@ public class Line_Mod {
 			if (j < allPoints.size() - 2) {// special case for start and end of
 				// line
 				// generate the normal point and add to the newLine
-				PVector p0 = new PVector(allPoints.get(j).x, allPoints.get(j).y);
+				Point p0 = new Point(allPoints.get(j).x, allPoints.get(j).y);
 				PVector normal = new PVector(-1, 1); // normal vector to the
 				// drawn line (might
 				// need to change signs
@@ -45,7 +44,7 @@ public class Line_Mod {
 				PVector normalPoint = PVector.add(p0, normal); // determine the
 				// location of
 				// new point
-				PVector newPoint = new PVector(normalPoint.x, normalPoint.y);
+				Point newPoint = new Point(normalPoint.x, normalPoint.y, translatedLine.lineID);
 				translatedLine.addPoint(newPoint);
 			}
 		}
@@ -68,7 +67,7 @@ public class Line_Mod {
 				PVector normalPoint = PVector.add(p0, normal); // determine the
 				// location of
 				// new point
-				PVector newPoint = new PVector(normalPoint.y, normalPoint.x);
+				Point newPoint = new Point(normalPoint.y, normalPoint.x, reflectionLine.lineID);
 				reflectionLine.addPoint(newPoint);
 			}
 		}
@@ -94,8 +93,8 @@ public class Line_Mod {
 				PVector normalPoint = PVector.add(p0, normal); // determine the
 				// location of
 				// new point
-				PVector newPoint = new PVector(normalPoint.x / 2 + 100,
-						normalPoint.y / 2 + 100);
+				Point newPoint = new Point(normalPoint.x / 2 + 100,
+						normalPoint.y / 2 + 100, scaledLine.lineID);
 				// hard-coded the +100 in an attempt to get the scaled line
 				// closer to the origional
 				// needs actual fixing.
@@ -130,7 +129,7 @@ public class Line_Mod {
 				PVector normalPoint = PVector.add(p0, normal); // determine the
 				// location of
 				// new point
-				PVector newPoint = new PVector(normalPoint.y, normalPoint.x);
+				Point newPoint = new Point(normalPoint.y, normalPoint.x, rotatedLine.lineID);
 				rotatedLine.addPoint(newPoint);
 			}
 		}
@@ -156,7 +155,7 @@ public class Line_Mod {
 				x = x - DEGREE_RANDOM + 2 * DEGREE_RANDOM * random.nextFloat();
 				y = y - DEGREE_RANDOM + 2 * DEGREE_RANDOM * random.nextFloat();
 
-				PVector newPoint = new PVector(x, y);
+				Point newPoint = new Point(x, y, newLine.lineID);
 				newLine.allPoints.add(newPoint);
 			} else
 				// just add the point to the point array
@@ -203,11 +202,11 @@ public class Line_Mod {
 
 				x = x - DEGREE_RANDOM + 2 * DEGREE_RANDOM * random.nextFloat() + (float)random.nextGaussian();
 				y = y - DEGREE_RANDOM + 2 * DEGREE_RANDOM * random.nextFloat() + (float)random.nextGaussian();
-				PVector newPoint = new PVector(x, y);
+				Point newPoint = new Point(x, y, newLine.lineID);
 				newLine.allPoints.add(newPoint);
 				x = x - DEGREE_RANDOM + 1.3f * (DEGREE_RANDOM +2) * random.nextFloat() + (float)random.nextGaussian();
 				y = y - DEGREE_RANDOM + 1.9f * (DEGREE_RANDOM + 2) * random.nextFloat() + (float)random.nextGaussian();
-				newPoint = new PVector(x, y);
+				newPoint = new Point(x, y, newLine.lineID);
 				newLine.allPoints.add(newPoint);
 			/*	x = x - DEGREE_RANDOM + 1.3f * (DEGREE_RANDOM +3) * random.nextFloat() + (float)random.nextGaussian();
 				y = y - DEGREE_RANDOM + 1.9f * (DEGREE_RANDOM + 3) * random.nextFloat() + (float)random.nextGaussian();
@@ -243,7 +242,7 @@ public class Line_Mod {
 				for(int i1 = 0; i1< (int) (nextY-y); ++i1) {
 					float ynew = y - (random.nextInt(5)*random.nextFloat()); 
 					x += 1;//random.nextInt(2)*random.nextFloat();
-					PVector newPoint = new PVector(x, ynew);
+					Point newPoint = new Point(x, ynew);
 					newLine.allPoints.add(newPoint);
 				}
 				
@@ -282,13 +281,13 @@ public class Line_Mod {
 				if(!reverse) {
 				float x1 = line2.allPoints.get(i).x;
 				float y1 = line2.allPoints.get(i).y;
-				PVector newPoint = new PVector(scale_factor*x1, y1);
+				Point newPoint = new Point(scale_factor*x1, y1);
 				newLine.allPoints.add(newPoint);
 				}
 				else {
 					float x1 = line2.allPoints.get(i).x - (reverse_offset)  ;
 					float y1 =  line2.allPoints.get(i).y - (reverse_offset) ;
-					PVector newPoint = new PVector(x1, y1);
+					Point newPoint = new Point(x1, y1,newLine.lineID);
 					newLine.allPoints.add(newPoint);
 				}
 
@@ -328,17 +327,17 @@ public class Line_Mod {
 				if(!reverse) {
 				float x1 = line2.allPoints.get(i).x;
 				float y1 = line2.allPoints.get(i).y;
-				PVector newPoint = new PVector(scale_factor*x1, y1);
+				Point newPoint = new Point(scale_factor*x1, y1, newLine.lineID);
 				newLine.allPoints.add(newPoint);
 				}
 				else {
 					float x1 = line2.allPoints.get(i).x - (reverse_offset)  ;
 					float y1 =  line2.allPoints.get(i).y - (reverse_offset) ;
-					PVector newPoint = new PVector(x1, y1);
+					Point newPoint = new Point(x1, y1, newLine.lineID);
 					newLine.allPoints.add(newPoint);
 				}
 
-				//PVector newPoint = new PVector(scale_factor*x1, y1);
+				//Point newPoint = new Point(scale_factor*x1, y1);
 				//newLine.allPoints.add(newPoint);
 			} else{}
 				// just add the point to the point array
@@ -377,7 +376,7 @@ public class Line_Mod {
 				float x1 = /*line.allPoints.get(i).x -*/ rand.nextInt((int)line2.allPoints.get(i).x);
 				float y1 = /*line.allPoints.get(i).y -*/ rand.nextInt((int)line2.allPoints.get(i).y);
 
-				PVector newPoint = new PVector(scale_factor*x1, scale_factor*y1);
+				Point newPoint = new Point(scale_factor*x1, scale_factor*y1, newLine.lineID);
 				newLine.allPoints.add(newPoint);
 			} else
 
@@ -400,7 +399,7 @@ public class Line_Mod {
 			if (j < l.allPoints.size() - 2) {// special case for start and end of
 				// line
 				// generate the normal point and add to the newLine
-				PVector p0 = new PVector(l.allPoints.get(j).x, l.allPoints.get(j).y);
+				Point p0 = new Point(l.allPoints.get(j).x, l.allPoints.get(j).y, scaledLine.lineID);
 				PVector normal = new PVector(1, -1); // line to get a
 				// translation point
 				// from
@@ -408,8 +407,8 @@ public class Line_Mod {
 				PVector normalPoint = PVector.add(p0, normal); // determine the
 				// location of
 				// new point
-				PVector newPoint = new PVector(normalPoint.x / 5 + 100,
-						normalPoint.y / 5 + 100);
+				Point newPoint = new Point(normalPoint.x / 5 + 100,
+						normalPoint.y / 5 + 100, scaledLine.lineID);
 				// hard-coded the +100 in an attempt to get the scaled line
 				// closer to the origional
 				// needs actual fixing.
@@ -474,7 +473,7 @@ public class Line_Mod {
 		for(int i =0; i<line.allPoints.size();++i) {
 			
 			
-			PVector newPoint = new PVector(line.allPoints.get(i).x + offset, (float)fs.value(i) + offset);
+			Point newPoint = new Point(line.allPoints.get(i).x + offset, (float)fs.value(i) + offset, newLine.lineID);
 			newLine.allPoints.add(newPoint);
 		}
 		return newLine;
@@ -535,8 +534,8 @@ public class Line_Mod {
 			if ((float)pf.value((double)i) > line.allPoints.get(/*0*/i).y + 20 ) {
 				
 			} else {
-			PVector newPoint = new PVector(line.allPoints.get(i).x, (float)pf.value((double)i) + line.allPoints.get(/*0*/i).y - offset );
-			newLine.allPoints.add(newPoint);
+				Point newPoint = new Point(line.allPoints.get(i).x, (float)pf.value((double)i) + line.allPoints.get(/*0*/i).y - offset, newLine.lineID);
+				newLine.allPoints.add(newPoint);
 			}
 		}
 		return newLine;

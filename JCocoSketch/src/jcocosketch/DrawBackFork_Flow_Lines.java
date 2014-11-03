@@ -123,7 +123,7 @@ public class DrawBackFork_Flow_Lines extends PApplet {
 		if (drawingMode == "draw" && this.mouseButton == LEFT) {
 			LineSegment l = new LineSegment(new PVector(pmouseX, pmouseY),
 					new PVector(mouseX, mouseY));
-			curLine.addPoint(new PVector(mouseX, mouseY));
+			curLine.addPoint(new Point(mouseX, mouseY, curLine.lineID));
 			ellipse(mouseX, mouseY, 10, 10); 
 			//line(l.start.x, l.start.y, l.end.x, l.end.y);
 			buffer.addSegment(l);
@@ -136,7 +136,7 @@ public class DrawBackFork_Flow_Lines extends PApplet {
 			lassoOn = true;
 			LineSegment l = new LineSegment(new PVector(pmouseX, pmouseY),
 					new PVector(mouseX, mouseY));
-			curLasso.addPoint(new PVector(mouseX, mouseY));
+			curLasso.addPoint(new Point(mouseX, mouseY, curLasso.lineID));
 			ellipse(mouseX, mouseY, 10, 10); 
 			//line(l.start.x, l.start.y, l.end.x, l.end.y);
 			//Need to figure out how to get lasso to work without adding it to the segment and being accounted for as an extra line
@@ -146,7 +146,7 @@ public class DrawBackFork_Flow_Lines extends PApplet {
 		if (drawingMode == "teach") {
 			LineSegment l = new LineSegment(new PVector(pmouseX, pmouseY),
 					new PVector(mouseX, mouseY));
-			curLine.addPoint(new PVector(mouseX, mouseY));
+			curLine.addPoint(new Point(mouseX, mouseY, curLine.lineID));
 			//line(l.start.x, l.start.y, l.end.x, l.end.y);
 			buffer.addSegment(l);
 		}
@@ -216,13 +216,15 @@ Line line2;
 	 */
 	public void drawAfterLasso() {
 		System.out.println("Added line from lasso");
+		
 		if (buffer.allGroups.size() > 0) {
-			int size_main = buffer.allGroups.size() -1;
+			//for (int k =0; k<buffer.allGroups.size(); ++k) {
+			int size_main = buffer.allGroups.size() -1; //k;//
 			int size_lines = buffer.allGroups.get(size_main).size() -1;
 			for (int i = 0; i< buffer.allGroups.get(size_main).size(); ++i )
 			{
 			
-			Line l1 = buffer.allGroups.get(size_main).get(size_lines);
+			Line l1 = buffer.allGroups.get(size_main).get(/*size_lines*/i);
 			engine = new Decision_Engine(l1, line2, (float)Math.sqrt(Math.pow(width, 2) + Math.pow(height, 2)));
 			curLine = null;
 			Line l = engine.decision();
@@ -233,6 +235,7 @@ Line line2;
 			activeDrawing = false; 
 			System.out.println("Added line from lasso");
 			}
+			//}
 			
 		}else {
 		engine = new Decision_Engine(curLine, line2, (float)Math.sqrt(Math.pow(width, 2) + Math.pow(height, 2)));

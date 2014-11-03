@@ -7,7 +7,7 @@ import java.util.*;
 import utilities.PVecUtilities;
 
 public class Line {
-	ArrayList<PVector> allPoints = new ArrayList<PVector>();
+	ArrayList<Point> allPoints = new ArrayList<Point>();
 	ArrayList<Float> parameter = new ArrayList<Float>();
 	Rectangle myBoundingBox;
 	float startTime;
@@ -32,7 +32,7 @@ public class Line {
 	}
 
 	public Line(float x, float y) {
-		allPoints.add(new PVector(x, y));
+		allPoints.add(new Point(x, y));
 		if (xmin == -1 && ymin == -1 && xmax == -1 && ymax == -1) {
 			xmin = x;
 			xmax = x;
@@ -54,13 +54,13 @@ public class Line {
 		this.lineID = rand.nextFloat();
 	}
 
-	public Line(ArrayList<PVector> all) {
+	public Line(ArrayList<Point> all) {
 		initFromPoints(all);
 		this.lineID = rand.nextFloat();
 	}
 
-	public Line(PVector[] all) {
-		ArrayList<PVector> allVec = new ArrayList<PVector>();
+	public Line(Point[] all) {
+		ArrayList<Point> allVec = new ArrayList<Point>();
 		for (int i = 0; i < all.length; i++) {
 			allVec.add(all[i]);
 		}
@@ -68,7 +68,7 @@ public class Line {
 		this.lineID = rand.nextFloat();
 	}
 
-	private void initFromPoints(ArrayList<PVector> all) {
+	private void initFromPoints(ArrayList<Point> all) {
 		allPoints = all;
 		initParam();
 	}
@@ -155,8 +155,9 @@ public class Line {
 		return Math.sqrt(xDiff * xDiff + yDiff * yDiff) <= 10; // make a buffer zone raduis of 10 pixels
 	}
 
-	public void addPoint(PVector p) {// manually add a point to allPoints
-		PVector lastP = null;
+	public void addPoint(Point p) {// manually add a point to allPoints
+		Point lastP = new Point(p.x, p.y, lineID); 
+		lastP.setTime(System.currentTimeMillis()); 
 		float lastParam = 0;
 		if (0 < allPoints.size()) {
 			lastP = getPoint(-1);
@@ -182,7 +183,7 @@ public class Line {
 			}
 		}
 		allPoints.add(p);
-		parameter.add(lastParam + PVector.sub(lastP, p).mag());
+		parameter.add(lastParam + Point.sub(lastP, p).mag());
 	}
 	
 	public void setGroupID(float groupID){
@@ -228,15 +229,15 @@ public class Line {
 		myBoundingBox.drawRect(buffer);
 	}
 
-	public ArrayList<PVector> getAllPoints() {
+	public ArrayList<Point> getAllPoints() {
 		return allPoints;
 	}
 
-	public PVector getPoint(int i) {
+	public Point getPoint(int i) {
 		return allPoints.get((allPoints.size() + i) % allPoints.size());
 	}
 
-	public PVector getPointAt(float target) {
+	public Point getPointAt(float target) {
 		if (target <= 0)
 			return allPoints.get(0);
 		if (target >= getParameter(-1))
@@ -250,9 +251,9 @@ public class Line {
 		float paramA = parameter.get(pointIndex - 1);
 		float paramB = parameter.get(pointIndex);
 		float fractionA = (target - paramA) / (paramB - paramA);
-		PVector vectorA = allPoints.get(pointIndex - 1);
-		PVector vectorB = allPoints.get(pointIndex);
-		return PVector.lerp(vectorA, vectorB, fractionA);
+		Point vectorA = allPoints.get(pointIndex - 1);
+		Point vectorB = allPoints.get(pointIndex);
+		return Point.LerpPoint(vectorA, vectorB, fractionA);
 	}
 
 	public PVector getKDerivativeAt(float target, int k) {

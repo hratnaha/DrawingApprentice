@@ -39,7 +39,7 @@ public class Group {
 		
 		Line normalizedLine = new Line();
 		for(int j = 0; j < line.allPoints.size(); j++){
-			normalizedLine.addPoint(new PVector((line.allPoints.get(j).x-xmin),(line.allPoints.get(j).y-ymin)));
+			normalizedLine.addPoint(new Point((line.allPoints.get(j).x-xmin),(line.allPoints.get(j).y-ymin), normalizedLine.lineID));
 		}
 //		normalizedGroup.addLine(normalizedLine);
 		
@@ -55,7 +55,7 @@ public class Group {
 		for(int i = 0; i < lines.size(); i++){
 			Line normalizedLine = new Line();
 			for(int j = 0; j < lines.get(i).allPoints.size(); j++){
-				normalizedLine.addPoint(new PVector((lines.get(i).allPoints.get(j).x-this.xmin),(lines.get(i).allPoints.get(j).y-this.ymin)));
+				normalizedLine.addPoint(new Point((lines.get(i).allPoints.get(j).x-this.xmin),(lines.get(i).allPoints.get(j).y-this.ymin), normalizedLine.lineID));
 				//normalizedLine.addPoint(new PVector(12,12));
 			}
 			normalizedGroup.addLine(normalizedLine);

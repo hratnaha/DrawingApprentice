@@ -9,12 +9,16 @@ import processing.core.PVector;
  */
 public class Point extends PVector implements Comparable{
 	private float lineID;
-	private double x;
-    private double y;
+	//private double x;
+    //private double y;
     private Object opt_value;
+    private float timestamp; 
 
     private float groupID;
 
+    public Point(float x, float y){
+    	super(x, y);
+    }
     /**
      * Creates a new point object.
      *
@@ -22,30 +26,32 @@ public class Point extends PVector implements Comparable{
      * @param {double} y The y-coordinate of the point.
      * @param {Object} opt_value Optional value associated with the point.     
      */
-    public Point(double x, double y, float lineID) {
-    	this.x = x;
-        this.y = y;
+    public Point(float x, float y, float lineID) {
+    	super(x, y);
         this.lineID = lineID;
     }
-    public Point(double x, double y, Object opt_value) {
-        this.x = x;
-        this.y = y;
+    public Point(float x, float y, Object opt_value) {
+        super(x, y);
         this.opt_value = opt_value;
     }
+    
+    public void setTime(long time){
+    	timestamp = time; 
+    }
 
-    public double getX() {
+    public float getX() {
         return x;
     }
 
-    public void setX(double x) {
+    public void setX(float x) {
         this.x = x;
     }
 
-    public double getY() {
+    public float getY() {
         return y;
     }
 
-    public void setY(double y) {
+    public void setY(float y) {
         this.y = y;
     }
 
@@ -90,5 +96,10 @@ public class Point extends PVector implements Comparable{
             return 0;
         }
 
+    }
+    
+    public static Point LerpPoint(Point ptA, Point ptB, float fractionA){
+    	PVector lerpPV = PVector.lerp(ptA, ptB, fractionA);
+    	return new Point(lerpPV.x, lerpPV.y, ptA.lineID); 
     }
 }

@@ -85,7 +85,9 @@ public class Decision_Engine {
 			break;
 			//newLine = 
 		}
-		return  m.Trim(newLine, 2160, 1440);//newLine;
+		newLine = m.Trim(newLine, 2160, 1440);//newLine;
+		newLine.compGenerated = true;
+		return newLine;
 	}
 
 	

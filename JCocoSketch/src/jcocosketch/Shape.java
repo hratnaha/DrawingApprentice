@@ -48,8 +48,8 @@ public class Shape {
 			Line l = allLines.get(i);
 			Line newLine = new Line();
 			for (int j = 0; j < l.allPoints.size(); j++) {
-				PVector p = new PVector(l.allPoints.get(j).x,
-						l.allPoints.get(j).y);
+				Point p = new Point(l.allPoints.get(j).x,
+						l.allPoints.get(j).y, newLine.lineID);
 				p.x = p.x * xScale;
 				p.y = p.y * yScale;
 				newLine.addPoint(p);
