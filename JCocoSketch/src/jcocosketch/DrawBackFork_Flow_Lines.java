@@ -43,6 +43,7 @@ public class DrawBackFork_Flow_Lines extends PApplet {
 	Buffer buffer;
 	int width = 2160;
 	int height= 1440;
+	Regional regionDecisionEngine;
 	
 	public void setup() {
 		buffer = new Buffer(this, this.g, width, height);
@@ -180,7 +181,9 @@ Line line2;
 		//			engine = new Decision_Engine(l1, line2, (float)Math.sqrt(Math.pow(width, 2) + Math.pow(height, 2)));
 			//		System.out.println("Added line from lasso");
 		//		}else {
-				engine = new Decision_Engine(curLine, line2, (float)Math.sqrt(Math.pow(width, 2) + Math.pow(height, 2)));
+			//	engine = new Decision_Engine(curLine, line2, (float)Math.sqrt(Math.pow(width, 2) + Math.pow(height, 2)));
+				if (engine == null)
+					engine = new Local(curLine, line2, (float)Math.sqrt(Math.pow(width, 2) + Math.pow(height, 2)));
 		//		}
 				buffer.allLines.add(curLine); //add human line to buffer storage
 				
@@ -209,10 +212,13 @@ Line line2;
 		} else
 			intClick = false;
 		shapeDrag = false;
+		
+		//just for debug
+		((Local)engine).print();
 	}
 
 	/**
-	 * Added new funciton to draw in a region after lasso is done
+	 * Added new function to draw in a region after lasso is done
 	 */
 	public void drawAfterLasso() {
 		System.out.println("Added line from lasso");
@@ -226,6 +232,12 @@ Line line2;
 			
 			Line l1 = buffer.allGroups.get(size_main).get(/*size_lines*/i);
 			engine = new Decision_Engine(l1, line2, (float)Math.sqrt(Math.pow(width, 2) + Math.pow(height, 2)));
+			//Modification
+			engine = new Local(l1, line2, (float)Math.sqrt(Math.pow(width, 2) + Math.pow(height, 2)));
+			//end modification
+			regionDecisionEngine = new Regional(l1, line2, (float)Math.sqrt(Math.pow(width, 2) + Math.pow(height, 2)));
+			regionDecisionEngine.addRegion(size_main);
+			
 			curLine = null;
 			Line l = engine.decision();
 			l.compGenerated = true; 
@@ -239,10 +251,13 @@ Line line2;
 			
 		}else {
 		engine = new Decision_Engine(curLine, line2, (float)Math.sqrt(Math.pow(width, 2) + Math.pow(height, 2)));
+		//Modification
+		engine = new Local(curLine, line2, (float)Math.sqrt(Math.pow(width, 2) + Math.pow(height, 2)));
+		//end modification
 		}
 		
 		
-		
+	
 	}
 	public void keyPressed(){
 		if(key=='z')
@@ -258,6 +273,14 @@ Line line2;
 		if(key=='c')
 		{
 			buffer.clear();
+		}
+		
+		if(key == '1') {
+			((Local)engine).upvote();
+		}
+		
+		if(key == '2') {
+			((Local)engine).downvote();
 		}
 	}
 
