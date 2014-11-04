@@ -50,22 +50,19 @@ public class Buffer {
 				buffer.stroke(0,0,255);
 			else buffer.stroke(0); 
 			for (int j= 0; j < l.allPoints.size() - 1; j++) {
-				PVector p1 = l.allPoints.get(j); 
-				PVector p2 = l.allPoints.get(j+1);
+				Point p1 = l.allPoints.get(j); 
+				Point p2 = l.allPoints.get(j+1);
+				p1.setLineID(l.lineID);
+				p2.setLineID(l.lineID);
 				
-				//Create points from PVector points
-				Point point1 = new Point(p1.x,p1.y,l.lineID);
-				Point point2 = new Point(p2.x,p2.y,l.lineID);
 				if(l.getGroupID() != 1){
-					point1.setGroupID(l.getGroupID());
-					point2.setGroupID(l.getGroupID());
-					//System.out.println(point1.getGroupID());
-					//System.out.println(point2.getGroupID());
+					p1.setGroupID(l.getGroupID());
+					p2.setGroupID(l.getGroupID());
 				}
 				
 				buffer.line(p1.x, p1.y, p2.x,p2.y);
-				mainTree.set(point1.getX(),point1.getY(),point1);
-				mainTree.set(point2.getX(),point2.getY(),point2);
+				mainTree.set(p1.getX(),p1.getY(),p1);
+				mainTree.set(p2.getX(),p2.getY(),p2);
 				//System.out.println("QuadTree: " + mainTree.getCount());
 			}
 			diff=false;
