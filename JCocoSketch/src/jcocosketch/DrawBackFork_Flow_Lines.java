@@ -248,6 +248,16 @@ Line line2;
 		//If 'm' is pressed bot draws a random group is drawn on the the quadrant with lead density
 		if(key=='m'){
 			Node leastDense = buffer.mainTree.leastDenseNode();
+			System.out.println(leastDense.getX() + "," + leastDense.getY());
+			Random randy = new Random();
+			Group randomGroup = buffer.allGroups.get(randy.nextInt(buffer.allGroups.size()));
+			Group normGroup = randomGroup.normalizedGroup();
+			System.out.println("Actual Norm Mins: " + randomGroup.getXmin() + "," + randomGroup.getYmin());
+			Group shiftedGroup = normGroup.shiftGroup(leastDense.getX(), leastDense.getY());
+			for(int i = 0; i < shiftedGroup.lines.size(); i++){
+				buffer.allLines.add(shiftedGroup.lines.get(i));
+			}
+			buffer.allGroups.add(shiftedGroup);
 			
 		}
 		if(key=='z')

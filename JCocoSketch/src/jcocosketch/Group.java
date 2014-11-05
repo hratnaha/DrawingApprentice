@@ -25,11 +25,9 @@ public class Group {
 		this.lines = linesInGroup;
 		this.groupID = groupID;
 	}
-	
-	//THE PROBLEM IS THE XMIN AND YMIN FOR GROUPS IS SET TO -1 and for some reason never updated
-	
+		
 	public void addLine(Line line){
-		line.makeBoundingBox();
+		//line.makeBoundingBox();
 		System.out.println(line.xmin + " " + line.ymin);
 		this.lines.add(line);
 		if(this.xmin == -1){
@@ -47,17 +45,15 @@ public class Group {
 		if(this.ymax == -1) {
 			this.ymax = line.ymax;
 		} 
-		if(line.xmin > -1 || line.ymin > -1 || line.xmax > -1 || line.ymax > -1) {
-			if (line.xmin < xmin && line.xmin > -1) {
-				xmin = line.xmin;
-			} if (line.xmax > xmax && line.xmax > -1) {
-				xmax = line.xmax;
-			}
-			if (line.ymin < ymin || line.ymin > -1) {
-				ymin = line.ymin;
-			} if (line.ymax > ymax || line.ymax > -1) {
-				ymax = line.ymax;
-			}
+		if (line.xmin < xmin && line.xmin > -1) {
+			xmin = line.xmin;
+		} if (line.xmax > xmax && line.xmax > -1) {
+			xmax = line.xmax;
+		}
+		if (line.ymin < ymin && line.ymin > -1) {
+			ymin = line.ymin;
+		} if (line.ymax > ymax && line.ymax > -1) {
+			ymax = line.ymax;
 		}
 		
 		Line normalizedLine = new Line();
@@ -68,6 +64,25 @@ public class Group {
 		
 	}
 	
+	/**
+	 * Shifts group by X and Y specified
+	 * @param x
+	 * @param y
+	 * @return shiftedGroup
+	 */
+	public Group shiftGroup(double x, double y){
+		Group shiftedGroup = new Group();
+		
+		for(int i = 0; i < lines.size(); i++){
+			Line newLine = new Line();
+			for(int j = 0; j < lines.get(i).allPoints.size(); j++){
+				newLine.addPoint(new Point((lines.get(i).allPoints.get(j).x + (float)x), (lines.get(i).allPoints.get(j).y+ (float)y)));
+			}
+			shiftedGroup.addLine(newLine);
+		}
+		
+		return shiftedGroup;	
+	}
 	public void removeLine(Line line){
 		this.lines.remove(line);
 	}
