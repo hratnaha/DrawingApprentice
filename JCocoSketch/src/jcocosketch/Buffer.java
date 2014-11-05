@@ -8,7 +8,8 @@ import java.util.*;
 
 public class Buffer {
 	ArrayList<Line> allLines = new ArrayList<Line>();
-	ArrayList<ArrayList<Line>> allGroups = new ArrayList<ArrayList<Line>>();
+	ArrayList<Group> allGroups = new ArrayList<Group>();
+	ArrayList<Group> normalizedGroups = new ArrayList<Group>();
 	PImage img;
 	PGraphics buffer;
 	PGraphics buffer2; 
@@ -37,7 +38,7 @@ public class Buffer {
 	// Need to integrate this for color. Keep a record of all the lines
 	//independent from the segments that have been printed. 
 	public void update() { 
-		System.out.println("Update Called");
+		System.out.println("Update Called!");
 		buffer.beginDraw(); 
 		buffer.background(255);
 		//buffer.smooth();
@@ -69,6 +70,35 @@ public class Buffer {
 		}
 		Point[] keys = mainTree.getKeys();
 		
+		//Testing Normalized Groups
+//		if(normalizedGroups.size() == 1){
+//			for (int i = 0; i < normalizedGroups.get(0).lines.size(); i++) 
+//			{ 
+//				Line n = normalizedGroups.get(0).lines.get(i);
+//				buffer.strokeWeight(1);
+//				if(showComp && n.compGenerated)
+//					buffer.stroke(0,0,255);
+//				else buffer.stroke(0); 
+//				for (int j= 0; j < n.allPoints.size() - 1; j++) {
+//					Point p1 = n.allPoints.get(j); 
+//					Point p2 = n.allPoints.get(j+1);
+//					p1.setLineID(n.lineID);
+//					p2.setLineID(n.lineID);
+//					
+//					if(n.getGroupID() != 1){
+//						p1.setGroupID(n.getGroupID());
+//						p2.setGroupID(n.getGroupID());
+//					}
+//					
+//					buffer.line(p1.x, p1.y, p2.x,p2.y);
+//					//mainTree.set(p1.getX(),p1.getY(),p1);
+//					//mainTree.set(p2.getX(),p2.getY(),p2);
+//					//System.out.println("QuadTree: " + mainTree.getCount());
+//				}
+//				diff=false;
+//			}
+//		}
+		
 		buffer.endDraw();
 		img = buffer.get(0, 0, buffer.width, buffer.height);
 		diff=true; 
@@ -82,7 +112,7 @@ public class Buffer {
 			lassoLine = null;
 		}
 		//Number of groups with lines completely in it
-		System.out.println(allGroups.size());
+		System.out.println("Groups Size: " + allGroups.size());
 	}
 
 
