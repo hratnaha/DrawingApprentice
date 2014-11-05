@@ -255,9 +255,13 @@ Line line2;
 			System.out.println("Actual Norm Mins: " + randomGroup.getXmin() + "," + randomGroup.getYmin());
 			Group shiftedGroup = normGroup.shiftGroup(leastDense.getX(), leastDense.getY());
 			for(int i = 0; i < shiftedGroup.lines.size(); i++){
-				buffer.allLines.add(shiftedGroup.lines.get(i));
+				engine = new Decision_Engine(shiftedGroup.lines.get(i), line2, (float)Math.sqrt(Math.pow(width, 2) + Math.pow(height, 2)));
+				Line aiLine = engine.decision();
+				aiLine.compGenerated = true; 
+				stack.push(aiLine);
+				compLines.add(aiLine);
 			}
-			buffer.allGroups.add(shiftedGroup);
+			//buffer.allGroups.add(shiftedGroup);
 			
 		}
 		if(key=='z')
