@@ -12,10 +12,11 @@ var java = require("java");
 java.classpath.push("commons-lang3-3.1.jar");
 java.classpath.push("commons-io.jar");
 java.classpath.push("commons-math3-3.3.jar");
-java.classpath.push("apprentice.jar");      // test library
-java.classpath.push("core.jar");        // processing
+java.classpath.push("apprentice.jar");      // apprentice library
+java.classpath.push("core.jar");            // processing
 
-var ShiftPt = java.import('jcocosketch.nodebridge.shiftpts');
+var Apprentice = java.import('jcocosketch.nodebridge.Apprentice');
+var apprentice = new Apprentice();
 
 // set up express
 var express = require('express'),
@@ -33,61 +34,80 @@ var io = require('socket.io')(server);
 server.listen(8080);
 
 io.on('connection', function (socket) {
-  console.log("new client connected");
-  socket.emit('newconnection', { hello: 'world' });
-  socket.on('newStroke', newStrokeReceived);
-  socket.on('submit', submitResult);
+    console.log("new client connected");
+    socket.emit('newconnection', { hello: 'world' });
+    socket.on('newStroke', newStrokeReceived);
+    socket.on('setMode', onModeChanged);
+    socket.on('clear', onClear);
+    socket.on('submit', submitResult);
 });
 
-function newStrokeReceived(data){
-    var d = JSON.parse(data);
+function onClear() {
+    apprentice.clearSync();
+}
 
+function onModeChanged(mode) {
+    var m = JSON.parse(mode);
+    apprentice.setModeSync(m);
+}
+
+function newStrokeReceived(data) {
+    var d = JSON.parse(data);
+    
     var stroke = d.data;
-    // shift the packet points in the data
+    
     var stroketime = java.newLong(stroke.timestamp);
-    var shift = new ShiftPt(stroketime);
+    // categorize if it is grouping or not
+    if (d.isGrouping)
+        apprentice.startGroupingSync(stroketime);
+    else
+        apprentice.addNewStrokeSync(stroketime);
+    
     var pts = stroke.packetPoints;
     var returnSt = [];
-
+    
+    // adding all the points in the stroke
     for (var i = 0; i < pts.length; i++) {
         var pt = pts[i];
         var pttime = java.newLong(pt.timestamp);
-            shift.addPointSync(parseInt(pt.x, 10), parseInt(pt.y, 10), pttime, pt.id);
-        }
-        // Todo: reconstruct the message to send out
-        shift.shiftTen(function (err, result) {
+        apprentice.addPointSync(parseInt(pt.x, 10), parseInt(pt.y, 10), pttime, pt.id);
+    }
+    // Todo: reconstruct the message to send out
+    apprentice.decision(function (err, result) {
+        if (result != null) {
             var newpkpts = [];
             for (var i = 0; i < result.sizeSync(); i++) {
                 var newpt = result.getSync(i);
-            
+                
                 newpkpts.push(CreatePacketPoint(newpt));
             }
             stroke.packetPoints = newpkpts;
-        
+            
             // decode to JSON and send the message
             var resultmsg = JSON.stringify(stroke);
             io.emit('respondStroke', resultmsg);
             console.log("sending: " + resultmsg);
-        });
-    }
-
-function submitResult(d){
-  submit(d, function(error, result){
-    console.log(result);
-  });
+        }
+    });
 }
 
-function CreatePacketPoint(newpt){
+function submitResult(d) {
+    submit(d, function (error, result) {
+        console.log(result);
+    });
+}
+
+function CreatePacketPoint(newpt) {
     // construct a new packet point
     var pkpt = {
-            id : newpt.id,
-            x : newpt.x,
-            y : newpt.y,
-            timestamp : newpt.timestamp,
-            pressure : 0          // to be implemented when the pressure is available
-        };
-
-     return pkpt;
+        id : newpt.id,
+        x : newpt.x,
+        y : newpt.y,
+        timestamp : newpt.timestamp,
+        pressure : 0          // to be implemented when the pressure is available
+    };
+    
+    return pkpt;
 }
 
 console.log("SocketIO Server Initialized!");

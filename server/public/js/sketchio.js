@@ -4,16 +4,15 @@ var socket;
 var botCanvas = {};
 var isdrawing = false;
 var curStroke = [];
-function initWebSocket()
-{
+function initWebSocket() {
     botCanvas = document.getElementById('botpad');
     botCanvas.setAttribute('width', container.offsetWidth * 0.95);
-    botCanvas.setAttribute('height', container.offsetHeight * 0.90);   
+    botCanvas.setAttribute('height', container.offsetHeight * 0.90);
     
-	output = document.getElementById("output");
-	socket = io.connect(ioUri);
-
-	socket.on('newconnection', onOpen);
+    output = document.getElementById("output");
+    socket = io.connect(ioUri);
+    
+    socket.on('newconnection', onOpen);
     socket.on('respondStroke', onNewStroke);
     
     var i = 0;
@@ -36,10 +35,10 @@ function initWebSocket()
         }
     }, 20);
 }
-function onNewStroke(data){
-	console.log(data);
-	// decode the data into the new stroke
-	var botStroke = JSON.parse(data);
+function onNewStroke(data) {
+    console.log(data);
+    // decode the data into the new stroke
+    var botStroke = JSON.parse(data);
     curStroke.push(botStroke);
 
 	//var botPts = botStroke.packetPoints;
@@ -52,18 +51,44 @@ function onNewStroke(data){
 		
 	//}
 }
-function onOpen(data){
-	console.log(data);
+function onOpen(data) {
+    console.log(data);
 }
-function doSend(message)
-{
-	//writeToScreen("SENT: " + message);
-	socket.emit('newStroke', message);
+function doSend(message) {
+    //writeToScreen("SENT: " + message);
+    socket.emit('newStroke', message);
 }
-function writeToScreen(message)
-{
-	var pre = document.createElement("p");
-	pre.style.wordWrap = "break-word";
-	pre.innerHTML = message;
-	output.appendChild(pre);
+function writeToScreen(message) {
+    var pre = document.createElement("p");
+    pre.style.wordWrap = "break-word";
+    pre.innerHTML = message;
+    output.appendChild(pre);
+}
+// save a image to the client's computer
+function saveToImage() {
+
+}
+// clear the canvas
+function clearCanvas() {
+    socket.emit('clear', 'all');
+}
+// change the mode base on the UI changes
+function setMode(mode) {
+    var m = 0;
+    switch ($(this).val()) {
+        case 'local':
+            m = 0;
+            break;
+        case 'region':
+            m = 1;
+            break;
+        case 'global':
+            m = 2;
+            break;
+    }
+    
+    socket.emit('setMode', m);
+}
+function groupingMode(modenum) {
+
 }
