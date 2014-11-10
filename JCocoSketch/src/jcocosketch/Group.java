@@ -7,34 +7,53 @@ import processing.core.PVector;
 public class Group {
 	ArrayList<Line> lines = new ArrayList<Line>();
 	private float groupID;
-	private float xmin = 0;
-	private float ymin = 0;
-	private float xmax = 0;
-	private float ymax = 0;
+	private float xmin = -1;
+	private float ymin = -1;
+	private float xmax = -1;
+	private float ymax = -1;
 	//private Group normalizedGroup;
 	
 	public Group(){
 		groupID = -1;
 	}
 	
+	public Group(ArrayList<Line> linesInGroup){
+		this.lines = linesInGroup;
+	}
+	
+	public Group(ArrayList<Line> linesInGroup, float groupID){
+		this.lines = linesInGroup;
+		this.groupID = groupID;
+	}
+		
 	public void addLine(Line line){
+		//line.makeBoundingBox();
+		System.out.println(line.xmin + " " + line.ymin);
 		this.lines.add(line);
-		if(this.xmin == 0 && this.ymin == 0 && this.xmax == 0 && this.ymax == 0) {
+		if(this.xmin == -1){
 			this.xmin = line.xmin;
-			this.xmax = line.xmax;
+		}
+		
+		if(this.ymin == -1){
 			this.ymin = line.ymin;
+		}
+			
+		if(this.xmax == -1){
+			this.xmax = line.xmax;
+		}
+			
+		if(this.ymax == -1) {
 			this.ymax = line.ymax;
-		} else {
-			if (line.xmin < xmin) {
-				xmin = line.xmin;
-			} else if (line.xmax > xmax) {
-				xmax = line.xmax;
-			}
-			if (line.ymin < ymin) {
-				ymin = line.ymin;
-			} else if (line.ymax > ymax) {
-				ymax = line.ymax;
-			}
+		} 
+		if (line.xmin < xmin && line.xmin > -1) {
+			xmin = line.xmin;
+		} if (line.xmax > xmax && line.xmax > -1) {
+			xmax = line.xmax;
+		}
+		if (line.ymin < ymin && line.ymin > -1) {
+			ymin = line.ymin;
+		} if (line.ymax > ymax && line.ymax > -1) {
+			ymax = line.ymax;
 		}
 		
 		Line normalizedLine = new Line();
@@ -45,6 +64,25 @@ public class Group {
 		
 	}
 	
+	/**
+	 * Shifts group by X and Y specified
+	 * @param x
+	 * @param y
+	 * @return shiftedGroup
+	 */
+	public Group shiftGroup(double x, double y){
+		Group shiftedGroup = new Group();
+		
+		for(int i = 0; i < lines.size(); i++){
+			Line newLine = new Line();
+			for(int j = 0; j < lines.get(i).allPoints.size(); j++){
+				newLine.addPoint(new Point((lines.get(i).allPoints.get(j).x + (float)x), (lines.get(i).allPoints.get(j).y+ (float)y)));
+			}
+			shiftedGroup.addLine(newLine);
+		}
+		
+		return shiftedGroup;	
+	}
 	public void removeLine(Line line){
 		this.lines.remove(line);
 	}
@@ -52,9 +90,9 @@ public class Group {
 	public Group normalizedGroup(){
 		Group normalizedGroup = new Group();
 		
-		for(int i = 0; i < lines.size(); i++){
+		for(int i = 0; i < this.lines.size(); i++){
 			Line normalizedLine = new Line();
-			for(int j = 0; j < lines.get(i).allPoints.size(); j++){
+			for(int j = 0; j < this.lines.get(i).allPoints.size(); j++){
 				normalizedLine.addPoint(new Point((lines.get(i).allPoints.get(j).x-this.xmin),(lines.get(i).allPoints.get(j).y-this.ymin), normalizedLine.lineID));
 				//normalizedLine.addPoint(new PVector(12,12));
 			}

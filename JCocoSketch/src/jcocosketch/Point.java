@@ -18,6 +18,7 @@ public class Point extends PVector implements Comparable{
 
     public Point(float x, float y){
     	super(x, y);
+    	this.lineID = 0;
     }
     /**
      * Creates a new point object.
@@ -33,6 +34,7 @@ public class Point extends PVector implements Comparable{
     public Point(float x, float y, Object opt_value) {
         super(x, y);
         this.opt_value = opt_value;
+        this.lineID = 0;
     }
     
     public void setTime(long time){
@@ -102,4 +104,5 @@ public class Point extends PVector implements Comparable{
     	PVector lerpPV = PVector.lerp(ptA, ptB, fractionA);
     	return new Point(lerpPV.x, lerpPV.y, ptA.lineID); 
     }
+
 }

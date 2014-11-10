@@ -33,12 +33,22 @@ public class Line {
 
 	public Line(float x, float y) {
 		allPoints.add(new Point(x, y));
-		if (xmin == -1 && ymin == -1 && xmax == -1 && ymax == -1) {
-			xmin = x;
-			xmax = x;
-			ymin = y;
-			ymax = y;
-		} else {
+		if(this.xmin == -1){
+			this.xmin = x;
+		}
+		
+		if(this.ymin == -1){
+			this.ymin = y;
+		}
+			
+		if(this.xmax == -1){
+			this.xmax = x;
+		}
+			
+		if(this.ymax == -1) {
+			this.ymax = y;
+		} 
+		if(xmin > -1 || ymin > -1 || xmax > -1 || ymax > -1)  {
 			if (x < xmin) {
 				xmin = x;
 			} else if (x > xmax) {
@@ -77,12 +87,22 @@ public class Line {
 		parameter.clear();
 		parameter.add(0.0f);
 		for (int i = 1; i < allPoints.size(); i++) {
-			if (xmin == -1 && ymin == -1 && xmax == -1 && ymax == -1) {
-				xmin = allPoints.get(i).x;
-				xmax = allPoints.get(i).x;
-				ymin = allPoints.get(i).y;
-				ymax = allPoints.get(i).y;
-			} else {
+			if(this.xmin == -1){
+				this.xmin = allPoints.get(i).x;
+			}
+			
+			if(this.ymin == -1){
+				this.ymin = allPoints.get(i).y;
+			}
+				
+			if(this.xmax == -1){
+				this.xmax = allPoints.get(i).x;
+			}
+				
+			if(this.ymax == -1) {
+				this.ymax = allPoints.get(i).y;
+			} 
+			if(xmin > -1 || ymin > -1 || xmax > -1 || ymax > -1) {
 				if (allPoints.get(i).x < xmin) {
 					xmin = allPoints.get(i).x;
 				} else if (allPoints.get(i).x > xmax) {
@@ -110,7 +130,7 @@ public class Line {
 	}
 
 	public void makeBoundingBox() {
-		// creat the bounding box after the end of the line
+		// create the bounding box after the end of the line
 		for (int i = 0; i < allPoints.size(); i++) {
 			PVector p1 = allPoints.get(i);
 			if (xmin == -1 && ymin == -1 && xmax == -1 && ymax == -1) {

@@ -220,11 +220,11 @@ Line line2;
 		if (buffer.allGroups.size() > 0) {
 			//for (int k =0; k<buffer.allGroups.size(); ++k) {
 			int size_main = buffer.allGroups.size() -1; //k;//
-			int size_lines = buffer.allGroups.get(size_main).size() -1;
-			for (int i = 0; i< buffer.allGroups.get(size_main).size(); ++i )
+			int size_lines = buffer.allGroups.get(size_main).getSize() -1;
+			for (int i = 0; i< buffer.allGroups.get(size_main).getSize(); ++i )
 			{
 			
-			Line l1 = buffer.allGroups.get(size_main).get(/*size_lines*/i);
+			Line l1 = buffer.allGroups.get(size_main).lines.get(/*size_lines*/i);
 			engine = new Decision_Engine(l1, line2, (float)Math.sqrt(Math.pow(width, 2) + Math.pow(height, 2)));
 			curLine = null;
 			Line l = engine.decision();
@@ -245,6 +245,25 @@ Line line2;
 		
 	}
 	public void keyPressed(){
+		//If 'm' is pressed bot draws a random group is drawn on the the quadrant with lead density
+		if(key=='m'){
+			Node leastDense = buffer.mainTree.leastDenseNode();
+			System.out.println(leastDense.getX() + "," + leastDense.getY());
+			Random randy = new Random();
+			Group randomGroup = buffer.allGroups.get(randy.nextInt(buffer.allGroups.size()));
+			Group normGroup = randomGroup.normalizedGroup();
+			System.out.println("Actual Norm Mins: " + randomGroup.getXmin() + "," + randomGroup.getYmin());
+			Group shiftedGroup = normGroup.shiftGroup(leastDense.getX(), leastDense.getY());
+			for(int i = 0; i < shiftedGroup.lines.size(); i++){
+				engine = new Decision_Engine(shiftedGroup.lines.get(i), line2, (float)Math.sqrt(Math.pow(width, 2) + Math.pow(height, 2)));
+				Line aiLine = engine.decision();
+				aiLine.compGenerated = true; 
+				stack.push(aiLine);
+				compLines.add(aiLine);
+			}
+			//buffer.allGroups.add(shiftedGroup);
+			
+		}
 		if(key=='z')
 		{
 			buffer.showComp = true; 
