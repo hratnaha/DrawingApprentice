@@ -12,6 +12,10 @@ public class DrawBackFork_Flow_Lines extends PApplet {
 	GTextField drawMeTF;
 	GButton teachMeButton;
 	GButton drawMeButton;
+	GButton localButton;
+	GButton regionalButton;
+	GButton globalButton;
+	GLabel modeText;
 
 	ArrayList<Line> allLines = new ArrayList<Line>(); // keeps track of all
 	// human lines
@@ -22,6 +26,7 @@ public class DrawBackFork_Flow_Lines extends PApplet {
 	
 	ArrayList<Shape> allShapes = new ArrayList<Shape>();
 	String drawingMode = "draw"; // draw, teach, drawPos
+	String perceptionMode = "local";
 	StringList strings = new StringList(); // strings for file output
 	int i; // iteration count for stack
 	int lineSpeed = 25;
@@ -74,6 +79,18 @@ public class DrawBackFork_Flow_Lines extends PApplet {
 		stack.draw(this.g, buffer);
 
 		textSize(16);
+		if(perceptionMode.equals("local")){
+			fill(0);
+			text("Local", 1000, 10, 220, 50);
+		}
+		if(perceptionMode.equals("regional")){
+			fill(0);
+			text("Regional", 1000, 10, 220, 50);
+		}
+		if(perceptionMode.equals("global")){
+			fill(0);
+			text("Global", 1000, 10, 220, 50);
+		}
 		if (drawingMode == "teach") {
 			fill(0);
 			text("Type name of object, draw it, then click done!", 235, 10,
@@ -164,35 +181,76 @@ Line line2;
 			//line(pmouseX, pmouseY, mouseX, mouseY);
 			if (drawingMode == "draw" && activeDrawing && lassoOn == false) {
 				buffer.addToBuffer(curLine); 
-				if(stack.getSize() ==0) buffer.update(); 
-				int offset = 3;
-				if(allLines.size()>offset){
+				if(stack.getSize() ==0) buffer.update();
+				if(perceptionMode.equals("local")){
+					int offset = 3;
+					if(allLines.size()>offset){
+						
+						line2 = allLines.get(allLines.size()-offset);
+					}
+					else
+					{
+						line2 = curLine; ///can add other shapes to mutate with
+					}
+					//Added new stuff here - KYS
+				//	if (buffer.allGroups.size() > 0) {
+				//		Line l1 = buffer.allGroups.get(0).get(0);
+			//			engine = new Decision_Engine(l1, line2, (float)Math.sqrt(Math.pow(width, 2) + Math.pow(height, 2)));
+				//		System.out.println("Added line from lasso");
+			//		}else {
+					engine = new Decision_Engine(curLine, line2, (float)Math.sqrt(Math.pow(width, 2) + Math.pow(height, 2)));
+			//		}
+					buffer.allLines.add(curLine); //add human line to buffer storage
 					
-					line2 = allLines.get(allLines.size()-offset);
+					curLine = null;
+					Line l = engine.decision();
+					l.compGenerated = true; 
+					stack.push(l);
+					for (int j= 0; j < l.allPoints.size() - 1; j++) {
+						Point p1 = l.allPoints.get(j); 
+						Point p2 = l.allPoints.get(j+1);
+						buffer.mainTree.set(p1.getX(),p1.getY(),p1);
+						buffer.mainTree.set(p2.getX(),p2.getY(),p2);
+					}
+					//buffer.allLines.add(l); //add comp line to buffer storage
+					compLines.add(l);
+					activeDrawing = false; 
 				}
-				else
-				{
-					line2 = curLine; ///can add other shapes to mutate with
+				else if(perceptionMode.equals("regional")){
+					//boolean isInGroup = true;
+					Group enclosingGroup = null;
+					curLine.makeBoundingBox();
+					for(int i = 0; i < buffer.allGroups.size(); i++){
+						if(curLine.xmin > buffer.allGroups.get(i).getXmin() && curLine.ymin > buffer.allGroups.get(i).getYmin()
+								&& curLine.xmax < buffer.allGroups.get(i).getXmax() && curLine.ymax < buffer.allGroups.get(i).getYmax()){
+							enclosingGroup = buffer.allGroups.get(i);
+							i=buffer.allGroups.size();
+						}
+					}
+					if(enclosingGroup == null){
+						System.out.println("Regional: Current Line is not in a group");
+					}
+					else{
+						System.out.println("Regional: Current Line is in a group");
+						Random randy = new Random();
+						int randomLineIndex = randy.nextInt(enclosingGroup.lines.size());
+						line2 = curLine;
+						engine = new Decision_Engine(enclosingGroup.lines.get(randomLineIndex), line2, (float)Math.sqrt(Math.pow(width, 2) + Math.pow(height, 2)));
+						Line aiLine = engine.decision();
+						aiLine.compGenerated = true; 
+						stack.push(aiLine);
+						compLines.add(aiLine);
+						for (int j= 0; j < aiLine.allPoints.size() - 1; j++) {
+							Point p1 = aiLine.allPoints.get(j); 
+							Point p2 = aiLine.allPoints.get(j+1);
+							buffer.mainTree.set(p1.getX(),p1.getY(),p1);
+							buffer.mainTree.set(p2.getX(),p2.getY(),p2);
+						}
+					}
 				}
-				//Added new stuff here - KYS
-			//	if (buffer.allGroups.size() > 0) {
-			//		Line l1 = buffer.allGroups.get(0).get(0);
-		//			engine = new Decision_Engine(l1, line2, (float)Math.sqrt(Math.pow(width, 2) + Math.pow(height, 2)));
-			//		System.out.println("Added line from lasso");
-		//		}else {
-				engine = new Decision_Engine(curLine, line2, (float)Math.sqrt(Math.pow(width, 2) + Math.pow(height, 2)));
-		//		}
-				buffer.allLines.add(curLine); //add human line to buffer storage
-				
-				curLine = null;
-				Line l = engine.decision();
-				l.compGenerated = true; 
-				stack.push(l);
-				//buffer.allLines.add(l); //add comp line to buffer storage
-				compLines.add(l);
-				activeDrawing = false; 
 			} else if (drawingMode == "draw" && lassoOn == true) {
 				System.out.println("Right Button Released");
+				perceptionMode = "regional";
 				buffer.lassoLine = curLasso;
 				curLasso = null;
 				lassoOn = false;
@@ -240,7 +298,6 @@ Line line2;
 		}else {
 		engine = new Decision_Engine(curLine, line2, (float)Math.sqrt(Math.pow(width, 2) + Math.pow(height, 2)));
 		}
-		
 		
 		
 	}
@@ -373,6 +430,21 @@ Line line2;
 		}
 		drawMeTF.setText("");
 	} // _CODE_:drawMeButton:574185:
+	
+	public void localButton_click1(GButton source, GEvent event) { 
+		System.out.println("Local Button Pressed");
+		perceptionMode="local";
+	} 
+	
+	public void regionalButton_click1(GButton source, GEvent event) { 
+		System.out.println("Regional Button Pressed");
+		perceptionMode="regional";
+	}
+	
+	public void globalButton_click1(GButton source, GEvent event) { 
+		System.out.println("Global Button Pressed");
+		perceptionMode="global";
+	}
 
 	// Create all the GUI controls.
 	// autogenerated do not edit
@@ -400,5 +472,20 @@ Line line2;
 		drawMeButton.setText("Draw me a...");
 		drawMeButton.setLocalColorScheme(GCScheme.CYAN_SCHEME);
 		drawMeButton.addEventHandler(this, "drawMeButton_click1");
+		
+		localButton = new GButton(this, 700, 10, 80, 30);
+		localButton.setText("Local");
+		//localButton.setLocalColorScheme(GCScheme.CYAN_SCHEME);
+		localButton.addEventHandler(this, "localButton_click1");
+		
+		regionalButton = new GButton(this, 800, 10, 80, 30);
+		regionalButton.setText("Regional");
+		//localButton.setLocalColorScheme(GCScheme.CYAN_SCHEME);
+		regionalButton.addEventHandler(this, "regionalButton_click1");
+		
+		globalButton = new GButton(this, 900, 10, 80, 30);
+		globalButton.setText("Global");
+		//localButton.setLocalColorScheme(GCScheme.CYAN_SCHEME);
+		globalButton.addEventHandler(this, "globalButton_click1");
 	}
 }
