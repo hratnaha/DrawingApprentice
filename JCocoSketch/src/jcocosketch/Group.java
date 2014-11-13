@@ -55,7 +55,7 @@ public class Group {
 		} if (line.ymax > ymax && line.ymax > -1) {
 			ymax = line.ymax;
 		}
-		
+	
 		Line normalizedLine = new Line();
 		for(int j = 0; j < line.allPoints.size(); j++){
 			normalizedLine.addPoint(new Point((line.allPoints.get(j).x-xmin),(line.allPoints.get(j).y-ymin), normalizedLine.lineID));
