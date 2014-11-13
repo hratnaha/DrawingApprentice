@@ -66,7 +66,7 @@ public class Buffer {
 				mainTree.set(p2.getX(),p2.getY(),p2);
 				//System.out.println("QuadTree: " + mainTree.getCount());
 			}
-			diff=false;
+			//diff=false;
 		}
 		Point[] keys = mainTree.getKeys();
 		
@@ -101,7 +101,8 @@ public class Buffer {
 		
 		buffer.endDraw();
 		img = buffer.get(0, 0, buffer.width, buffer.height);
-		diff=true; 
+		//diff=true; 
+		diff=false; 
 
 		//Lasso recognition and contains happens here	
 		if(lassoLine == null){
@@ -123,6 +124,7 @@ public class Buffer {
 	}
 
 	public void addSegment(LineSegment l){
+		System.out.println("AddSegment"); 
 		int padding = 5; 
 		PVector p1 = l.start; 
 		PVector p2 = l.end; 
@@ -151,12 +153,12 @@ public class Buffer {
 		//get the background image of the buffer to paste over
 		PImage backgroundImage = buffer.get((int)buffPos.x, (int)buffPos.y,buffer2.width, buffer2.height); 
 		buffer2.beginDraw(); 
-		buffer2.smooth(); 
+		//buffer2.smooth(); 
 		buffer2.background(0,0); 
 		buffer2.image(backgroundImage, buffer2.width, buffer2.height ); 
 		buffer2.strokeWeight(1);
 		buffer2.stroke(0);
-		buffer2.smooth();
+		//buffer2.smooth();
 		buffer2.line(newP1.x , newP1.y, newP2.x, newP2.y);
 		buffer2.endDraw();
 		PImage tempImage = buffer2.get(0, 0, buffer2.width, buffer2.height); 

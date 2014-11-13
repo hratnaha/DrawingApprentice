@@ -124,7 +124,7 @@ public class DrawBackFork_Flow_Lines extends PApplet {
 			LineSegment l = new LineSegment(new PVector(pmouseX, pmouseY),
 					new PVector(mouseX, mouseY));
 			curLine.addPoint(new Point(mouseX, mouseY, curLine.lineID));
-			ellipse(mouseX, mouseY, 10, 10); 
+			//ellipse(mouseX, mouseY, 10, 10); 
 			//line(l.start.x, l.start.y, l.end.x, l.end.y);
 			buffer.addSegment(l);
 			
