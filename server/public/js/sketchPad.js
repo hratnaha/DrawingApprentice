@@ -7,6 +7,7 @@ function sketchUtil() {
     canvas.setAttribute('width', container.offsetWidth * 0.95);
     canvas.setAttribute('height', container.offsetHeight * 0.90);
     var context = canvas.getContext('2d');
+    context.lineWidth = 0.1;
     var curstroke;
     var strCounter = 0, pkptCounter = 0;
     var colorline;
