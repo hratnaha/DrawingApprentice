@@ -99,12 +99,15 @@ public class DrawBackFork_Flow_Lines extends PApplet {
 				//curLine.setStart(new PVector(mouseX, mouseY));
 				curLine.setColor(humanColor);
 				allLines.add(curLine);
+				CreativeTrajectoryMonitor.AddMode(0);
 			}
 			if(mouseButton == RIGHT){
 				System.out.println("Right Button Pressed");
 				curLasso = new LassoLine();
 				//curLine.setStart(new PVector(mouseX, mouseY));
 				allLines.add(curLasso);
+				//Prediction for mode Stuff
+				CreativeTrajectoryMonitor.AddMode(1);
 			}
 		} else if (drawingMode == "drawPos" && intClick != true) {
 			shapeBound = new Rectangle(new PVector(mouseX, mouseY), 0, 0);
@@ -281,6 +284,9 @@ Line line2;
 		
 		if(key == '2') {
 			((Local)engine).downvote();
+		}
+		if(key == 'p') {
+			CreativeTrajectoryMonitor.PredictMode();
 		}
 	}
 
