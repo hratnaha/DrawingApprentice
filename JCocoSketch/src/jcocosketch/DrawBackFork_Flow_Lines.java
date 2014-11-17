@@ -81,15 +81,18 @@ public class DrawBackFork_Flow_Lines extends PApplet {
 		textSize(16);
 		if(perceptionMode.equals("local")){
 			fill(0);
-			text("Local", 1000, 10, 220, 50);
+			textSize(24); 
+			text("Local", 400, 25, 220, 50);
 		}
 		if(perceptionMode.equals("regional")){
 			fill(0);
-			text("Regional", 1000, 10, 220, 50);
+			textSize(24); 
+			text("Regional", 400, 25, 220, 50);
 		}
 		if(perceptionMode.equals("global")){
 			fill(0);
-			text("Global", 1000, 10, 220, 50);
+			textSize(24); 
+			text("Global", 400, 25, 220, 50);
 		}
 		if (drawingMode == "teach") {
 			fill(0);
@@ -107,7 +110,7 @@ public class DrawBackFork_Flow_Lines extends PApplet {
 
 	// ##### Event Handling
 	public void mousePressed() {
-		checkInterface(new PVector(mouseX, mouseY));
+		//checkInterface(new PVector(mouseX, mouseY));
 		// println("intClick = " + intClick +" Drawing Mode: " + drawingMode);
 		if (drawingMode == "teach" || drawingMode == "draw" && intClick != true) {
 			if(mouseButton == LEFT){
@@ -353,7 +356,7 @@ Line line2;
 			stack.push(s.allLines.get(i));
 		}
 	}
-
+/*
 	public void checkInterface(PVector pos) {
 		float[][] elements = {
 				{ teachMeTF.getX(), teachMeTF.getY(), teachMeTF.getWidth(),
@@ -375,7 +378,7 @@ Line line2;
 				intClick = false;
 		}
 	}
-
+*/
 	public void textfield1_change1(GTextField source, GEvent event) { // _CODE_:teachMeTF:397121:
 		// println("teachMeTF - GTextField event occured " +
 		// System.currentTimeMillis()%10000000 );
@@ -454,6 +457,7 @@ Line line2;
 		G4P.setCursor(ARROW);
 		if (frame != null)
 			frame.setTitle("Apprentice AI Drawing Partner");
+		/*
 		teachMeTF = new GTextField(this, 15, 10, 120, 30, G4P.SCROLLBARS_NONE);
 		teachMeTF.setDefaultText("Teach me!");
 		teachMeTF.setLocalColorScheme(GCScheme.CYAN_SCHEME);
@@ -472,18 +476,19 @@ Line line2;
 		drawMeButton.setText("Draw me a...");
 		drawMeButton.setLocalColorScheme(GCScheme.CYAN_SCHEME);
 		drawMeButton.addEventHandler(this, "drawMeButton_click1");
+		*/
 		
-		localButton = new GButton(this, 700, 10, 80, 30);
+		localButton = new GButton(this, 25, 10, 100, 50);
 		localButton.setText("Local");
 		//localButton.setLocalColorScheme(GCScheme.CYAN_SCHEME);
 		localButton.addEventHandler(this, "localButton_click1");
 		
-		regionalButton = new GButton(this, 800, 10, 80, 30);
+		regionalButton = new GButton(this, 150, 10, 100, 50);
 		regionalButton.setText("Regional");
 		//localButton.setLocalColorScheme(GCScheme.CYAN_SCHEME);
 		regionalButton.addEventHandler(this, "regionalButton_click1");
 		
-		globalButton = new GButton(this, 900, 10, 80, 30);
+		globalButton = new GButton(this, 275, 10, 100, 50);
 		globalButton.setText("Global");
 		//localButton.setLocalColorScheme(GCScheme.CYAN_SCHEME);
 		globalButton.addEventHandler(this, "globalButton_click1");
