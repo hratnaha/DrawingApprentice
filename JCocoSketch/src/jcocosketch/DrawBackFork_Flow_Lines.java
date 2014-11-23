@@ -299,7 +299,7 @@ Line line2;
 			//}
 			
 		}else {
-		engine = new Decision_Engine(curLine, line2, (float)Math.sqrt(Math.pow(width, 2) + Math.pow(height, 2)));
+			engine = new Decision_Engine(curLine, line2, (float)Math.sqrt(Math.pow(width, 2) + Math.pow(height, 2)));
 		}
 		
 		

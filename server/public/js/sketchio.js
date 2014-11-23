@@ -18,6 +18,7 @@ function initWebSocket() {
     var i = 0;
     var botStroke = "";
     var ctx = botCanvas.getContext('2d');
+    ctx.width = 0.1;
     var timer = setInterval(function () {
         
         if (botStroke != "" && i < botStroke.packetPoints.length) {

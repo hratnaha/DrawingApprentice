@@ -19,7 +19,7 @@ public class Line {
 	float xmax = -1;
 	float ymax = -1;
 	int color = 0;
-	boolean compGenerated = false; 
+	public boolean compGenerated = false; 
 	boolean isSelected = false;
 	Random rand = new Random();
 
