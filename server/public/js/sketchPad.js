@@ -58,7 +58,15 @@ function sketchUtil() {
         isDrawing: false,
         touchstart: function (coors) {
             curstroke = createNewStroke();
-            
+            if ($("#cboxGrouping").attr('checked') == "checked") {
+                context.setLineDash([5]);
+                context.strokeStyle = "#ff8040";
+            } else {
+                colorline = document.getElementById('background').value;
+                context.strokeStyle = colorline;
+                context.setLineDash([0]);
+            }
+
             context.beginPath();
             context.moveTo(coors.x, coors.y);
             this.isDrawing = true;
@@ -67,8 +75,7 @@ function sketchUtil() {
             if (this.isDrawing) {
                 context.lineTo(coors.x, coors.y);
                 context.stroke();
-                colorline = document.getElementById('background').value;
-                context.strokeStyle = colorline;
+                
                 var json_coor = JSON.stringify(coors); //converting to json
                 pushNewPacketPoint(coors);
             }
@@ -79,10 +86,15 @@ function sketchUtil() {
                 var stringStroke = JSON.stringify(curstroke);
                 doSend(stringStroke);
                 
-                bothInputContext.drawImage(canvas, 0, 0);
                 var height = canvas.height;
-                context.clearRect(0,0,canvas.width, canvas.height);
+
                 this.isDrawing = false;
+                if ($("#cboxGrouping").attr('checked') == "checked") {
+                    $("#cboxGrouping").prop('checked',false);
+                } else
+                    bothInputContext.drawImage(canvas, 0, 0);
+
+                context.clearRect(0, 0, canvas.width, canvas.height);
             }
         }
     };

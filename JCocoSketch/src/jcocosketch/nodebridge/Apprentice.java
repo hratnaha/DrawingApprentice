@@ -20,9 +20,9 @@ public class Apprentice {
 	ArrayList<Group> normalizedGroups = new ArrayList<Group>();
 	QuadTree mainTree;
 	Line line2;
-	
+
 	int width = 1400, height = 800;
-	
+
 	public Apprentice() {
 		mainTree = new QuadTree(0, 0, width, height);
 	}
@@ -32,6 +32,7 @@ public class Apprentice {
 		switch (mode_code) {
 		case 0:
 			currentMode = TrajectorMode.Local;
+			this.isGrouping = false;
 			break;
 		case 1:
 			currentMode = TrajectorMode.Regional;
@@ -89,7 +90,9 @@ public class Apprentice {
 						line2 = curline; // can add other shapes to mutate with
 					}
 
-					Decision_Engine engine = new Decision_Engine(curline, line2, (float) Math.sqrt(Math.pow(500, 2) + Math.pow(400, 2)));
+					Decision_Engine engine = new Decision_Engine(curline,
+							line2, (float) Math.sqrt(Math.pow(500, 2)
+									+ Math.pow(400, 2)));
 					allLines.add(curline);
 
 					Line newline = engine.decision();
@@ -119,15 +122,15 @@ public class Apprentice {
 		this.allPoints = new ArrayList<SketchPoint>();
 		return null;
 	}
-	
+
 	public static String getStackTrace(final Throwable throwable) {
-	     final StringWriter sw = new StringWriter();
-	     final PrintWriter pw = new PrintWriter(sw, true);
-	     throwable.printStackTrace(pw);
-	     return sw.getBuffer().toString();
+		final StringWriter sw = new StringWriter();
+		final PrintWriter pw = new PrintWriter(sw, true);
+		throwable.printStackTrace(pw);
+		return sw.getBuffer().toString();
 	}
-	
-	public ArrayList<ArrayList<SketchPoint>> Grouping(){
+
+	public ArrayList<ArrayList<SketchPoint>> Grouping() {
 		currentMode = TrajectorMode.Regional;
 		LassoLine curLasso = new LassoLine();
 
@@ -138,50 +141,59 @@ public class Apprentice {
 
 			mainTree.set(pt.x, pt.y, newpt);
 		}
-		
+
 		curLasso.action(allGroups, allLines, normalizedGroups);
-		
+
 		this.allPoints = new ArrayList<SketchPoint>();
-		
 		return GetLinesFromLasso();
 	}
-	
+
 	public ArrayList<ArrayList<SketchPoint>> GetLinesFromLasso() {
-		if (this.allGroups.size() > 0) {
-			ArrayList<ArrayList<SketchPoint>> results = new ArrayList<>();
-			
-			int size_main = this.allGroups.size() - 1;
-			int size_lines = this.allGroups.get(size_main).getSize() - 1;
-			for (int i = 0; i < this.allGroups.get(size_main).getSize(); ++i) {
 
-				Line l1 = this.allGroups.get(size_main).lines.get(i);
-				Decision_Engine engine = new Decision_Engine(l1, line2, (float) Math.sqrt(Math
-						.pow(width, 2) + Math.pow(height, 2)));
+		try {
+			if (this.allGroups.size() > 0) {
 
-				Line l = engine.decision();
-				l.compGenerated = true;
-				
-				ArrayList<SketchPoint> result = new ArrayList<>();
-				ArrayList<Point> pts = l.getAllPoints();
-				System.out.println(pts.size());
-				// for(PVector pt : pts){
-				for (int j = 0; j < pts.size(); j++) {
-					SketchPoint newpt = new SketchPoint();
-					newpt.x = pts.get(j).x;
-					newpt.y = pts.get(j).y;
-					newpt.id = this.allPoints.get(j).id;
-					newpt.timestamp = this.allPoints.get(j).timestamp;
-					result.add(newpt);
+				ArrayList<ArrayList<SketchPoint>> results = new ArrayList<>();
+
+				int size_main = this.allGroups.size() - 1;
+				int size_lines = this.allGroups.get(size_main).getSize() - 1;
+
+				for (int i = 0; i < this.allGroups.get(size_main).getSize(); ++i) {
+					Line l1 = this.allGroups.get(size_main).lines.get(i);
+					Decision_Engine engine = new Decision_Engine(l1, line2,
+							(float) Math.sqrt(Math.pow(width, 2)
+									+ Math.pow(height, 2)));
+
+					Line l = engine.decision();
+					l.compGenerated = true;
+
+					//System.out.println("line generated");
+
+					ArrayList<SketchPoint> result = new ArrayList<>();
+					ArrayList<Point> pts = l.getAllPoints();
+					System.out.println(pts.size());
+					// for(PVector pt : pts){
+					for (int j = 0; j < pts.size(); j++) {
+						SketchPoint newpt = new SketchPoint();
+						newpt.x = pts.get(j).x;
+						newpt.y = pts.get(j).y;
+						//newpt.id = this.allPoints.get(j).id;
+						newpt.timestamp = System.nanoTime();//this.allPoints.get(j).timestamp;
+						result.add(newpt);
+					}
+					results.add(result);
+
+					System.out.println("Added a line from lasso");
 				}
-				results.add(result);
-				
-				System.out.println("Added a line from lasso");
+				System.out.println("num of lines: " + results.size());
+				return results;
+			} else {
+				// engine = new Decision_Engine(line2, line2, (float)
+				// Math.sqrt(Math
+				// .pow(width, 2) + Math.pow(height, 2)));
 			}
-
-			return results;
-		} else {
-//			engine = new Decision_Engine(line2, line2, (float) Math.sqrt(Math
-//					.pow(width, 2) + Math.pow(height, 2)));
+		} catch (Exception e) {
+			System.out.println(getStackTrace(e));
 		}
 		return null;
 	}

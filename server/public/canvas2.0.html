@@ -8,6 +8,7 @@
             <option value="region">Region</option>
             <option value="global">Global</option>
         </select>
+        <input id="cboxGrouping" type="checkbox" name="grouping" value="Grouping" /> Grouping
     </div>
     <div id="container">
         <canvas id="both">Sorry, your browser is not supported.</canvas>
@@ -39,6 +40,7 @@
         clearCanvas();
     }, false);
     $("#mode").change(setMode);
+    $("#cboxGrouping").change(groupingMode);
 </script>
 <div id="output"></div>
 <style type="text/css">
