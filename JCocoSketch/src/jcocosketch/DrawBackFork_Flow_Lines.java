@@ -251,7 +251,37 @@ Line line2;
 						}
 					}
 				}
-			} else if (drawingMode == "draw" && lassoOn == true) {
+				else if(perceptionMode.equals("global")){
+					//boolean isInGroup = true;
+					Node leastDense = buffer.mainTree.leastDenseNode();
+					System.out.println(leastDense.getX() + "," + leastDense.getY());
+					Random randy = new Random();
+					if(buffer.allGroups.size() > 0){
+						Group randomGroup = buffer.allGroups.get(randy.nextInt(buffer.allGroups.size()));
+						Group normGroup = randomGroup.normalizedGroup();
+						System.out.println("Actual Norm Mins: " + randomGroup.getXmin() + "," + randomGroup.getYmin());
+						Group shiftedGroup = normGroup.shiftGroup(leastDense.getX(), leastDense.getY());
+						for(int i = 0; i < shiftedGroup.lines.size(); i++){
+							engine = new Decision_Engine(shiftedGroup.lines.get(i), line2, (float)Math.sqrt(Math.pow(width, 2) + Math.pow(height, 2)));
+							Line aiLine = engine.decision();
+							aiLine.compGenerated = true; 
+							stack.push(aiLine);
+							compLines.add(aiLine);
+						}
+					}
+					else{
+						Group randomGroup = new Group();
+						randomGroup.addLine(curLine);
+						Group normGroup = randomGroup.normalizedGroup();
+						Group shiftedGroup = normGroup.shiftGroup(leastDense.getX(), leastDense.getY());
+						engine = new Decision_Engine(shiftedGroup.lines.get(0), line2, (float)Math.sqrt(Math.pow(width, 2) + Math.pow(height, 2)));
+						Line aiLine = engine.decision();
+						aiLine.compGenerated = true; 
+						stack.push(aiLine);
+						compLines.add(aiLine);
+					}
+				}
+			} if (drawingMode == "draw" && lassoOn == true) {
 				System.out.println("Right Button Released");
 				//perceptionMode = "regional";
 				buffer.lassoLine = curLasso;
@@ -260,10 +290,10 @@ Line line2;
 				buffer.update();
 				this.drawAfterLasso();
 				
-			} else if (drawingMode == "drawPos") {
+			} if (drawingMode == "drawPos") {
 				createShape(shapeBound.origin);
 				drawingMode = "draw";
-			} else if (drawingMode == "teach") {
+			} if (drawingMode == "teach") {
 				myShape.addLine(curLine);
 				myShape.completeShape();
 			}
@@ -277,30 +307,60 @@ Line line2;
 	 */
 	public void drawAfterLasso() {
 		System.out.println("Added line from lasso");
-		
 		if (buffer.allGroups.size() > 0) {
 			//for (int k =0; k<buffer.allGroups.size(); ++k) {
 			int size_main = buffer.allGroups.size() -1; //k;//
 			int size_lines = buffer.allGroups.get(size_main).getSize() -1;
-			for (int i = 0; i< buffer.allGroups.get(size_main).getSize(); ++i )
-			{
-			
-			Line l1 = buffer.allGroups.get(size_main).lines.get(/*size_lines*/i);
-			engine = new Decision_Engine(l1, line2, (float)Math.sqrt(Math.pow(width, 2) + Math.pow(height, 2)));
-			curLine = null;
-			Line l = engine.decision();
-			l.compGenerated = true; 
-			stack.push(l);
-			//buffer.allLines.add(l); //add comp line to buffer storage
-			compLines.add(l);
-			activeDrawing = false; 
-			System.out.println("Added line from lasso");
+			int lineCount = 0;
+			while(lineCount < 10){
+				for (int i = 0; i< buffer.allGroups.get(size_main).getSize(); i++ )
+				{		
+					Line l1 = buffer.allGroups.get(size_main).lines.get(/*size_lines*/i);
+					engine = new Decision_Engine(l1, line2, (float)Math.sqrt(Math.pow(width, 2) + Math.pow(height, 2)));
+					curLine = null;
+					Line l = engine.decision();
+					l.compGenerated = true; 
+					stack.push(l);
+					//buffer.allLines.add(l); //add comp line to buffer storage
+					compLines.add(l);
+					activeDrawing = false; 
+					System.out.println("Added line from lasso");
+					if(lineCount >=9){
+						i = buffer.allGroups.get(size_main).getSize();
+					}
+					lineCount++;
+				}
 			}
 			//}
+			
 			
 		}else {
 		engine = new Decision_Engine(curLine, line2, (float)Math.sqrt(Math.pow(width, 2) + Math.pow(height, 2)));
 		}
+		perceptionMode = "local";
+//		if (buffer.allGroups.size() > 0) {
+//			//for (int k =0; k<buffer.allGroups.size(); ++k) {
+//			int size_main = buffer.allGroups.size() -1; //k;//
+//			int size_lines = buffer.allGroups.get(size_main).getSize() -1;
+//			for (int i = 0; i< buffer.allGroups.get(size_main).getSize(); ++i )
+//			{
+//			
+//			Line l1 = buffer.allGroups.get(size_main).lines.get(/*size_lines*/i);
+//			engine = new Decision_Engine(l1, line2, (float)Math.sqrt(Math.pow(width, 2) + Math.pow(height, 2)));
+//			curLine = null;
+//			Line l = engine.decision();
+//			l.compGenerated = true; 
+//			stack.push(l);
+//			//buffer.allLines.add(l); //add comp line to buffer storage
+//			compLines.add(l);
+//			activeDrawing = false; 
+//			System.out.println("Added line from lasso");
+//			}
+//			//}
+//			
+//		}else {
+//		engine = new Decision_Engine(curLine, line2, (float)Math.sqrt(Math.pow(width, 2) + Math.pow(height, 2)));
+//		}
 		
 		
 	}
