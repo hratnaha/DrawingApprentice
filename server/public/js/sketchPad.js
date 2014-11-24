@@ -1,12 +1,16 @@
-var canvas = "{}";
+//var canvas = "{}";
 
 function sketchUtil() {
     // get the canvas element and its context
     var container = document.getElementById('container');
-    canvas = document.getElementById('sketchpad');
+    bothCanvas.setAttribute('width', container.offsetWidth * 0.95);
+    bothCanvas.setAttribute('height', container.offsetHeight * 0.90);
+
+    var canvas = document.getElementById('sketchpad');
     canvas.setAttribute('width', container.offsetWidth * 0.95);
     canvas.setAttribute('height', container.offsetHeight * 0.90);
     var context = canvas.getContext('2d');
+    context.lineWidth = 0.1;
     var curstroke;
     var strCounter = 0, pkptCounter = 0;
     var colorline;
@@ -54,7 +58,15 @@ function sketchUtil() {
         isDrawing: false,
         touchstart: function (coors) {
             curstroke = createNewStroke();
-            
+            if ($("#cboxGrouping").attr('checked') == "checked") {
+                context.setLineDash([5]);
+                context.strokeStyle = "#ff8040";
+            } else {
+                colorline = document.getElementById('background').value;
+                context.strokeStyle = colorline;
+                context.setLineDash([0]);
+            }
+
             context.beginPath();
             context.moveTo(coors.x, coors.y);
             this.isDrawing = true;
@@ -63,21 +75,26 @@ function sketchUtil() {
             if (this.isDrawing) {
                 context.lineTo(coors.x, coors.y);
                 context.stroke();
-                colorline = document.getElementById('background').value;
-                context.strokeStyle = colorline;
+                
                 var json_coor = JSON.stringify(coors); //converting to json
                 pushNewPacketPoint(coors);
-
             }
-
         },
         touchend: function (coors) {
             if (this.isDrawing) {
                 this.touchmove(coors);
-                
                 var stringStroke = JSON.stringify(curstroke);
                 doSend(stringStroke);
+                
+                var height = canvas.height;
+
                 this.isDrawing = false;
+                if ($("#cboxGrouping").attr('checked') == "checked") {
+                    $("#cboxGrouping").prop('checked',false);
+                } else
+                    bothInputContext.drawImage(canvas, 0, 0);
+
+                context.clearRect(0, 0, canvas.width, canvas.height);
             }
         }
     };
@@ -169,7 +186,6 @@ var log = function (msg) {
     console.log(msg);
 };
 var logtouch = function (evtype, t) {
-    
     pressurevalue = t.webkitForce;
 }
 

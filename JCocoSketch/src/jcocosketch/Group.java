@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import processing.core.PVector;
 
 public class Group {
-	ArrayList<Line> lines = new ArrayList<Line>();
+	public ArrayList<Line> lines = new ArrayList<Line>();
 	private float groupID;
 	private float xmin = -1;
 	private float ymin = -1;

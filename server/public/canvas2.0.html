@@ -1,15 +1,17 @@
 <html>
 <body>
     <div id="buttons">
-        <input type="color" name="background" id="background" value="#ff0000" />
+        <input type="color" name="background" id="background" value="#000000" />
         <input type="button" id="clear" value="Clear" />
         <select id="mode">
             <option value="local">Local</option>
             <option value="region">Region</option>
             <option value="global">Global</option>
         </select>
+        <input id="cboxGrouping" type="checkbox" name="grouping" value="Grouping" /> Grouping
     </div>
     <div id="container">
+        <canvas id="both">Sorry, your browser is not supported.</canvas>
         <canvas id="botpad">Sorry, your browser is not supported.</canvas>
         <canvas id="sketchpad">Sorry, your browser is not supported.</canvas>
     </div>
@@ -18,7 +20,7 @@
 <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
 <script src="https://cdn.socket.io/socket.io-1.0.6.js"></script>
 <script type="text/javascript" src="js/sketchPad.js"></script>
-<script type="text/javascript" src="js/sketchio.js"></script>
+<script type="text/javascript" src="js/sketchio_client.js"></script>
 <script type="text/javascript">
 
     window.requestAnimFrame = (function () {
@@ -27,10 +29,8 @@
         };
     })();
 
-    var c = document.getElementById("sketchpad");
-    var ctx = c.getContext("2d");
-    ctx.beginPath();
-    ctx.stroke();
+    var bothCanvas = document.getElementById("both");
+    var bothInputContext = bothCanvas.getContext("2d");
 
     window.addEventListener("load", initWebSocket, false);
     window.addEventListener('load', sketchUtil, false);
@@ -40,6 +40,7 @@
         clearCanvas();
     }, false);
     $("#mode").change(setMode);
+    $("#cboxGrouping").change(groupingMode);
 </script>
 <div id="output"></div>
 <style type="text/css">
@@ -59,13 +60,20 @@
         /*-moz-border-radius: 160px;*/
         /*border-radius: 500px;*/
     }
-
+    #both {
+        border: 1px solid #000;
+        position: absolute;
+        left: 0;
+        top: 0;
+        z-index: 0;
+    } 
+    
     #sketchpad {
         border: 1px solid #000;
         position: absolute;
         left: 0;
         top: 0;
-        z-index: 1;
+        z-index: 2;
     }
 
     #botpad {
@@ -73,7 +81,7 @@
         position: absolute;
         left: 0;
         top: 0;
-        z-index: 0;
+        z-index: 1;
     }
 
     #buttons {
