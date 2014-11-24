@@ -306,7 +306,7 @@ Line line2;
 	 * Added new funciton to draw in a region after lasso is done
 	 */
 	public void drawAfterLasso() {
-		System.out.println("Added line from lasso");
+		System.out.println("Added line from lasso - regional after lasso");
 		if (buffer.allGroups.size() > 0) {
 			//for (int k =0; k<buffer.allGroups.size(); ++k) {
 			int size_main = buffer.allGroups.size() -1; //k;//
