@@ -1,9 +1,12 @@
-var canvas = "{}";
+//var canvas = "{}";
 
 function sketchUtil() {
     // get the canvas element and its context
     var container = document.getElementById('container');
-    canvas = document.getElementById('sketchpad');
+    bothCanvas.setAttribute('width', container.offsetWidth * 0.95);
+    bothCanvas.setAttribute('height', container.offsetHeight * 0.90);
+
+    var canvas = document.getElementById('sketchpad');
     canvas.setAttribute('width', container.offsetWidth * 0.95);
     canvas.setAttribute('height', container.offsetHeight * 0.90);
     var context = canvas.getContext('2d');
@@ -68,16 +71,17 @@ function sketchUtil() {
                 context.strokeStyle = colorline;
                 var json_coor = JSON.stringify(coors); //converting to json
                 pushNewPacketPoint(coors);
-
             }
-
         },
         touchend: function (coors) {
             if (this.isDrawing) {
                 this.touchmove(coors);
-                
                 var stringStroke = JSON.stringify(curstroke);
                 doSend(stringStroke);
+                
+                bothInputContext.drawImage(canvas, 0, 0);
+                var height = canvas.height;
+                context.clearRect(0,0,canvas.width, canvas.height);
                 this.isDrawing = false;
             }
         }
@@ -170,7 +174,6 @@ var log = function (msg) {
     console.log(msg);
 };
 var logtouch = function (evtype, t) {
-    
     pressurevalue = t.webkitForce;
 }
 
