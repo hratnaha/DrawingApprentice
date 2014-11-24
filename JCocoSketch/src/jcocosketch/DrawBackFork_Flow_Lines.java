@@ -253,7 +253,7 @@ Line line2;
 				}
 			} else if (drawingMode == "draw" && lassoOn == true) {
 				System.out.println("Right Button Released");
-				perceptionMode = "regional";
+				//perceptionMode = "regional";
 				buffer.lassoLine = curLasso;
 				curLasso = null;
 				lassoOn = false;
