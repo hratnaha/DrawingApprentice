@@ -288,7 +288,7 @@ Line line2;
 				curLasso = null;
 				lassoOn = false;
 				buffer.update();
-				this.drawAfterLasso();
+				//this.drawAfterLasso();
 				
 			} if (drawingMode == "drawPos") {
 				createShape(shapeBound.origin);
