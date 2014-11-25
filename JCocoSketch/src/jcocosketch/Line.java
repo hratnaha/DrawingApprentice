@@ -77,7 +77,26 @@ public class Line {
 		initFromPoints(allVec);
 		this.lineID = rand.nextFloat();
 	}
-
+	
+	public Line normalizeLine(){
+		this.makeBoundingBox();
+		Line normalizedLine = new Line();
+		for(int j = 0; j < this.allPoints.size(); j++){
+			normalizedLine.addPoint(new Point((this.allPoints.get(j).x-xmin),(this.allPoints.get(j).y-ymin), normalizedLine.lineID));
+		}
+		return normalizedLine;
+	}
+	
+	public Line shiftLine(double x, double y){
+		Line shiftedLine = new Line();
+		
+		for(int j = 0; j < this.allPoints.size(); j++){
+			shiftedLine.addPoint(new Point((this.allPoints.get(j).x + (float)x), (this.allPoints.get(j).y+ (float)y)));
+		}
+		
+		return shiftedLine;
+	}
+	
 	private void initFromPoints(ArrayList<Point> all) {
 		allPoints = all;
 		initParam();

@@ -201,7 +201,11 @@ Line line2;
 			//			engine = new Decision_Engine(l1, line2, (float)Math.sqrt(Math.pow(width, 2) + Math.pow(height, 2)));
 				//		System.out.println("Added line from lasso");
 			//		}else {
-					engine = new Decision_Engine(curLine, line2, (float)Math.sqrt(Math.pow(width, 2) + Math.pow(height, 2)));
+					if(curLine == null){
+						engine = new Decision_Engine(buffer.allLines.get(buffer.allLines.size()-1), line2, (float)Math.sqrt(Math.pow(width, 2) + Math.pow(height, 2)));
+					}else{
+						engine = new Decision_Engine(curLine, line2, (float)Math.sqrt(Math.pow(width, 2) + Math.pow(height, 2)));
+					}
 			//		}
 					buffer.allLines.add(curLine); //add human line to buffer storage
 					
@@ -219,7 +223,7 @@ Line line2;
 					compLines.add(l);
 					activeDrawing = false; 
 				}
-				else if(perceptionMode.equals("regional")){
+				if(perceptionMode.equals("regional")){
 					//boolean isInGroup = true;
 					Group enclosingGroup = null;
 					curLine.makeBoundingBox();
@@ -249,37 +253,112 @@ Line line2;
 							buffer.mainTree.set(p1.getX(),p1.getY(),p1);
 							buffer.mainTree.set(p2.getX(),p2.getY(),p2);
 						}
+						curLine = null;
 					}
 				}
-				else if(perceptionMode.equals("global")){
+				if(perceptionMode.equals("global")){
 					//boolean isInGroup = true;
 					//Different Global Behaviors
-					Node leastDense = buffer.mainTree.leastDenseNode();
-					System.out.println(leastDense.getX() + "," + leastDense.getY());
 					Random randy = new Random();
-					if(buffer.allGroups.size() > 0){
-						Group randomGroup = buffer.allGroups.get(randy.nextInt(buffer.allGroups.size()));
-						Group normGroup = randomGroup.normalizedGroup();
-						System.out.println("Actual Norm Mins: " + randomGroup.getXmin() + "," + randomGroup.getYmin());
-						Group shiftedGroup = normGroup.shiftGroup(leastDense.getX(), leastDense.getY());
-						for(int i = 0; i < shiftedGroup.lines.size(); i++){
-							engine = new Decision_Engine(shiftedGroup.lines.get(i), line2, (float)Math.sqrt(Math.pow(width, 2) + Math.pow(height, 2)));
+					int randomSelection = 1;
+					//Behavior 1: AI draws in least dense node based on random group
+					if(randomSelection == 0){
+						Node leastDense = buffer.mainTree.leastDenseNode();
+						//System.out.println(leastDense.getX() + "," + leastDense.getY());
+						
+						if(buffer.allGroups.size() > 0){
+							Group randomGroup = buffer.allGroups.get(randy.nextInt(buffer.allGroups.size()));
+							Group normGroup = randomGroup.normalizedGroup();
+							System.out.println("Actual Norm Mins: " + randomGroup.getXmin() + "," + randomGroup.getYmin());
+							Group shiftedGroup = normGroup.shiftGroup(leastDense.getX(), leastDense.getY());
+							for(int i = 0; i < shiftedGroup.lines.size(); i++){
+								engine = new Decision_Engine(shiftedGroup.lines.get(i), line2, (float)Math.sqrt(Math.pow(width, 2) + Math.pow(height, 2)));
+								Line aiLine = engine.decision();
+								aiLine.compGenerated = true; 
+								stack.push(aiLine);
+								compLines.add(aiLine);
+								for (int j= 0; j < aiLine.allPoints.size() - 1; j++) {
+									Point p1 = aiLine.allPoints.get(j); 
+									Point p2 = aiLine.allPoints.get(j+1);
+									buffer.mainTree.set(p1.getX(),p1.getY(),p1);
+									buffer.mainTree.set(p2.getX(),p2.getY(),p2);
+								}
+							}
+						}
+						else{
+							Group randomGroup = new Group();
+							randomGroup.addLine(curLine);
+							Group normGroup = randomGroup.normalizedGroup();
+							Group shiftedGroup = normGroup.shiftGroup(leastDense.getX(), leastDense.getY());
+							engine = new Decision_Engine(shiftedGroup.lines.get(0), line2, (float)Math.sqrt(Math.pow(width, 2) + Math.pow(height, 2)));
 							Line aiLine = engine.decision();
 							aiLine.compGenerated = true; 
 							stack.push(aiLine);
 							compLines.add(aiLine);
+							for (int j= 0; j < aiLine.allPoints.size() - 1; j++) {
+								Point p1 = aiLine.allPoints.get(j); 
+								Point p2 = aiLine.allPoints.get(j+1);
+								buffer.mainTree.set(p1.getX(),p1.getY(),p1);
+								buffer.mainTree.set(p2.getX(),p2.getY(),p2);
+							}
 						}
+						curLine = null;
 					}
-					else{
-						Group randomGroup = new Group();
-						randomGroup.addLine(curLine);
-						Group normGroup = randomGroup.normalizedGroup();
-						Group shiftedGroup = normGroup.shiftGroup(leastDense.getX(), leastDense.getY());
-						engine = new Decision_Engine(shiftedGroup.lines.get(0), line2, (float)Math.sqrt(Math.pow(width, 2) + Math.pow(height, 2)));
-						Line aiLine = engine.decision();
-						aiLine.compGenerated = true; 
-						stack.push(aiLine);
-						compLines.add(aiLine);
+					//Behavior 2: AI draws in least dense node based on random line
+					if(randomSelection == 1){
+						Node leastDense = buffer.mainTree.leastDenseNode();
+						
+						if(buffer.allLines.size() > 0){
+							Line randomLine = buffer.allLines.get(randy.nextInt(buffer.allLines.size()));
+							Line normalizedLine = randomLine.normalizeLine();
+							Line shiftedLine = normalizedLine.shiftLine(leastDense.getX(), leastDense.getY());
+							engine = new Decision_Engine(shiftedLine, line2, (float)Math.sqrt(Math.pow(width, 2) + Math.pow(height, 2)));
+							Line aiLine = engine.decision();
+							aiLine.compGenerated = true; 
+							stack.push(aiLine);
+							compLines.add(aiLine);
+							for (int j= 0; j < aiLine.allPoints.size() - 1; j++) {
+								Point p1 = aiLine.allPoints.get(j); 
+								Point p2 = aiLine.allPoints.get(j+1);
+								buffer.mainTree.set(p1.getX(),p1.getY(),p1);
+								buffer.mainTree.set(p2.getX(),p2.getY(),p2);
+							}
+						} else{
+							if(curLine != null){
+								Line normalizedLine = curLine.normalizeLine();
+								Line shiftedLine = normalizedLine.shiftLine(leastDense.getX(), leastDense.getY());
+								engine = new Decision_Engine(shiftedLine, line2, (float)Math.sqrt(Math.pow(width, 2) + Math.pow(height, 2)));
+								Line aiLine = engine.decision();
+								aiLine.compGenerated = true; 
+								stack.push(aiLine);
+								compLines.add(aiLine);
+								for (int j= 0; j < aiLine.allPoints.size() - 1; j++) {
+									Point p1 = aiLine.allPoints.get(j); 
+									Point p2 = aiLine.allPoints.get(j+1);
+									buffer.mainTree.set(p1.getX(),p1.getY(),p1);
+									buffer.mainTree.set(p2.getX(),p2.getY(),p2);
+								}
+							}
+						}
+						curLine = null;
+					}
+					//Behavior 3: AI selects random group and reacts to all lines in the group (like local reaction)
+					if(randomSelection == 2){
+						Group randomGroup = buffer.allGroups.get(randy.nextInt(buffer.allGroups.size()));
+						
+						for(int i = 0; i < randomGroup.lines.size(); i++){
+							engine = new Decision_Engine(randomGroup.lines.get(i), line2, (float)Math.sqrt(Math.pow(width, 2) + Math.pow(height, 2)));
+							Line aiLine = engine.decision();
+							aiLine.compGenerated = true; 
+							stack.push(aiLine);
+							compLines.add(aiLine);
+							for (int j= 0; j < aiLine.allPoints.size() - 1; j++) {
+								Point p1 = aiLine.allPoints.get(j); 
+								Point p2 = aiLine.allPoints.get(j+1);
+								buffer.mainTree.set(p1.getX(),p1.getY(),p1);
+								buffer.mainTree.set(p2.getX(),p2.getY(),p2);
+							}
+						}
 					}
 				}
 			} if (drawingMode == "draw" && lassoOn == true) {
