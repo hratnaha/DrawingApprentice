@@ -253,6 +253,7 @@ Line line2;
 				}
 				else if(perceptionMode.equals("global")){
 					//boolean isInGroup = true;
+					//Different Global Behaviors
 					Node leastDense = buffer.mainTree.leastDenseNode();
 					System.out.println(leastDense.getX() + "," + leastDense.getY());
 					Random randy = new Random();
