@@ -260,7 +260,7 @@ Line line2;
 					//boolean isInGroup = true;
 					//Different Global Behaviors
 					Random randy = new Random();
-					int randomSelection = 1;
+					int randomSelection = randy.nextInt(3);
 					//Behavior 1: AI draws in least dense node based on random group
 					if(randomSelection == 0){
 						Node leastDense = buffer.mainTree.leastDenseNode();
