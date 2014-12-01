@@ -218,46 +218,45 @@ Line line2;
 				if(stack.getSize() ==0) buffer.update();
 				
 				buffer.allLines.add(curLine); //add human line to buffer storage			
-				curLine = null;
-				
-//				if(perceptionMode.equals("local")){
-//					int offset = 3;
-//					if(allLines.size()>offset){
-//						
-//						line2 = allLines.get(allLines.size()-offset);
-//					}
-//					else
-//					{
-//						line2 = curLine; ///can add other shapes to mutate with
-//					}
-//					//Added new stuff here - KYS
-//				//	if (buffer.allGroups.size() > 0) {
-//				//		Line l1 = buffer.allGroups.get(0).get(0);
-//			//			engine = new Decision_Engine(l1, line2, (float)Math.sqrt(Math.pow(width, 2) + Math.pow(height, 2)));
-//				//		System.out.println("Added line from lasso");
-//			//		}else {
-//					if(curLine == null){
-//						engine = new Decision_Engine(buffer.allLines.get(buffer.allLines.size()-1), line2, (float)Math.sqrt(Math.pow(width, 2) + Math.pow(height, 2)));
-//					}else{
-//						engine = new Decision_Engine(curLine, line2, (float)Math.sqrt(Math.pow(width, 2) + Math.pow(height, 2)));
-//					}
-//			//		}
-//					buffer.allLines.add(curLine); //add human line to buffer storage
-//					
-//					curLine = null;
-//					Line l = engine.decision();
-//					l.compGenerated = true; 
-//					stack.push(l);
-//					for (int j= 0; j < l.allPoints.size() - 1; j++) {
-//						Point p1 = l.allPoints.get(j); 
-//						Point p2 = l.allPoints.get(j+1);
-//						buffer.mainTree.set(p1.getX(),p1.getY(),p1);
-//						buffer.mainTree.set(p2.getX(),p2.getY(),p2);
-//					}
-//					//buffer.allLines.add(l); //add comp line to buffer storage
-//					compLines.add(l);
-//					activeDrawing = false; 
-//				}
+				/**Local Perceptual Logic**/
+				if(perceptionMode.equals("local")){
+					int offset = 3;
+					if(allLines.size()>offset){
+						
+						line2 = allLines.get(allLines.size()-offset);
+					}
+					else
+					{
+						line2 = curLine; ///can add other shapes to mutate with
+					}
+					//Added new stuff here - KYS
+				//	if (buffer.allGroups.size() > 0) {
+				//		Line l1 = buffer.allGroups.get(0).get(0);
+			//			engine = new Decision_Engine(l1, line2, (float)Math.sqrt(Math.pow(width, 2) + Math.pow(height, 2)));
+				//		System.out.println("Added line from lasso");
+			//		}else {
+					if(curLine == null){
+						engine = new Decision_Engine(buffer.allLines.get(buffer.allLines.size()-1), line2, (float)Math.sqrt(Math.pow(width, 2) + Math.pow(height, 2)));
+					}else{
+						engine = new Decision_Engine(curLine, line2, (float)Math.sqrt(Math.pow(width, 2) + Math.pow(height, 2)));
+					}
+			//		}
+					buffer.allLines.add(curLine); //add human line to buffer storage
+					
+					curLine = null;
+					Line l = engine.decision();
+					l.compGenerated = true; 
+					stack.push(l);
+					for (int j= 0; j < l.allPoints.size() - 1; j++) {
+						Point p1 = l.allPoints.get(j); 
+						Point p2 = l.allPoints.get(j+1);
+						buffer.mainTree.set(p1.getX(),p1.getY(),p1);
+						buffer.mainTree.set(p2.getX(),p2.getY(),p2);
+					}
+					//buffer.allLines.add(l); //add comp line to buffer storage
+					compLines.add(l);
+					activeDrawing = false; 
+				}
 //				if(perceptionMode.equals("regional")){
 //					//boolean isInGroup = true;
 //					Group enclosingGroup = null;
@@ -396,6 +395,7 @@ Line line2;
 //						}
 //					}
 //				}
+				curLine = null;
 			} if (drawingMode == "draw" && lassoOn == true) {
 				System.out.println("Right Button Released");
 				//perceptionMode = "regional";
@@ -710,47 +710,47 @@ Line line2;
 				Line lastLine = buffer.allLines.get(buffer.allLines.size()-1);
 				
 				/**Local Perceptual Logic**/
-				if(perceptionMode.equals("local")){
-					localSec++;
-					if(localSec > 0 && localSec % 3==0){
-						perceptualTimer.stop();
-						System.out.println(perceptualTimer.isRunning());
-						int offset = 3;
-						if(allLines.size()>offset){
-							
-							line2 = allLines.get(allLines.size()-offset);
-						}
-						else
-						{
-							line2 = lastLine; ///can add other shapes to mutate with
-						}
-						//Added new stuff here - KYS
-					//	if (buffer.allGroups.size() > 0) {
-					//		Line l1 = buffer.allGroups.get(0).get(0);
-				//			engine = new Decision_Engine(l1, line2, (float)Math.sqrt(Math.pow(width, 2) + Math.pow(height, 2)));
-					//		System.out.println("Added line from lasso");
-				//		}else {
-						engine = new Decision_Engine(lastLine, line2, (float)Math.sqrt(Math.pow(width, 2) + Math.pow(height, 2)));
-						
-				//		}
-						
-						Line l = engine.decision();
-						l.compGenerated = true; 
-						stack.push(l);
-						for (int j= 0; j < l.allPoints.size() - 1; j++) {
-							Point p1 = l.allPoints.get(j); 
-							Point p2 = l.allPoints.get(j+1);
-							buffer.mainTree.set(p1.getX(),p1.getY(),p1);
-							buffer.mainTree.set(p2.getX(),p2.getY(),p2);
-						}
-						//buffer.allLines.add(l); //add comp line to buffer storage
-						compLines.add(l);
-						
-						localSec = 0;
-						perceptualTimer.setInitialDelay(2500);
-						perceptualTimer.start();
-					}
-				}
+//				if(perceptionMode.equals("local")){
+//					localSec++;
+//					if(localSec > 0 && localSec % 3==0){
+//						perceptualTimer.stop();
+//						System.out.println(perceptualTimer.isRunning());
+//						int offset = 3;
+//						if(allLines.size()>offset){
+//							
+//							line2 = allLines.get(allLines.size()-offset);
+//						}
+//						else
+//						{
+//							line2 = lastLine; ///can add other shapes to mutate with
+//						}
+//						//Added new stuff here - KYS
+//					//	if (buffer.allGroups.size() > 0) {
+//					//		Line l1 = buffer.allGroups.get(0).get(0);
+//				//			engine = new Decision_Engine(l1, line2, (float)Math.sqrt(Math.pow(width, 2) + Math.pow(height, 2)));
+//					//		System.out.println("Added line from lasso");
+//				//		}else {
+//						engine = new Decision_Engine(lastLine, line2, (float)Math.sqrt(Math.pow(width, 2) + Math.pow(height, 2)));
+//						
+//				//		}
+//						
+//						Line l = engine.decision();
+//						l.compGenerated = true; 
+//						stack.push(l);
+//						for (int j= 0; j < l.allPoints.size() - 1; j++) {
+//							Point p1 = l.allPoints.get(j); 
+//							Point p2 = l.allPoints.get(j+1);
+//							buffer.mainTree.set(p1.getX(),p1.getY(),p1);
+//							buffer.mainTree.set(p2.getX(),p2.getY(),p2);
+//						}
+//						//buffer.allLines.add(l); //add comp line to buffer storage
+//						compLines.add(l);
+//						
+//						localSec = 0;
+//						perceptualTimer.setInitialDelay(2500);
+//						perceptualTimer.start();
+//					}
+//				}
 				
 				/**Regional Perceptual Logic**/
 				if(perceptionMode.equals("regional") && buffer.allGroups.size() > 0){
@@ -794,7 +794,7 @@ Line line2;
 					if(humanNotActiveSec >= 15){
 						perceptionMode = "local";
 					}	
-					else if(globalSec > 0 && globalSec % 3==0){
+					else if(globalSec > 0 && globalSec % 5==0){
 						//boolean isInGroup = true;
 						//Different Global Behaviors
 						perceptualTimer.stop();
