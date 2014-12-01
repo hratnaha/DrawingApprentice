@@ -58,6 +58,7 @@ public class DrawBackFork_Flow_Lines extends PApplet {
 	int localSec;
 	int regionalSec;
 	int globalSec;
+	int AIPausedSec = 0;
 	
 	public void setup() {
 		buffer = new Buffer(this, this.g, width, height);
@@ -610,23 +611,23 @@ Line line2;
 	
 	public void localButton_click1(GButton source, GEvent event) { 
 		localSec = 0;
-		regionalSec = -1;
-		globalSec = -1;
+		regionalSec = 0;
+		globalSec = 0;
 		System.out.println("Local Button Pressed");
 		perceptionMode="local";
 	} 
 	
 	public void regionalButton_click1(GButton source, GEvent event) { 
-		localSec = -1;
+		localSec = 0;
 		regionalSec = 0;
-		globalSec = -1;
+		globalSec = 0;
 		System.out.println("Regional Button Pressed");
 		perceptionMode="regional";
 	}
 	
 	public void globalButton_click1(GButton source, GEvent event) { 
-		localSec = -1;
-		regionalSec = -1;
+		localSec = 0;
+		regionalSec = 0;
 		globalSec = 0;
 		System.out.println("Global Button Pressed");
 		perceptionMode="global";
@@ -683,6 +684,13 @@ Line line2;
 		public void actionPerformed(ActionEvent e) {
 			humanNotActiveSec++;
 			System.out.println("Human last active " + humanNotActiveSec + " seconds ago\n");
+			if(!perceptualTimer.isRunning()){
+				AIPausedSec++;
+				System.out.println("AI System paused for " + AIPausedSec + " seconds");
+			}
+			else{
+				AIPausedSec = 0;
+			}
 		}
 		
 	}
@@ -697,10 +705,6 @@ Line line2;
 		public void actionPerformed(ActionEvent e) {
 			//Perceptual Modes
 			if(buffer.allLines.size() > 0){
-				//To make sure timer is working properly
-				System.out.println("Local last active " + localSec + " seconds ago");
-				System.out.println("Regional last active " + regionalSec + " seconds ago");
-				System.out.println("Global last active " + globalSec + " seconds ago\n");
 				
 				//Get's last line (the current line)
 				Line lastLine = buffer.allLines.get(buffer.allLines.size()-1);
@@ -708,8 +712,9 @@ Line line2;
 				/**Local Perceptual Logic**/
 				if(perceptionMode.equals("local")){
 					localSec++;
-					if((localSec > 0) && (localSec % 5 == 0)){
+					if(localSec > 0 && localSec % 3==0){
 						perceptualTimer.stop();
+						System.out.println(perceptualTimer.isRunning());
 						int offset = 3;
 						if(allLines.size()>offset){
 							
@@ -741,7 +746,8 @@ Line line2;
 						//buffer.allLines.add(l); //add comp line to buffer storage
 						compLines.add(l);
 						
-						perceptualTimer.setInitialDelay(2000);
+						localSec = 0;
+						perceptualTimer.setInitialDelay(2500);
 						perceptualTimer.start();
 					}
 				}
@@ -749,11 +755,10 @@ Line line2;
 				/**Global Perceptual Logic**/
 				if(perceptionMode.equals("global")){
 					globalSec++;
-					
 					if(humanNotActiveSec >= 15){
 						perceptionMode = "local";
 					}	
-					else if(globalSec > 0){
+					else if(globalSec > 0 && globalSec % 3==0){
 						//boolean isInGroup = true;
 						//Different Global Behaviors
 						perceptualTimer.stop();
@@ -864,7 +869,7 @@ Line line2;
 								}
 							}
 						}
-						
+						globalSec=0;
 						perceptualTimer.setInitialDelay(5000);
 						perceptualTimer.start();
 					
