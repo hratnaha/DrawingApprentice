@@ -257,39 +257,38 @@ Line line2;
 					compLines.add(l);
 					activeDrawing = false; 
 				}
-//				if(perceptionMode.equals("regional")){
-//					//boolean isInGroup = true;
-//					Group enclosingGroup = null;
-//					curLine.makeBoundingBox();
-//					for(int i = 0; i < buffer.allGroups.size(); i++){
-//						if(curLine.xmin > buffer.allGroups.get(i).getXmin() && curLine.ymin > buffer.allGroups.get(i).getYmin()
-//								&& curLine.xmax < buffer.allGroups.get(i).getXmax() && curLine.ymax < buffer.allGroups.get(i).getYmax()){
-//							enclosingGroup = buffer.allGroups.get(i);
-//							i=buffer.allGroups.size();
-//						}
-//					}
-//					if(enclosingGroup == null){
-//						System.out.println("Regional: Current Line is not in a group");
-//					}
-//					else{
-//						System.out.println("Regional: Current Line is in a group");
-//						Random randy = new Random();
-//						int randomLineIndex = randy.nextInt(enclosingGroup.lines.size());
-//						line2 = curLine;
-//						engine = new Decision_Engine(enclosingGroup.lines.get(randomLineIndex), line2, (float)Math.sqrt(Math.pow(width, 2) + Math.pow(height, 2)));
-//						Line aiLine = engine.decision();
-//						aiLine.compGenerated = true; 
-//						stack.push(aiLine);
-//						compLines.add(aiLine);
-//						for (int j= 0; j < aiLine.allPoints.size() - 1; j++) {
-//							Point p1 = aiLine.allPoints.get(j); 
-//							Point p2 = aiLine.allPoints.get(j+1);
-//							buffer.mainTree.set(p1.getX(),p1.getY(),p1);
-//							buffer.mainTree.set(p2.getX(),p2.getY(),p2);
-//						}
-//						curLine = null;
-//					}
-//				}
+				if(perceptionMode.equals("regional")){
+					//boolean isInGroup = true;
+					Group enclosingGroup = null;
+					curLine.makeBoundingBox();
+					for(int i = 0; i < buffer.allGroups.size(); i++){
+						if(curLine.xmin > buffer.allGroups.get(i).getXmin() && curLine.ymin > buffer.allGroups.get(i).getYmin()
+								&& curLine.xmax < buffer.allGroups.get(i).getXmax() && curLine.ymax < buffer.allGroups.get(i).getYmax()){
+							enclosingGroup = buffer.allGroups.get(i);
+							i=buffer.allGroups.size();
+						}
+					}
+					if(enclosingGroup == null){
+						System.out.println("Regional: Current Line is not in a group");
+					}
+					else{
+						System.out.println("Regional: Current Line is in a group");
+						Random randy = new Random();
+						int randomLineIndex = randy.nextInt(enclosingGroup.lines.size());
+						line2 = curLine;
+						engine = new Decision_Engine(enclosingGroup.lines.get(randomLineIndex), line2, (float)Math.sqrt(Math.pow(width, 2) + Math.pow(height, 2)));
+						Line aiLine = engine.decision();
+						aiLine.compGenerated = true; 
+						stack.push(aiLine);
+						compLines.add(aiLine);
+						for (int j= 0; j < aiLine.allPoints.size() - 1; j++) {
+							Point p1 = aiLine.allPoints.get(j); 
+							Point p2 = aiLine.allPoints.get(j+1);
+							buffer.mainTree.set(p1.getX(),p1.getY(),p1);
+							buffer.mainTree.set(p2.getX(),p2.getY(),p2);
+						}
+					}
+				}
 //				if(perceptionMode.equals("global")){
 //					//boolean isInGroup = true;
 //					//Different Global Behaviors
@@ -678,6 +677,13 @@ Line line2;
 		globalButton.addEventHandler(this, "globalButton_click1");
 	}
 	
+	//Function starts global behaviors up again
+	//Call after DRAWING of a global behavior is done
+	public void afterGlobalBehavior(){
+		perceptualTimer.setDelay(5000);
+		perceptualTimer.start();
+	}
+	
 	public class GeneralTiming implements ActionListener{
 
 		@Override
@@ -753,48 +759,46 @@ Line line2;
 //				}
 				
 				/**Regional Perceptual Logic**/
-				if(perceptionMode.equals("regional") && buffer.allGroups.size() > 0){
-					//boolean isInGroup = true;
-					Group enclosingGroup = null;
-					lastLine.makeBoundingBox();
-					for(int i = 0; i < buffer.allGroups.size(); i++){
-						if(lastLine.xmin > buffer.allGroups.get(i).getXmin() && lastLine.ymin > buffer.allGroups.get(i).getYmin()
-								&& lastLine.xmax < buffer.allGroups.get(i).getXmax() && lastLine.ymax < buffer.allGroups.get(i).getYmax()){
-							enclosingGroup = buffer.allGroups.get(i);
-							i=buffer.allGroups.size();
-						}
-					}
-					if(enclosingGroup == null){
-						System.out.println("Regional: Current Line is not in a group");
-					}
-					else{
-						System.out.println("Regional: Current Line is in a group");
-						Random randy = new Random();
-						int randomLineIndex = randy.nextInt(enclosingGroup.lines.size());
-						line2 = lastLine;
-						engine = new Decision_Engine(enclosingGroup.lines.get(randomLineIndex), line2, (float)Math.sqrt(Math.pow(width, 2) + Math.pow(height, 2)));
-						Line aiLine = engine.decision();
-						aiLine.compGenerated = true; 
-						stack.push(aiLine);
-						compLines.add(aiLine);
-						for (int j= 0; j < aiLine.allPoints.size() - 1; j++) {
-							Point p1 = aiLine.allPoints.get(j); 
-							Point p2 = aiLine.allPoints.get(j+1);
-							buffer.mainTree.set(p1.getX(),p1.getY(),p1);
-							buffer.mainTree.set(p2.getX(),p2.getY(),p2);
-						}
-					}
-				}
-				
-				
-				
+//				if(perceptionMode.equals("regional") && buffer.allGroups.size() > 0){
+//					//boolean isInGroup = true;
+//					Group enclosingGroup = null;
+//					lastLine.makeBoundingBox();
+//					for(int i = 0; i < buffer.allGroups.size(); i++){
+//						if(lastLine.xmin > buffer.allGroups.get(i).getXmin() && lastLine.ymin > buffer.allGroups.get(i).getYmin()
+//								&& lastLine.xmax < buffer.allGroups.get(i).getXmax() && lastLine.ymax < buffer.allGroups.get(i).getYmax()){
+//							enclosingGroup = buffer.allGroups.get(i);
+//							i=buffer.allGroups.size();
+//						}
+//					}
+//					if(enclosingGroup == null){
+//						System.out.println("Regional: Current Line is not in a group");
+//					}
+//					else{
+//						System.out.println("Regional: Current Line is in a group");
+//						Random randy = new Random();
+//						int randomLineIndex = randy.nextInt(enclosingGroup.lines.size());
+//						line2 = lastLine;
+//						engine = new Decision_Engine(enclosingGroup.lines.get(randomLineIndex), line2, (float)Math.sqrt(Math.pow(width, 2) + Math.pow(height, 2)));
+//						Line aiLine = engine.decision();
+//						aiLine.compGenerated = true; 
+//						stack.push(aiLine);
+//						compLines.add(aiLine);
+//						for (int j= 0; j < aiLine.allPoints.size() - 1; j++) {
+//							Point p1 = aiLine.allPoints.get(j); 
+//							Point p2 = aiLine.allPoints.get(j+1);
+//							buffer.mainTree.set(p1.getX(),p1.getY(),p1);
+//							buffer.mainTree.set(p2.getX(),p2.getY(),p2);
+//						}
+//					}
+//				}
+					
 				/**Global Perceptual Logic**/
 				if(perceptionMode.equals("global")){
 					globalSec++;
 					if(humanNotActiveSec >= 15){
 						perceptionMode = "local";
 					}	
-					else if(globalSec > 0 && globalSec % 5==0){
+					else if(globalSec > 0 && globalSec % 3==0){
 						//boolean isInGroup = true;
 						//Different Global Behaviors
 						perceptualTimer.stop();
@@ -821,9 +825,11 @@ Line line2;
 								for(int i = 0; i < shiftedGroup.lines.size(); i++){
 									engine = new Decision_Engine(shiftedGroup.lines.get(i), line2, (float)Math.sqrt(Math.pow(width, 2) + Math.pow(height, 2)));
 									Line aiLine = engine.decision();
+									perceptualTimer.stop();
 									aiLine.compGenerated = true; 
 									stack.push(aiLine);
 									compLines.add(aiLine);
+									
 									for (int j= 0; j < aiLine.allPoints.size() - 1; j++) {
 										Point p1 = aiLine.allPoints.get(j); 
 										Point p2 = aiLine.allPoints.get(j+1);
@@ -906,9 +912,7 @@ Line line2;
 							}
 						}
 						globalSec=0;
-						perceptualTimer.setInitialDelay(5000);
-						perceptualTimer.start();
-					
+						afterGlobalBehavior();//Remove this once this same call is made after all line_mod DRAWINGS (not computations)
 					}
 				}
 			}
