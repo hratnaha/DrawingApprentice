@@ -541,4 +541,29 @@ public class Line_Mod {
 		return newLine;
 		
 	}
+	
+	public Line Segment(Line line) {
+		SegmentPolyFunction p = SegmentationAlgorithm.ChopIntoSegments(line);
+		System.out.println("Called Segmentation Algorithm");
+		for(int i =0 ;i <p.coeffs.length; ++i) {
+			System.out.println("Coeffs " + i + ": " +p.coeffs[i]);
+		}
+		Line newLine = new Line();
+	
+		/*for (int i = 0; i < line.allPoints.size(); i++) {
+			float x = line.allPoints.get(i).x;
+			
+			double resilt = p.coeffs[0]*Math.pow(x, 3) + p.coeffs[1]*Math.pow(x, 2) + p.coeffs[2]*Math.pow(x, 1) + p.coeffs[3];
+			//System.out.println("Debug Point Result #" + i + " " + resilt);
+			PVector point = new PVector(x, (float)pf.value((double)x));
+			newLine.allPoints.add(point);
+		}
+		*/
+	
+		newLine = p.getLine();
+		
+		return newLine;
+	}
+
+
 }

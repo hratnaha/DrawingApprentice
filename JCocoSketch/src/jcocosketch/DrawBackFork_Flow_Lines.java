@@ -450,6 +450,7 @@ Line line2;
 			
 		}else {
 			engine = new Decision_Engine(curLine, line2, (float)Math.sqrt(Math.pow(width, 2) + Math.pow(height, 2)));
+			engine = new Local(curLine, line2, (float)Math.sqrt(Math.pow(width, 2) + Math.pow(height, 2)));1
 		}
 		//perceptionMode = "local";
 //		if (buffer.allGroups.size() > 0) {
@@ -490,6 +491,7 @@ Line line2;
 			Group shiftedGroup = normGroup.shiftGroup(leastDense.getX(), leastDense.getY());
 			for(int i = 0; i < shiftedGroup.lines.size(); i++){
 				engine = new Decision_Engine(shiftedGroup.lines.get(i), line2, (float)Math.sqrt(Math.pow(width, 2) + Math.pow(height, 2)));
+				engine = new Local(curLine, line2, (float)Math.sqrt(Math.pow(width, 2) + Math.pow(height, 2)));
 				Line aiLine = engine.decision();
 				aiLine.compGenerated = true; 
 				stack.push(aiLine);
@@ -512,6 +514,18 @@ Line line2;
 		{
 			buffer.clear();
 		}
+
+		if(key == '1') {
+			((Local)engine).upvote();
+		}
+		
+		if(key == '2') {
+			((Local)engine).downvote();
+		}
+		if(key == 'p') {
+			CreativeTrajectoryMonitor.PredictMode();
+		}
+
 	}
 
 	public void clear() {
