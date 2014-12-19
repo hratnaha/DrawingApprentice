@@ -83,6 +83,9 @@ public class Group {
 	}
 	
 	public boolean isInGroup(Line line, double threshold){
+		if(line.allPoints.size() <= 0){
+			return false;
+		}
 		int pointsInGroup = 0;
 		for(int i = 0; i < line.allPoints.size(); i++){
 			if(this.isInGroup(line.allPoints.get(i))){
