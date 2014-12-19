@@ -275,7 +275,7 @@ Line line2;
 						Random randy = new Random();
 						int randomLineIndex = randy.nextInt(enclosingGroup.lines.size());
 						line2 = curLine;
-						double offset = .25;
+						double offset = .25 * randy.nextDouble();;
 						double diag = offset * (Math.sqrt(Math.pow(enclosingGroup.getXmax()-enclosingGroup.getXmin(), 2) + Math.pow(enclosingGroup.getYmax()-enclosingGroup.getYmin(), 2)));
 						engine = new Decision_Engine(enclosingGroup.lines.get(randomLineIndex), line2, (float)diag);
 						Line aiLine = engine.decision();
