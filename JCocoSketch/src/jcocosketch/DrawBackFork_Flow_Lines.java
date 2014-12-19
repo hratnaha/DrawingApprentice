@@ -243,7 +243,6 @@ Line line2;
 			//		}
 					buffer.allLines.add(curLine); //add human line to buffer storage
 					
-					curLine = null;
 					Line l = engine.decision();
 					l.compGenerated = true; 
 					stack.push(l);
@@ -394,7 +393,6 @@ Line line2;
 //						}
 //					}
 //				}
-				curLine = null;
 			} if (drawingMode == "draw" && lassoOn == true) {
 				System.out.println("Right Button Released");
 				//perceptionMode = "regional";
@@ -414,6 +412,18 @@ Line line2;
 		} else
 			intClick = false;
 		shapeDrag = false;
+		
+		//Adds current line to a group if it's within a group
+		if(curLine != null){
+			double threshold = .8;
+			for(int i=0; i< buffer.allGroups.size(); i++){
+				if(buffer.allGroups.get(i).isInGroup(curLine, threshold)){
+					buffer.allGroups.get(i).addLine(curLine);
+					System.out.println("Line drawn added to group");
+				}
+			}
+		}
+		curLine = null;
 	}
 
 	/**
@@ -450,7 +460,7 @@ Line line2;
 			
 		}else {
 			engine = new Decision_Engine(curLine, line2, (float)Math.sqrt(Math.pow(width, 2) + Math.pow(height, 2)));
-			engine = new Local(curLine, line2, (float)Math.sqrt(Math.pow(width, 2) + Math.pow(height, 2)));1
+			engine = new Local(curLine, line2, (float)Math.sqrt(Math.pow(width, 2) + Math.pow(height, 2)));
 		}
 		//perceptionMode = "local";
 //		if (buffer.allGroups.size() > 0) {

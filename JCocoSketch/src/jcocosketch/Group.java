@@ -64,6 +64,39 @@ public class Group {
 		
 	}
 	
+	public boolean isInGroup(Point point){
+		if(point.x <= xmax && point.x >= xmin && point.y <= ymax && point.y >= ymin){
+			return true;
+		}
+		else{
+			return false;
+		}
+	}
+	
+	public boolean isInGroup(double x, double y){
+		if(x <= xmax && x >= xmin && y <= ymax && y >= ymin){
+			return true;
+		}
+		else{
+			return false;
+		}
+	}
+	
+	public boolean isInGroup(Line line, double threshold){
+		int pointsInGroup = 0;
+		for(int i = 0; i < line.allPoints.size(); i++){
+			if(this.isInGroup(line.allPoints.get(i))){
+				pointsInGroup++;
+			}
+		}
+		if(threshold <= (pointsInGroup/line.allPoints.size())){
+			return true;
+		}
+		else{
+			return false;
+		}
+	}
+	
 	/**
 	 * Shifts group by X and Y specified
 	 * @param x

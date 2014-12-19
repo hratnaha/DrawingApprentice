@@ -63,6 +63,11 @@ public class LassoLine extends Line{
 		boolean isInLasso = false;
 		System.out.println("In Action method");
 		Group newGroup = new Group();
+		this.makeBoundingBox();
+		newGroup.setXmin(this.xmin);
+		newGroup.setXmax(this.xmax);
+		newGroup.setYmax(this.ymax);
+		newGroup.setYmin(this.ymin);
 		newGroup.setGroupID(currentBuffer.allGroups.size());
 		ArrayList<Line> linesInGroup = new ArrayList<Line>();
 		for (int i = 0; i < currentBuffer.allLines.size(); i++) 
