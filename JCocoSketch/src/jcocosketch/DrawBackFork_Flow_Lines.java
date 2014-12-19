@@ -237,8 +237,10 @@ Line line2;
 			//		}else {
 					if(curLine == null){
 						engine = new Decision_Engine(buffer.allLines.get(buffer.allLines.size()-1), line2, (float)Math.sqrt(Math.pow(width, 2) + Math.pow(height, 2)));
+						engine = new Local(buffer.allLines.get(buffer.allLines.size()-1), line2, (float)Math.sqrt(Math.pow(width, 2) + Math.pow(height, 2)));
 					}else{
 						engine = new Decision_Engine(curLine, line2, (float)Math.sqrt(Math.pow(width, 2) + Math.pow(height, 2)));
+						engine = new Local(curLine, line2, (float)Math.sqrt(Math.pow(width, 2) + Math.pow(height, 2)));
 					}
 			//		}
 					buffer.allLines.add(curLine); //add human line to buffer storage
@@ -450,7 +452,7 @@ Line line2;
 			
 		}else {
 			engine = new Decision_Engine(curLine, line2, (float)Math.sqrt(Math.pow(width, 2) + Math.pow(height, 2)));
-			engine = new Local(curLine, line2, (float)Math.sqrt(Math.pow(width, 2) + Math.pow(height, 2)));1
+			engine = new Local(curLine, line2, (float)Math.sqrt(Math.pow(width, 2) + Math.pow(height, 2)));
 		}
 		//perceptionMode = "local";
 //		if (buffer.allGroups.size() > 0) {
