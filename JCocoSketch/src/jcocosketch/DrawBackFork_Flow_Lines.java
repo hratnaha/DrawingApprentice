@@ -254,6 +254,7 @@ Line line2;
 					}
 					//buffer.allLines.add(l); //add comp line to buffer storage
 					compLines.add(l);
+					buffer.allLines.add(l);
 					activeDrawing = false; 
 				}
 				if(perceptionMode.equals("regional")){
@@ -282,6 +283,7 @@ Line line2;
 						aiLine.compGenerated = true; 
 						stack.push(aiLine);
 						compLines.add(aiLine);
+						buffer.allLines.add(aiLine);
 						for (int j= 0; j < aiLine.allPoints.size() - 1; j++) {
 							Point p1 = aiLine.allPoints.get(j); 
 							Point p2 = aiLine.allPoints.get(j+1);
@@ -311,6 +313,7 @@ Line line2;
 //								aiLine.compGenerated = true; 
 //								stack.push(aiLine);
 //								compLines.add(aiLine);
+//								buffer.allLines.add(aiLine);
 //								for (int j= 0; j < aiLine.allPoints.size() - 1; j++) {
 //									Point p1 = aiLine.allPoints.get(j); 
 //									Point p2 = aiLine.allPoints.get(j+1);
@@ -351,6 +354,7 @@ Line line2;
 //							aiLine.compGenerated = true; 
 //							stack.push(aiLine);
 //							compLines.add(aiLine);
+							//buffer.allLines.add(aiLine);
 //							for (int j= 0; j < aiLine.allPoints.size() - 1; j++) {
 //								Point p1 = aiLine.allPoints.get(j); 
 //								Point p2 = aiLine.allPoints.get(j+1);
@@ -366,6 +370,7 @@ Line line2;
 //								aiLine.compGenerated = true; 
 //								stack.push(aiLine);
 //								compLines.add(aiLine);
+								//buffer.allLines.add(aiLine);
 //								for (int j= 0; j < aiLine.allPoints.size() - 1; j++) {
 //									Point p1 = aiLine.allPoints.get(j); 
 //									Point p2 = aiLine.allPoints.get(j+1);
@@ -386,6 +391,7 @@ Line line2;
 //							aiLine.compGenerated = true; 
 //							stack.push(aiLine);
 //							compLines.add(aiLine);
+							//buffer.allLines.add(aiLine);
 //							for (int j= 0; j < aiLine.allPoints.size() - 1; j++) {
 //								Point p1 = aiLine.allPoints.get(j); 
 //								Point p2 = aiLine.allPoints.get(j+1);
@@ -449,6 +455,7 @@ Line line2;
 					stack.push(l);
 					//buffer.allLines.add(l); //add comp line to buffer storage
 					compLines.add(l);
+					buffer.allLines.add(l);
 					activeDrawing = false; 
 					System.out.println("Added line from lasso");
 					if(lineCount >=9){
@@ -508,6 +515,7 @@ Line line2;
 				aiLine.compGenerated = true; 
 				stack.push(aiLine);
 				compLines.add(aiLine);
+				buffer.allLines.add(aiLine);
 			}
 			//buffer.allGroups.add(shiftedGroup);
 			
@@ -809,6 +817,7 @@ Line line2;
 //						aiLine.compGenerated = true; 
 //						stack.push(aiLine);
 //						compLines.add(aiLine);
+				//buffer.allLines.add(aiLine);
 //						for (int j= 0; j < aiLine.allPoints.size() - 1; j++) {
 //							Point p1 = aiLine.allPoints.get(j); 
 //							Point p2 = aiLine.allPoints.get(j+1);
@@ -855,6 +864,7 @@ Line line2;
 									aiLine.compGenerated = true; 
 									stack.push(aiLine);
 									compLines.add(aiLine);
+									buffer.allLines.add(aiLine);
 									
 									for (int j= 0; j < aiLine.allPoints.size() - 1; j++) {
 										Point p1 = aiLine.allPoints.get(j); 
@@ -874,6 +884,7 @@ Line line2;
 								aiLine.compGenerated = true; 
 								stack.push(aiLine);
 								compLines.add(aiLine);
+								buffer.allLines.add(aiLine);
 								for (int j= 0; j < aiLine.allPoints.size() - 1; j++) {
 									Point p1 = aiLine.allPoints.get(j); 
 									Point p2 = aiLine.allPoints.get(j+1);
@@ -895,6 +906,7 @@ Line line2;
 								aiLine.compGenerated = true; 
 								stack.push(aiLine);
 								compLines.add(aiLine);
+								buffer.allLines.add(aiLine);
 								for (int j= 0; j < aiLine.allPoints.size() - 1; j++) {
 									Point p1 = aiLine.allPoints.get(j); 
 									Point p2 = aiLine.allPoints.get(j+1);
@@ -910,6 +922,7 @@ Line line2;
 									aiLine.compGenerated = true; 
 									stack.push(aiLine);
 									compLines.add(aiLine);
+									buffer.allLines.add(aiLine);
 									for (int j= 0; j < aiLine.allPoints.size() - 1; j++) {
 										Point p1 = aiLine.allPoints.get(j); 
 										Point p2 = aiLine.allPoints.get(j+1);
@@ -929,6 +942,7 @@ Line line2;
 								aiLine.compGenerated = true; 
 								stack.push(aiLine);
 								compLines.add(aiLine);
+								buffer.allLines.add(aiLine);
 								for (int j= 0; j < aiLine.allPoints.size() - 1; j++) {
 									Point p1 = aiLine.allPoints.get(j); 
 									Point p2 = aiLine.allPoints.get(j+1);
