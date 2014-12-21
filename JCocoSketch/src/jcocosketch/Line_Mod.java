@@ -26,6 +26,10 @@ public class Line_Mod {
 		this.random = random;
 	}
 
+	public Line MakeCompGenerated(Line line) {
+		line.compGenerated = true;
+		return line;
+	}
 	public Line translation() {
 		float lineSpacing = 80;
 		Line translatedLine = new Line();
@@ -48,7 +52,8 @@ public class Line_Mod {
 				translatedLine.addPoint(newPoint);
 			}
 		}
-		return translatedLine;
+		
+		return MakeCompGenerated(translatedLine);
 	}
 
 	public Line reflection() { // reflects along y = -x
@@ -71,7 +76,7 @@ public class Line_Mod {
 				reflectionLine.addPoint(newPoint);
 			}
 		}
-		return reflectionLine;
+		return MakeCompGenerated(reflectionLine);
 	}
 
 	public Line scaling() { // scales it, just doesn't put the line where I'd
@@ -101,7 +106,7 @@ public class Line_Mod {
 				scaledLine.addPoint(newPoint);
 			}
 		}
-		return scaledLine;
+		return MakeCompGenerated(scaledLine);
 	}
 
 	public Line rotation() { // requires some maths
@@ -133,7 +138,7 @@ public class Line_Mod {
 				rotatedLine.addPoint(newPoint);
 			}
 		}
-		return rotatedLine;
+		return MakeCompGenerated(rotatedLine);
 	}
 
 	public Line drawBack(Line line) {
@@ -161,7 +166,7 @@ public class Line_Mod {
 				// just add the point to the point array
 				newLine.allPoints.add(line.allPoints.get(i));
 		}
-		return newLine;
+		return MakeCompGenerated(newLine);
 	}
 	public Line Trim(Line line, int width, int height) {
 		
@@ -180,7 +185,7 @@ public class Line_Mod {
 				// just add the point to the point array
 				newLine.allPoints.add(line.allPoints.get(i));
 		}
-		return newLine;
+		return MakeCompGenerated(newLine);
 	}
 	
 
@@ -249,7 +254,7 @@ public class Line_Mod {
 				
 				
 		}
-		return newLine;
+		return MakeCompGenerated(newLine);
 	}
 	
 	//************************************************************************
@@ -299,7 +304,7 @@ public class Line_Mod {
 		}
 
 
-		return newLine;
+		return MakeCompGenerated(newLine);
 	}
 
 	public Line drawOnlyMutation(Line line, Line line2) {
@@ -345,7 +350,7 @@ public class Line_Mod {
 		}
 
 
-		return newLine;
+		return MakeCompGenerated(newLine);
 	}
 
 
@@ -385,7 +390,7 @@ public class Line_Mod {
 		}
 
 		newLine = this.scaling(newLine);
-		return newLine;
+		return MakeCompGenerated(newLine);
 	}
 
 	public Line scaling(Line l) { // scales it, just doesn't put the line where I'd
@@ -415,7 +420,7 @@ public class Line_Mod {
 				scaledLine.addPoint(newPoint);
 			}
 		}
-		return scaledLine;
+		return MakeCompGenerated(scaledLine);
 	}
 	
 	//TODO:
@@ -476,7 +481,7 @@ public class Line_Mod {
 			Point newPoint = new Point(line.allPoints.get(i).x + offset, (float)fs.value(i) + offset, newLine.lineID);
 			newLine.allPoints.add(newPoint);
 		}
-		return newLine;
+		return MakeCompGenerated(newLine);
 	}
 	
 	private float result(double[] best, float x) {
@@ -538,7 +543,7 @@ public class Line_Mod {
 				newLine.allPoints.add(newPoint);
 			}
 		}
-		return newLine;
+		return MakeCompGenerated(newLine);
 		
 	}
 	
@@ -562,7 +567,7 @@ public class Line_Mod {
 	
 		newLine = p.getLine();
 		
-		return newLine;
+		return MakeCompGenerated(newLine);
 	}
 
 

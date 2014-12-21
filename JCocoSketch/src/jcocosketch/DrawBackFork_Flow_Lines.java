@@ -7,9 +7,14 @@ import javax.swing.Timer;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectOutputStream;
 import java.util.*;
 
 import g4p_controls.*;
+import flexjson.*;
 
 public class DrawBackFork_Flow_Lines extends PApplet {
 	GTextField teachMeTF;
@@ -25,6 +30,9 @@ public class DrawBackFork_Flow_Lines extends PApplet {
 	// human lines
 	ArrayList<Line> compLines = new ArrayList<Line>(); // keeps track of all
 	// comp lines
+	ArrayList<String> allModes = new ArrayList<String>();
+	Date time = new Date();
+	//all modes timestamped
 	
 	DrawBackStack stack = new DrawBackStack();
 	
@@ -91,6 +99,8 @@ public class DrawBackFork_Flow_Lines extends PApplet {
 		//smooth();
 	}
 
+
+		
 	public void draw() {
 		
 		PImage buffImage = buffer.getImage();
@@ -208,6 +218,7 @@ public class DrawBackFork_Flow_Lines extends PApplet {
 		}
 	}
 Line line2;
+private GButton saveButton;
 	public void mouseReleased() {
 		this.humanNotActiveSec = 0;
 		generalTimer.restart();
@@ -441,6 +452,7 @@ Line line2;
 	 */
 	public void drawAfterLasso() {
 		System.out.println("Added line from lasso - regional after lasso");
+		this.AddTextAndTimeStamp("lasso done");
 		if (buffer.allGroups.size() > 0) {
 			//for (int k =0; k<buffer.allGroups.size(); ++k) {
 			int size_main = buffer.allGroups.size() -1; //k;//
@@ -500,7 +512,7 @@ Line line2;
 		
 		
 	}
-	public void keyPressed(){
+	public void keyPressed() {
 		//If 'm' is pressed bot draws a random group is drawn on the the quadrant with lead density
 		if(key=='m'){
 			Node leastDense = buffer.mainTree.leastDenseNode();
@@ -539,15 +551,22 @@ Line line2;
 
 		if(key == '1') {
 			((Local)engine).upvote();
+			this.AddTextAndTimeStamp("Upvoted in " + perceptionMode);
 		}
 		
 		if(key == '2') {
 			((Local)engine).downvote();
+			this.AddTextAndTimeStamp("Downvoted in " + perceptionMode);
 		}
 		if(key == 'p') {
 			CreativeTrajectoryMonitor.PredictMode();
 		}
-
+		//Serialization stuff
+		if (key == 's') {
+			//depreciated
+			//moved the code to save button click
+		}
+		//end serialization
 	}
 
 	public void clear() {
@@ -644,12 +663,16 @@ Line line2;
 		drawMeTF.setText("");
 	} // _CODE_:drawMeButton:574185:
 	
+	
+	
+	
 	public void localButton_click1(GButton source, GEvent event) { 
 		localSec = 0;
 		regionalSec = 0;
 		globalSec = 0;
 		System.out.println("Local Button Pressed");
 		perceptionMode="local";
+		this.AddTextAndTimeStamp(perceptionMode);
 	} 
 	
 	public void regionalButton_click1(GButton source, GEvent event) { 
@@ -658,6 +681,7 @@ Line line2;
 		globalSec = 0;
 		System.out.println("Regional Button Pressed");
 		perceptionMode="regional";
+		this.AddTextAndTimeStamp(perceptionMode);
 	}
 	
 	public void globalButton_click1(GButton source, GEvent event) { 
@@ -666,6 +690,51 @@ Line line2;
 		globalSec = 0;
 		System.out.println("Global Button Pressed");
 		perceptionMode="global";
+		this.AddTextAndTimeStamp(perceptionMode);
+	}
+
+	//Serialize the data and Save
+	//Added by KYS Dec 19, 2014
+	public void saveButton_click(GButton source, GEvent event) { 
+		 JSONSerializer serializer = new JSONSerializer();
+		
+			String userLines = serializer.deepSerialize(this.allLines);
+			String computerLines =  serializer.deepSerialize(this.compLines);
+			String modes =  serializer.deepSerialize(this.allModes);
+			String localFreqDist = serializer.deepSerialize(((Local)engine).freq);
+			String curTime = time.toString();
+			
+	 
+			writeToFile(new File(curTime + "userLines.json"), userLines);
+			writeToFile(new File(curTime + "computerLines.json"), computerLines);
+			writeToFile(new File(curTime + "Modes.json"), modes);
+			writeToFile(new File(curTime + "LocalAlgorithmsFrequency.json"), localFreqDist);
+		
+	}
+
+
+
+	private void writeToFile(File file, String content) {
+		try (FileOutputStream fop = new FileOutputStream(file)) {
+ 
+			// if file doesn't exists, then create it
+			if (!file.exists()) {
+				file.createNewFile();
+			}
+ 
+			// get the content in bytes
+			byte[] contentInBytes = content.getBytes();
+ 
+			fop.write(contentInBytes);
+			fop.flush();
+			fop.close();
+ 
+			System.out.println("Done");
+			System.out.println("data saved");
+ 
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 
 	// Create all the GUI controls.
@@ -711,6 +780,10 @@ Line line2;
 		globalButton.setText("Global");
 		//localButton.setLocalColorScheme(GCScheme.CYAN_SCHEME);
 		globalButton.addEventHandler(this, "globalButton_click1");
+		
+		saveButton = new GButton(this, 550, 10, 100, 50);
+		saveButton.setText("Save Data");
+		saveButton.addEventHandler(this, "saveButton_click");
 	}
 	
 	//Function starts global behaviors up again
@@ -725,7 +798,7 @@ Line line2;
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			humanNotActiveSec++;
-			System.out.println("Human last active " + humanNotActiveSec + " seconds ago\n");
+		//	System.out.println("Human last active " + humanNotActiveSec + " seconds ago\n");
 			if(!perceptualTimer.isRunning()){
 				AIPausedSec++;
 				System.out.println("AI System paused for " + AIPausedSec + " seconds");
@@ -960,5 +1033,10 @@ Line line2;
 			}
 		}
 		
+	}
+	
+	private void AddTextAndTimeStamp(String str) {
+		String s = time.toString();
+		allModes.add(time + "\t" + str );
 	}
 }

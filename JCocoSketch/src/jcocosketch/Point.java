@@ -8,13 +8,13 @@ import processing.core.PVector;
  *
  */
 public class Point extends PVector implements Comparable{
-	private float lineID;
+	public float lineID;
 	//private double x;
     //private double y;
-    private Object opt_value;
-    private float timestamp; 
+    public Object opt_value;
+    public float timestamp; 
 
-    private float groupID;
+    public float groupID;
 
     public Point(float x, float y){
     	super(x, y);

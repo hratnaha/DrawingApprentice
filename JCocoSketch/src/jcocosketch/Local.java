@@ -21,7 +21,7 @@ public class Local extends Decision_Engine{
 
 	public int numAlgorithms = 10;
 	private double[] learningArray = new double[10];
-	protected  Frequency freq = new Frequency();
+	public  Frequency freq = new Frequency();
 	//Neural NEt
 	//private BasicNetwork network;
 	public Local(Line line, Line line2, float screenDiag) {

@@ -7,18 +7,18 @@ import java.util.*;
 import utilities.PVecUtilities;
 
 public class Line {
-	ArrayList<Point> allPoints = new ArrayList<Point>();
-	ArrayList<Float> parameter = new ArrayList<Float>();
-	Rectangle myBoundingBox;
-	float startTime;
-	float endTime;
-	float lineID;
-	float groupID = 1;
-	float xmin = -1;
-	float ymin = -1;
-	float xmax = -1;
-	float ymax = -1;
-	int color = 0;
+	public ArrayList<Point> allPoints = new ArrayList<Point>();
+	public ArrayList<Float> parameter = new ArrayList<Float>();
+	public Rectangle myBoundingBox;
+	public float startTime;
+	public float endTime;
+	public float lineID;
+	public float groupID = 1;
+	public float xmin = -1;
+	public float ymin = -1;
+	public float xmax = -1;
+	public float ymax = -1;
+	public int color = 0;
 	public boolean compGenerated = false; 
 	boolean isSelected = false;
 	Random rand = new Random();
@@ -371,7 +371,15 @@ public class Line {
 	}
 
 	public float getRectHeight() {
+		if (myBoundingBox != null) {
+		
 		return myBoundingBox.getHeight();
+		}
+		else {
+			return 0;
+		}
+	
+		
 	}
 
 	public void setLineID(float lineID) {
