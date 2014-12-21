@@ -705,10 +705,10 @@ private GButton saveButton;
 			String curTime = time.toString();
 			
 	 
-			writeToFile(new File(curTime + "userLines.json"), userLines);
-			writeToFile(new File(curTime + "computerLines.json"), computerLines);
-			writeToFile(new File(curTime + "Modes.json"), modes);
-			writeToFile(new File(curTime + "LocalAlgorithmsFrequency.json"), localFreqDist);
+			writeToFile(new File("userLines.json"), userLines);
+			writeToFile(new File("computerLines.json"), computerLines);
+			writeToFile(new File("Modes.json"), modes);
+			writeToFile(new File("LocalAlgorithmsFrequency.json"), localFreqDist);
 		
 	}
 
