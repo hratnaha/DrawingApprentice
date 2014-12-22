@@ -696,20 +696,30 @@ private GButton saveButton;
 	//Serialize the data and Save
 	//Added by KYS Dec 19, 2014
 	public void saveButton_click(GButton source, GEvent event) { 
-		 JSONSerializer serializer = new JSONSerializer();
+		String s = G4P.selectOutput("Select the Directory to Save File:");
+		 saveToFIle(s);
+		
+	}
+
+
+
+	private void saveToFIle(String filename) {
+		if (filename != null) {
+		JSONSerializer serializer = new JSONSerializer();
 		
 			String userLines = serializer.deepSerialize(this.allLines);
 			String computerLines =  serializer.deepSerialize(this.compLines);
 			String modes =  serializer.deepSerialize(this.allModes);
 			String localFreqDist = serializer.deepSerialize(((Local)engine).freq);
-			String curTime = time.toString();
+			File f = new File(filename);
+			String curTime = f.getAbsolutePath() + " ";
 			
 	 
-			writeToFile(new File("userLines.json"), userLines);
-			writeToFile(new File("computerLines.json"), computerLines);
-			writeToFile(new File("Modes.json"), modes);
-			writeToFile(new File("LocalAlgorithmsFrequency.json"), localFreqDist);
-		
+			writeToFile(new File(curTime + "userLines.json"), userLines);
+			writeToFile(new File(curTime + "computerLines.json"), computerLines);
+			writeToFile(new File(curTime + "Modes.json"), modes);
+			writeToFile(new File(curTime + "LocalAlgorithmsFrequency.json"), localFreqDist);
+		}
 	}
 
 
