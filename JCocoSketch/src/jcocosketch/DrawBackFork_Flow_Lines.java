@@ -240,35 +240,52 @@ private GButton saveButton;
 					{
 						line2 = curLine; ///can add other shapes to mutate with
 					}
+					line2 = curLine;
 					//Added new stuff here - KYS
 				//	if (buffer.allGroups.size() > 0) {
 				//		Line l1 = buffer.allGroups.get(0).get(0);
 			//			engine = new Decision_Engine(l1, line2, (float)Math.sqrt(Math.pow(width, 2) + Math.pow(height, 2)));
 				//		System.out.println("Added line from lasso");
 			//		}else {
-					if(curLine == null){
-						engine = new Decision_Engine(buffer.allLines.get(buffer.allLines.size()-1), line2, (float)Math.sqrt(Math.pow(width, 2) + Math.pow(height, 2)));
-						engine = new Local(buffer.allLines.get(buffer.allLines.size()-1), line2, (float)Math.sqrt(Math.pow(width, 2) + Math.pow(height, 2)));
-					}else{
-						engine = new Decision_Engine(curLine, line2, (float)Math.sqrt(Math.pow(width, 2) + Math.pow(height, 2)));
-						engine = new Local(curLine, line2, (float)Math.sqrt(Math.pow(width, 2) + Math.pow(height, 2)));
+					if(curLine.allPoints.size() <= 0 || line2.allPoints.size() <= 0){
+						System.out.print("Current line has no points. Draw another line to try again.");
 					}
-			//		}
-					buffer.allLines.add(curLine); //add human line to buffer storage
-					
-					Line l = engine.decision();
-					l.compGenerated = true; 
-					stack.push(l);
-					for (int j= 0; j < l.allPoints.size() - 1; j++) {
-						Point p1 = l.allPoints.get(j); 
-						Point p2 = l.allPoints.get(j+1);
-						buffer.mainTree.set(p1.getX(),p1.getY(),p1);
-						buffer.mainTree.set(p2.getX(),p2.getY(),p2);
+					else{
+						if(curLine == null){
+							if(buffer.allLines.get(buffer.allLines.size()-1).allPoints.size() <= 0 || buffer.allLines.get(buffer.allLines.size()-1) == null){
+								System.out.print("Line has no points, draw another Line");
+								engine = null;
+							}
+							else{
+								engine = new Decision_Engine(buffer.allLines.get(buffer.allLines.size()-1), line2, (float)Math.sqrt(Math.pow(width, 2) + Math.pow(height, 2)));
+								engine = new Local(buffer.allLines.get(buffer.allLines.size()-1), line2, (float)Math.sqrt(Math.pow(width, 2) + Math.pow(height, 2)));
+							}
+						}else{
+							engine = new Decision_Engine(curLine, line2, (float)Math.sqrt(Math.pow(width, 2) + Math.pow(height, 2)));
+							engine = new Local(curLine, line2, (float)Math.sqrt(Math.pow(width, 2) + Math.pow(height, 2)));
+						}
+				//		}
+						buffer.allLines.add(curLine); //add human line to buffer storage
+						
+						if(engine == null){
+							
+						}
+						else{
+							Line l = engine.decision();
+							l.compGenerated = true; 
+							stack.push(l);
+							for (int j= 0; j < l.allPoints.size() - 1; j++) {
+								Point p1 = l.allPoints.get(j); 
+								Point p2 = l.allPoints.get(j+1);
+								buffer.mainTree.set(p1.getX(),p1.getY(),p1);
+								buffer.mainTree.set(p2.getX(),p2.getY(),p2);
+							}
+							//buffer.allLines.add(l); //add comp line to buffer storage
+							compLines.add(l);
+							buffer.allLines.add(l);	
+						}
+						activeDrawing = false; 
 					}
-					//buffer.allLines.add(l); //add comp line to buffer storage
-					compLines.add(l);
-					buffer.allLines.add(l);
-					activeDrawing = false; 
 				}
 				if(perceptionMode.equals("regional")){
 					//boolean isInGroup = true;
@@ -291,17 +308,22 @@ private GButton saveButton;
 						line2 = curLine;
 						double offset = .25 * randy.nextDouble();;
 						double diag = offset * (Math.sqrt(Math.pow(enclosingGroup.getXmax()-enclosingGroup.getXmin(), 2) + Math.pow(enclosingGroup.getYmax()-enclosingGroup.getYmin(), 2)));
-						engine = new Decision_Engine(enclosingGroup.lines.get(randomLineIndex), line2, (float)diag);
-						Line aiLine = engine.decision();
-						aiLine.compGenerated = true; 
-						stack.push(aiLine);
-						compLines.add(aiLine);
-						buffer.allLines.add(aiLine);
-						for (int j= 0; j < aiLine.allPoints.size() - 1; j++) {
-							Point p1 = aiLine.allPoints.get(j); 
-							Point p2 = aiLine.allPoints.get(j+1);
-							buffer.mainTree.set(p1.getX(),p1.getY(),p1);
-							buffer.mainTree.set(p2.getX(),p2.getY(),p2);
+						if(enclosingGroup.lines.get(randomLineIndex).allPoints.size() <= 0 || enclosingGroup.lines.get(randomLineIndex) == null){
+							System.out.println("Will try again later when line randomly chosen has more points or is not null");
+						}
+						else{
+							engine = new Decision_Engine(enclosingGroup.lines.get(randomLineIndex), line2, (float)diag);
+							Line aiLine = engine.decision();
+							aiLine.compGenerated = true; 
+							stack.push(aiLine);
+							compLines.add(aiLine);
+							buffer.allLines.add(aiLine);
+							for (int j= 0; j < aiLine.allPoints.size() - 1; j++) {
+								Point p1 = aiLine.allPoints.get(j); 
+								Point p2 = aiLine.allPoints.get(j+1);
+								buffer.mainTree.set(p1.getX(),p1.getY(),p1);
+								buffer.mainTree.set(p2.getX(),p2.getY(),p2);
+							}
 						}
 					}
 				}
@@ -462,20 +484,25 @@ private GButton saveButton;
 				for (int i = 0; i< buffer.allGroups.get(size_main).getSize(); i++ )
 				{		
 					Line l1 = buffer.allGroups.get(size_main).lines.get(/*size_lines*/i);
-					engine = new Decision_Engine(l1, line2, (float)Math.sqrt(Math.pow(width, 2) + Math.pow(height, 2)));
-					curLine = null;
-					Line l = engine.decision();
-					l.compGenerated = true; 
-					stack.push(l);
-					//buffer.allLines.add(l); //add comp line to buffer storage
-					compLines.add(l);
-					buffer.allLines.add(l);
-					activeDrawing = false; 
-					System.out.println("Added line from lasso");
-					if(lineCount >=9){
-						i = buffer.allGroups.get(size_main).getSize();
+					if(l1.allPoints.size() <= 0 || line2.allPoints.size() <= 0 || l1 == null || line2 == null){
+						System.out.println("l1 or line2 has no points or are null.");
 					}
-					lineCount++;
+					else{
+						engine = new Decision_Engine(l1, line2, (float)Math.sqrt(Math.pow(width, 2) + Math.pow(height, 2)));
+						curLine = null;
+						Line l = engine.decision();
+						l.compGenerated = true; 
+						stack.push(l);
+						//buffer.allLines.add(l); //add comp line to buffer storage
+						compLines.add(l);
+						buffer.allLines.add(l);
+						activeDrawing = false; 
+						System.out.println("Added line from lasso");
+						if(lineCount >=9){
+							i = buffer.allGroups.get(size_main).getSize();
+						}
+						lineCount++;
+					}
 				}
 			}
 			//}
@@ -667,6 +694,8 @@ private GButton saveButton;
 	
 	
 	public void localButton_click1(GButton source, GEvent event) { 
+		perceptualTimer.restart();
+		perceptualTimer.stop();
 		localSec = 0;
 		regionalSec = 0;
 		globalSec = 0;
@@ -676,6 +705,8 @@ private GButton saveButton;
 	} 
 	
 	public void regionalButton_click1(GButton source, GEvent event) { 
+		perceptualTimer.restart();
+		perceptualTimer.stop();
 		localSec = 0;
 		regionalSec = 0;
 		globalSec = 0;
@@ -916,7 +947,8 @@ private GButton saveButton;
 				if(perceptionMode.equals("global")){
 					globalSec++;
 					if(humanNotActiveSec >= 15){
-						perceptionMode = "local";
+						perceptualTimer.restart();
+						//perceptionMode = "local";
 					}	
 					else if(globalSec > 0 && globalSec % 3==0){
 						//boolean isInGroup = true;
@@ -943,19 +975,24 @@ private GButton saveButton;
 								System.out.println("Actual Norm Mins: " + randomGroup.getXmin() + "," + randomGroup.getYmin());
 								Group shiftedGroup = normGroup.shiftGroup(leastDense.getX(), leastDense.getY());
 								for(int i = 0; i < shiftedGroup.lines.size(); i++){
-									engine = new Decision_Engine(shiftedGroup.lines.get(i), line2, (float)Math.sqrt(Math.pow(width, 2) + Math.pow(height, 2)));
-									Line aiLine = engine.decision();
-									perceptualTimer.stop();
-									aiLine.compGenerated = true; 
-									stack.push(aiLine);
-									compLines.add(aiLine);
-									buffer.allLines.add(aiLine);
-									
-									for (int j= 0; j < aiLine.allPoints.size() - 1; j++) {
-										Point p1 = aiLine.allPoints.get(j); 
-										Point p2 = aiLine.allPoints.get(j+1);
-										buffer.mainTree.set(p1.getX(),p1.getY(),p1);
-										buffer.mainTree.set(p2.getX(),p2.getY(),p2);
+									if(shiftedGroup.lines.get(i).allPoints.size() <= 0 || shiftedGroup.lines.get(i) == null || line2.allPoints.size() <= 0 || line2 == null){
+										System.out.println("Will try again later when lines have positive number of points and are not null");
+									}
+									else{
+										engine = new Decision_Engine(shiftedGroup.lines.get(i), line2, (float)Math.sqrt(Math.pow(width, 2) + Math.pow(height, 2)));
+										Line aiLine = engine.decision();
+										perceptualTimer.stop();
+										aiLine.compGenerated = true; 
+										stack.push(aiLine);
+										compLines.add(aiLine);
+										buffer.allLines.add(aiLine);
+										
+										for (int j= 0; j < aiLine.allPoints.size() - 1; j++) {
+											Point p1 = aiLine.allPoints.get(j); 
+											Point p2 = aiLine.allPoints.get(j+1);
+											buffer.mainTree.set(p1.getX(),p1.getY(),p1);
+											buffer.mainTree.set(p2.getX(),p2.getY(),p2);
+										}
 									}
 								}
 							}
@@ -964,17 +1001,22 @@ private GButton saveButton;
 								randomGroup.addLine(lastLine);
 								Group normGroup = randomGroup.normalizedGroup();
 								Group shiftedGroup = normGroup.shiftGroup(leastDense.getX(), leastDense.getY());
-								engine = new Decision_Engine(shiftedGroup.lines.get(0), line2, (float)Math.sqrt(Math.pow(width, 2) + Math.pow(height, 2)));
-								Line aiLine = engine.decision();
-								aiLine.compGenerated = true; 
-								stack.push(aiLine);
-								compLines.add(aiLine);
-								buffer.allLines.add(aiLine);
-								for (int j= 0; j < aiLine.allPoints.size() - 1; j++) {
-									Point p1 = aiLine.allPoints.get(j); 
-									Point p2 = aiLine.allPoints.get(j+1);
-									buffer.mainTree.set(p1.getX(),p1.getY(),p1);
-									buffer.mainTree.set(p2.getX(),p2.getY(),p2);
+								if(shiftedGroup.lines.get(0).allPoints.size() <= 0 || shiftedGroup.lines.get(i) == null || line2.allPoints.size() <= 0 || line2 == null){
+									System.out.println("Will try again later when lines have positive number of points and are not null");
+								}
+								else{
+									engine = new Decision_Engine(shiftedGroup.lines.get(0), line2, (float)Math.sqrt(Math.pow(width, 2) + Math.pow(height, 2)));
+									Line aiLine = engine.decision();
+									aiLine.compGenerated = true; 
+									stack.push(aiLine);
+									compLines.add(aiLine);
+									buffer.allLines.add(aiLine);
+									for (int j= 0; j < aiLine.allPoints.size() - 1; j++) {
+										Point p1 = aiLine.allPoints.get(j); 
+										Point p2 = aiLine.allPoints.get(j+1);
+										buffer.mainTree.set(p1.getX(),p1.getY(),p1);
+										buffer.mainTree.set(p2.getX(),p2.getY(),p2);
+									}
 								}
 							}
 						}
@@ -986,22 +1028,10 @@ private GButton saveButton;
 								Line randomLine = buffer.allLines.get(randy.nextInt(buffer.allLines.size()));
 								Line normalizedLine = randomLine.normalizeLine();
 								Line shiftedLine = normalizedLine.shiftLine(leastDense.getX(), leastDense.getY());
-								engine = new Decision_Engine(shiftedLine, line2, (float)Math.sqrt(Math.pow(width, 2) + Math.pow(height, 2)));
-								Line aiLine = engine.decision();
-								aiLine.compGenerated = true; 
-								stack.push(aiLine);
-								compLines.add(aiLine);
-								buffer.allLines.add(aiLine);
-								for (int j= 0; j < aiLine.allPoints.size() - 1; j++) {
-									Point p1 = aiLine.allPoints.get(j); 
-									Point p2 = aiLine.allPoints.get(j+1);
-									buffer.mainTree.set(p1.getX(),p1.getY(),p1);
-									buffer.mainTree.set(p2.getX(),p2.getY(),p2);
+								if(shiftedLine.allPoints.size() <= 0 || shiftedLine == null || line2.allPoints.size() <= 0 || line2 == null){
+									System.out.println("Will try again later when lines have positive number of points and are not null");
 								}
-							} else{
-								if(lastLine != null){
-									Line normalizedLine = lastLine.normalizeLine();
-									Line shiftedLine = normalizedLine.shiftLine(leastDense.getX(), leastDense.getY());
+								else{
 									engine = new Decision_Engine(shiftedLine, line2, (float)Math.sqrt(Math.pow(width, 2) + Math.pow(height, 2)));
 									Line aiLine = engine.decision();
 									aiLine.compGenerated = true; 
@@ -1015,6 +1045,28 @@ private GButton saveButton;
 										buffer.mainTree.set(p2.getX(),p2.getY(),p2);
 									}
 								}
+							} else{
+								if(lastLine != null){
+									Line normalizedLine = lastLine.normalizeLine();
+									Line shiftedLine = normalizedLine.shiftLine(leastDense.getX(), leastDense.getY());
+									if(shiftedLine.allPoints.size() <= 0 || shiftedLine == null || line2.allPoints.size() <= 0 || line2 == null){
+										System.out.println("Will try again later when lines have positive number of points and are not null");
+									}
+									else{
+										engine = new Decision_Engine(shiftedLine, line2, (float)Math.sqrt(Math.pow(width, 2) + Math.pow(height, 2)));
+										Line aiLine = engine.decision();
+										aiLine.compGenerated = true; 
+										stack.push(aiLine);
+										compLines.add(aiLine);
+										buffer.allLines.add(aiLine);
+										for (int j= 0; j < aiLine.allPoints.size() - 1; j++) {
+											Point p1 = aiLine.allPoints.get(j); 
+											Point p2 = aiLine.allPoints.get(j+1);
+											buffer.mainTree.set(p1.getX(),p1.getY(),p1);
+											buffer.mainTree.set(p2.getX(),p2.getY(),p2);
+										}
+									}
+								}
 							}
 						}
 						//Behavior 3: AI selects random group and reacts to all lines in the group (like local reaction)
@@ -1022,17 +1074,22 @@ private GButton saveButton;
 							Group randomGroup = buffer.allGroups.get(randy.nextInt(buffer.allGroups.size()));
 							
 							for(int i = 0; i < randomGroup.lines.size(); i++){
-								engine = new Decision_Engine(randomGroup.lines.get(i), line2, (float)Math.sqrt(Math.pow(width, 2) + Math.pow(height, 2)));
-								Line aiLine = engine.decision();
-								aiLine.compGenerated = true; 
-								stack.push(aiLine);
-								compLines.add(aiLine);
-								buffer.allLines.add(aiLine);
-								for (int j= 0; j < aiLine.allPoints.size() - 1; j++) {
-									Point p1 = aiLine.allPoints.get(j); 
-									Point p2 = aiLine.allPoints.get(j+1);
-									buffer.mainTree.set(p1.getX(),p1.getY(),p1);
-									buffer.mainTree.set(p2.getX(),p2.getY(),p2);
+								if(randomGroup.lines.get(i).allPoints.size() <= 0 || randomGroup.lines.get(i) == null || line2.allPoints.size() <= 0 || line2 == null){
+									System.out.println("Will try again later when lines have positive number of points and are not null");
+								}
+								else{
+									engine = new Decision_Engine(randomGroup.lines.get(i), line2, (float)Math.sqrt(Math.pow(width, 2) + Math.pow(height, 2)));
+									Line aiLine = engine.decision();
+									aiLine.compGenerated = true; 
+									stack.push(aiLine);
+									compLines.add(aiLine);
+									buffer.allLines.add(aiLine);
+									for (int j= 0; j < aiLine.allPoints.size() - 1; j++) {
+										Point p1 = aiLine.allPoints.get(j); 
+										Point p2 = aiLine.allPoints.get(j+1);
+										buffer.mainTree.set(p1.getX(),p1.getY(),p1);
+										buffer.mainTree.set(p2.getX(),p2.getY(),p2);
+									}
 								}
 							}
 						}
