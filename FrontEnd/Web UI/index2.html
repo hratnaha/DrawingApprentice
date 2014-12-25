@@ -1,0 +1,409 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<title>The Drawing Apprentice</title>
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="stylesheet" type="text/css" href="css/bootstrap.min.css" />
+<link rel="stylesheet" type="text/css" href="css/jquery-ui.css" />
+<link rel="stylesheet" type="text/css" href="jquery-ui-1.10.1.custom.min.css" />
+<link rel="stylesheet" type="text/css" href="css/style.css" />
+
+
+<script type="text/javascript" src="jquery-1.11.1.min.js"></script>
+<script type="text/javascript" src="jquery-ui-1.10.1.custom.min.js"></script>
+<script type="text/javascript" src="js/script.js"></script>
+<script type="text/css" src="jquery-ui.css"></script>
+
+
+
+</head>
+
+<body onload="init()">
+<div class="container">
+
+    <div id="color_palette" class="col-lg-5 col-md-5 col-sm-5 col-xs-5">
+    	<div class="row" style="padding-left:-30px;">
+        	<div class="col-lg-1 col-md-1 col-sm-1 col-xs-1">
+            	 <input type="image" src="../images/red.png" name="saveForm" class="btTxt submit" id="saveForm" />
+            </div>
+
+            <div class="col-lg-1 col-md-1 col-sm-1 col-xs-1">
+            	 <input type="image" src="../images/peach.png" name="saveForm" class="btTxt submit" id="saveForm" />
+            </div>
+            <div class="col-lg-1 col-md-1 col-sm-1 col-xs-1">
+                <input type="image" src="../images/yellow.png" name="saveForm" class="btTxt submit" id="saveForm" />
+            </div>
+            <div class="col-lg-1 col-md-1 col-sm-1 col-xs-1">
+                <input type="image" src="../images/green.png" name="saveForm" class="btTxt submit" id="saveForm" />
+            </div>
+            <div class="col-lg-1 col-md-1 col-sm-1 col-xs-1">
+                <input type="image" src="../images/purple.png" name="saveForm" class="btTxt submit" id="saveForm" />
+            </div>
+        </div>
+        <div class="row" style="padding-left:-30px;">
+        	<div class="col-lg-1 col-md-1 col-sm-1 col-xs-1">
+                <input type="image" src="../images/blue.png" name="saveForm" class="btTxt submit" id="saveForm" />
+            </div>
+            <div class="col-lg-1 col-md-1 col-sm-1 col-xs-1">
+                <input type="image" src="../images/white.png" name="saveForm" class="btTxt submit" id="saveForm" />
+            </div>
+            <div class="col-lg-1 col-md-1 col-sm-1 col-xs-1">
+                <input type="image" src="../images/grey.png" name="saveForm" class="btTxt submit" id="saveForm" />
+            </div>
+            <div class="col-lg-1 col-md-1 col-sm-1 col-xs-1">
+                <input type="image" src="../images/black.png" name="saveForm" class="btTxt submit" id="saveForm" />
+            </div>
+            <div class="col-lg-1 col-md-1 col-sm-1 col-xs-1">
+                <input type="image" src="../images/new_color.png" name="saveForm" class="btTxt submit" id="saveForm" />
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3">
+    	<div class="row">
+                  <h4 id="line_thickness_title" class="col-sm-8" style="float:left;">Line Thickness</h4>
+                  <div class="col-sm-4" id="thickness" style="padding-top:20px;height:34px;" >
+                  	<img id="brush5" style="display: none; margin-left:auto;margin-right:auto;" src="../images/brush-5.png" />
+                    <img id="brush4" style="display: none; margin-left:auto;margin-right:auto;" src="../images/brush-4.png" />
+                    <img id="brush3" style="display: none; margin-left:auto;margin-right:auto;" src="../images/brush-3.png" />
+                    <img id="brush2" style="display: none; margin-left:auto;margin-right:auto;" src="../images/brush-2.png" />
+                    <img id="brush1" style="margin-left:auto;margin-right:auto;" src="../images/brush-1.png" />
+                  </div><!--/.col-sm-4-->
+                <!--http://codepen.io/wherever/pen/JBqtb-->
+        </div><!--1st row-->
+        
+        <div class="row">
+
+                <div style="height:10px; margin:10px 25px;" id="line_thickness_slider"></div>
+                <div class="col-xs-1" id="textarea_one">1</div>
+                <div class="col-xs-1" id="textarea_two">5</div>
+                <script>
+					 $(function() {
+							$("#line_thickness_slider").slider(
+							{step:1,
+							min:1,
+							max:5,
+							value:1,
+							slide: function (event, ui){
+								$("#line_thickness_slider").val(ui.value);
+								$("#hiddenline_thickness_slider").val(ui.value);
+							},
+							change: function(event, ui){
+								if(ui.value == 1){
+									$('#brush1').show();
+									$('#brush2').hide();
+									$('#brush3').hide();
+									$('#brush4').hide();
+									$('#brush5').hide();
+									}
+								
+								else if(ui.value == 2) {
+									$('#brush1').hide();
+									$('#brush2').show();
+									$('#brush3').hide();
+									$('#brush4').hide();
+									$('#brush5').hide();
+								}
+								else if(ui.value == 3){
+									$('#brush1').hide();
+									$('#brush2').hide();
+									$('#brush3').show();
+									$('#brush4').hide();
+									$('#brush5').hide();	
+								}
+								else if(ui.value == 4){
+									$('#brush1').hide();
+									$('#brush2').hide();
+									$('#brush3').hide();
+									$('#brush4').show();
+									$('#brush5').hide();	
+								}
+								else if(ui.value == 5){
+									$('#brush1').hide();
+									$('#brush2').hide();
+									$('#brush3').hide();
+									$('#brush4').hide();
+									$('#brush5').show();
+								}
+								
+								}
+							});
+						
+						
+					});
+               </script>
+               
+        </div><!--/.row-->
+        
+        <div class="row">
+             <h4 id="opacity_title">Opacity</h4>
+		</div><!--Opacity 1st row-->
+        
+        <div class="row">
+             <div style="height:10px; margin:10px 25px;" id="opacity_slider"></div>
+             <div class="col-xs-1" id="textarea_three">0</div>
+             <div class="col-xs-1" id="textarea_four">100</div>
+                <script>
+						$(function () {
+							var slider = $("#opacity_slider").slider({
+							range: "min",     
+							value: 0,
+							min: 0,
+							max: 100,
+							step: 1,
+							slide: function(event, ui) {
+								$(ui.handle).find('.tooltip').text(ui.value);
+								},
+								create: function(event, ui) {
+								  var tooltip = $('<div class="tooltip" />');
+								  
+								$(event.target).find('.ui-slider-handle').append(tooltip);
+								},
+								change: function(event, ui) {
+										  $('#hidden').attr('value', ui.value);
+										  }
+						  			 });
+						});
+				
+
+               </script>
+
+        	</div><!--Opacity 2nd row-->
+	</div><!--/.col-lg-3 col-md-3 col-sm-3 col-xs-3-->
+    
+    <div class="col-lg-1 col-md-1 col-sm-1 col-xs-1" >
+    	<h5 style="text-align:center;width:95px;">Drawing Mode</h5>
+        <button class="btn btn-default btn-md" id="global" style="width:80px;height:28px;"><p>Global</p></button>
+        <button class="btn btn-default btn-md" id="regional" style="width:80px;height:28px;"><p>Regional</p></button>
+        <button class="btn btn-default btn-md" id="local" style="width:80px;height:28px;"><p>Local</p></button>
+    </div>
+    <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2" style="padding-top:60px;width:200px;">
+    	<a href="#"><img src="../images/add_new.png" style="height:40px;width:40px;margin-left:8%;padding:auto;float:left;" data-toggle="modal" data-target="#new"></img></a>
+        <a href="#"><img src="../images/setting.png"  style="height:40px;width:40px;margin-left:10%;padding:auto;float:left;" id="setting"></img></a>
+        <a href="#"><img src="../images/download.png"  style="height:40px;width:40px;margin-left:10%;padding:auto;float:left;" id="download"></img></a>
+    </div>
+    
+    <!--Modal-->
+			<div class="modal fade" id="new" role="dialog">
+            	<div class="modal-dialog">
+                	<div class="modal-content">
+                    	<form class="form-horizontal">
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss=:"modal">&times;</button>
+                                <h3 style="padding-left:3%;">New Canvas</h3>
+                            </div>
+                            
+                            <div class="modal-body">
+                            	<div class="form-group">
+                                	<label for="Participant-ID" class="col-lg-4 control-label">Participant ID</label>
+                                    <div class="col-lg-8">
+                                    	<input type="text" class="form-control" id="Participant-ID" placeholder="Put Participant ID Here"/>
+                                    </div> 
+                                </div><!--/.form-group-->
+                                
+                               <div class="form-group">
+                                        <label for="Human-Collaborator" class="col-lg-4 control-label">Human Collaborator</label>
+                                        <div class="col-lg-8">
+                                            <input type="text" class="form-control" id="Human-Collaborator" placeholder="Human Collaborator"/>
+                                        </div> 
+                               </div><!--/.form-group-->
+                                
+                                
+                               <div class="form-group">
+                                        <label for="Drawing-Mode" class="col-lg-4 control-label">Drawing Mode</label>
+                                        <div class="col-lg-8">
+                                        	<button class="btn btn-lg btn-default">Global</button>
+                                            <button class="btn btn-lg btn-default" >Regional </button>
+                                            <button class="btn btn-lg btn-default" >Local </button>
+                                        </div> 
+                               </div><!--/.form-group-->
+                                
+                                
+                            </div><!--/.modal-body-->
+                            
+                            <div class="modal-footer">
+                            	<button class="btn btn-lg btn-warning pull-left">Setting</button>
+                                <button class="btn btn-lg btn-info pull-left">Open Recent</button>
+                                <a class="btn btn-lg btn-danger" data-dismiss = "modal">Close</a>
+                            </div><!--/.modal-footer-->
+                       </form> 
+                    </div>
+                </div><!--/.modal-dialog-->
+            </div><!--/.modal fade-->
+        <!--Modal Ends-->
+
+</div><!--/.container-fluid-->
+<div class="col-lg-12" id="canvas">
+<script type="text/javascript">
+var canvas, ctx, flag = false,
+    prevX = 0,
+    currX = 0,
+    prevY = 0,
+    currY = 0,
+    dot_flag = false;
+
+var x = "black",
+    y = 2;
+
+function init() {
+    canvas = document.getElementById('can');
+    ctx = canvas.getContext("2d");
+    w = canvas.width;
+    h = canvas.height;
+
+    canvas.addEventListener("mousemove", function (e) {
+        findxy('move', e)
+    }, false);
+    canvas.addEventListener("mousedown", function (e) {
+        findxy('down', e)
+    }, false);
+    canvas.addEventListener("mouseup", function (e) {
+        findxy('up', e)
+    }, false);
+    canvas.addEventListener("mouseout", function (e) {
+        findxy('out', e)
+    }, false);
+}
+
+
+
+function draw() {
+    ctx.beginPath();
+    ctx.moveTo(prevX, prevY);
+    ctx.lineTo(currX, currY);
+    ctx.strokeStyle = x;
+    ctx.lineWidth = y;
+    ctx.stroke();
+    ctx.closePath();
+    a = currX;
+    b = currY;
+    a -= canvas.offsetLeft;
+    b -= canvas.offsetTop;
+    var now = new Date();
+var now_utc = new Date(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate(), now.getUTCHours(), now.getUTCMinutes(), now.getUTCSeconds());
+
+    console.log("x: " + currX + " y: " + currY + " time " + now_utc.toJSON());
+}
+
+function erase() {
+    var m = confirm("Want to clear");
+    if (m) {
+        ctx.clearRect(0, 0, w, h);
+        document.getElementById("canvasimg").style.display = "none";
+    }
+}
+
+function save() {
+    document.getElementById("canvasimg").style.border = "2px solid";
+    var dataURL = canvas.toDataURL();
+    document.getElementById("canvasimg").src = dataURL;
+    document.getElementById("canvasimg").style.display = "inline";
+}
+
+function findxy(res, e) {
+    if (res == 'down') {
+        prevX = currX;
+        prevY = currY;
+        currX = e.clientX - canvas.offsetLeft;
+        currY = e.clientY - canvas.offsetTop;
+
+        flag = true;
+        dot_flag = true;
+        if (dot_flag) {
+            ctx.beginPath();
+            ctx.fillStyle = x;
+            ctx.fillRect(currX, currY, 2, 2);
+            ctx.closePath();
+            dot_flag = false;
+        }
+    }
+    if (res == 'up' || res == "out") {
+        flag = false;
+    }
+    if (res == 'move') {
+        if (flag) {
+            prevX = currX;
+            prevY = currY;
+            currX = e.clientX - canvas.offsetLeft;
+            currY = e.clientY - canvas.offsetTop;
+            draw();
+        }
+    }
+}
+
+function wsTest(){
+  // connect to the websocket server
+  var address = "ws://localhost:21073";
+  var ws = new WebSocket(address);
+
+  ws.onopen = function(){
+    // send the data every 2 seconds
+    function createNewStroke(){
+        var newstroke = { // create a temporary stroke for sending
+            type : "stroke",
+            data : {
+                timestamp : 0,
+                id : "newStroke",
+                color : {
+                        r: 0,
+                        g: 0,
+                        b: 0,
+                        a: 0
+                    },
+                packetPoints : [
+                    {
+                        id : "newPoint 1",
+                        x : 0,
+                        y : 0,
+                        timestamp : 0,
+                        pressure : 0
+                    },
+                    {
+                        id : "newPoint 2",
+                        x : 0,
+                        y : 0,
+                        timestamp : 0,
+                        pressure : 0
+                    }
+                ]
+            }
+        }
+
+        var message = JSON.stringify(newstroke);
+        ws.send(message);
+
+        console.log("sent:");
+        console.log(message);
+    }
+
+    setInterval(createNewStroke, 2000);
+  };
+  ws.onerror = function(e){
+      console.log("error!!" + e);
+  };
+}
+
+</script>
+	 <canvas id="can" width="900" height="600" style="position:absolute;top:10%;left:15%;border:2px solid;">
+     </canvas>
+     
+     <img id="canvasing" style="position:absolute;top:10%;left:52%;" style="display:none;">
+
+     <div class="row">
+    <input type="button" class="btn btn-lg btn-default" value="save" id="btn" size="100" onclick="save()" style="position:absolute;top:60px;left:35%;">
+    <input type="button" class="btn btn-lg btn-default" value="clear" id="clr" size="100" onclick="erase()" style="position:absolute;top:60px;left:47%;">
+    <input type="button" class="btn btn-lg btn-default" value="test" id="clr" size="100" onclick="wsTest()" style="position:absolute;top:60px;left:60%;">
+    </div><!--/.row-->
+
+
+?
+</div><!--/.col-lg-12 #canvas-->
+
+<script type="text/javascript" src="js/bootstrap.js"></script>
+<script type="text/javascript" src="js/bootstrap.min.js"></script>
+
+</body>
+
+</html>

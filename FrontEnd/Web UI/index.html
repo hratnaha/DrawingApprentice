@@ -1,0 +1,101 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<title>The Drawing Apprentice</title>
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="stylesheet" type="text/css" href="css/bootstrap.min.css" />
+<link rel="stylesheet" type="text/css" href="css/jquery-ui.css" />
+<link rel="stylesheet" type="text/css" href="jquery-ui-1.10.1.custom.min.css" />
+
+<script type="text/javascript" src="jquery-1.11.1.min.js"></script>
+<script type="text/css" src="jquery-ui.css"></script>
+<script type="text/javascript" src="jquery-ui-1.10.1.custom.min.js"></script>
+
+
+
+</head>
+
+<body class="container">
+<!--Panel-->
+<div id="grey_panel" class="col-lg-12">
+	<div id="color_palette" class="col-lg-4">
+    </div><!--#color_palette-->
+    
+    <div id="line_thickness_and_palette" class="col-lg-4" >
+    
+        <div id="line_thickness" class="row">
+    
+                <button class="btn btn-default btn-sm" id="add_line_thickness_button">
+                	+
+                </button><!--#add_line_thickness_button-->
+    
+                <h4 style="display:inline-block">Line Thickness</h4>
+    
+                <button class="btn btn-default btn-sm" id="decreas_line_thickness_button">
+                	-
+                </button><!--#decreas_line_thickness_button-->
+                
+                <script>
+					 $(function() {
+							$("#line_thickness_slider").slider();
+					
+					});
+               </script>
+
+        <div id="line_thickness_slider" class="row col-lg-4">
+                <div class="col-md-12" id="line_thickness_slider"></div><!--#line_thickness_slider-->
+
+        </div><!--#line_thickness /.row-->
+        
+
+
+     
+     <div id="opacity" class="row">
+               <button class="btn btn-default btn-sm" id="increase_opacity_button">
+                    +
+               </button>
+                    
+               <h4 style="display:inline-block;">Opacity</h4>
+                    
+               <button class="btn btn-default btn-sm" id="decrease_opacity_button">
+                    -
+               </button>
+               <div id="opacity_slider">
+               </div>
+    
+      </div><!--#opacity /.row-->  
+    </div><!--#line_thickness and opacity /.col-lg-4-->
+    
+    <div id="drawing_mode" class="col-lg-2">
+    	<div class="row">
+        	<div id="drawing_mode_title"><h4 style="display:inline-block">Drawing Mode</h4></div>
+        	<button class="btn btn-default btn-md" id="global" style="width:100px">Global</button>
+            <br />
+            <button class="btn btn-default btn-md" id="regional" style="width:100px">Regional</button>
+            <br />
+            <button class="btn btn-default btn-md" id="local" style="width:100px">Local</button>
+        </div><!--#drawing_mode-->
+    </div>
+    
+    <div id="add_new" class="col-lg-2">
+    </div><!--#add_new-->
+    
+    <div id="setting" class="col-lg-2">
+    </div><!--#add_new-->
+
+</div><!--/.col-lg-12 #grey_panel-->
+
+
+
+
+
+
+<!--Javascript File-->
+
+
+
+
+</body>
+</html>
