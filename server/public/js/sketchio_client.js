@@ -97,3 +97,6 @@ function groupingMode(chk) {
 	    socket.emit('setMode', 3);
 	}
 }
+function voteUpOrDown(isup) {
+    socket.emit('vote', isup);
+}

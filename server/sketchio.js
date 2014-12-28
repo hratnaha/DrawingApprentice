@@ -104,7 +104,13 @@ io.on('connection', function (so) {
     so.on('setMode', onModeChanged);
     so.on('clear', onClear);
     so.on('submit', submitResult);
+    so.on('vote', onVote);
 });
+
+function onVote(isUp) {
+    var vote = isUp ? 1 : 0;
+    apprentice.voteSync(vote);
+}
 
 function onClear() {
     apprentice.clearSync();

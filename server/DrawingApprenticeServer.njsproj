@@ -1,0 +1,99 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{43395ebb-35bd-4424-a80f-dde651f4f336}</ProjectGuid>
+    <ProjectHome />
+    <ProjectView>ShowAllFiles</ProjectView>
+    <StartupFile>sketchio.js</StartupFile>
+    <WorkingDirectory>.</WorkingDirectory>
+    <OutputPath>.</OutputPath>
+    <ProjectTypeGuids>{3AF33F2E-1136-4D97-BBB7-1795711AC8B8};{349c5851-65df-11da-9384-00065b846f21};{9092AA53-FB77-4645-B42D-1CCCA6BD08BD}</ProjectTypeGuids>
+    <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">11.0</VisualStudioVersion>
+    <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
+    <StartWebBrowser>True</StartWebBrowser>
+    <LaunchUrl>http://localhost:1318/canvas2.0.html</LaunchUrl>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)' == 'Debug'" />
+  <PropertyGroup Condition="'$(Configuration)' == 'Release'" />
+  <ItemGroup>
+    <Content Include="package.json" />
+    <Content Include="README.md" />
+    <Compile Include="hello-world-server.js" />
+    <Compile Include="Sketch.js" />
+    <Compile Include="sketchio.js" />
+    <Content Include="public\canvas2.0.html" />
+    <Content Include="public\canvas.html" />
+    <Content Include="public\doctor.html" />
+    <Compile Include="public\jquery-1.8.2.js" />
+    <Content Include="apprentice\images\bot.png" />
+    <Content Include="apprentice\images\robot.png" />
+    <Content Include="apprentice\res\catIcon.png" />
+    <Content Include="apprentice\res\dog.png" />
+    <Content Include="apprentice\res\rat.png" />
+    <Content Include="apprentice\lib\processing-base\core\export.txt" />
+    <Compile Include="public\js\sketchAnimation.js" />
+    <Compile Include="public\js\sketchio_client.js" />
+    <Compile Include="public\js\sketchPad.js" />
+    <Compile Include="public\js\sketchWS.js" />
+    <Compile Include="public\js\socket.io.js" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="apprentice" />
+    <Folder Include="apprentice\images" />
+    <Folder Include="apprentice\jcocosketch" />
+    <Folder Include="apprentice\jcocosketch\intersectionResponse" />
+    <Folder Include="apprentice\jcocosketch\nodebridge" />
+    <Folder Include="apprentice\lib" />
+    <Folder Include="apprentice\lib\G4P" />
+    <Folder Include="apprentice\lib\G4P\library" />
+    <Folder Include="apprentice\lib\processing-base" />
+    <Folder Include="apprentice\lib\processing-base\core" />
+    <Folder Include="apprentice\META-INF" />
+    <Folder Include="apprentice\res" />
+    <Folder Include="apprentice\utilities" />
+    <Folder Include="public" />
+    <Folder Include="public\js" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.Common.targets" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <Import Project="$(VSToolsPath)\Node.js Tools\Microsoft.NodejsTools.targets" />
+  <ProjectExtensions>
+    <VisualStudio>
+      <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
+        <WebProjectProperties>
+          <UseIIS>False</UseIIS>
+          <AutoAssignPort>True</AutoAssignPort>
+          <DevelopmentServerPort>0</DevelopmentServerPort>
+          <DevelopmentServerVPath>/</DevelopmentServerVPath>
+          <IISUrl>http://localhost:48022/</IISUrl>
+          <NTLMAuthentication>False</NTLMAuthentication>
+          <UseCustomServer>True</UseCustomServer>
+          <CustomServerUrl>http://localhost:1337</CustomServerUrl>
+          <SaveServerSettingsInUserFile>False</SaveServerSettingsInUserFile>
+        </WebProjectProperties>
+      </FlavorProperties>
+      <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}" User="">
+        <WebProjectProperties>
+          <StartPageUrl>
+          </StartPageUrl>
+          <StartAction>CurrentPage</StartAction>
+          <AspNetDebugging>True</AspNetDebugging>
+          <SilverlightDebugging>False</SilverlightDebugging>
+          <NativeDebugging>False</NativeDebugging>
+          <SQLDebugging>False</SQLDebugging>
+          <ExternalProgram>
+          </ExternalProgram>
+          <StartExternalURL>
+          </StartExternalURL>
+          <StartCmdLineArguments>
+          </StartCmdLineArguments>
+          <StartWorkingDirectory>
+          </StartWorkingDirectory>
+          <EnableENC>False</EnableENC>
+          <AlwaysStartWebServerOnDebug>False</AlwaysStartWebServerOnDebug>
+        </WebProjectProperties>
+      </FlavorProperties>
+    </VisualStudio>
+  </ProjectExtensions>
+</Project>

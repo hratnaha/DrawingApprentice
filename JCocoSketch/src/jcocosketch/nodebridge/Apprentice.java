@@ -46,6 +46,13 @@ public class Apprentice {
 		}
 	}
 
+	public void vote(int isUp){
+		if(isUp == 1)
+			System.out.println("vote up");
+		else
+			System.out.println("vote down");
+	}
+	
 	public void clear() {
 		System.out.println("clear");
 	}
