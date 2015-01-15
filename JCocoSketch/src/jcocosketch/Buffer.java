@@ -68,7 +68,6 @@ public class Buffer {
 			}
 			//diff=false;
 		}
-		Point[] keys = mainTree.getKeys();
 		
 		//Testing Normalized Groups	
 		buffer.endDraw();
