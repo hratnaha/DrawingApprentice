@@ -611,6 +611,7 @@ public class DrawBackFork_Flow_Lines extends PApplet {
 	}
 	
 	public void globalButton_click1(GButton source, GEvent event) { 
+		perceptualTimer.restart();
 		localSec = 0;
 		regionalSec = 0;
 		globalSec = 0;
@@ -645,16 +646,18 @@ public class DrawBackFork_Flow_Lines extends PApplet {
 			ArrayList<Line> turnLines = curTurn.getLines();
 			
 			if(turnLines.size() > 0){
-				for(int i = 0; i < turnLines.size(); i++){
-					curLine = turnLines.get(i);
-					if(perceptionMode.equals("local")){
-						localMode();
+				if(perceptionMode.equals("local") || perceptionMode.equals("regional")){
+					for(int i = 0; i < turnLines.size(); i++){
+						curLine = turnLines.get(i);
+						if(perceptionMode.equals("local")){
+							localMode();
+						}
+						if(perceptionMode.equals("regional")){
+							regionalMode();
+						}
 					}
-					if(perceptionMode.equals("regional")){
-						regionalMode();
-					}
+					curLine = null;
 				}
-				curLine = null;
 			}
 			curTurn = null;
 			userTurn = false;
@@ -839,14 +842,14 @@ public class DrawBackFork_Flow_Lines extends PApplet {
 			}
 		}
 
-		private void globalMode() {
+		public void globalMode() {
 			Line lastLine = buffer.allLines.get(buffer.allLines.size()-1);
 			globalSec++;
-			if(humanNotActiveSec >= 15){
-				perceptualTimer.restart();
-				//perceptionMode = "local";
-			}	
-			else if(globalSec > 0 && globalSec % 3==0){
+//			if(humanNotActiveSec >= 15){
+//				perceptualTimer.restart();
+//				//perceptionMode = "local";
+//			}	
+			if(globalSec > 0 && globalSec % 3==0 && userTurn == false){
 				//boolean isInGroup = true;
 				//Different Global Behaviors
 				perceptualTimer.stop();
