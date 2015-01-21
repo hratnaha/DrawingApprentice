@@ -28,6 +28,7 @@ public class Line {
 
 	public Line() {
 		startTime = System.currentTimeMillis() / 1000.0f;
+		endTime = System.currentTimeMillis() / 1000.0f;
 		this.lineID = rand.nextFloat();
 	}
 
@@ -61,12 +62,15 @@ public class Line {
 			}
 		}
 		startTime = System.currentTimeMillis() / 1000.0f;
+		endTime = System.currentTimeMillis() / 1000.0f;
 		this.lineID = rand.nextFloat();
 	}
 
 	public Line(ArrayList<Point> all) {
 		initFromPoints(all);
 		this.lineID = rand.nextFloat();
+		this.startTime = all.get(0).timestamp;
+		this.endTime = all.get(all.size()-1).timestamp;
 	}
 
 	public Line(Point[] all) {
@@ -76,6 +80,8 @@ public class Line {
 		}
 		initFromPoints(allVec);
 		this.lineID = rand.nextFloat();
+		this.startTime = all[0].timestamp;
+		this.endTime = all[all.length-1].timestamp;
 	}
 	
 	public Line normalizeLine(){

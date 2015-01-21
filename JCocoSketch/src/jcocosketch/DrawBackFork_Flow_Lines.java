@@ -35,6 +35,7 @@ public class DrawBackFork_Flow_Lines extends PApplet {
 	ArrayList<String> allModes = new ArrayList<String>();
 	Date time = new Date();
 	//all modes timestamped
+	ArrayList<Turn> humanTurns = new ArrayList<Turn>();
 	
 	DrawBackStack stack = new DrawBackStack();
 	
@@ -71,6 +72,7 @@ public class DrawBackFork_Flow_Lines extends PApplet {
 	int globalSec;
 	int AIPausedSec = 0;
 	Line line2;
+	Turn curTurn = null;
 	
 	public void setup() {
 		buffer = new Buffer(this, this.g, width, height);
@@ -279,7 +281,8 @@ public class DrawBackFork_Flow_Lines extends PApplet {
 		if (!intClick && userTurn) {
 			//line(pmouseX, pmouseY, mouseX, mouseY);
 			if (drawingMode == "draw" && activeDrawing && lassoOn == false) {
-				buffer.addToBuffer(curLine); 
+				buffer.addToBuffer(curLine);
+				curTurn.addLine(curLine);
 				if(stack.getSize() ==0) buffer.update();
 				
 				buffer.allLines.add(curLine); //add human line to buffer storage	
@@ -405,7 +408,7 @@ public class DrawBackFork_Flow_Lines extends PApplet {
 			
 			
 		}else {
-			engine = new Decision_Engine(curLine, line2, (float)Math.sqrt(Math.pow(width, 2) + Math.pow(height, 2)));
+			//engine = new Decision_Engine(curLine, line2, (float)Math.sqrt(Math.pow(width, 2) + Math.pow(height, 2)));
 			engine = new Local(curLine, line2, (float)Math.sqrt(Math.pow(width, 2) + Math.pow(height, 2)));
 		}
 		//perceptionMode = "local";
@@ -635,10 +638,16 @@ public class DrawBackFork_Flow_Lines extends PApplet {
 		
 		if(turnButton.getText().equals("Start Turn")){
 			turnButton.setText("Stop Turn");
+			curTurn = new Turn();
+			curTurn.startTurn();
 			userTurn = true;
 		}
 		else if(turnButton.getText().equals("Stop Turn")){
 			turnButton.setText("Start Turn");
+			curTurn.endTurn();
+			humanTurns.add(curTurn);
+			System.out.println("Latest Turn Line Count: " + curTurn.getLines().size());
+			curTurn = null;
 			userTurn = false;
 		}
 	}
