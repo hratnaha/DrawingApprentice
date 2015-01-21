@@ -242,6 +242,8 @@ public class DrawBackFork_Flow_Lines extends PApplet {
 	//		System.out.println("Added line from lasso");
 //		}else {
 		if(curLine.allPoints.size() <= 0 || line2.allPoints.size() <= 0){
+			System.out.println("Curline: " + curLine.allPoints.size());
+			System.out.println("Line 2: " + line2.allPoints.size());
 			System.out.print("Current line has no points. Draw another line to try again.");
 		}
 		else{
@@ -286,13 +288,7 @@ public class DrawBackFork_Flow_Lines extends PApplet {
 				if(stack.getSize() ==0) buffer.update();
 				
 				buffer.allLines.add(curLine); //add human line to buffer storage	
-				/**Local Perceptual Logic**/
-				if(perceptionMode.equals("local")){
-					localMode();
-				}
-				if(perceptionMode.equals("regional")){
-					regionalMode();
-				}
+				allLines.add(curLine);
 			} if (drawingMode == "draw" && lassoOn == true) {
 				System.out.println("Right Button Released");
 				buffer.lassoLine = curLasso;
@@ -646,7 +642,20 @@ public class DrawBackFork_Flow_Lines extends PApplet {
 			turnButton.setText("Start Turn");
 			curTurn.endTurn();
 			humanTurns.add(curTurn);
-			System.out.println("Latest Turn Line Count: " + curTurn.getLines().size());
+			ArrayList<Line> turnLines = curTurn.getLines();
+			
+			if(turnLines.size() > 0){
+				for(int i = 0; i < turnLines.size(); i++){
+					curLine = turnLines.get(i);
+					if(perceptionMode.equals("local")){
+						localMode();
+					}
+					if(perceptionMode.equals("regional")){
+						regionalMode();
+					}
+				}
+				curLine = null;
+			}
 			curTurn = null;
 			userTurn = false;
 		}
@@ -766,7 +775,6 @@ public class DrawBackFork_Flow_Lines extends PApplet {
 		//	System.out.println("Human last active " + humanNotActiveSec + " seconds ago\n");
 			if(!perceptualTimer.isRunning()){
 				AIPausedSec++;
-				System.out.println("AI System paused for " + AIPausedSec + " seconds");
 			}
 			else{
 				AIPausedSec = 0;
