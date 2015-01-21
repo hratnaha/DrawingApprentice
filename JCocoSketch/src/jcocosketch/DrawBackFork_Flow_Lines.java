@@ -25,6 +25,7 @@ public class DrawBackFork_Flow_Lines extends PApplet {
 	GButton regionalButton;
 	GButton globalButton;
 	GButton saveButton;
+	GButton turnButton;
 	GLabel modeText;
 
 	ArrayList<Line> allLines = new ArrayList<Line>(); // keeps track of all
@@ -50,6 +51,7 @@ public class DrawBackFork_Flow_Lines extends PApplet {
 	boolean lineGroup = false;
 	boolean bufferChanged = false;
 	boolean lassoOn = false;
+	boolean userTurn = false;
 	Shape myShape;
 	Shape targetShape;
 	Rectangle shapeBound;
@@ -150,7 +152,7 @@ public class DrawBackFork_Flow_Lines extends PApplet {
 	public void mousePressed() {
 		this.humanNotActiveSec = 0;
 		generalTimer.stop();
-		if (drawingMode == "teach" || drawingMode == "draw" && intClick != true) {
+		if (userTurn && intClick != true) {
 			if(mouseButton == LEFT){
 				curLine = new Line();
 				//curLine.setStart(new PVector(mouseX, mouseY));
@@ -179,7 +181,7 @@ public class DrawBackFork_Flow_Lines extends PApplet {
 		mouseY = mouseY < 0 ? 0 : mouseY;
 		this.humanNotActiveSec = -1;
 		if(!intClick){
-		if (drawingMode == "draw" && this.mouseButton == LEFT) {
+		if (drawingMode == "draw" && this.mouseButton == LEFT && userTurn) {
 			LineSegment l = new LineSegment(new PVector(pmouseX, pmouseY),
 					new PVector(mouseX, mouseY));
 			curLine.addPoint(new Point(mouseX, mouseY, curLine.lineID));
@@ -190,7 +192,7 @@ public class DrawBackFork_Flow_Lines extends PApplet {
 			activeDrawing = true; 
 		}
 		//Lasso Tool with right click
-		if (drawingMode == "draw" && mouseButton == RIGHT ) {
+		if (drawingMode == "draw" && mouseButton == RIGHT && userTurn) {
 			//System.out.println("Right Button Dragged");
 			lassoOn = true;
 			LineSegment l = new LineSegment(new PVector(pmouseX, pmouseY),
@@ -274,14 +276,13 @@ public class DrawBackFork_Flow_Lines extends PApplet {
 	public void mouseReleased() {
 		this.humanNotActiveSec = 0;
 		generalTimer.restart();
-		if (!intClick) {
+		if (!intClick && userTurn) {
 			//line(pmouseX, pmouseY, mouseX, mouseY);
 			if (drawingMode == "draw" && activeDrawing && lassoOn == false) {
 				buffer.addToBuffer(curLine); 
 				if(stack.getSize() ==0) buffer.update();
 				
 				buffer.allLines.add(curLine); //add human line to buffer storage	
-				//FIGURE OUT WHERE REGIONAL IS
 				/**Local Perceptual Logic**/
 				if(perceptionMode.equals("local")){
 					localMode();
@@ -626,6 +627,21 @@ public class DrawBackFork_Flow_Lines extends PApplet {
 		 saveToFIle(s);
 		
 	}
+	
+	public void turnButton_click(GButton source, GEvent event) { 
+		localSec = 0;
+		regionalSec = 0;
+		globalSec = 0;
+		
+		if(turnButton.getText().equals("Start Turn")){
+			turnButton.setText("Stop Turn");
+			userTurn = true;
+		}
+		else if(turnButton.getText().equals("Stop Turn")){
+			turnButton.setText("Start Turn");
+			userTurn = false;
+		}
+	}
 
 
 
@@ -720,6 +736,10 @@ public class DrawBackFork_Flow_Lines extends PApplet {
 		saveButton = new GButton(this, 550, 10, 100, 50);
 		saveButton.setText("Save Data");
 		saveButton.addEventHandler(this, "saveButton_click");
+		
+		turnButton = new GButton(this, 675, 10, 100, 50);
+		turnButton.setText("Start Turn");
+		turnButton.addEventHandler(this, "turnButton_click");
 	}
 	
 	//Function starts global behaviors up again
