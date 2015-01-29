@@ -5,6 +5,14 @@ import processing.data.StringList;
 
 import javax.swing.Timer;
 
+import com.mongodb.BasicDBObject;
+import com.mongodb.DB;
+import com.mongodb.DBCollection;
+import com.mongodb.DBCursor;
+import com.mongodb.DBObject;
+import com.mongodb.MongoClient;
+import com.mongodb.util.JSON;
+
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
@@ -732,16 +740,118 @@ private GButton saveButton;
 		
 	}
 
-
-
+	MongoClient client;
+	boolean saveUserLines;
+	boolean saveCompLines;
+	boolean saveModes;
+	boolean saveFreq;
+	
+	/**
+	 * connect to mongo
+	 */
+	private void mongoConnect() {
+		try{
+			client = new MongoClient( "localhost" , 27017 );
+	        DB db = client.getDB( "dapp" );
+	        DBCollection coll = db.createCollection("userLines",null);
+         
+		}catch(Exception e){
+			System.err.println( e.getClass().getName() + ": " + e.getMessage() );
+		}
+		saveUserLines = true;
+		saveCompLines = true;
+		saveModes = true;
+		saveFreq = true;
+	}
+	
+	private void toggleSave(boolean userLines, boolean compLines, boolean modes, boolean freq){
+		saveUserLines = userLines;
+		saveCompLines = compLines;
+		saveModes = modes;
+		saveFreq = freq;
+	}
+	/**
+	 * converts string to json formatted db object
+	 * @param coll collection to insert into
+	 * @param data stringified json
+	 * @return the object created
+	 */
+	private BasicDBObject mongoConvertDoc(String coll, String data) {
+		BasicDBObject obj = null;
+		switch (coll) {
+		case "userLines":
+			obj = (BasicDBObject) JSON.parse(data.substring(1,data.length()));
+			obj.append("_id","userLines");
+			break;
+			
+		case "compLines":
+			obj = (BasicDBObject) JSON.parse(data.substring(1,data.length()));
+			obj.append("_id","compLines");
+			break;
+		
+		case "allModes":
+			obj = (BasicDBObject) JSON.parse("{" + data + "}");
+			obj.append("_id","allModes");
+			break;
+		
+		case "freq":
+			obj = (BasicDBObject) JSON.parse(data);
+			obj.append("_id","freq");
+			break;
+		default:
+			obj = null;			
+		}
+		return obj;
+	}
 	private void saveToFIle(String filename) {
 		if (filename != null) {
 		JSONSerializer serializer = new JSONSerializer();
-		
+		mongoConnect();
+		DB db = client.getDB("dapp");
+		DBCollection sessions = db.getCollection("sessions");
+		DBCollection lineCol = sessions.getCollection("lineData");
 			String userLines = serializer.deepSerialize(this.allLines);
 			String computerLines =  serializer.deepSerialize(this.compLines);
 			String modes =  serializer.deepSerialize(this.allModes);
 			String localFreqDist = serializer.deepSerialize(((Local)engine).freq);
+			
+			//choose which to save
+			toggleSave(true,true,false,true);
+			//update or insert document
+			BasicDBObject query = new BasicDBObject().append("_id", "userLines");
+			if(saveUserLines){
+				if(lineCol.distinct("_id").contains("userLines")){
+					lineCol.update(query, mongoConvertDoc("userLines",userLines));
+				}else{
+					lineCol.insert(mongoConvertDoc("userLines",userLines));
+				}
+			}
+			if(saveCompLines){
+				query.append("_id","compLines");
+				if(lineCol.distinct("_id").contains("compLines")){
+					lineCol.update(query, mongoConvertDoc("compLines",computerLines));
+				}else{
+					lineCol.insert(mongoConvertDoc("compLines",computerLines));
+				}
+			}
+			if(saveModes){
+				query.append("_id","allModes");
+				if(lineCol.distinct("_id").contains("allModes")){
+					lineCol.update(query, mongoConvertDoc("allModes",modes));
+				}else{
+					lineCol.insert(mongoConvertDoc("allModes",modes));
+				}
+			}
+			if(saveFreq){
+				query.append("_id","freq");
+				if(lineCol.distinct("_id").contains("freq")){	
+					lineCol.update(query, mongoConvertDoc("freq",localFreqDist));
+				}else{
+					lineCol.insert(mongoConvertDoc("freq",localFreqDist));
+				}
+			}
+			
+			mongoPrintCollection();
 			File f = new File(filename);
 			String curTime = f.getAbsolutePath() + " ";
 			
@@ -753,7 +863,12 @@ private GButton saveButton;
 		}
 	}
 
-
+	private void mongoPrintCollection(){
+		DBCursor cursor = client.getDB("dapp").getCollection("sessions").getCollection("lineData").find();
+		while(cursor.hasNext()){
+			System.out.println(cursor.next());
+		}
+	}
 
 	private void writeToFile(File file, String content) {
 		try (FileOutputStream fop = new FileOutputStream(file)) {

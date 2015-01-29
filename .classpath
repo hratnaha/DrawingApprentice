@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="Cornucopia/jni/src"/>
+	<classpathentry kind="src" path="DrawBackFork_Flow_Lines/generated/preproc"/>
+	<classpathentry kind="src" path="JCocoSketch/src"/>
+	<classpathentry kind="lib" path="JCocoSketch/core.jar"/>
+	<classpathentry kind="lib" path="JCocoSketch/lib/ApacheMath/commons-math3-3.3-javadoc.jar"/>
+	<classpathentry kind="lib" path="JCocoSketch/lib/ApacheMath/commons-math3-3.3.jar"/>
+	<classpathentry kind="lib" path="JCocoSketch/lib/flexjson-2.1/flexjson-2.1-javadoc.jar"/>
+	<classpathentry kind="lib" path="JCocoSketch/lib/flexjson-2.1/flexjson-2.1-sources.jar"/>
+	<classpathentry kind="lib" path="JCocoSketch/lib/flexjson-2.1/flexjson-2.1.jar"/>
+	<classpathentry kind="lib" path="JCocoSketch/lib/G4P/library/G4P.jar"/>
+	<classpathentry kind="lib" path="JCocoSketch/lib/processing-base/core/gluegen-rt-natives-linux-amd64.jar"/>
+	<classpathentry kind="lib" path="JCocoSketch/lib/processing-base/core/gluegen-rt-natives-linux-armv6hf.jar"/>
+	<classpathentry kind="lib" path="JCocoSketch/lib/processing-base/core/gluegen-rt-natives-linux-i586.jar"/>
+	<classpathentry kind="lib" path="JCocoSketch/lib/processing-base/core/gluegen-rt-natives-macosx-universal.jar"/>
+	<classpathentry kind="lib" path="JCocoSketch/lib/processing-base/core/gluegen-rt-natives-windows-amd64.jar"/>
+	<classpathentry kind="lib" path="JCocoSketch/lib/processing-base/core/gluegen-rt-natives-windows-i586.jar"/>
+	<classpathentry kind="lib" path="JCocoSketch/lib/processing-base/core/gluegen-rt.jar"/>
+	<classpathentry kind="lib" path="JCocoSketch/lib/processing-base/core/jogl-all-natives-linux-amd64.jar"/>
+	<classpathentry kind="lib" path="JCocoSketch/lib/processing-base/core/jogl-all-natives-linux-armv6hf.jar"/>
+	<classpathentry kind="lib" path="JCocoSketch/lib/processing-base/core/jogl-all-natives-linux-i586.jar"/>
+	<classpathentry kind="lib" path="JCocoSketch/lib/processing-base/core/jogl-all-natives-macosx-universal.jar"/>
+	<classpathentry kind="lib" path="JCocoSketch/lib/processing-base/core/jogl-all-natives-windows-amd64.jar"/>
+	<classpathentry kind="lib" path="JCocoSketch/lib/processing-base/core/jogl-all-natives-windows-i586.jar"/>
+	<classpathentry kind="lib" path="JCocoSketch/lib/processing-base/core/jogl-all.jar"/>
+	<classpathentry kind="lib" path="server/apprentice.jar"/>
+	<classpathentry kind="lib" path="server/commons-math3-3.3-javadoc.jar"/>
+	<classpathentry kind="lib" path="server/commons-math3-3.3.jar"/>
+	<classpathentry kind="lib" path="server/core.jar"/>
+	<classpathentry kind="lib" path="C:/mongodb/mongo-java-driver-2.11.3.jar"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.7"/>
+	<classpathentry kind="lib" path="C:/Users/Justin/Documents/GT/DrawingApprentice/DrawBackFork_Flow_Lines/processing-core.jar"/>
+	<classpathentry kind="output" path="server/apprentice"/>
+</classpath>

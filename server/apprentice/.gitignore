@@ -1,1 +1,14 @@
-/bin
+/.metadata/
+/jcocosketch/
+/jni/
+/utilities/
+/DrawBackFork_Flow_Lines$BezierFit.class
+/DrawBackFork_Flow_Lines$Button.class
+/DrawBackFork_Flow_Lines$Decision_Engine.class
+/DrawBackFork_Flow_Lines$FoodSeeker.class
+/DrawBackFork_Flow_Lines$Line.class
+/DrawBackFork_Flow_Lines$LineGroup.class
+/DrawBackFork_Flow_Lines$Line_Mod.class
+/DrawBackFork_Flow_Lines$Rectangle.class
+/DrawBackFork_Flow_Lines$particle.class
+/DrawBackFork_Flow_Lines.class
