@@ -60,10 +60,10 @@ function sketchUtil() {
             curstroke = createNewStroke();
             if ($("#cboxGrouping").attr('checked') == "checked") {
                 context.setLineDash([5]);
-                context.strokeStyle = "#ff8040";
+                context.strokeStyle = x;
             } else {
                 colorline = document.getElementById('background').value;
-                context.strokeStyle = colorline;
+                context.strokeStyle = x;
                 context.setLineDash([0]);
             }
 
