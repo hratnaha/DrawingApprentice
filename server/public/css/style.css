@@ -8,7 +8,7 @@
 	background: -moz-linear-gradient(top, #000000, #404040);
 	border-radius:10px;
 	z-index:10;
-	position:relative;
+	position:fixed;
 	margin-left:10%;
 	
 	 /* Safari 4-5, Chrome 1-9 */ 
@@ -40,40 +40,37 @@
         /*-moz-border-radius: 160px;*/
         /*border-radius: 500px;*/
     }
-    #both {
+#both {
 		width:100%;
 		height:100%;
         border: 1px solid #000;
-		position: absolute;
-		margin-top:60px;
+		position: fixed;
         left: 0;
         top: 0;
         z-index: 0;
     } 
     
-    #sketchpad {
+#sketchpad {
 		width:100%;
 		height:100%;
         border: 1px solid #000;
-        position: absolute;
-		margin-top:60px;
+        position: fixed;
         left: 0;
         top: 0;
         z-index: 2;
     }
 
-    #botpad {
+#botpad {
 		width:100%;
 		height:100%;
         border: 1px solid #000;
-        position: absolute;
-		margin-top:60px;
+        position: fixed;
         left: 0;
         top: 0;
         z-index: 1;
     }
 
-    #buttons {
+#buttons {
         padding-left: 10px;
         padding-top: 10px;
     }
@@ -84,10 +81,15 @@
 	}
 	
 #toggle_button {
+	background:url(../images/collapse.png) no-repeat;
+	width:50px;
+	height:31px;
+	opacity:0.7;
 	margin-left:50%;
 	margin-right:46%;
+	margin-top:9.7%;
 	position:absolute;
-	z-index:1000;
+	z-index:1000; 
 	}
 	
 .col-lg-5{
@@ -130,14 +132,32 @@ p{
 	
 #global{
 	margin-top:0px;}
+#global:active{
+	background-color:#7E7D7D;
+	}
+	
 #regional{
 	margin-top:6px;}
+#regional:active{
+	background-color:#7E7D7D;
+	}
 #local{
-	margin-top:6px;}v
+	margin-top:6px;}
+#local:active{
+	background-color:#7E7D7D;
+	}
 .new_button{
 	background-image:url(../../images/add_new.png);
 	}
-
+.grouping{
+	height:70px;
+	width:70px;
+	background:url(../images/grouping-01.png) no-repeat;
+	}
+.grouping:active{
+	
+	background:url(../images/grouped-01.png) no-repeat;
+	}
 /*slider styling*/
 #line_thickness_slider
 	{
@@ -190,7 +210,7 @@ p{
 #opacity_title{
 	display:inline-block;
 	width:150px;
-	padding-left:35%;
+	padding-left:30%;
 	padding-top:10px;
 	padding-bottom:10px;
 	margin-top:0px;

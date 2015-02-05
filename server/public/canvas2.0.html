@@ -20,15 +20,16 @@ put js files before css files
 </head>
 <body>
 
-    <div id="buttons">
-        <input type="color" name="background" id="background" value="#000000" style="display:none;"/>
+    <div id="buttons" style="display:none;">
+        <input type="color" name="background" id="background" value="#000000" display:none;/>
         <input type="button" id="clear" value="Clear" style="display:none;" />
-        <select id="mode">
+        <select id="mode" style="display:none;">
             <option value="local" style="z-index:2000;">Local</option>
             <option value="region" style="z-index:2000;">Region</option>
             <option value="global" style="z-index:2000;">Global</option>
+           <input id="cboxGrouping" type="checkbox" name="grouping" value="Grouping" />Grouping
         </select>
-        <input id="cboxGrouping" type="checkbox" name="grouping" value="Grouping" /> Grouping
+       
     </div><!--#buttons-->
 
 
@@ -52,8 +53,8 @@ put js files before css files
     <div class="container" id="toggle" class="toggle" onload="AdjustOpacitySlider()">  
 
 
-     <div id="color_palette" class="col-lg-5 col-md-5 col-sm-5 col-xs-5">
-    	<div class="row" style="padding-left:-30px;">
+     <div id="color_palette" class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
+    	<div class="row">
         	<div class="col-lg-1 col-md-1 col-sm-1 col-xs-1">
             	 <input type="image" src="images/red.png" name="saveForm" class="btTxt submit saveForm" id="saveForm1" />
             </div>
@@ -71,7 +72,7 @@ put js files before css files
                 <input type="image" src="images/purple.png" name="saveForm" class="btTxt submit saveForm" id="saveForm5" />
             </div>
         </div><!--/.row-->
-         <div class="row" style="padding-left:-30px;">
+         <div class="row">
         	<div class="col-lg-1 col-md-1 col-sm-1 col-xs-1">
                 <input type="image" src="images/blue.png" name="saveForm" class="btTxt submit saveForm" id="saveForm6" />
             </div>
@@ -88,6 +89,7 @@ put js files before css files
                 <input type="image" src="images/new_color.png" name="saveForm" class="btTxt submit saveForm" id="saveForm10" />
             </div>
         </div><!--/row-->
+
     </div><!--/#color_palette-->
 					<!--=========================LINE THICKNESS AND OPACITY=========================-->
    <div id="line_thickness_opacity" class="col-lg-3 col-md-3 col-sm-3 col-xs-3">
@@ -128,22 +130,17 @@ put js files before css files
 
 
     <div id="drawing_mode" class="col-lg-1 col-md-1 col-sm-1 col-xs-1" >
-    	<h5 style="text-align:center;width:95px;">Drawing Mode</h5>
-        <button class="btn btn-default btn-md mode" type="button" id="global" value="global" style="width:80px;height:28px;"><p>Global</p></button>
-        <button class="btn btn-default btn-md mode" type="button" id="regional" value="region" style="width:80px;height:28px;"><p>Regional</p></button>
-        <button class="btn btn-default btn-md mode" type="button" id="local" value="local" style="width:80px;height:28px;"><p>Local</p></button>
+    	<h5 style="text-align:left;width:100px;">Drawing Mode</h5>
+        <button class="btn btn-default btn-md mode" type="button" id="global" value="global" style="width:80px;height:28px;" onclick="ChangeMode1()"><p>Global</p></button>
+        <button class="btn btn-default btn-md mode" type="button" id="regional" value="region" style="width:80px;height:28px;" onClick="ChangeMode2()"><p>Regional</p></button>
+        <button class="btn btn-default btn-md mode" type="button" id="local" value="local" style="width:80px;height:28px;" onClick="ChangeMode3()"><p>Local</p></button>
     </div>
     
-   <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2" id="new_setting_download_trash"style="margin-left:2%;margin-top:2%;">
+   <div class="col-lg-2" id="new_setting_download_trash"style="margin-left:2%;margin-top:2%;">
         <div class="row-fluid">
 		    <div class="col-lg-1 col-md-1 col-sm-1 col-xs-1" id="add_new">
                     <a href="#"><img src="images/add_new.png" data-toggle="modal" data-target="#new"></img></a>
-                    <script>
-					    $('#add_new').click(function(){
-							//$("#icon").css("z-index","10");
-                    		$("#canvas").offset({ top: 0, left: 0 });
-						});
-                    </script>
+
             </div>
             
              <div class="col-lg-1 col-md-1 col-sm-1 col-xs-1" id="setting">
@@ -154,32 +151,46 @@ put js files before css files
             <div class="col-lg-1 col-md-1 col-sm-1 col-xs-1" id="download" >
                     <a href="#"><img src="images/download.png" id="download"></img></a>
             </div>
-          	<div class="col-lg-1 col-md-1 col-sm-1 col-xs-1" id="trash">
+          	<div class="col-lg-1 col-md-1 col-sm-1 col-xs-1" id="trash" onClick="clearCanvas()">
                      <a href="#"><img src="images/trasn.png" id="trash" /></a>
             </div>
         </div><!--/.row-fluid-->	
         </div><!--/.row-fluid-->
      </div><!--/#new_setting_download_trash .col-lg-2 col-md-2 col-sm-2 col-xs-2-->
+	
+     <div class="col-lg-1" id="grouping" style="margin-top:2.5%;margin-left:-2%;" >
+        <h4>Grouping</h4>
+		<button class="btn grouping"></button>
+     </div>
+    
+           
 
-    <div class="modal fade" id="new" role="dialog">
-            	<div class="modal-dialog">
-                	<div class="modal-content">
-                    	<form class="form-horizontal">
-                            <div class="modal-header">
-                                <button type="button" class="close" data-dismiss=:"modal">&times;</button>
+	</div><!--/.container #control_panel-->
+
+ 
+         
+<div><a class="btn" id="toggle_button" onClick="togglebutton()"></a></div>
+</div><!--#canvas-->
+              
+<div class="modal fade" id="new" role="dialog" data-backdrop="static">
+            	<div class="modal-dialog" data-backdrop="static">
+                	<div class="modal-content" data-backdrop="static" style="z-index:5000;">
+                    	<form class="form-horizontal" data-backdrop="static">
+                            <div class="modal-header" data-backdrop="static">
+                                <button type="button" class="close" data-dismiss="modal">&times;</button>
 
                                 <h3 style="padding-left:3%;">New Canvas</h3>
                             </div>
                             
-                            <div class="modal-body">
-                            	<div class="form-group">
+                            <div class="modal-body" data-backdrop="static">
+                            	<div class="form-group" data-backdrop="static">
                                 	<label for="Participant-ID" class="col-lg-4 control-label">Participant ID</label>
                                     <div class="col-lg-8">
                                     	<input type="text" class="form-control" id="Participant-ID" placeholder="Put Participant ID Here"/>
                                     </div> 
                                 </div><!--/.form-group-->
                                 
-                               <div class="form-group">
+                               <div class="form-group" data-backdrop="static">
                                         <label for="Human-Collaborator" class="col-lg-4 control-label">Human Collaborator</label>
                                         <div class="col-lg-8">
                                             <input type="text" class="form-control" id="Human-Collaborator" placeholder="Human Collaborator"/>
@@ -187,12 +198,12 @@ put js files before css files
                                </div><!--/.form-group-->
                                 
                                 
-                               <div class="form-group">
+                               <div class="form-group" data-backdrop="static">
                                         <label for="Drawing-Mode" class="col-lg-4 control-label">Drawing Mode</label>
                                         <div class="col-lg-8">
-                                        	<button class="btn btn-lg btn-default">Global</button>
-                                            <button class="btn btn-lg btn-default" >Regional </button>
-                                            <button class="btn btn-lg btn-default" >Local </button>
+                                        	<button class="btn btn-lg btn-default modal-btn" onclick="ChangeMode1()">Global</button>
+                                            <button class="btn btn-lg btn-default modal-btn" onclick="ChangeMode2()">Regional </button>
+                                            <button class="btn btn-lg btn-default modal-btn" onclick="ChangeMode3()">Local </button>
                                         </div> 
                                </div><!--/.form-group-->
                                 
@@ -200,11 +211,12 @@ put js files before css files
                             </div><!--/.modal-body-->
                             
                             <div class="modal-footer">
-                            	<button class="btn btn-lg btn-warning pull-left">Setting</button>
-                                <button class="btn btn-lg btn-info pull-left">Open Recent</button>
-                                <a class="btn btn-lg btn-danger" id="close" data-dismiss = "modal">Close</a>
+                            	<button class="btn btn-lg btn-warning pull-left modal-btn">Setting</button>
+                                <a data-backdrop='static'><button class="btn btn-lg btn-info modal-btn">Open Recent</button></a>
+                                <a class="btn btn-lg btn-danger" id="close" data-dismiss="modal">Close</a>
                                   <script>
-                            		$('#close').click(function(){
+                            		$('.modal-btn').click(function() { return false; });
+									$('#close').click(function(){
 									$("#icon").css("z-index","1000");
 									});
                                 </script>
@@ -212,36 +224,7 @@ put js files before css files
                        </form> 
                     </div><!--modal-content-->
                 </div><!--/.modal-dialog-->
-            </div><!--/.modal fade-->
-           
-
-	</div><!--/.container #control_panel-->
-
- 
-
-<!--div><button type="button" id="icon" class="btn btn_collapse" data-toggle="collapse" data-target="#control_panel">
-     
-      <!--script>
-					$('#icon').click(function(){
-						if ($('#control_panel').hasClass("in")){
-							$('#canvas').css("z-index","-10");
-							$('#icon').css("z-index","200");
-							$('#icon').css("margin-top","150px");
-							console.log("canvas is in");
-						}
-					else{
-							$('#canvas').css("z-index","-2");
-							$('#icon').css("z-index","200");
-							$('#icon').css("margin-top","-10px");
-							$console.log("canvas is out");
-						}
-					});
-      </script-->
-         
-<div><button class="btn btn-default" id="toggle_button" style="display:block;">Toggle</button></div>
-</div><!--#canvas-->
-              
-       	
+            </div><!--/.modal fade-->       	
 
         		
 
@@ -259,9 +242,6 @@ put js files before css files
 
 <script type="text/javascript" src="js/script.js"></script>
 <script type="text/javascript">
-
-    
-
     var bothCanvas = document.getElementById("both");
     var bothInputContext = bothCanvas.getContext("2d");
 
@@ -272,7 +252,8 @@ put js files before css files
         sketchpad.width = sketchpad.width;
         clearCanvas();
     }, false);
-    $("#mode").change(setMode);
+    $("#mode").change(setMode); //what does this do?
+	console.log("test");
     $("#cboxGrouping").change(groupingMode);
 </script>
 <div id="output"></div>

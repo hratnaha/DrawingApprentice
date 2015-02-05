@@ -77,19 +77,29 @@ $("#saveForm9").click(function Black(){
 
 console.log("saveForms all loaded");
 
+
 $( "#toggle_button" ).click(function() {
-  $( "#toggle" ).slideToggle( "slow", function() {
+  $('#toggle_button').css('margin-top', '-0.5%');
+  $( "#toggle" ).slideToggle( "fast", function() {
     // Animation complete.
-    });
+    if($('#toggle').css('display') == 'none'){
+		$('#toggle_button').css('margin-top', '10px;');
+        }
+	else{
+		$('#toggle_button').css('margin-top','10%');
+		}
+	});	
 });
-  	
+ 
+
+
 
 $(function AdjustOpacitySlider() {
 	var slider = $("#opacity_slider").slider({    
 			min: 0,
 			max: 1,
-			step: 0.1,
-			value: 0.5,
+			step: 0.05,
+			value: 0.8,
 			range: "min",  
 		    
 			create: function(event, ui) {
@@ -200,6 +210,23 @@ $("#down").click(function(){
 		    voteUpOrDown(false);
 			console.log("Voted Down!");
 		});
+		
+
+$("#global").click(function(){
+		setMode(mode);
+		console.log("global mode");
+	});
+
+$("#regional").click(function(){
+		setMode(mode);
+		console.log("regional mode");
+	});
+
+$("#local").click(function(){
+		setMode(mode);
+		console.log("local mode");
+	});
+
 
 function FullScreenCanvas() {
         		var canvas = document.getElementById('can'),
@@ -220,8 +247,6 @@ function FullScreenCanvas() {
 			$("#canvas").offset({ top: 0, left: 0 });
 			
 }
-
-
 
 
 

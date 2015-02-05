@@ -74,15 +74,19 @@ function saveToImage() {
 }
 // clear the canvas
 function clearCanvas() {
+	alert('clear canvas');
     socket.emit('clear', 'all');
 }
 // change the mode base on the UI changes
+
+
 function setMode(mode) {
+   
     switch ($(this).val()) {
         case 'local':
             m = 0;
             break;
-        case 'region':
+        case 'regional':
             m = 1;
             break;
         case 'global':
@@ -92,6 +96,23 @@ function setMode(mode) {
     socket.emit('setMode', m);
 }
 
+
+
+function ChangeMode1(){
+	alert("Global");
+	socket.emit('setMode',2);
+
+}
+
+function ChangeMode2(){
+	alert("Regional");
+	socket.emit('setMode',1);
+}
+
+function ChangeMode3(){
+	alert("Local");
+	socket.emit('setMode',0)
+}
 
 	
 function groupingMode(chk) {
