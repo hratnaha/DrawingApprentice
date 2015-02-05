@@ -2,6 +2,8 @@
 //CANVAS JAVASCTIPT
 var thickness = 0;
 var x = "#000000";
+var y = 0.5;
+var opacity = 1.0;
 
 $( document ).ready(function() {
 console.log( "ready!" );
@@ -73,6 +75,14 @@ $("#saveForm9").click(function Black(){
 		ctx.strokeStyle = x;
 	});
 
+console.log("saveForms all loaded");
+
+$( "#toggle_button" ).click(function() {
+  $( "#toggle" ).slideToggle( "slow", function() {
+    // Animation complete.
+    });
+});
+  	
 
 $(function AdjustOpacitySlider() {
 	var slider = $("#opacity_slider").slider({    
@@ -91,12 +101,20 @@ $(function AdjustOpacitySlider() {
 			slide: function(event, ui) {
 					$("#opacity_slider").val(ui.value);
 					$(ui.handle).find('.tooltip').text(ui.value);
+					opacity = $("#opacity_slider").slider('value');
+					console.log(opacity);
 				   },
 			change: function(event, ui) {
 					$('#hidden').attr('value', ui.value);
+					opacity = $("#opacity_slider").slider('value');
+					console.log(opacity);
 					}
+		
 		});
+	
+		console.log(opacity);
 });
+	
 	
 $(function AdjustLineThickness() {
 		$("#line_thickness_slider").slider(
@@ -115,6 +133,8 @@ $(function AdjustLineThickness() {
 			$('#brush3').hide();
 			$('#brush4').hide();
 			$('#brush5').hide();
+			y = 0.5;
+			
 					}
 								
 			else if(ui.value == 2) {
@@ -123,6 +143,8 @@ $(function AdjustLineThickness() {
 			$('#brush3').hide();
 			$('#brush4').hide();
 			$('#brush5').hide();
+			ctx.lineWidth = 7;
+			y = 2
 					}
 			else if(ui.value == 3){
 			$('#brush1').hide();
@@ -130,6 +152,7 @@ $(function AdjustLineThickness() {
 			$('#brush3').show();
 			$('#brush4').hide();
 			$('#brush5').hide();	
+			y = 4;
 					}
 			else if(ui.value == 4){
 			$('#brush1').hide();
@@ -137,6 +160,7 @@ $(function AdjustLineThickness() {
 			$('#brush3').hide();
 			$('#brush4').show();
 			$('#brush5').hide();	
+			y = 6;
 					}
 			else if(ui.value == 5){
 			$('#brush1').hide();
@@ -144,6 +168,7 @@ $(function AdjustLineThickness() {
 			$('#brush3').hide();
 			$('#brush4').hide();
 			$('#brush5').show();
+			y = 8;
 					}					
 	  		}//change function
 
@@ -164,6 +189,18 @@ $("#download").click(function(){
 });
 
 
+
+$("#up").click(function(){
+		    voteUpOrDown(true);
+			console.log("Voted Up!");
+		});
+
+
+$("#down").click(function(){
+		    voteUpOrDown(false);
+			console.log("Voted Down!");
+		});
+
 function FullScreenCanvas() {
         		var canvas = document.getElementById('can'),
                 context = canvas.getContext('2d');
@@ -183,7 +220,6 @@ function FullScreenCanvas() {
 			$("#canvas").offset({ top: 0, left: 0 });
 			
 }
-
 
 
 

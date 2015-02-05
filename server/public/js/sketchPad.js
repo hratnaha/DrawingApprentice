@@ -61,10 +61,14 @@ function sketchUtil() {
             if ($("#cboxGrouping").attr('checked') == "checked") {
                 context.setLineDash([5]);
                 context.strokeStyle = x;
+				context.globalAlpha = opacity;
+	
             } else {
                 colorline = document.getElementById('background').value;
                 context.strokeStyle = x;
                 context.setLineDash([0]);
+				context.lineWidth = y;
+				context.globalAlpha = opacity;
             }
 
             context.beginPath();
@@ -75,6 +79,8 @@ function sketchUtil() {
             if (this.isDrawing) {
                 context.lineTo(coors.x, coors.y);
                 context.stroke();
+				context.lineWidth = y;
+				context.globalAlpha = opacity;
                 
                 var json_coor = JSON.stringify(coors); //converting to json
                 pushNewPacketPoint(coors);

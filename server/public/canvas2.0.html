@@ -1,24 +1,28 @@
 <html>
 <head>
 <title>The Drawing Apprentice</title>
+<!--
+put js files before css files
+
+--> 
+    <script src="js/jquery-1.11.2.min.js"></script>
+    <script src="js/jquery-ui-1.10.1.custom.min.js"></script>
+    <script src="https://cdn.socket.io/socket.io-1.0.6.js"></script>
+	<script type="text/javascript" src="js/sketchPad.js"></script>
+	<script type="text/javascript" src="js/sketchio_client.js"></script>
+	<script type="text/javascript" src="js/bootstrap.js"></script>
+	<script type="text/javascript" src="js/bootstrap.min.js"></script>
     <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css" />
 	<link rel="stylesheet" type="text/css" href="css/jquery-ui.css" />
 	<link rel="stylesheet" type="text/css" href="css/jquery-ui-1.10.1.custom.min.css" />
     <link rel="stylesheet" type="text/css" href="css/style.css" />
-    <link rel="stylesheet" href="//code.jquery.com/ui/1.11.2/themes/smoothness/jquery-ui.css">
-    <script src="//code.jquery.com/jquery-1.10.2.js"></script>
-    <script src="//code.jquery.com/ui/1.11.2/jquery-ui.js"></script>
-    <script>
- 		 $(function() {
-  		  $( "#opacity_slider" ).slider();
-  		 });
-   </script>
+
 </head>
 <body>
 
     <div id="buttons">
-        <input type="color" name="background" id="background" value="#000000" />
-        <input type="button" id="clear" value="Clear" />
+        <input type="color" name="background" id="background" value="#000000" style="display:none;"/>
+        <input type="button" id="clear" value="Clear" style="display:none;" />
         <select id="mode">
             <option value="local" style="z-index:2000;">Local</option>
             <option value="region" style="z-index:2000;">Region</option>
@@ -27,20 +31,27 @@
         <input id="cboxGrouping" type="checkbox" name="grouping" value="Grouping" /> Grouping
     </div><!--#buttons-->
 
- <div class="vote circlebase type1" id="up" >
-<button type="button" class="btn thumb_up" style="border-radius:50%;"></button>
-    </div>    
+
+<button type="button" class="btn thumb_up vote circlebase type1" id="up" style="border-radius:50%;">
+	
+</button>
+
+   
 
 	<div class="vote circlebase type1" id="down">
-<button type="button" class="btn thumb_down" style="border-radius:50%;"></button>
+<button type="button" class="btn thumb_down" style="border-radius:50%;">
+	<script>
+    //voteUpOrDown(false);
+    </script>
+</button>
 	</div>
 
-
-<!--=================================================-->
 <div class="col-lg-12" id="canvas">
 
 <!--<canvas id="can" style="position:absolute;margin:0;padding:0;border:1px solid black; display:block;top:0px;"></canvas>-->
-    <div class="container" id="control_panel" onload="AdjustOpacitySlider()">  
+    <div class="container" id="toggle" class="toggle" onload="AdjustOpacitySlider()">  
+
+
      <div id="color_palette" class="col-lg-5 col-md-5 col-sm-5 col-xs-5">
     	<div class="row" style="padding-left:-30px;">
         	<div class="col-lg-1 col-md-1 col-sm-1 col-xs-1">
@@ -118,9 +129,9 @@
 
     <div id="drawing_mode" class="col-lg-1 col-md-1 col-sm-1 col-xs-1" >
     	<h5 style="text-align:center;width:95px;">Drawing Mode</h5>
-        <button class="btn btn-default btn-md" id="global" style="width:80px;height:28px;"><p>Global</p></button>
-        <button class="btn btn-default btn-md" id="regional" style="width:80px;height:28px;"><p>Regional</p></button>
-        <button class="btn btn-default btn-md" id="local" style="width:80px;height:28px;"><p>Local</p></button>
+        <button class="btn btn-default btn-md mode" type="button" id="global" value="global" style="width:80px;height:28px;"><p>Global</p></button>
+        <button class="btn btn-default btn-md mode" type="button" id="regional" value="region" style="width:80px;height:28px;"><p>Regional</p></button>
+        <button class="btn btn-default btn-md mode" type="button" id="local" value="local" style="width:80px;height:28px;"><p>Local</p></button>
     </div>
     
    <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2" id="new_setting_download_trash"style="margin-left:2%;margin-top:2%;">
@@ -129,7 +140,7 @@
                     <a href="#"><img src="images/add_new.png" data-toggle="modal" data-target="#new"></img></a>
                     <script>
 					    $('#add_new').click(function(){
-							$("#icon").css("z-index","-5");
+							//$("#icon").css("z-index","10");
                     		$("#canvas").offset({ top: 0, left: 0 });
 						});
                     </script>
@@ -203,11 +214,14 @@
                 </div><!--/.modal-dialog-->
             </div><!--/.modal fade-->
            
-          
+
 	</div><!--/.container #control_panel-->
-<div><button type="button" id="icon" class="btn btn_collapse" data-toggle="collapse" data-target="#control_panel">
+
+ 
+
+<!--div><button type="button" id="icon" class="btn btn_collapse" data-toggle="collapse" data-target="#control_panel">
      
-      <script>
+      <!--script>
 					$('#icon').click(function(){
 						if ($('#control_panel').hasClass("in")){
 							$('#canvas').css("z-index","-10");
@@ -222,19 +236,18 @@
 							$console.log("canvas is out");
 						}
 					});
-      </script>
-     </button> 
+      </script-->
          
-	</div><!--#icon-->
+<div><button class="btn btn-default" id="toggle_button" style="display:block;">Toggle</button></div>
 </div><!--#canvas-->
-
-
+              
+       	
 
         		
 
 <!--===================================================-->
 
-    <div id="container" style="position:absolute;">
+    <div id="container">
         <canvas id="both">Sorry, your browser is not supported.</canvas>
         <canvas id="botpad">Sorry, your browser is not supported.</canvas>
         <canvas id="sketchpad">Sorry, your browser is not supported.</canvas>
@@ -242,23 +255,12 @@
 
 
 
-<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
-<script src="https://cdn.socket.io/socket.io-1.0.6.js"></script>
-<!--<script src="js/jquery-ui-1.10.1.custom.min.js"></script>-->
-<!--<script src="js/jquery-1.11.1.min.js"></script>-->
-<script type="text/javascript" src="js/sketchPad.js"></script>
-<script type="text/javascript" src="js/sketchio_client.js"></script>
-<script type="text/javascript" src="js/bootstrap.js"></script>
-<script type="text/javascript" src="js/bootstrap.min.js"></script>
-<script type="text/javascript" src="js/script.js"></script>
+<!--script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script-->
 
+<script type="text/javascript" src="js/script.js"></script>
 <script type="text/javascript">
 
-    window.requestAnimFrame = (function () {
-        return window.requestAnimationFrame || window.webkitRequestAnimationFrame || window.mozRequestAnimationFrame || window.oRequestAnimationFrame || window.msRequestAnimationFrame || function ( /* function */ callback, /* DOMElement */ element) {
-            window.setTimeout(callback, 1000 / 60);
-        };
-    })();
+    
 
     var bothCanvas = document.getElementById("both");
     var bothInputContext = bothCanvas.getContext("2d");

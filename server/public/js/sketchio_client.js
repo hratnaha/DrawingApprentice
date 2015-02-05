@@ -4,6 +4,7 @@ var socket;
 var botCanvas = {};
 var isdrawing = false;
 var curStroke = [];
+
 function initWebSocket() {
     botCanvas = document.getElementById('botpad');
     botCanvas.setAttribute('width', container.offsetWidth * 0.95);
@@ -77,7 +78,6 @@ function clearCanvas() {
 }
 // change the mode base on the UI changes
 function setMode(mode) {
-    var m = 0;
     switch ($(this).val()) {
         case 'local':
             m = 0;
@@ -88,10 +88,12 @@ function setMode(mode) {
         case 'global':
             m = 2;
             break;
-    }
-    
+    } 
     socket.emit('setMode', m);
 }
+
+
+	
 function groupingMode(chk) {
 	if(this.checked){
 	    socket.emit('setMode', 3);
