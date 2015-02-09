@@ -77,6 +77,7 @@ public class Local extends Decision_Engine{
 	
 	public void upvote() {
 	//	freq.addValue(decisionNumber);
+		
 		freq.incrementValue(decisionNumber, 1);
 		
 		System.out.println("Incremented " + decisionNumber);

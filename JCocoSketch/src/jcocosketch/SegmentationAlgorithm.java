@@ -37,11 +37,13 @@ public class SegmentationAlgorithm {
 	}
 	
 	public static SegmentPolyFunction[] ChopIntoSegments(Line line, int samples) {
-		SegmentPolyFunction[] poly = new SegmentPolyFunction[samples];
+		SegmentPolyFunction[] poly = new SegmentPolyFunction[samples +1];
 		int length = line.allPoints.size() / samples;
 		Line temp = new Line();
 		int j = 0;
-		for (int i = 0; i < line.allPoints.size(); ++i) {
+		
+		
+		for (int i = 1; i < line.allPoints.size(); ++i) {
 			if ( i % length != 0) {
 				temp.allPoints.add(line.allPoints.get(i));
 			}
@@ -50,6 +52,7 @@ public class SegmentationAlgorithm {
 				temp = new Line();
 			}
 		}
+		System.out.println("Done Poly Segmenting");
 		return poly;
 	}
 }

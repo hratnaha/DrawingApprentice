@@ -565,6 +565,8 @@ private GButton saveButton;
 		if (key == 's') {
 			//depreciated
 			//moved the code to save button click
+			//Kmeans test
+			KMeans.Cluster(allLines, 3);
 		}
 		//end serialization
 	}
