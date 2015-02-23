@@ -3,12 +3,12 @@
 function sketchUtil() {
     // get the canvas element and its context
     var container = document.getElementById('container');
-    bothCanvas.setAttribute('width', container.offsetWidth * 0.95);
-    bothCanvas.setAttribute('height', container.offsetHeight * 0.90);
+    bothCanvas.setAttribute('width', container.offsetWidth);
+    bothCanvas.setAttribute('height', container.offsetHeight);
 
     var canvas = document.getElementById('sketchpad');
-    canvas.setAttribute('width', container.offsetWidth * 0.95);
-    canvas.setAttribute('height', container.offsetHeight * 0.90);
+    canvas.setAttribute('width', container.offsetWidth);
+    canvas.setAttribute('height', container.offsetHeight);
     var context = canvas.getContext('2d');
     context.lineWidth = 0.1;
     var curstroke;

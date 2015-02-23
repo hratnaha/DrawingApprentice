@@ -250,23 +250,13 @@ function FullScreenCanvas() {
 
 
 
-function erase() {
-    var m = confirm("Want to clear");
-    if (m) {
-        ctx.clearRect(0, 0, w, h);
-        document.getElementById("both").style.display = "none";
-		document.getElementById("botpad").style.display = "none";
-		document.getElementById("sketchpad").style.display = "none";
-		
-    }
-}
-
-
-
-document.getElementById('trash').addEventListener('click', function() {
-		alert("want to clear canvas?");
-        myCanvasContext1.clearRect(0, 0, canvas.width, canvas.height)
-      }, false);
-
 
 }); //document ready
+
+
+function clearcanvas() {
+		alert("clear canvas!!!");
+        myCanvasContext1.clearRect(0, 0, canvas.width, canvas.height);
+		myCanvasContext2.clearRect(0, 0, canvas.width, canvas.height);
+		myCanvasContext3.clearRect(0, 0, canvas.width, canvas.height);
+}

@@ -7,8 +7,8 @@ var curStroke = [];
 
 function initWebSocket() {
     botCanvas = document.getElementById('botpad');
-    botCanvas.setAttribute('width', container.offsetWidth * 0.95);
-    botCanvas.setAttribute('height', container.offsetHeight * 0.90);
+    botCanvas.setAttribute('width', container.offsetWidth);
+    botCanvas.setAttribute('height', container.offsetHeight);
     
     output = document.getElementById("output");
     socket = io.connect(ioUri);
@@ -75,7 +75,10 @@ function saveToImage() {
 // clear the canvas
 function clearCanvas() {
 	alert('clear canvas');
-	context.clearRect(0, 0, canvas.width, canvas.height);
+	myCanvasContext1.clearRect(0, 0, myCanvas1.width, myCanvas1.height);
+	myCanvasContext2.clearRect(0, 0, myCanvas2.width, myCanvas2.height);
+	myCanvasContext3.clearRect(0, 0, myCanvas3.width, myCanvas3.height);
+	//context.clearRect(0, 0, canvas.width, canvas.height);
     socket.emit('clear', 'all');
 }
 // change the mode base on the UI changes
