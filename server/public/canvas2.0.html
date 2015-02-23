@@ -140,7 +140,7 @@ put js files before css files
             <div class="col-lg-1 col-md-1 col-sm-1 col-xs-1" id="download" >
                     <a href="#"><img src="images/download.png" id="download"></img></a>
             </div>
-          	<div class="col-lg-1 col-md-1 col-sm-1 col-xs-1" id="trash">
+          	<div class="col-lg-1 col-md-1 col-sm-1 col-xs-1" id="trash" value="clear">
                      <a href="#"><img src="images/trasn.png" type="button" value="ClearnCanvas" id="trash" onClick="erase()" /></a>
 
             </div>
@@ -150,14 +150,7 @@ put js files before css files
 	
      <div class="col-lg-1" style="margin-top:2.5%;margin-left:-2%;" >
         <h4>Grouping</h4>
-		<button id="grouping" class="btn grouping">
-        <script>
-         $('#grouping').click(function(){
-			 alert("grouping clicked");
-			 
-			 });
-        </script>
-        </button>
+		<button id="grouping" class="btn grouping"></button>
      </div>
     
            
@@ -166,7 +159,7 @@ put js files before css files
 
  
          
-<div><a class="btn" id="toggle_button" onClick="togglebutton()"></a></div>
+<div><a class="btn" id="toggle_button" ></a></div>
 </div><!--#canvas-->
               
 <div class="modal fade" id="new" role="dialog" data-backdrop="static">
@@ -240,9 +233,26 @@ put js files before css files
         </select>
        
     </div><!--#buttons-->
-        <canvas id="both">Sorry, your browser is not supported.</canvas>
-        <canvas id="botpad">Sorry, your browser is not supported.</canvas>
-        <canvas id="sketchpad">Sorry, your browser is not supported.</canvas>
+        <canvas id="both">Sorry, your browser is not supported.
+        <script>
+        var myCanvas1 = document.getElementById("both");
+   		var myCanvasContext1 = myCanvas1.getContext('2d');
+		</script>
+        </canvas>
+        
+        <canvas id="botpad">Sorry, your browser is not supported.
+        <script>
+        var myCanvas2 = document.getElementById("botpad");
+   		var myCanvasContext2 = myCanvas2.getContext('2d');
+		</script>
+        </canvas>
+        
+        <canvas id="sketchpad">Sorry, your browser is not supported.
+        <script>
+        var myCanvas3 = document.getElementById("sketchpad");
+   		var myCanvasContext3 = myCanvas3.getContext('2d');
+		</script>
+        </canvas>
     </div>
 
 

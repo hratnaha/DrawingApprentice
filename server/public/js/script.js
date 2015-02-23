@@ -262,4 +262,11 @@ function erase() {
 }
 
 
+
+document.getElementById('trash').addEventListener('click', function() {
+		alert("want to clear canvas?");
+        myCanvasContext1.clearRect(0, 0, canvas.width, canvas.height)
+      }, false);
+
+
 }); //document ready

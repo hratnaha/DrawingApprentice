@@ -59,20 +59,22 @@ function sketchUtil() {
         isDrawing: false,
         touchstart: function (coors) {
             curstroke = createNewStroke();
-			//if (document.getElementById('grouping').clicked == true){
-            if ($("#cboxGrouping").attr('checked') == "checked") {
+			if (document.getElementById('grouping').clicked == true){
+            //if ($("#cboxGrouping").attr('checked') == "checked") {
 				
-				alert("grouping is checked");
+				//alert("grouping checked");
                 context.setLineDash([5]);
                 context.strokeStyle = x;
+				console.log(x);
 				context.globalAlpha = opacity;
-	
+				groupingMode(true);
             } else {
                 colorline = document.getElementById('background').value;
                 context.strokeStyle = x;
                 context.setLineDash([0]);
 				context.lineWidth = y;
 				context.globalAlpha = opacity;
+				groupingMode(false);
             }
 
             context.beginPath();
