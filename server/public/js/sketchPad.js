@@ -53,12 +53,16 @@ function sketchUtil() {
         curstroke.data.packetPoints.push(pkpt);
     }
     
+	
     // create a drawer which tracks touch movements
     var drawer = {
         isDrawing: false,
         touchstart: function (coors) {
             curstroke = createNewStroke();
+			//if (document.getElementById('grouping').clicked == true){
             if ($("#cboxGrouping").attr('checked') == "checked") {
+				
+				alert("grouping is checked");
                 context.setLineDash([5]);
                 context.strokeStyle = x;
 				context.globalAlpha = opacity;
@@ -95,7 +99,8 @@ function sketchUtil() {
                 var height = canvas.height;
 
                 this.isDrawing = false;
-                if ($("#cboxGrouping").attr('checked') == "checked") {
+				//if (document.getElementById('grouping').clicked == true) {
+               if ($("#cboxGrouping").attr('checked') == "checked") {
                     $("#cboxGrouping").prop('checked',false);
                 } else
                     bothInputContext.drawImage(canvas, 0, 0);

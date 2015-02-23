@@ -75,6 +75,7 @@ function saveToImage() {
 // clear the canvas
 function clearCanvas() {
 	alert('clear canvas');
+	context.clearRect(0, 0, canvas.width, canvas.height);
     socket.emit('clear', 'all');
 }
 // change the mode base on the UI changes

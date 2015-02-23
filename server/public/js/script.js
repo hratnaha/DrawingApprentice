@@ -189,7 +189,7 @@ $(function AdjustLineThickness() {
 			
 
 $("#trash").click(function(){
-	erase();
+	clearCanvas();
 });
 
 
@@ -248,6 +248,18 @@ function FullScreenCanvas() {
 			
 }
 
+
+
+function erase() {
+    var m = confirm("Want to clear");
+    if (m) {
+        ctx.clearRect(0, 0, w, h);
+        document.getElementById("both").style.display = "none";
+		document.getElementById("botpad").style.display = "none";
+		document.getElementById("sketchpad").style.display = "none";
+		
+    }
+}
 
 
 }); //document ready

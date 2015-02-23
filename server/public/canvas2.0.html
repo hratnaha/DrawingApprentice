@@ -20,17 +20,6 @@ put js files before css files
 </head>
 <body>
 
-    <div id="buttons" style="display:none;">
-        <input type="color" name="background" id="background" value="#000000" display:none;/>
-        <input type="button" id="clear" value="Clear" style="display:none;" />
-        <select id="mode" style="display:none;">
-            <option value="local" style="z-index:2000;">Local</option>
-            <option value="region" style="z-index:2000;">Region</option>
-            <option value="global" style="z-index:2000;">Global</option>
-           <input id="cboxGrouping" type="checkbox" name="grouping" value="Grouping" />Grouping
-        </select>
-       
-    </div><!--#buttons-->
 
 
 <button type="button" class="btn thumb_up vote circlebase type1" id="up" style="border-radius:50%;">
@@ -151,16 +140,24 @@ put js files before css files
             <div class="col-lg-1 col-md-1 col-sm-1 col-xs-1" id="download" >
                     <a href="#"><img src="images/download.png" id="download"></img></a>
             </div>
-          	<div class="col-lg-1 col-md-1 col-sm-1 col-xs-1" id="trash" onClick="clearCanvas()">
-                     <a href="#"><img src="images/trasn.png" id="trash" /></a>
+          	<div class="col-lg-1 col-md-1 col-sm-1 col-xs-1" id="trash">
+                     <a href="#"><img src="images/trasn.png" type="button" value="ClearnCanvas" id="trash" onClick="erase()" /></a>
+
             </div>
         </div><!--/.row-fluid-->	
         </div><!--/.row-fluid-->
      </div><!--/#new_setting_download_trash .col-lg-2 col-md-2 col-sm-2 col-xs-2-->
 	
-     <div class="col-lg-1" id="grouping" style="margin-top:2.5%;margin-left:-2%;" >
+     <div class="col-lg-1" style="margin-top:2.5%;margin-left:-2%;" >
         <h4>Grouping</h4>
-		<button class="btn grouping"></button>
+		<button id="grouping" class="btn grouping">
+        <script>
+         $('#grouping').click(function(){
+			 alert("grouping clicked");
+			 
+			 });
+        </script>
+        </button>
      </div>
     
            
@@ -231,6 +228,18 @@ put js files before css files
 <!--===================================================-->
 
     <div id="container">
+    
+    <div id="buttons" style="z-index:5000;">
+        <input type="color" name="background" id="background" value="#000000" display:none;/>
+        <input type="button" id="clear" value="Clear" style="display:none;" />
+        <select id="mode" style="display:none;">
+            <option value="local" style="z-index:2000;">Local</option>
+            <option value="region" style="z-index:2000;">Region</option>
+            <option value="global" style="z-index:2000;">Global</option>
+           <!--input id="cboxGrouping" type="checkbox" name="grouping" value="Grouping" />Grouping-->
+        </select>
+       
+    </div><!--#buttons-->
         <canvas id="both">Sorry, your browser is not supported.</canvas>
         <canvas id="botpad">Sorry, your browser is not supported.</canvas>
         <canvas id="sketchpad">Sorry, your browser is not supported.</canvas>
@@ -248,10 +257,10 @@ put js files before css files
     window.addEventListener("load", initWebSocket, false);
     window.addEventListener('load', sketchUtil, false);
 
-    document.getElementById('clear').addEventListener('click', function () {
-        sketchpad.width = sketchpad.width;
-        clearCanvas();
-    }, false);
+    //document.getElementById('trash').addEventListener('click', function () {
+      //  sketchpad.width = sketchpad.width;
+        //clearCanvas();
+    //}, false);
     $("#mode").change(setMode); //what does this do?
 	console.log("test");
     $("#cboxGrouping").change(groupingMode);
