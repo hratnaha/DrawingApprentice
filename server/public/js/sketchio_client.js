@@ -25,11 +25,15 @@ function initWebSocket() {
         if (botStroke != "" && i < botStroke.packetPoints.length) {
             ctx.lineTo(botStroke.packetPoints[i].x, botStroke.packetPoints[i].y);
             ctx.stroke();
+			ctx.strokeStyle = x;
+			ctx.globalAlpha = opacity;
             i++;
         } else if (curStroke.length > 0) {
             botStroke = curStroke.shift();
             ctx.beginPath();
             ctx.moveTo(botStroke.packetPoints[0].x, botStroke.packetPoints[0].y);
+			ctx.strokeStyle = x;
+			ctx.globalAlpha = opacity;
             i = 0;
         } else if (botStroke != "") {
             bothInputContext.drawImage(botCanvas, 0, 0);

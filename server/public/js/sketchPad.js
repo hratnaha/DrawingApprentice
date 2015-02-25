@@ -207,7 +207,7 @@ var mouseIsDown = false;
 function pressure1() {
     
     $(document).on("mousemove", function () { log("mousemove"); });
-    $(document).on("touchstart touchmove touchend touchcancel", function (ev) {
+    $(document).on("touchstart touchmove touchend touchcancel", function (ev) {3
         $.each(ev.originalEvent.touches, function (i, t) { logtouch(ev.type + "-touches", t); });
         $.each(ev.originalEvent.changedTouches, function (i, t) { logtouch(ev.type + "-changed", t); });
         $.each(ev.originalEvent.targetTouches, function (i, t) { logtouch(ev.type + "-target", t); });
