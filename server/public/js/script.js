@@ -153,7 +153,7 @@ $(function AdjustLineThickness() {
 			$('#brush3').hide();
 			$('#brush4').hide();
 			$('#brush5').hide();
-			ctx.lineWidth = 7;
+			//ctx.lineWidth = 7;
 			y = 2
 					}
 			else if(ui.value == 3){

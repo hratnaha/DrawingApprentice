@@ -27,6 +27,7 @@ function initWebSocket() {
             ctx.stroke();
 			ctx.strokeStyle = x;
 			ctx.globalAlpha = opacity;
+			ctx.lineWidth = y;
             i++;
         } else if (curStroke.length > 0) {
             botStroke = curStroke.shift();
@@ -34,6 +35,7 @@ function initWebSocket() {
             ctx.moveTo(botStroke.packetPoints[0].x, botStroke.packetPoints[0].y);
 			ctx.strokeStyle = x;
 			ctx.globalAlpha = opacity;
+			ctx.lineWidth = y;
             i = 0;
         } else if (botStroke != "") {
             bothInputContext.drawImage(botCanvas, 0, 0);
