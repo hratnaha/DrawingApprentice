@@ -16,7 +16,6 @@ java.classpath.push("apprentice.jar");      // apprentice library
 java.classpath.push("core.jar");            // processing
 
 var Apprentice = java.import('jcocosketch.nodebridge.Apprentice');
-var apprentice = new Apprentice();
 
 // set up express
 var express = require('express'),
@@ -34,6 +33,13 @@ var isGrouping = false;
 server.listen(8080);
 
 io.on('connection', function (so) {
+    var apprentice = new Apprentice();
+    
+    so.on('canvasSize', function setSize(size) {
+        //var d = JSON.parse(size);
+        apprentice.setCanvasSize(size.width, size.height);
+    });
+
     console.log("new client connected");
     so.emit('newconnection', { hello: 'world' });
     so.on('newStroke', function newStrokeReceived(data) {
@@ -80,7 +86,6 @@ io.on('connection', function (so) {
                     }
                 }
             });
-            isGrouping = false;
         } else {
             apprentice.decision(function (err, result) {
                 if (result != null) {
@@ -101,28 +106,31 @@ io.on('connection', function (so) {
         }        
         so.broadcast.emit('respondStroke', JSON.stringify(d.data));
     });
+    
+    function onVote(isUp) {
+        var vote = isUp ? 1 : 0;
+        apprentice.voteSync(vote);
+    }
+    
+    function onClear() {
+        apprentice.clearSync();
+    }
+    
+    function onModeChanged(mode) {
+        var m = JSON.parse(mode);
+        if (m == 3)
+            isGrouping = true;
+        else if (m == 4)
+            isGrouping = false;
+        else
+            apprentice.setModeSync(m);
+    }
+
     so.on('setMode', onModeChanged);
     so.on('clear', onClear);
     so.on('submit', submitResult);
     so.on('vote', onVote);
 });
-
-function onVote(isUp) {
-    var vote = isUp ? 1 : 0;
-    apprentice.voteSync(vote);
-}
-
-function onClear() {
-    apprentice.clearSync();
-}
-
-function onModeChanged(mode) {
-    var m = JSON.parse(mode);
-    if (m === 3) {
-        isGrouping = true;
-    }else
-        apprentice.setModeSync(m);
-}
 
 function submitResult(d) {
     submit(d, function (error, result) {

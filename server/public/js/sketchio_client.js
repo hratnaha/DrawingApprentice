@@ -60,7 +60,11 @@ function onNewStroke(data) {
 	//}
 }
 function onOpen(data) {
-    console.log(data);
+    var size = {
+        width : container.offsetWidth,
+        height: container.offsetHeight
+    };  
+    socket.emit("canvasSize", size);
 }
 function doSend(message) {
     //writeToScreen("SENT: " + message);
@@ -124,9 +128,10 @@ function ChangeMode3(){
 
 	
 function groupingMode(chk) {
-	if(this.checked){
-	    socket.emit('setMode', 3);
-	}
+	if(chk)
+	   	socket.emit('setMode', 3);
+	else
+		socket.emit('setMode', 4);
 }
 function voteUpOrDown(isup) {
     socket.emit('vote', isup);

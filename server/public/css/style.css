@@ -154,8 +154,7 @@ p{
 	width:70px;
 	background:url(../images/grouping-01.png) no-repeat;
 	}
-.grouping:active{
-	
+.grouping.isgrouping{
 	background:url(../images/grouped-01.png) no-repeat;
 	}
 /*slider styling*/

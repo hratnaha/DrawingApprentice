@@ -90,7 +90,7 @@ public class Buffer {
 
 	public void addToBuffer(Line l) {
 		allLines.add(l);
-		// update();
+		//update();
 		diff = true;
 	}
 

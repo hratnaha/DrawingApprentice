@@ -59,7 +59,7 @@ function sketchUtil() {
         isDrawing: false,
         touchstart: function (coors) {
             curstroke = createNewStroke();
-			if (document.getElementById('grouping').clicked == true){
+			if ($('#grouping').hasClass("isGrouping")){
             //if ($("#cboxGrouping").attr('checked') == "checked") {
 				
 				//alert("grouping checked");
@@ -67,14 +67,12 @@ function sketchUtil() {
                 context.strokeStyle = x;
 				console.log(x);
 				context.globalAlpha = opacity;
-				groupingMode(true);
             } else {
                 colorline = document.getElementById('background').value;
                 context.strokeStyle = x;
                 context.setLineDash([0]);
 				context.lineWidth = y;
 				context.globalAlpha = opacity;
-				groupingMode(false);
             }
 
             context.beginPath();
@@ -102,9 +100,7 @@ function sketchUtil() {
 
                 this.isDrawing = false;
 				//if (document.getElementById('grouping').clicked == true) {
-               if ($("#cboxGrouping").attr('checked') == "checked") {
-                    $("#cboxGrouping").prop('checked',false);
-                } else
+                if (!$('#grouping').hasClass("isGrouping"))
                     bothInputContext.drawImage(canvas, 0, 0);
 
                 context.clearRect(0, 0, canvas.width, canvas.height);

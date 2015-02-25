@@ -21,12 +21,17 @@ public class Apprentice {
 	QuadTree mainTree;
 	Line line2;
 
-	int width = 1400, height = 800;
+	int width = 2100, height = 1080;
 
 	public Apprentice() {
 		mainTree = new QuadTree(0, 0, width, height);
 	}
 
+	public void setCanvasSize(int width, int height){
+		this.width = width;
+		this.height = height;
+	}
+	
 	public void setMode(int mode_code) {
 		System.out.println("change to mode: " + mode_code);
 		switch (mode_code) {

@@ -260,3 +260,14 @@ function clearcanvas() {
 		myCanvasContext2.clearRect(0, 0, canvas.width, canvas.height);
 		myCanvasContext3.clearRect(0, 0, canvas.width, canvas.height);
 }
+
+$("#grouping").click(function(){
+	if($("#grouping").hasClass("isGrouping")){
+		$("#grouping").removeClass("isGrouping");
+		groupingMode(false);
+	}
+	else{
+		$("#grouping").addClass("isGrouping");
+		groupingMode(true);
+	}
+});
