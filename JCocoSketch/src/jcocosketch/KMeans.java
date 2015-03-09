@@ -26,7 +26,7 @@ public class KMeans {
 
 		final KMeansClustering kmeans = new KMeansClustering(K, set);
 
-		kmeans.iteration(100);
+		kmeans.iteration(500);
 		//System.out.println("Final WCSS: " + kmeans.getWCSS());
 
 		// Display the cluster
