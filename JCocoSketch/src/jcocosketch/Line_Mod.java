@@ -547,7 +547,7 @@ public class Line_Mod {
 		
 	}
 	
-	public Line Segment(Line line) {
+	public Line Segment(Line line, boolean variant) {
 		SegmentPolyFunction p = SegmentationAlgorithm.ChopIntoSegments(line);
 		System.out.println("Called Segmentation Algorithm");
 		for(int i =0 ;i <p.coeffs.length; ++i) {
@@ -564,9 +564,49 @@ public class Line_Mod {
 			newLine.allPoints.add(point);
 		}
 		*/
-	
+	if(!variant) 
 		newLine = p.getLine();
-		
+	else
+		newLine = p.getVariantLine();
+	
+		return MakeCompGenerated(newLine);
+	}
+	
+	public Line Segment(Line line, int samples, boolean variant) {
+		SegmentPolyFunction[] p = SegmentationAlgorithm.ChopIntoSegments(line, samples);
+		System.out.println("Called Segmentation Algorithm with sampling");
+		/*for(int i =0 ;i <p.coeffs.length; ++i) {
+			System.out.println("Coeffs " + i + ": " +p.coeffs[i]);
+		}*/
+		Line newLine = new Line();
+		ArrayList<Line> pol = new ArrayList<Line>();
+		for (int i = 0; i < line.allPoints.size(); i+=samples) {
+			if (i + samples < line.allPoints.size()) {
+			List<Point> points = line.allPoints.subList(i, i+samples);
+			Line tempLine = new Line();
+			tempLine.allPoints.addAll(points);
+			System.out.println("Chopped Line: " + i);
+			SegmentPolyFunction pGen = SegmentationAlgorithm.ChopIntoSegments(tempLine);
+			if (!variant) {
+				pol.add(pGen.getLine());
+			}
+			else {
+				pol.add(pGen.getVariantLine());
+			}
+			}
+		}
+			//line.allPoints.subList(0, toIndex)
+	
+		//for (int  i=0;i<p.length; i++) {
+			//newLine.allPoints.addAll(p[i].getLine().allPoints);
+		//}
+		//newLine = p[0].getLine();
+		//System.out.println("Coeff 1 " + p[2].coeffs[0]);
+		System.out.println("Segmentation Array Length: " + p.length);
+		System.out.println("Line Array Length: " + pol.size());
+		for (int i = 0; i< pol.size(); ++i) {
+			newLine.allPoints.addAll(pol.get(i).allPoints);
+		}
 		return MakeCompGenerated(newLine);
 	}
 

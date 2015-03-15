@@ -487,6 +487,8 @@ public class DrawBackFork_Flow_Lines extends PApplet {
 		if (key == 's') {
 			//depreciated
 			//moved the code to save button click
+			//Kmeans test
+			KMeans.Cluster(allLines, 3);
 		}
 		//end serialization
 	}

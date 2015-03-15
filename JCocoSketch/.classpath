@@ -16,6 +16,7 @@
 	<classpathentry kind="lib" path="lib/processing-base/core/jogl-all-natives-windows-i586.jar"/>
 	<classpathentry kind="lib" path="lib/processing-base/core/jogl-all.jar"/>
 	<classpathentry kind="lib" path="lib/G4P/library/G4P.jar"/>
+	<classpathentry kind="lib" path="C:/Users/chipi_000/git/DrawingApprentice_GitHub/JCocoSketch/lib/encog/encog-core-3.3.0.jar"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/4"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/flexjson"/>
 	<classpathentry exported="true" kind="lib" path="core.jar"/>

@@ -37,7 +37,7 @@ public class Decision_Engine {
 	protected Line decisionLine(int decision) {
 		Line_Mod m = new Line_Mod(this.line, random);
 		Line newLine = new Line();
-		switch (decision) {
+		switch (/*decision*/10) {
 		case 1:
 			newLine = m.translation();
 			break;
@@ -82,7 +82,8 @@ public class Decision_Engine {
 			break;
 			
 		case 10:
-			newLine = m.Segment(this.line);
+			newLine = m.Segment(this.line, 2, true);
+			//newLine = m.Segment(this.line, true);
 			break;
 			
 		default:
