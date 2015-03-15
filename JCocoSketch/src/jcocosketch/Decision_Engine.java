@@ -37,7 +37,7 @@ public class Decision_Engine {
 	protected Line decisionLine(int decision) {
 		Line_Mod m = new Line_Mod(this.line, random);
 		Line newLine = new Line();
-		switch (/*decision*/10) {
+		switch (decision) {
 		case 1:
 			newLine = m.translation();
 			break;
