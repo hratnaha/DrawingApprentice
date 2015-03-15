@@ -1,4 +1,4 @@
-var ioUri = "http://localhost:8080"; //replace with the Websocket URL
+var ioUri = "http://localhost:8080"; //replace with the Websocket URL //"http://108.179.251.165:8080"; //
 var output;
 var socket;
 var botCanvas = {};
