@@ -124,7 +124,7 @@ public class Buffer {
 	}
 
 	public void addSegment(LineSegment l){
-		//System.out.println("AddSegment"); 
+//		System.out.println("AddSegment"); 
 		int padding = 5; 
 		PVector p1 = l.start; 
 		PVector p2 = l.end; 

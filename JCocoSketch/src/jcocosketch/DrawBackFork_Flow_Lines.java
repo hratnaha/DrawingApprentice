@@ -3,6 +3,7 @@ package jcocosketch;
 import processing.core.*;
 import processing.data.StringList;
 
+import javax.swing.*;
 import javax.swing.Timer;
 
 import com.mongodb.BasicDBObject;
@@ -13,6 +14,9 @@ import com.mongodb.DBObject;
 import com.mongodb.MongoClient;
 import com.mongodb.util.JSON;
 
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Component;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
@@ -291,6 +295,7 @@ private GButton saveButton;
 							//buffer.allLines.add(l); //add comp line to buffer storage
 							compLines.add(l);
 							buffer.allLines.add(l);	
+							//add lines here
 						}
 						activeDrawing = false; 
 					}
@@ -475,6 +480,8 @@ private GButton saveButton;
 			}
 		}
 		curLine = null;
+		
+		System.out.println("all lines: " + new JSONSerializer().deepSerialize(this.allLines));
 	}
 
 	/**
@@ -737,10 +744,132 @@ private GButton saveButton;
 	public void saveButton_click(GButton source, GEvent event) { 
 		String s = G4P.selectOutput("Select the Directory to Save File:");
 		 saveToFIle(s);
+	}
+	
+	private GTextField userIDText;
+	private JDialog redrawDialog;
+	private JPanel redrawPanel;
+	private void createRedrawWindow(){
+		redrawDialog = new JDialog();
+		redrawDialog.setSize(400, 200);
+		JPanel panel = new JPanel(new BorderLayout());
+		panel.setSize(400,300);
+		panel.setBackground(new Color(200,200,200));
 		
+		JLabel linesLabel = new JLabel("Which lines do you want to draw?");
+		final JCheckBox uLinesBox = new JCheckBox("User Lines", true);
+		uLinesBox.setBackground(new Color(200,200,200));
+		final JCheckBox cLinesBox = new JCheckBox("Computer Lines", true);
+		cLinesBox.setBackground(new Color(200,200,200));
+		
+		JPanel centerPanel = new JPanel();
+		centerPanel.setBackground(new Color(200,200,200));
+		JButton okButton = new JButton();
+		okButton.setSize(40,60);
+		okButton.setText("Redraw");
+		okButton.addActionListener(new ActionListener(){
+			public void actionPerformed(ActionEvent e){
+				//redraw!
+				boolean u = false;
+				boolean c = false;
+				if(uLinesBox.isSelected()){
+					u = true;
+				}
+				if(cLinesBox.isSelected()){
+					c = true;
+				}
+				redrawLines(u,c);
+			}
+		});
+		
+		panel.add(linesLabel,BorderLayout.NORTH);
+		centerPanel.add(uLinesBox);
+		centerPanel.add(cLinesBox);
+		panel.add(centerPanel,BorderLayout.CENTER);
+		panel.add(okButton,BorderLayout.SOUTH);
+		redrawDialog.add(panel);
+	
+		
+		
+		
+//		redrawWindow.add( new GButton(this,4,5,100,200));
+
+		redrawDialog.setVisible(true);
+	}
+	
+	private void redrawLines(boolean u, boolean c){
+		String id = userIDText.getText();
+		try{			
+			BasicDBObject[] data = mongoGetData(id);
+			JSONDeserializer deserializer = new JSONDeserializer();
+			Line line1 = (Line)deserializer.deserialize(data[1].toString());
+			Line line2= (Line)deserializer.deserialize(data[2].toString());
+			if(u){
+//				System.out.println(data[2].toString());
+				if(line1.compGenerated){
+					drawLine(line2);
+				}else{
+					drawLine(line1);
+				}
+//				buffer.addToBuffer(userLines);
+			}
+			if(c){
+				if(!line1.compGenerated){
+					drawLine(line2);
+				}else{
+					drawLine(line1);
+				}
+				//buffer.addToBuffer(compLines);
+			}
+			//buffer.update();
+		}
+		catch(Exception e){
+			System.out.println("Error:" + e.getMessage());
+		}
 	}
 
+	private ArrayList<Line> deserialize(String s){
+		ArrayList<Line> lines = new ArrayList<Line>();
+		String id = userIDText.getText();
+		try{			
+			BasicDBObject[] data = mongoGetData(id);
+			JSONDeserializer deserializer = new JSONDeserializer();
+			if(s.indexOf("allPoints", 5) > -1){//more than one line
+				while(s.indexOf("allPoints")> -1){
+					String d = "[{";
+//					int end = (s.indexOf("allPoints",4) > -1) ? s.indexOf("allPoints",4) : 
+					lines.add((Line)deserializer.deserialize(d));
+				}
+			}
+		}
+		catch(Exception e){
+			System.out.println("Error:" + e.getMessage());
+		}
+		return lines;
+	}
+	private void drawLine(Line l){
+		ArrayList<Point> points = l.allPoints;
+		for(int ii = 0; ii < points.size()-1;){
+			LineSegment ls = new LineSegment(new PVector(points.get(ii).x,points.get(ii).y),
+					new PVector(points.get(++ii).x,points.get(ii).y));
+			buffer.addSegment(ls);
+			//buffer.addToBuffer(l);
+		}
+			//buffer.update();
+	}
+	
+	public void redrawButton_click(GButton source, GEvent event) {
+		
+		System.out.println("redrawing");
+		createRedrawWindow();
+
+	}
+	
+	//mongo variables
 	MongoClient client;
+	DB userDB;
+	DB dataDB;
+	String currentUser;
 	boolean saveUserLines;
 	boolean saveCompLines;
 	boolean saveModes;
@@ -751,10 +880,13 @@ private GButton saveButton;
 	 */
 	private void mongoConnect() {
 		try{
+			currentUser = "testUser";
 			client = new MongoClient( "localhost" , 27017 );
-	        DB db = client.getDB( "dapp" );
-	        DBCollection coll = db.createCollection("userLines",null);
-         
+	        userDB = client.getDB("dappUsers");
+	        dataDB = client.getDB("dappData");
+	        System.out.println("Connected to mongo");
+	        System.out.println("Current user: " + currentUser);
+	        DBCollection col = dataDB.getCollection("testUser");
 		}catch(Exception e){
 			System.err.println( e.getClass().getName() + ": " + e.getMessage() );
 		}
@@ -763,7 +895,46 @@ private GButton saveButton;
 		saveModes = true;
 		saveFreq = true;
 	}
-	
+	/**
+	 * retrieve user from db
+	 * @param userID
+	 * @return BDBObj of user info
+	 */
+	private BasicDBObject mongoGetUser(String userID){
+		mongoConnect();
+		BasicDBObject obj = new BasicDBObject().append("userID",userID);
+		DBCollection col = userDB.getCollection("users");
+		DBCursor cursor = col.find(obj);
+		if(!cursor.hasNext()){
+			return null;
+		}else{
+			return (BasicDBObject) cursor.next();
+		}
+	}
+	/**
+	 * gets all line data from db
+	 * @param userID
+	 * @return userlines, complines, freq, modes
+	 */
+	private BasicDBObject[] mongoGetData(String userID){
+		mongoConnect();
+		DBCollection col;
+		try{
+			col = dataDB.getCollection(userID).getCollection("lineData");
+			BasicDBObject[] data = new BasicDBObject[4];
+			DBCursor cursor = col.find();
+			int i = 0;
+			while(cursor.hasNext()){
+				data[i] = (BasicDBObject) cursor.next();
+				i++;
+			}
+			return data;
+		}
+		catch(Exception e){
+			System.out.println("Can't find collection");
+		}
+		return null;
+	}
 	private void toggleSave(boolean userLines, boolean compLines, boolean modes, boolean freq){
 		saveUserLines = userLines;
 		saveCompLines = compLines;
@@ -803,13 +974,37 @@ private GButton saveButton;
 		}
 		return obj;
 	}
+	/**
+	 * creates a user object for mongo
+	 * @param id
+	 * @param name
+	 * @param age
+	 * @param date
+	 * @return
+	 */
+	private void mongoCreateUser(String id, String name, String age, String date){
+		//add new parameters as needed
+		BasicDBObject obj = new BasicDBObject().append("name", name)
+				.append("age", age)
+				.append("date", date)
+				.append("userID", id);
+		DBCollection col = client.getDB("dappUsers").getCollection("users");
+		BasicDBObject query = new BasicDBObject().append("name",name);
+		if(col.distinct("name").contains(name)){
+			col.update(query, obj);
+		}else{
+			col.insert(obj);
+		}
+	}
+	
+	
 	private void saveToFIle(String filename) {
 		if (filename != null) {
 		JSONSerializer serializer = new JSONSerializer();
 		mongoConnect();
-		DB db = client.getDB("dapp");
-		DBCollection sessions = db.getCollection("sessions");
-		DBCollection lineCol = sessions.getCollection("lineData");
+		DB db = client.getDB("dappData");
+		DBCollection userCol = db.getCollection(currentUser);
+		DBCollection lineCol = userCol.getCollection("lineData");
 			String userLines = serializer.deepSerialize(this.allLines);
 			String computerLines =  serializer.deepSerialize(this.compLines);
 			String modes =  serializer.deepSerialize(this.allModes);
@@ -851,11 +1046,12 @@ private GButton saveButton;
 				}
 			}
 			
-			mongoPrintCollection();
+			//mongoPrintCollection();
 			File f = new File(filename);
 			String curTime = f.getAbsolutePath() + " ";
-			
-	 
+			mongoCreateUser("testUser", "User", "3", "2/8/2015");
+			System.out.println(mongoGetUser("testUser"));
+			mongoPrintData(mongoGetData("testUser"));
 			writeToFile(new File(curTime + "userLines.json"), userLines);
 			writeToFile(new File(curTime + "computerLines.json"), computerLines);
 			writeToFile(new File(curTime + "Modes.json"), modes);
@@ -864,7 +1060,19 @@ private GButton saveButton;
 	}
 
 	private void mongoPrintCollection(){
-		DBCursor cursor = client.getDB("dapp").getCollection("sessions").getCollection("lineData").find();
+		DBCursor cursor = client.getDB("dappData").getCollection(currentUser).getCollection("lineData").find();
+		while(cursor.hasNext()){
+			System.out.println(cursor.next());
+		}
+	}
+	private void mongoPrintData(BasicDBObject[] data){
+		for(BasicDBObject o: data){
+			System.out.println(o);
+		}
+	}
+	
+	private void mongoPrintUsers(){
+		DBCursor cursor = client.getDB("dappUsers").getCollection("users").find();
 		while(cursor.hasNext()){
 			System.out.println(cursor.next());
 		}
@@ -892,7 +1100,7 @@ private GButton saveButton;
 			e.printStackTrace();
 		}
 	}
-
+	private GButton redrawButton;
 	// Create all the GUI controls.
 	// autogenerated do not edit
 	public void createGUI() {
@@ -940,7 +1148,16 @@ private GButton saveButton;
 		saveButton = new GButton(this, 550, 10, 100, 50);
 		saveButton.setText("Save Data");
 		saveButton.addEventHandler(this, "saveButton_click");
+		
+		//redrawButton added
+		redrawButton = new GButton(this,675,10,100,50);
+		redrawButton.setText("Redraw");
+		redrawButton.addEventHandler(this, "redrawButton_click");
+		
+		//userIDText
+		userIDText = new GTextField(this,800, 25, 100, 20);
 	}
+	
 	
 	//Function starts global behaviors up again
 	//Call after DRAWING of a global behavior is done

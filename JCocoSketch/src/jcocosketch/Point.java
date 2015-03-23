@@ -16,6 +16,9 @@ public class Point extends PVector implements Comparable{
 
     public float groupID;
 
+    public Point(){
+    	
+    }
     public Point(float x, float y){
     	super(x, y);
     	this.lineID = 0;
