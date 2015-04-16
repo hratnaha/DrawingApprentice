@@ -11,6 +11,7 @@ public class Decision_Engine {
 	
 	Random random = new Random();
 	IntersectionResponseMaster xResponseMaster = new IntersectionResponseMaster();
+	
 	Line line;
 	float screenDiag = 0.0f;
 	Line line2;
@@ -37,7 +38,7 @@ public class Decision_Engine {
 	protected Line decisionLine(int decision) {
 		Line_Mod m = new Line_Mod(this.line, random);
 		Line newLine = new Line();
-		switch (/*decision*/10) {
+		switch (/*decision*//*10*/11) {
 		case 1:
 			newLine = m.translation();
 			break;
@@ -84,8 +85,19 @@ public class Decision_Engine {
 		case 10:
 			newLine = m.Segment(this.line, 2, true);
 			//newLine = m.Segment(this.line, true);
+			//Print VIA NEAT LEARNING
+			//newLine = m.generateBYNEATLEARNING(newLine, 2);
+			newLine = m.SegmentNEAT(newLine, 1, true);  //Remove if you do not want to learn
 			break;
 			
+		case 11:
+		//	newLine = m.generateBYCTMExploration(this.line);
+			newLine = m.SegmentAndCTM(this.line, 1);
+			break;
+			
+		case 12:
+			newLine = m.generateBYCTMExploration(this.line);
+			break;
 		default:
 			newLine = m.drawMutation(this.line, this.line2);
 			//newLine = m.Trim(newLine, 2160, 1440);
@@ -96,6 +108,7 @@ public class Decision_Engine {
 		}
 		newLine = m.Trim(newLine, 2160, 1440);//newLine;
 		newLine.compGenerated = true;
+		
 		return newLine;
 	}
 
