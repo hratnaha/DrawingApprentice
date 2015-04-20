@@ -29,7 +29,7 @@ public class Decision_Engine {
 		int decision = 1 + random.nextInt(6); //was 4 before default case, its just to increase probability of mutation
 		}*/
 
-		int decision = 1 + random.nextInt(11); //was 4 before default case, its just to increase probability of mutation
+		int decision = 1 + random.nextInt(12); //was 4 before default case, its just to increase probability of mutation
 
 		return decisionLine(decision);
 	}
@@ -85,7 +85,16 @@ public class Decision_Engine {
 			newLine = m.Segment(this.line, 2, true);
 			//newLine = m.Segment(this.line, true);
 			break;
-			
+
+        case 11:
+                //	newLine = m.generateBYCTMExploration(this.line);
+            newLine = m.SegmentAndCTM(this.line, 1);
+            break;
+
+        case 12:
+            newLine = m.generateBYCTMExploration(this.line);
+            break;
+
 		default:
 			newLine = m.drawMutation(this.line, this.line2);
 			//newLine = m.Trim(newLine, 2160, 1440);

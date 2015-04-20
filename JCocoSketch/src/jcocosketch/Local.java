@@ -19,8 +19,8 @@ import org.encog.ml.data.buffer.BufferedMLDataSet;*/
 
 public class Local extends Decision_Engine{
 
-	public int numAlgorithms = 10;
-	private double[] learningArray = new double[10];
+	public int numAlgorithms = 12;
+	private double[] learningArray = new double[numAlgorithms];
 	public  Frequency freq = new Frequency();
 	//Neural NEt
 	//private BasicNetwork network;

@@ -539,7 +539,7 @@ public class Line_Mod {
 			if ((float)pf.value((double)i) > line.allPoints.get(/*0*/i).y + 20 ) {
 				
 			} else {
-				Point newPoint = new Point(line.allPoints.get(i).x, (float)pf.value((double)i) + line.allPoints.get(/*0*/i).y - offset, newLine.lineID);
+				Point newPoint = new Point(line.allPoints.get(i).getX(), (float)pf.value((double)i) + line.allPoints.get(/*0*/i).y - offset, newLine.lineID);
 				newLine.allPoints.add(newPoint);
 			}
 		}
@@ -573,42 +573,203 @@ public class Line_Mod {
 	}
 	
 	public Line Segment(Line line, int samples, boolean variant) {
-		SegmentPolyFunction[] p = SegmentationAlgorithm.ChopIntoSegments(line, samples);
-		System.out.println("Called Segmentation Algorithm with sampling");
+        SegmentPolyFunction[] p = SegmentationAlgorithm.ChopIntoSegments(line, samples);
+    //    System.out.println("Called Segmentation Algorithm with sampling");
 		/*for(int i =0 ;i <p.coeffs.length; ++i) {
 			System.out.println("Coeffs " + i + ": " +p.coeffs[i]);
 		}*/
-		Line newLine = new Line();
-		ArrayList<Line> pol = new ArrayList<Line>();
-		for (int i = 0; i < line.allPoints.size(); i+=samples) {
-			if (i + samples < line.allPoints.size()) {
-			List<Point> points = line.allPoints.subList(i, i+samples);
-			Line tempLine = new Line();
-			tempLine.allPoints.addAll(points);
-			System.out.println("Chopped Line: " + i);
-			SegmentPolyFunction pGen = SegmentationAlgorithm.ChopIntoSegments(tempLine);
-			if (!variant) {
-				pol.add(pGen.getLine());
-			}
-			else {
-				pol.add(pGen.getVariantLine());
-			}
-			}
-		}
-			//line.allPoints.subList(0, toIndex)
-	
-		//for (int  i=0;i<p.length; i++) {
-			//newLine.allPoints.addAll(p[i].getLine().allPoints);
-		//}
-		//newLine = p[0].getLine();
-		//System.out.println("Coeff 1 " + p[2].coeffs[0]);
-		System.out.println("Segmentation Array Length: " + p.length);
-		System.out.println("Line Array Length: " + pol.size());
-		for (int i = 0; i< pol.size(); ++i) {
-			newLine.allPoints.addAll(pol.get(i).allPoints);
-		}
-		return MakeCompGenerated(newLine);
-	}
+        ArrayList<ArrayList<Double>> coeffsList = new ArrayList<ArrayList<Double>> ();
+        ArrayList<ArrayList<Double>> inputList = new ArrayList<ArrayList<Double>> ();
+        Line newLine = new Line();
+        ArrayList<Line> pol = new ArrayList<Line>();
+        for (int i = 0; i < line.allPoints.size(); i+=samples) {
+            if (i + samples < line.allPoints.size()) {
+                List<Point> points = line.allPoints.subList(i, i+samples);
+                Line tempLine = new Line();
+                tempLine.allPoints.addAll(points);
+         //       System.out.println("Chopped Line: " + i);
+                SegmentPolyFunction pGen = SegmentationAlgorithm.ChopIntoSegments(tempLine);
+
+                //add coeffs to array
+                ArrayList<Double> coeffs = new ArrayList<Double>();
+                coeffs.add(pGen.coeffs[0]);
+                coeffs.add(pGen.coeffs[1]);
+                coeffs.add(pGen.coeffs[2]);
+                coeffsList.add(coeffs);
+                //Input fed to NEAT Net, only x,y pairs now
+                ArrayList<Double> input = new ArrayList<Double>();
+                input.add((double)line.allPoints.get(i).getX());
+                input.add((double)line.allPoints.get(i).getY());
+                inputList.add(input);
+                if (!variant) {
+                    pol.add(pGen.getLine());
+                }
+                else {
+                    pol.add(pGen.getVariantLine());
+                }
+            }
+        }
+        //line.allPoints.subList(0, toIndex)
+
+        //for (int  i=0;i<p.length; i++) {
+        //newLine.allPoints.addAll(p[i].getLine().allPoints);
+        //}
+        //newLine = p[0].getLine();
+        //System.out.println("Coeff 1 " + p[2].coeffs[0]);
+        System.out.println("Segmentation Array Length: " + p.length);
+        System.out.println("Line Array Length: " + pol.size());
+        for (int i = 0; i< pol.size(); ++i) {
+            newLine.allPoints.addAll(pol.get(i).allPoints);
+        }
+
+        // DO the LEARNING by COEFFICIENTS
+        double[][] INPUT = new double[inputList.size()][2];
+        for (int i =0; i<INPUT.length; ++i) {
+            for (int j =0; j<2; ++j){
+                INPUT[i][j] = inputList.get(i).get(j);
+            }
+        }
+        double[][] OUTPUT = new double[coeffsList.size()][1];
+        for (int i =0; i<OUTPUT.length; ++i) {
+            for (int j =0; j<1; ++j){
+                OUTPUT[i][j] = coeffsList.get(i).get(2);
+            }
+        }
+
+        //LEARN -- remove this for not performing learning with segmentation
+      //  NEATLearner.SimpleLearner(INPUT, OUTPUT);
+
+        return MakeCompGenerated(newLine);
+    }
+    public Line generateBYNEATLEARNING(Line line, int samples) {
+        SegmentPolyFunction pf = new SegmentPolyFunction();
+        ArrayList<Line> listOfLines = new ArrayList<Line>();
+        for (int i =0; i < line.allPoints.size(); i+=samples){
+            pf.x0 = line.allPoints.get(i).x;
+            pf.x1 = pf.x0 + samples;
+
+            double[] data = {(double)line.allPoints.get(i).getX(), (double)line.allPoints.get(i).getY()};
+            pf.coeffs[3] = 200;
+            pf.coeffs[2] = NEATLearner.getCoeffecientsByNEAT(data);
+            pf.coeffs[1] = NEATLearner.getCoeffecientsByNEAT(data);
+            pf.coeffs[0] = NEATLearner.getCoeffecientsByNEAT(data);
+
+            listOfLines.add(pf.getVariantLine(600));
+
+        }
+        Line toReturn  = new Line();
+        for (int i =0; i<listOfLines.size(); ++i) {
+            Line l = listOfLines.get(i);
+            for (int j=0; j<l.allPoints.size(); ++j){
+                toReturn.allPoints.add(l.allPoints.get(j));
+            }
+        }
+        return toReturn;
+    }
+
+    //NEAT CO-GENERATION
+    public Line SegmentNEAT(Line line, int samples, boolean variant) {
+        SegmentPolyFunction[] p = SegmentationAlgorithm.ChopIntoSegments(line, samples);
+        System.out.println("Called Segmentation Algorithm with sampling and NEAT");
+
+
+        Line newLine = new Line();
+        ArrayList<Line> pol = new ArrayList<Line>();
+        for (int i = 0; i < line.allPoints.size(); i+=samples) {
+            if (i + samples < line.allPoints.size()) {
+                List<Point> points = line.allPoints.subList(i, i+samples);
+                Line tempLine = new Line();
+                tempLine.allPoints.addAll(points);
+                System.out.println("Chopped Line: " + i);
+                SegmentPolyFunction pGen = SegmentationAlgorithm.ChopIntoSegments(tempLine);
+                //add coeffs to array
+
+                //Input fed to NEAT Net, only x,y pairs now
+                double[] data = {(double)line.allPoints.get(i).getX(), (double)line.allPoints.get(i).getY()};
+                //		pGen.coeffs[3] = 200;
+                pGen.coeffs[1] = NEATLearner.getCoeffecientsByNEAT(data);
+                pGen.coeffs[2] = NEATLearner.getCoeffecientsByNEAT(data)*1.23;
+                if (!variant) {
+                    pol.add(pGen.getLine());
+                }
+                else {
+                    pol.add(pGen.getVariantLine(500, pGen.coeffs, false));
+                }
+            }
+        }
+        //line.allPoints.subList(0, toIndex)
+
+        //for (int  i=0;i<p.length; i++) {
+        //newLine.allPoints.addAll(p[i].getLine().allPoints);
+        //}
+        //newLine = p[0].getLine();
+        //System.out.println("Coeff 1 " + p[2].coeffs[0]);
+        System.out.println("Segmentation Array Length: " + p.length);
+        System.out.println("Line Array Length: " + pol.size());
+        for (int i = 0; i< pol.size(); ++i) {
+            newLine.allPoints.addAll(pol.get(i).allPoints);
+        }
+
+        newLine = this.scaling(newLine);
+        return MakeCompGenerated(newLine);
+    }
+
+    public Line generateBYCTMExploration(Line line) {
+        int[] allY = new int[line.allPoints.size()];
+        for (int i =0; i <allY.length; ++i) {
+            allY[i] = (int)line.allPoints.get(i).getY();
+
+        }
+
+        float[] newY = EMCCTMOPTIMIZE.OptimizePoints(allY, true, 20000);
+        Line newLine = new Line();
+        for (int i =0; i <newY.length; ++i) {
+            newLine.allPoints.add(new Point(line.allPoints.get(i).getX(), newY[i], newLine.lineID));
+        }
+        newLine = Segment(newLine, 1, true); //how surprising the data has to be
+        return newLine;
+    }
+
+    public Line SegmentAndCTM(Line line, int samples){
+        Line newLine = new Line();
+        ArrayList<Line> pol = new ArrayList<Line>();
+        for (int i = 0; i < line.allPoints.size(); i+=samples) {
+            if (i + samples <= line.allPoints.size()) {
+                List<Point> points = line.allPoints.subList(i, i+samples);
+                Line tempLine = new Line();
+                tempLine.allPoints.addAll(points);
+                SegmentPolyFunction pGen = SegmentationAlgorithm.ChopIntoSegments(tempLine);
+                //DO CTM STUFF HERE
+                int[] YS = new int[pGen.coeffs.length];
+                for (int x =0; x < YS.length; ++x) {
+                    YS[x] = (int)pGen.coeffs[x];
+                    if (YS[x] < 0) {
+                        YS[x] = -YS[x];
+                    } else if (YS[x] ==0) {
+                        YS[x] = 1;
+                    }
+                }
+
+                float[] newYS = EMCCTMOPTIMIZE.OptimizePoints(YS);
+                double[] newCoeffs = new double[newYS.length];
+
+                for (int x =0; x < newYS.length; ++x) {
+                    newCoeffs[x] = pGen.coeffs[x] + newYS[x]*1.2 ;
+
+                }
+
+                pol.add(pGen.getVariantLine(200, newCoeffs, true));
+
+            }
+        }
+
+        for (int i = 0; i< pol.size(); ++i) {
+            newLine.allPoints.addAll(pol.get(i).allPoints);
+        }
+
+        return MakeCompGenerated(newLine);
+    }
+
 
 
 }
