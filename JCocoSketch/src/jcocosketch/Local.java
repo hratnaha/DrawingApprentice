@@ -19,8 +19,8 @@ import org.encog.ml.data.buffer.BufferedMLDataSet;*/
 
 public class Local extends Decision_Engine{
 
-	public int numAlgorithms = 10;
-	private double[] learningArray = new double[10];
+	public int numAlgorithms = 14;
+	private double[] learningArray = new double[numAlgorithms];
 	public  Frequency freq = new Frequency();
 	//Neural NEt
 	//private BasicNetwork network;
@@ -40,6 +40,7 @@ public class Local extends Decision_Engine{
 	}
 	private int decisionNumber = 0;
 	
+	@Override
 	public Line decision() {
 		int decision = generateNumberByFreq(freq, numAlgorithms); //1 + random.nextInt(11);
 		//freq.addValue(decision);

@@ -35,10 +35,10 @@ public class Decision_Engine {
 		return decisionLine(decision);
 	}
 
-	protected Line decisionLine(int decision) {
+	public Line decisionLine(int decision) {
 		Line_Mod m = new Line_Mod(this.line, random);
 		Line newLine = new Line();
-		switch (/*decision*//*10*/11) {
+		switch (/*decision*//*10*/decision) {
 		case 1:
 			newLine = m.translation();
 			break;
