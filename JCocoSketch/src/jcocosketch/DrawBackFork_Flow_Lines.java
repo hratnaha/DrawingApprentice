@@ -803,7 +803,7 @@ private GButton saveButton;
 			BasicDBObject[] data = mongoGetData(id);
 			JSONDeserializer deserializer = new JSONDeserializer();
 			Line line1 = (Line)deserializer.deserialize(data[1].toString());
-			Line line2= (Line)deserializer.deserialize(data[2].toString());
+			Line line2 = (Line)deserializer.deserialize(data[2].toString());
 			if(u){
 //				System.out.println(data[2].toString());
 				if(line1.compGenerated){

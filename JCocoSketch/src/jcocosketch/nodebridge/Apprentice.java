@@ -6,6 +6,10 @@ import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.util.*;
 
+import com.mongodb.BasicDBObject;
+
+import flexjson.JSONDeserializer;
+
 import jcocosketch.*;
 
 public class Apprentice {
@@ -23,8 +27,12 @@ public class Apprentice {
 
 	int width = 1400, height = 800;
 
+	MongoControl mongo;
+	JSONDeserializer deserializer;
 	public Apprentice() {
 		mainTree = new QuadTree(0, 0, width, height);
+		mongo = new MongoControl();
+		deserializer = new JSONDeserializer();
 	}
 
 	public void setMode(int mode_code) {
@@ -100,8 +108,14 @@ public class Apprentice {
 					Decision_Engine engine = new Decision_Engine(curline,
 							line2, (float) Math.sqrt(Math.pow(500, 2)
 									+ Math.pow(400, 2)));
+					//add to all lines
 					allLines.add(curline);
-
+					//save lines here
+					mongo.saveLine(allLines);
+//					System.out.println(mongoPrint(true));
+					//print out for debug
+					//System.out.println(mongoPrint());
+					
 					Line newline = engine.decision();
 
 					ArrayList<Point> pts = newline.getAllPoints();
@@ -208,4 +222,72 @@ public class Apprentice {
 	public int PtCount() {
 		return this.allPoints.size();
 	}
+	
+	private String mongoPrint(boolean user){
+		return mongo.linesString(user);
+	}
+	
+	private void redrawLines(boolean u, boolean c){
+		try{			
+			BasicDBObject[] data = mongo.data();
+			JSONDeserializer deserializer = new JSONDeserializer();
+			Line line1 = (Line)deserializer.deserialize(data[1].toString());
+			Line line2 = (Line)deserializer.deserialize(data[2].toString());
+			if(u){
+//				System.out.println(data[2].toString());
+				if(line1.compGenerated){
+					drawLine(line2);
+				}else{
+					drawLine(line1);
+				}
+//				buffer.addToBuffer(userLines);
+			}
+			if(c){
+				if(!line1.compGenerated){
+					drawLine(line2);
+				}else{
+					drawLine(line1);
+				}
+				//buffer.addToBuffer(compLines);
+			}
+			//buffer.update();
+		}
+		catch(Exception e){
+			System.out.println("Error:" + e.getMessage());
+		}
+	}
+
+	private ArrayList<Line> deserialize(String s){
+		ArrayList<Line> lines = new ArrayList<Line>();
+		try{			
+			BasicDBObject[] data = mongo.data();
+			JSONDeserializer deserializer = new JSONDeserializer();
+			if(s.indexOf("allPoints", 5) > -1){//more than one line
+				while(s.indexOf("allPoints")> -1){
+					String d = "[{";
+//					int end = (s.indexOf("allPoints",4) > -1) ? s.indexOf("allPoints",4) : 
+					lines.add((Line)deserializer.deserialize(d));
+				}
+			}
+		}
+		catch(Exception e){
+			System.out.println("Error:" + e.getMessage());
+		}
+		return lines;
+	}
+	private void drawLine(Line l){
+		ArrayList<Point> points = l.allPoints;
+		for(int ii = 0; ii < points.size()-1;){
+			LineSegment ls = new LineSegment(new PVector(points.get(ii).x,points.get(ii).y),
+					new PVector(points.get(++ii).x,points.get(ii).y));
+			//buffer.addSegment(ls);
+		}
+			//buffer.update();
+	}
+	
+	public void changeMongoUser(String id, String name){
+		mongo = new MongoControl(id);
+		mongo.createUser(id,name);
+	}
+	
 }

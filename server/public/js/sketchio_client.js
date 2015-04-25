@@ -39,7 +39,7 @@ function initWebSocket() {
     }, 20);
 }
 function onNewStroke(data) {
-    console.log(data);
+    //console.log(data);
     // decode the data into the new stroke
     var botStroke = JSON.parse(data);
     curStroke.push(botStroke);
@@ -61,6 +61,10 @@ function doSend(message) {
     //writeToScreen("SENT: " + message);
     socket.emit('newStroke', message);
 }
+function sendUserID (userID, name){
+    socket.emit('sendUserID',userID, name);
+}
+
 function writeToScreen(message) {
     var pre = document.createElement("p");
     pre.style.wordWrap = "break-word";

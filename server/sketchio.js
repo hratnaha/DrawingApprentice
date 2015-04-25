@@ -12,7 +12,9 @@ var java = require("java");
 java.classpath.push("commons-lang3-3.1.jar");
 java.classpath.push("commons-io.jar");
 java.classpath.push("commons-math3-3.3.jar");
-java.classpath.push("apprentice.jar");      // apprentice library
+java.classpath.push("mongo-java-driver-2.11.3.jar");
+java.classpath.push("flexjson-2.1.jar");
+java.classpath.push("test.jar");      // apprentice library
 java.classpath.push("core.jar");            // processing
 
 var Apprentice = java.import('jcocosketch.nodebridge.Apprentice');
@@ -36,9 +38,9 @@ server.listen(8080);
 io.on('connection', function (so) {
     console.log("new client connected");
     so.emit('newconnection', { hello: 'world' });
+    so.on('sendUserID', sendUserID);
     so.on('newStroke', function newStrokeReceived(data) {
         var d = JSON.parse(data);
-        
         var stroke = d.data;
         
         var stroketime = java.newLong(stroke.timestamp);
@@ -141,6 +143,10 @@ function CreatePacketPoint(newpt) {
     };
     
     return pkpt;
+}
+
+function sendUserID(userID, name){
+    apprentice.changeMongoUser(userID, name);
 }
 
 console.log("SocketIO Server Initialized!");

@@ -3,6 +3,10 @@
     <div id="buttons">
         <input type="color" name="background" id="background" value="#000000" />
         <input type="button" id="clear" value="Clear" />
+        <button id="login" value="FBLogin" onclick="fbLogin()">FBLogin</button>  
+        <button id="redraw" value="redraw" onclick="redraw()">redraw</button> 
+        <div id="fb-root"></div>  
+        <div id="fb-welcome"></div>
         <select id="mode">
             <option value="local">Local</option>
             <option value="region">Region</option>
@@ -18,29 +22,12 @@
 
 </body>
 
-<script>
-//facebook login
-  window.fbAsyncInit = function() {
-    FB.init({
-      appId      : '396574387181205',
-      xfbml      : true,
-      version    : 'v2.2'
-    });
-  };
-
-  (function(d, s, id){
-     var js, fjs = d.getElementsByTagName(s)[0];
-     if (d.getElementById(id)) {return;}
-     js = d.createElement(s); js.id = id;
-     js.src = "//connect.facebook.net/en_US/sdk.js";
-     fjs.parentNode.insertBefore(js, fjs);
-   }(document, 'script', 'facebook-jssdk'));
-</script>
 
 <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
 <script src="https://cdn.socket.io/socket.io-1.0.6.js"></script>
 <script type="text/javascript" src="js/sketchPad.js"></script>
 <script type="text/javascript" src="js/sketchio_client.js"></script>
+<script type="text/javascript" src="js/fblogin.js"></script>
 <script type="text/javascript">
 
     window.requestAnimFrame = (function () {
