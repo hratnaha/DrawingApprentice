@@ -552,11 +552,13 @@ private GButton saveButton;
 
 		if(key == '1') {
 			((Local)engine).upvote();
+			DQNJS.learn(1.0f);
 			this.AddTextAndTimeStamp("Upvoted in " + perceptionMode);
 		}
 		
 		if(key == '2') {
 			((Local)engine).downvote();
+			DQNJS.learn(-0.9f);
 			this.AddTextAndTimeStamp("Downvoted in " + perceptionMode);
 		}
 		if(key == 'p') {

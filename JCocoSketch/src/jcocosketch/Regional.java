@@ -1,9 +1,7 @@
 package jcocosketch;
 
+import java.io.IOException;
 import java.util.*;
-
-
-
 
 import org.apache.commons.math3.*;
 import org.apache.commons.math3.stat.Frequency;
@@ -58,7 +56,10 @@ public class Regional extends Decision_Engine {
 	}
 	
 	public Line decision() {
-		return local.decision();
+		
+			return local.decision();
+		
+		//return local.decisionLine(0);
 	}
 	
 

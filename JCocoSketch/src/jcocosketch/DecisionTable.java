@@ -1,3 +1,7 @@
+/**
+ * OBSOLETE
+ */
+
 package jcocosketch;
 import java.util.*;
 public class DecisionTable {
