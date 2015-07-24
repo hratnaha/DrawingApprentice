@@ -2,6 +2,7 @@ package jcocosketch;
 
 import javax.script.*;
 
+import java.io.File;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
@@ -9,21 +10,24 @@ import java.nio.file.Paths;
 
 public class DQNJS {
 
-	static final String DQNJS_PATH = "/Users/Yashraj/git/DrawingApprentice/JCocoSketch/src/jcocosketch/DQN.js";
+	//static final String DQNJS_PATH = "/Users/Yashraj/git/DrawingApprentice/JCocoSketch/src/jcocosketch/DQN.js";
+	static final String DQNJS_PATH = "jcocosketch/DQN.js";
 	static ScriptEngineManager manager = new ScriptEngineManager();
 	static ScriptEngine engine = manager.getEngineByName("JavaScript");
 	static Invocable inv;
 	static boolean isinit = false;
-
+	
+	
 	public static void init() throws IOException {
 
 		if (!isinit) {
 			// read script file
 			try {
+				
 				engine.eval(Files.newBufferedReader(
 						Paths.get(DQNJS_PATH),
 						StandardCharsets.UTF_8));
-
+				
 				isinit = true;
 
 			} catch (Exception e) {
