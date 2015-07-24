@@ -1,4 +1,4 @@
-var ioUri = "http://localhost:8080"; //replace with the Websocket URL //"http://108.179.251.165:8080"; //
+var ioUri = "http://localhost:8080"; //replace with the Websocket URL //"http://130.207.124.45"; //
 var output;
 var socket;
 var botCanvas = {};
@@ -12,6 +12,7 @@ function initWebSocket() {
     
     output = document.getElementById("output");
     socket = io.connect(ioUri);
+    //socket = io.connect(ioUri, {'path':'/DrawingApprentice/socket.io'});
     
     socket.on('newconnection', onOpen);
     socket.on('respondStroke', onNewStroke);
@@ -19,7 +20,7 @@ function initWebSocket() {
     var i = 0;
     var botStroke = "";
     var ctx = botCanvas.getContext('2d');
-    ctx.width = 0.1;
+    //ctx.width = 0.1;
     var timer = setInterval(function () {
         
         if (botStroke != "" && i < botStroke.packetPoints.length) {
@@ -46,7 +47,7 @@ function initWebSocket() {
     }, 20);
 }
 function onNewStroke(data) {
-    console.log(data);
+    //console.log(data);
     // decode the data into the new stroke
     var botStroke = JSON.parse(data);
     curStroke.push(botStroke);
