@@ -29,8 +29,16 @@ public class Decision_Engine {
 		int decision = 1 + random.nextInt(6); //was 4 before default case, its just to increase probability of mutation
 		}*/
 
-		int decision = 1 + random.nextInt(12); //was 4 before default case, its just to increase probability of mutation
-
+		int decision = 1 + random.nextInt(11); //was 4 before default case, its just to increase probability of mutation
+		try {
+		// Use Deep Q-Learning and Reward Shaping
+		int x = (int)(line.allPoints.get(0).x/10);
+		int y = (int)(line.allPoints.get(0).y/10);
+		
+		decision = 1 + DQNJS.getAction(x,y);
+		System.out.println("Action taken by DQN-agent");
+		} catch (Exception e) {}
+		
 		return decisionLine(decision);
 	}
 

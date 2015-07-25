@@ -1,5 +1,6 @@
 package jcocosketch;
 
+import java.io.IOException;
 import java.util.Iterator;
 
 import org.apache.commons.math3.stat.*;
@@ -19,7 +20,7 @@ import org.encog.ml.data.buffer.BufferedMLDataSet;*/
 
 public class Local extends Decision_Engine{
 
-	public int numAlgorithms = 12;
+	public int numAlgorithms = 14;
 	private double[] learningArray = new double[numAlgorithms];
 	public  Frequency freq = new Frequency();
 	//Neural NEt
@@ -40,13 +41,14 @@ public class Local extends Decision_Engine{
 	}
 	private int decisionNumber = 0;
 	
+	@Override
 	public Line decision() {
-		int decision = generateNumberByFreq(freq, numAlgorithms); //1 + random.nextInt(11);
+		/*int decision = generateNumberByFreq(freq, numAlgorithms); //1 + random.nextInt(11);
 		//freq.addValue(decision);
 		decisionNumber = decision;
 		for(int i = 1; i<=learningArray.length; ++i) {
 			learningArray[i - 1] = (double)freq.getCount(i);
-		}
+		}*/
 		
 		//Learn -- fix this propagation
 	/*	MLDataSet trainingData = new BasicMLDataSet();
@@ -58,7 +60,8 @@ public class Local extends Decision_Engine{
 	//	rprog.iteration();
 		//rprog.finishTraining();
 		*/
-		return super.decisionLine(decision);
+		//return super.decisionLine(decision);
+		return super.decision();
 	}
 
 	public int generateNumberByFreq(Frequency f, int numAlgorithms) {
@@ -77,13 +80,14 @@ public class Local extends Decision_Engine{
 	
 	public void upvote() {
 	//	freq.addValue(decisionNumber);
-		
+		DQNJS.learn(1.0f);
 		freq.incrementValue(decisionNumber, 1);
 		
 		System.out.println("Incremented " + decisionNumber);
 	}
 	
 	public void downvote() {
+		DQNJS.learn(-0.9f);
 		freq.incrementValue(decisionNumber, -2);
 		System.out.println("decremented " + decisionNumber);
 	}
