@@ -2,6 +2,7 @@ package jcocosketch;
 
 import processing.core.*;
 
+import java.io.IOException;
 import java.util.*;
 
 import jcocosketch.intersectionResponse.IntersectionResponseMaster;
@@ -18,6 +19,13 @@ public class Decision_Engine {
 		this.line = line;
 		this.line2 = line;
 		this.screenDiag = screenDiag;
+		//Fixed
+		try {
+			DQNJS.init();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 	public Line decision() {
