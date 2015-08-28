@@ -52,10 +52,15 @@ public class Apprentice {
 	}
 
 	public void vote(int isUp){
-		if(isUp == 1)
+		if(isUp == 1){
+			DQNJS.learn(1.0f);
 			System.out.println("vote up");
-		else
+		}
+		else{
+			DQNJS.learn(-0.9f);
 			System.out.println("vote down");
+		}
+			
 	}
 	
 	public void clear() {

@@ -45,7 +45,7 @@ public class QuadTree {
 
         Node root = this.root_;
         if (x < root.getX() || y < root.getY() || x > root.getX() + root.getW() || y > root.getY() + root.getH()) {
-            throw new QuadTreeException("Out of bounds : (" + x + ", " + y + ")");
+            //throw new QuadTreeException("Out of bounds : (" + x + ", " + y + ")");
         }
         if (this.insert(root, new Point((float)x, (float)y, value))) {
             this.count_++;
