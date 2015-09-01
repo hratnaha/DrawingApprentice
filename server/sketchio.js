@@ -44,15 +44,37 @@ io.on('connection', function (so) {
     so.emit('newconnection', { hello: 'world' });
 
     so.on('getData', function(data) {
-        var userLines = apprentice.getUserLinesSync();
-        var computerLines = apprentice.getComputerLinesSync();
+        var userLines;
+        var computerLines;
 
-        var allLines = {
-          userLines: userLines,
-          computerLines: computerLines
+        apprentice.getUserLines(function(err, item) {
+            if (err) {
+                console.log(err);
+            } else {
+                userLines = item;
+                afterUserLines();
+            }
+        });
+
+        function afterUserLines() {
+            apprentice.getComputerLines(function(err, item) {
+                if (err) {
+                    console.log(err);
+                } else {
+                    computerLines = item;
+                    emitData();
+                }
+            });
         }
 
-        so.emit('allData', allLines);
+        function emitData() {
+            var allLines = {
+                userLines: userLines,
+                computerLines: computerLines
+            }
+
+            so.emit('allData', allLines);
+        }
     });
 
     so.on('newStroke', function newStrokeReceived(data) {

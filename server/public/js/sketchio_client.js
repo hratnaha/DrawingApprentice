@@ -71,14 +71,14 @@ function onOpen(data) {
     socket.emit("canvasSize", size);
 }
 function onDataReceived(allData) {
-    var userBlob = new Blob([allData.userLines],
-        {type: "text/plain;charset=utf-8"});
-    var computerBlog = new Blob([allData.computerLines],
-        {type: "text/plain;charset=utf-8"});
-
     var timestamp = String(Date.now());
 
+    var userBlob = new Blob(allData.userLines,
+        {type: "text/plain;charset=utf-8"});
     saveAs(userBlob, timestamp + "userLines.txt");
+
+    var computerBlob = new Blob(allData.computerLines,
+        {type: "text/plain;charset=utf-8"});
     saveAs(computerBlob, timestamp + "computerLines.txt");
 }
 
