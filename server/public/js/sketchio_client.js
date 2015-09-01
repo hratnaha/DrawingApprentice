@@ -9,20 +9,21 @@ function initWebSocket() {
     botCanvas = document.getElementById('botpad');
     botCanvas.setAttribute('width', container.offsetWidth);
     botCanvas.setAttribute('height', container.offsetHeight);
-    
+
     output = document.getElementById("output");
     socket = io.connect(ioUri);
     //socket = io.connect(ioUri, {'path':'/DrawingApprentice/socket.io'});
-    
+
     socket.on('newconnection', onOpen);
     socket.on('respondStroke', onNewStroke);
-    
+    socket.on('allData', onDataReceived);
+
     var i = 0;
     var botStroke = "";
     var ctx = botCanvas.getContext('2d');
     //ctx.width = 0.1;
     var timer = setInterval(function () {
-        
+
         if (botStroke != "" && i < botStroke.packetPoints.length) {
             ctx.lineTo(botStroke.packetPoints[i].x, botStroke.packetPoints[i].y);
             ctx.stroke();
@@ -53,22 +54,34 @@ function onNewStroke(data) {
     curStroke.push(botStroke);
 
 	//var botPts = botStroke.packetPoints;
-	
+
  //   if (botPts.length > 1) {
-        
+
  //       ctx.beginPath();
  //       ctx.moveTo(botPts[0].x, botPts[0].y);
 	//	var i = 0;
-		
+
 	//}
 }
 function onOpen(data) {
     var size = {
         width : container.offsetWidth,
         height: container.offsetHeight
-    };  
+    };
     socket.emit("canvasSize", size);
 }
+function onDataReceived(allData) {
+    var userBlob = new Blob([allData.userLines],
+        {type: "text/plain;charset=utf-8"});
+    var computerBlog = new Blob([allData.computerLines],
+        {type: "text/plain;charset=utf-8"});
+
+    var timestamp = String(Date.now());
+
+    saveAs(userBlob, timestamp + "userLines.txt");
+    saveAs(computerBlob, timestamp + "computerLines.txt");
+}
+
 function doSend(message) {
     //writeToScreen("SENT: " + message);
     socket.emit('newStroke', message);
@@ -96,7 +109,7 @@ function clearCanvas() {
 
 
 function setMode(mode) {
-   
+
     switch ($(this).val()) {
         case 'local':
             m = 0;
@@ -107,7 +120,7 @@ function setMode(mode) {
         case 'global':
             m = 2;
             break;
-    } 
+    }
     socket.emit('setMode', m);
 }
 
@@ -129,7 +142,7 @@ function ChangeMode3(){
 	socket.emit('setMode',0)
 }
 
-	
+
 function groupingMode(chk) {
 	if(chk)
 	   	socket.emit('setMode', 3);
@@ -138,4 +151,8 @@ function groupingMode(chk) {
 }
 function voteUpOrDown(isup) {
     socket.emit('vote', isup);
+}
+
+function downloadData() {
+    socket.emit('getData');
 }
