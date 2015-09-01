@@ -71,15 +71,23 @@ function onOpen(data) {
     socket.emit("canvasSize", size);
 }
 function onDataReceived(allData) {
+    console.log('data received');
+    console.log(allData);
+
     var timestamp = String(Date.now());
 
-    var userBlob = new Blob(allData.userLines,
+    var userLines = allData.userLines;
+    var computerLines = allData.computerLines;
+
+    var userBlob = new Blob([userLines],
         {type: "text/plain;charset=utf-8"});
     saveAs(userBlob, timestamp + "userLines.txt");
 
-    var computerBlob = new Blob(allData.computerLines,
-        {type: "text/plain;charset=utf-8"});
-    saveAs(computerBlob, timestamp + "computerLines.txt");
+    setTimeout(function() {
+        var computerBlob = new Blob([computerLines],
+            {type: "text/plain;charset=utf-8"});
+        saveAs(computerBlob, timestamp + "computerLines.txt");
+    }, 500);
 }
 
 function doSend(message) {
@@ -154,5 +162,6 @@ function voteUpOrDown(isup) {
 }
 
 function downloadData() {
+    console.log('getting data...');
     socket.emit('getData');
 }
