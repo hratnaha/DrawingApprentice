@@ -14,6 +14,7 @@ java.classpath.push("commons-io.jar");
 java.classpath.push("commons-math3-3.3.jar");
 java.classpath.push("apprentice.jar");      // apprentice library
 java.classpath.push("core.jar");            // processing
+java.classpath.push("flexjson.jar");
 
 var Apprentice = java.import('jcocosketch.nodebridge.Apprentice');
 
@@ -50,6 +51,7 @@ io.on('connection', function (so) {
         apprentice.getUserLines(function(err, item) {
             if (err) {
                 console.log(err);
+
             } else {
                 userLines = item;
                 afterUserLines();

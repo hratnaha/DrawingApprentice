@@ -116,6 +116,27 @@ function onOpen(data) {
     };  
     socket.emit("canvasSize", size);
 }
+
+function onDataReceived(allData) {
+    console.log('data received');
+    console.log(allData);
+
+    var timestamp = String(Date.now());
+
+    var userLines = allData.userLines;
+    var computerLines = allData.computerLines;
+
+    var userBlob = new Blob([userLines],
+        {type: "text/plain;charset=utf-8"});
+    saveAs(userBlob, timestamp + "userLines.txt");
+
+    setTimeout(function() {
+        var computerBlob = new Blob([computerLines],
+            {type: "text/plain;charset=utf-8"});
+        saveAs(computerBlob, timestamp + "computerLines.txt");
+    }, 500);
+}
+
 function doSend(message) {
     //writeToScreen("SENT: " + message);
     socket.emit('newStroke', message);
@@ -185,4 +206,9 @@ function groupingMode(chk) {
 }
 function voteUpOrDown(isup) {
     socket.emit('vote', isup);
+}
+
+function downloadData() {
+    console.log('getting data...');
+    socket.emit('getData');
 }
