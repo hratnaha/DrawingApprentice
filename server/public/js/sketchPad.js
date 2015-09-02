@@ -11,11 +11,10 @@ function sketchUtil() {
     canvas.setAttribute('height', container.offsetHeight);
     var context = canvas.getContext('2d');
     context.lineWidth = 1;
-    //context.imageSmoothingEnabled = true;
     var curstroke;
     var strCounter = 0, pkptCounter = 0;
-    var colorline;   
-
+    var colorline;
+    
     function createNewStroke() {
         strCounter++;
         pkptCounter = 0;
@@ -60,23 +59,20 @@ function sketchUtil() {
         isDrawing: false,
         touchstart: function (coors) {
             curstroke = createNewStroke();
-            
-            if ($('#grouping').hasClass("isGrouping")) {
+			if ($('#grouping').hasClass("isGrouping")){
             //if ($("#cboxGrouping").attr('checked') == "checked") {
 				
 				//alert("grouping checked");
                 context.setLineDash([5]);
                 context.strokeStyle = x;
 				console.log(x);
-				context.globalAlpha = opacity;
+				context.globalAlpha = opacity2;
             } else {
                 colorline = document.getElementById('background').value;
-                
                 context.strokeStyle = x;
-                context.setLineDash([]);
+                //context.setLineDash([0]);
 				context.lineWidth = y;
-                context.globalAlpha = opacity;
-
+				context.globalAlpha = opacity2;
             }
 
             context.beginPath();
@@ -88,7 +84,7 @@ function sketchUtil() {
                 context.lineTo(coors.x, coors.y);
                 context.stroke();
 				context.lineWidth = y;
-				context.globalAlpha = opacity;
+				context.globalAlpha = opacity2;
                 
                 var json_coor = JSON.stringify(coors); //converting to json
                 pushNewPacketPoint(coors);
@@ -174,17 +170,17 @@ function sketchUtil() {
     var touchAvailable = ('createTouch' in document) || ('ontouchstart' in window);
     
     // attach the touchstart, touchmove, touchend event listeners.
-    //if (touchAvailable) {
+    if (touchAvailable) {
         canvas.addEventListener('touchstart', draw, false);
         canvas.addEventListener('touchmove', draw, false);
         canvas.addEventListener('touchend', draw, false);
-    //}
-    //// attach the mousedown, mousemove, mouseup event listeners.
-    //else {
+    }
+    // attach the mousedown, mousemove, mouseup event listeners.
+    else {
         canvas.addEventListener('mousedown', draw, false);
         canvas.addEventListener('mousemove', draw, false);
         canvas.addEventListener('mouseup', draw, false);
-    //}
+    }
     
     // prevent elastic scrolling
     document.body.addEventListener('touchmove', function (event) {
@@ -206,7 +202,7 @@ var mouseIsDown = false;
 
 function pressure1() {
     
-    $(document).on("mousemove", function () { /*log("mousemove"); */});
+    $(document).on("mousemove", function () { log("mousemove"); });
     $(document).on("touchstart touchmove touchend touchcancel", function (ev) {3
         $.each(ev.originalEvent.touches, function (i, t) { logtouch(ev.type + "-touches", t); });
         $.each(ev.originalEvent.changedTouches, function (i, t) { logtouch(ev.type + "-changed", t); });
