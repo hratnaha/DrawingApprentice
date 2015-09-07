@@ -6,15 +6,11 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
-import java.nio.file.Path;
 import java.nio.file.Paths;
 
 public class DQNJS {
 
 	//static final String DQNJS_PATH = "/Users/Yashraj/git/DrawingApprentice/JCocoSketch/src/jcocosketch/DQN.js";
-	
-	// FIX THIS - path should point to the DQN.js file in the jcocosketch directory
-	// 
 	static final String DQNJS_PATH = "DQN.js";
 	static ScriptEngineManager manager = new ScriptEngineManager();
 	static ScriptEngine engine = manager.getEngineByName("JavaScript");
@@ -27,11 +23,11 @@ public class DQNJS {
 		if (!isinit) {
 			// read script file
 			try {
-				Path pathToDQNJS = Paths.get(DQNJS_PATH);
+				
 				engine.eval(Files.newBufferedReader(
-						pathToDQNJS,
+						Paths.get(DQNJS_PATH),
 						StandardCharsets.UTF_8));
-				System.out.println("Deep RL Agent Initialized!");
+				
 				isinit = true;
 
 			} catch (Exception e) {

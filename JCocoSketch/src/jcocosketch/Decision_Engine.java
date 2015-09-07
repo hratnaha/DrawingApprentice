@@ -12,6 +12,7 @@ public class Decision_Engine {
 	
 	Random random = new Random();
 	IntersectionResponseMaster xResponseMaster = new IntersectionResponseMaster();
+	
 	Line line;
 	float screenDiag = 0.0f;
 	Line line2;
@@ -19,7 +20,6 @@ public class Decision_Engine {
 		this.line = line;
 		this.line2 = line;
 		this.screenDiag = screenDiag;
-		//Fixed
 		try {
 			DQNJS.init();
 		} catch (IOException e) {
@@ -28,7 +28,7 @@ public class Decision_Engine {
 		}
 	}
 
-	public Line decision() {
+	public Line decision()  {
 		/*if (this.line.getTotalDistance() < 2 * screenDiag && ELEMENTARY_DECISION_PROBABILITY < random.nextFloat()) {
 			Line response = xResponseMaster.response(this.line);
 			if (null != response)
@@ -39,18 +39,24 @@ public class Decision_Engine {
 
 		int decision = 1 + random.nextInt(11); //was 4 before default case, its just to increase probability of mutation
 		try {
-			// Use Deep Q-Learning and Reward Shaping
-			int x = (int)(line.allPoints.get(0).x/10);
-			int y = (int)(line.allPoints.get(0).y/10);
-			
-			decision = 1 + DQNJS.getAction(x,y);
-			System.out.println("Action taken by DQN-agent");
-		} catch (Exception e) {}
+		// Use Deep Q-Learning and Reward Shaping
+		int x = (int)(line.allPoints.get(0).x/10);
+		int y = (int)(line.allPoints.get(0).y/10);
 		
+		decision = 1 + DQNJS.getAction(x,y);
+		System.out.println("Action taken by DQN-agent");
+		} catch (Exception e) {}
 		return decisionLine(decision);
 	}
 
-	protected Line decisionLine(int decision) {
+	public Line decisionLine(int decision) {
+		/** Learn the structure and pattern using Hopfield
+		 * 
+		 */
+		//HopfieldAssociate.Init();
+		//HopfieldAssociate.Learn(this.line);
+		//System.out.println(ClassificationUtility.convertToPattern(line)[0][0]);
+		
 		Line_Mod m = new Line_Mod(this.line, random);
 		Line newLine = new Line();
 		switch (decision) {
@@ -100,17 +106,24 @@ public class Decision_Engine {
 		case 10:
 			newLine = m.Segment(this.line, 2, true);
 			//newLine = m.Segment(this.line, true);
+			//Print VIA NEAT LEARNING
+			//newLine = m.generateBYNEATLEARNING(newLine, 2);
+		//	newLine = m.SegmentNEAT(newLine, 1, true);  //Remove if you do not want to learn
 			break;
-
-        case 11:
-                //	newLine = m.generateBYCTMExploration(this.line);
-            newLine = m.SegmentAndCTM(this.line, 1);
-            break;
-
-        case 12:
-            newLine = m.generateBYCTMExploration(this.line);
-            break;
-
+			
+		case 11:
+		//	newLine = m.generateBYCTMExploration(this.line);
+			newLine = m.SegmentAndCTM(this.line, 1);
+			break;
+			
+		case 12:
+			newLine = m.generateBYCTMExploration(this.line);
+			break;
+			
+		case 13:
+		//	newLine = HopfieldAssociate.Generate(this.line);
+			break;
+			
 		default:
 			newLine = m.drawMutation(this.line, this.line2);
 			//newLine = m.Trim(newLine, 2160, 1440);
@@ -121,6 +134,7 @@ public class Decision_Engine {
 		}
 		newLine = m.Trim(newLine, 2160, 1440);//newLine;
 		newLine.compGenerated = true;
+		
 		return newLine;
 	}
 

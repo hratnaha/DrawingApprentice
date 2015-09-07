@@ -9,8 +9,8 @@ public class ClassificationUtility {
 		for (Line line : allLines) {
 			int n = line.allPoints.size() - 1;
 			for (int j =1; j <=n ; ++j) {
-				if (line.allPoints.get(0).getX() == line.allPoints.get(j).getX()
-						&& line.allPoints.get(j).getY() == line.allPoints.get(j).getY()) {
+				if (line.allPoints.get(0).x == line.allPoints.get(j).x 
+						&& line.allPoints.get(j).y == line.allPoints.get(j).y) {
 					System.out.println("Closed Lines = " + line.lineID);
 					closed.add(line);
 					break;
@@ -22,5 +22,17 @@ public class ClassificationUtility {
 	
 	public static void findUserDrawnPatterns(ArrayList<Line> allLines) {
 		
+	}
+	
+	public static int[][] convertToPattern(Line line) {
+		int[][] arr = new int[HopfieldAssociate.HEIGHT][HopfieldAssociate.WIDTH];
+		System.out.println("Converting to int array" + arr[0][0]);
+		for (int i =0; i < line.allPoints.size(); ++i) {
+			int x = (int) line.allPoints.get(i).x;
+			int y = (int) line.allPoints.get(i).y;
+			if (y< arr.length && x < arr[0].length)
+				arr[Math.abs(y)][Math.abs(x)] = 1;
+		}
+		return arr;
 	}
 }

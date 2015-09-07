@@ -30,13 +30,11 @@ public class Point extends PVector implements Comparable{
     public Point(float x, float y, float lineID) {
     	super(x, y);
         this.lineID = lineID;
-        this.timestamp = System.currentTimeMillis() / 1000.0f;
     }
     public Point(float x, float y, Object opt_value) {
         super(x, y);
         this.opt_value = opt_value;
         this.lineID = 0;
-        this.timestamp = System.currentTimeMillis() / 1000.0f;
     }
     
     public void setTime(long time){
