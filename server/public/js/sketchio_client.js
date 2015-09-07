@@ -1,4 +1,4 @@
-var ioUri = "http://130.207.124.45"; //"http://localhost:8080"; //
+var ioUri = "http://localhost:8080"; //"http://130.207.124.45"; //
 var output;
 var socket;
 var botCanvas = {};
@@ -14,8 +14,8 @@ function initWebSocket() {
     botCanvas.setAttribute('height', container.offsetHeight);
     
     output = document.getElementById("output");
-    //socket = io.connect(ioUri); // for local version
-    socket = io.connect(ioUri, { 'path': '/DrawingApprentice/socket.io' }); // for adam server
+    socket = io.connect(ioUri); // for local version
+    //socket = io.connect(ioUri, { 'path': '/DrawingApprentice/socket.io' }); // for adam server
     
     socket.on('newconnection', onOpen);
     socket.on('respondStroke', onNewStroke);

@@ -30,8 +30,8 @@ app.listen(process.env.PORT || 3000);
 var server = require('http').Server(app);
 var io = require('socket.io')(server);
 var isGrouping = false;
-//server.listen(8080);
-server.listen(81); // for adam server
+server.listen(8080);
+//server.listen(81); // for adam server
 
 io.on('connection', function (so) {
     var apprentice = new Apprentice();
