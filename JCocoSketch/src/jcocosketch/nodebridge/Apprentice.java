@@ -116,7 +116,7 @@ public class Apprentice {
 					allLines.add(curline);
 
 					Line newline = engine.decision();
-          this.compLines.add(newLine);
+					this.compLines.add(newline);
 
 					ArrayList<Point> pts = newline.getAllPoints();
 					System.out.println(pts.size());
