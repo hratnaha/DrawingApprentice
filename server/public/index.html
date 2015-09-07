@@ -99,7 +99,7 @@ put js files before css files
             	</button>
             </li>
              <li>
-            	<button class="btn btn-default btn-lg btn-customize" onclick="downloadData();" style="float:left;margin-left:2em;">
+            	<button class="btn btn-default btn-lg btn-customize" onClick="downloadData();" style="float:left;margin-left:2em;">
                Download
             	</button>
             </li>
@@ -113,26 +113,9 @@ put js files before css files
                Trash
             	</button>
             </li>
-            <li>
-            	 <div class="checkbox" style="margin-left:3em;">
-                  <label><input id="checkbox" type="checkbox" value=""></label>
-                  <script>
-                  	$('#checkbox').click(function(){
-						if (this.checked) {
-							TurnOffAgent();
-							alert("Agent is turned off");
-						}
-						else{
-							TurnOnAgent();
-							alert("Agent is turned on");
-							}
-					}) 
-                  
-                  </script>
-                </div>
-            </li>
+           
       </ul>
-               
+    				<label><input type="checkbox" value="" style="margin:1em 1em;"></label>
     </div><!-- /.navbar-collapse -->
   </div><!-- /.container-fluid -->
   
@@ -334,7 +317,7 @@ put js files before css files
     <div id="logo_placeholder"></div>
          <div id="creativity_slider">
         	<input id="ex8" data-slider-id='ex1Slider' type="text" data-slider-min="0" data-slider-max="100" data-slider-step="1" data-slider-value="14" style="z-index:9999;"/>
-            <h4 id="logo_title">Agent Creativity Level<br>(Slide to adjust)</h4>
+            <h4 id="logo_title">Agent Creativity Level<br><br>(Slide to adjust)</h4>
 
             <style>
 				#logo_title{
@@ -361,11 +344,16 @@ put js files before css files
 					tooltip: 'always'
 				});
 				
+				
 				// Without JQuery
 				var slider = new Slider("#ex8", {
 					tooltip: 'always'
 				});
-            
+				
+            	
+				
+				
+			
             </script>
         </div>
     

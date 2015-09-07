@@ -19,7 +19,7 @@ function initWebSocket() {
     socket.on('newconnection', onOpen);
     socket.on('respondStroke', onNewStroke);
     socket.on('allData', onDataReceived);
-
+    
 	var logo = document.getElementById("logo");
 	
 	
@@ -38,13 +38,15 @@ function initWebSocket() {
 			ctx.globalAlpha = opacity2;
 			ctx.lineWidth = y;
 
-            //console.log(botStroke.packetPoints[i].x);
-            moveLogo.style.left = botStroke.packetPoints[i].x - 70;
+			console.log(botStroke.packetPoints[i].x);
+			moveLogo.style.left = botStroke.packetPoints[i].x - 70;
             moveLogo.style.top = botStroke.packetPoints[i].y - 130;
-
+            
             i++;
-            //moveLogo.style.backgroundColor = "blue";
+			//moveLogo.style.backgroundColor = "blue";
 			finishStroke = true;
+		
+			
         } else if (curStroke.length > 0) {
             botStroke = curStroke.shift();
             ctx.beginPath();
@@ -66,6 +68,7 @@ function initWebSocket() {
             i = 0;
 			//moveLogo.style.backgroundColor = "yellow";
 			finishStroke = false;
+			MoveLogoBack();
         }
     }, 20);
 	
@@ -73,7 +76,7 @@ function initWebSocket() {
 }
 
 
-var timer2 = setInterval(function () {
+function MoveLogoBack () {
 	if(finishStroke==false){
 	//console.log("move");
 	//moveLogo.style.left = '4em';
@@ -86,7 +89,7 @@ var timer2 = setInterval(function () {
 	console.log('logo left is ' + moveLogo.style.left);	
 	}
 	
-	},500);
+	}
 
 
 function onNewStroke(data) {

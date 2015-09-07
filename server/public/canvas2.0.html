@@ -10,7 +10,6 @@ put js files before css files
     <script src="https://cdn.socket.io/socket.io-1.0.6.js"></script>
 	<script type="text/javascript" src="js/sketchPad.js"></script>
 	<script type="text/javascript" src="js/sketchio_client.js"></script>
-	<script type="text/javascript" src="js/FileSaver.min.js"></script>
 	<script type="text/javascript" src="js/bootstrap.js"></script>
 	<script type="text/javascript" src="js/bootstrap.min.js"></script>
     <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css" />
@@ -22,145 +21,128 @@ put js files before css files
 <body>
 
 
-
-<button type="button" class="btn thumb_up vote circlebase type1" id="up" style="border-radius:50%;">
-	
-</button>
-
-   
-
+<button type="button" class="btn thumb_up vote circlebase type1" id="up" style="border-radius:50%;"></button>
 	<div class="vote circlebase type1" id="down">
-<button type="button" class="btn thumb_down" style="border-radius:50%;">
-	<script>
-    //voteUpOrDown(false);
-    </script>
-</button>
+<button type="button" class="btn thumb_down" style="border-radius:50%;"></button>
 	</div>
 
-<div class="col-lg-12" id="canvas">
-
-<!--<canvas id="can" style="position:absolute;margin:0;padding:0;border:1px solid black; display:block;top:0px;"></canvas>-->
-    <div class="container" id="toggle" class="toggle" onload="AdjustOpacitySlider()">  
-
-
-     <div id="color_palette" class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
-    	<div class="row">
-        	<div class="col-lg-1 col-md-1 col-sm-1 col-xs-1">
-            	 <input type="image" src="images/red.png" name="saveForm" class="btTxt submit saveForm" id="saveForm1" />
-            </div>
-            <div class="col-lg-1 col-md-1 col-sm-1 col-xs-1">
-            	 <input type="image" src="images/peach.png" name="saveForm" class="btTxt submit saveForm" id="saveForm2" />
-            </div>
+<!--div class="span12" id="canvas"-->
+<nav class="navbar navbar-default" style="z-index:50;">
+    <div class="container-fluid" class="toggle" onload="AdjustOpacitySlider()">  <!--add id="toggle"-->
+    	
+        <div class="navbar-header">
+        	 <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+      		</button>
+        </div>
+    
+    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+    	     <ul class="nav navbar-nav" style="display:inline;"">
+                <li style="float:left;">
+                        <button name="saveForm" class="btn btn-lg btn-color saveForm" id="saveForm1" />
+                        <button name="saveForm" class="btn btn-lg btn-color saveForm" id="saveForm2" />
+                        <button name="saveForm" class="btn btn-lg btn-color saveForm" id="saveForm3" />
+                        <button name="saveForm" class="btn btn-lg btn-color saveForm" id="saveForm4" />
+                        <button name="saveForm" class="btn btn-lg btn-color saveForm" id="saveForm5" />
+                </li>
+                </br>
+				<li style="float:left;clear:both;">
+                        <button name="saveForm" class="btn btn-lg btn-color  saveForm" id="saveForm6" />
+                        <button name="saveForm" class="btn btn-lg btn-color  saveForm" id="saveForm7" />
+                        <button name="saveForm" class="btn btn-lg btn-color  saveForm" id="saveForm8" />
+                        <button name="saveForm" class="btn btn-lg btn-color  saveForm" id="saveForm9" />
+                        <button name="saveForm" class="btn btn-lg btn-color  saveForm" id="saveForm10" />
+                </li>
+                <!--li class="dropdown">
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Dropdown <span class="caret"></span></a>
+                  <ul class="dropdown-menu" role="menu">
+                    <li><a href="#">Action</a></li>
+                    <li><a href="#">Another action</a></li>
+                    <li><a href="#">Something else here</a></li>
+                    <li class="divider"></li>
+                    <li><a href="#">Separated link</a></li>
+                    <li class="divider"></li>
+                    <li><a href="#">One more separated link</a></li>
+                  </ul>
+               </li-->
+    	 	</ul>
             
-            <div class="col-lg-1 col-md-1 col-sm-1 col-xs-1">
-                <input type="image" src="images/yellow.png" name="saveForm" class="btTxt submit saveForm" id="saveForm3" />
+            <ul class="nav navbar-nav">
+            <div class="well" style="padding-top: 5px; padding-bottom: 0px;">
+            	<p style="display:inline-block;">
+                	<b>Line Thickness</b>
+                    <span class="label label-default" style="background-color:transparent;">
+                      <img id="brush5" style="display: none; width:20%;" src="images/brush-5.png" />
+                      <img id="brush4" style="display: none; width:20%; " src="images/brush-4.png" />
+                      <img id="brush3" style="display: none; width:20%; " src="images/brush-3.png" />
+                      <img id="brush2" style="display: none; width:20%;" src="images/brush-2.png" />
+                      <img id="brush1" style="width:20%;" src="images/brush-1.png" />
+                    </span>
+					<div id="line_thickness_slider"></div>
+                </p>
             </div>
-            <div class="col-lg-1 col-md-1 col-sm-1 col-xs-1">
-                <input type="image" src="images/green.png" name="saveForm" class="btTxt submit saveForm" id="saveForm4" />
-            </div>
-             <div class="col-lg-1 col-md-1 col-sm-1 col-xs-1">
-                <input type="image" src="images/purple.png" name="saveForm" class="btTxt submit saveForm" id="saveForm5" />
-            </div>
-        </div><!--/.row-->
-         <div class="row">
-        	<div class="col-lg-1 col-md-1 col-sm-1 col-xs-1">
-                <input type="image" src="images/blue.png" name="saveForm" class="btTxt submit saveForm" id="saveForm6" />
-            </div>
-            <div class="col-lg-1 col-md-1 col-sm-1 col-xs-1">
-                <input type="image" src="images/white.png" name="saveForm" class="btTxt submit saveForm" id="saveForm7" />
-            </div>
-            <div class="col-lg-1 col-md-1 col-sm-1 col-xs-1">
-                <input type="image" src="images/grey.png" name="saveForm" class="btTxt submit saveForm" id="saveForm8" />
-            </div>
-            <div class="col-lg-1 col-md-1 col-sm-1 col-xs-1">
-                <input type="image" src="images/black.png" name="saveForm" class="btTxt submit saveForm" id="saveForm9" />
-            </div>
-            <div class="col-lg-1 col-md-1 col-sm-1 col-xs-1">
-                <input type="image" src="images/new_color.png" name="saveForm" class="btTxt submit saveForm" id="saveForm10" />
-            </div>
-        </div><!--/row-->
-
-    </div><!--/#color_palette-->
-					<!--=========================LINE THICKNESS AND OPACITY=========================-->
-   <div id="line_thickness_opacity" class="col-lg-3 col-md-3 col-sm-3 col-xs-3">
-    	<div class="row">
-                  <h4 id="line_thickness_title" class="col-sm-8" style="float:left;">Line Thickness</h4>
-                  <div class="col-sm-4" id="thickness" style="padding-top:20px;height:34px;" >
-                  	<img id="brush5" style="display: none; margin-left:-15px;margin-right:auto;" src="images/brush-5.png" />
-                    <img id="brush4" style="display: none; margin-left:-15px;margin-right:auto;" src="images/brush-4.png" />
-                    <img id="brush3" style="display: none; margin-left:-15px;margin-right:auto;" src="images/brush-3.png" />
-                    <img id="brush2" style="display: none; margin-left:-15px;margin-right:auto;" src="images/brush-2.png" />
-                    <img id="brush1" style="margin-left:-15px;;margin-right:auto;" src="images/brush-1.png" />
-                  </div><!--/.col-sm-4-->
-                <!--http://codepen.io/wherever/pen/JBqtb-->
-        </div><!--1st row-->
-        
-        <div class="row">
-
-                <div style="height:10px; margin:10px 25px;" id="line_thickness_slider">
+            	<div class="well" style="padding-top: 0px;padding-bottom: 0px;margin-bottom: 0px;">
+                	<p><b>Opacity</b>
+                    <span class="badge"></span> 
+                    <div id="opacity_slider"></div>  	
+                    </p>
                 </div>
-                
-                <div class="col-xs-1" id="textarea_one">1</div>
-                <div class="col-xs-1" id="textarea_two">5</div>
-        </div><!--/.row-->
-        
-        <div class="row">
-             <h4 id="opacity_title">Opacity</h4>
-		</div><!--Opacity 1st row-->
-        
-        <div class="row">
-             <div style="height:10px; margin:-5px 25px;" id="opacity_slider">
-             </div>
-             
-             <div class="col-xs-1" id="textarea_three">0</div>
-             <div class="col-xs-1" id="textarea_four">100</div>
+            </ul>
 
-        </div><!--Opacity 2nd row-->
-	</div><!--/#line_thickness_opacity /.col-lg-3 col-md-3 col-sm-3 col-xs-3-->
+           <ul class="nav navbar-nav">
+           	<div class="well" style="padding-top: 5px; padding-bottom: 0px;">
+            	<div class="row">
+                	<b>Drawing Mode</b>
+                </div>
 
-
-    <div id="drawing_mode" class="col-lg-1 col-md-1 col-sm-1 col-xs-1" >
-    	<h5 style="text-align:left;width:100px;">Drawing Mode</h5>
-        <button class="btn btn-default btn-md mode" type="button" id="global" value="global" style="width:80px;height:28px;" onclick="ChangeMode1()"><p>Global</p></button>
-        <button class="btn btn-default btn-md mode" type="button" id="regional" value="region" style="width:80px;height:28px;" onClick="ChangeMode2()"><p>Regional</p></button>
-        <button class="btn btn-default btn-md mode" type="button" id="local" value="local" style="width:80px;height:28px;" onClick="ChangeMode3()"><p>Local</p></button>
-    </div>
-    
-   <div class="col-lg-2" id="new_setting_download_trash"style="margin-left:2%;margin-top:2%;">
-        <div class="row-fluid">
-		    <div class="col-lg-1 col-md-1 col-sm-1 col-xs-1" id="add_new">
-                    <a href="#"><img src="images/add_new.png" data-toggle="modal" data-target="#new"></img></a>
-
+                	<button class="btn btn-default btn-md mode center-block" id="global" onClick="ChangeMode1()">Global</button></br>
+               
+                	<button class="btn btn-default btn-md mode center-block" id="regional" onClick="ChangeMode2()">Regional</button></br>
+               
+                	<button class="btn btn-default btn-md mode center-block" id="local" onClick="ChangeMode3()">Local</button>
+                </div>
             </div>
-            
-             <div class="col-lg-1 col-md-1 col-sm-1 col-xs-1" id="setting">
-                    <a href="#"><img src="images/setting.png" id="setting"></img></a>
-            </div>
-           
-            <div class="row-fluid">
-            <div class="col-lg-1 col-md-1 col-sm-1 col-xs-1" id="download" >
-                <img src="images/download.png" onclick="downloadData();"></img>
-            </div>
-          	<div class="col-lg-1 col-md-1 col-sm-1 col-xs-1" id="trash" value="clear">
-                     <a href="#"><img src="images/trasn.png" type="button" value="ClearnCanvas" id="trash" /></a>
+           </ul>
 
-            </div>
-        </div><!--/.row-fluid-->	
-        </div><!--/.row-fluid-->
-     </div><!--/#new_setting_download_trash .col-lg-2 col-md-2 col-sm-2 col-xs-2-->
-	
-     <div class="col-lg-1" style="margin-top:2.5%;margin-left:-2%;" >
+            <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2" id="new_setting_download_trash" style="padding-top:3%;;margin:0;">
+   		<div class="row" style="padding:0;margin:0;">
+    		<button type="submit" class="saveFormb" id="add_new" data-toggle="modal" data-target="#new" style="padding:auto;margin:0 auto;"><img src="images/add_new.png"/></button>
+            <button type="submit" class="saveFormb" id="setting"><img src="images/setting.png"></img></button> 
+    	</div>
+   	 	<div class="row" style="padding:0;margin:0;">
+    		<button type="submit" class="saveFormb" id="download"><img src="images/download.png"/></button>
+            <button type="submit" class="saveFormb" id="trash"><img src="images/trasn.png"/></button>
+    	</div>
+    </div><!--/#new_setting_download_trash-->	
+    		<div class="col-lg-1 col-md-1 col-sm-1 col-xs-1" style="margin-top:2.5%;margin-left:-2%;" >
         <h4>Grouping</h4>
-		<button id="grouping" class="btn grouping"></button>
+		<button type="submit" class="saveFormb" id="grouping" class="btn grouping"><img src="images/grouping-01.png"/></button>
      </div>
-    
-           
+    </div><!--navbar-collapse-->
+            
+					<!--=========================LINE THICKNESS AND OPACITY=========================-->
+				
 
-	</div><!--/.container #control_panel-->
+  				 
+    
+   
+     
+     
+     
+     
+   		 </div><!-- /. container-fluid-->
+          
+</nav>
 
  
          
-<div><a class="btn" id="toggle_button" ></a></div>
+<div>
+	<a class="btn" id="toggle_button" ></a>
+</div>
+
 </div><!--#canvas-->
               
 <div class="modal fade" id="new" role="dialog" data-backdrop="static">

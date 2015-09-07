@@ -11,26 +11,35 @@ console.log( "ready!" );
 
 
 $(".saveForm").click(function AddWhiteBorder(){
-	$(this).css({
-		'border':'3px solid #4e4e4e',
-		'border-radius':'100%'});
+	//$(this).css({
+	//	'border':'3px solid #4e4e4e',
+	//	'border-radius':'100%'});
 	$(".saveForm").not(this).css({
 		'border':'none'
 		});
-
-	});
+});
 
 	
-$("#color1").click(function Red(){
-		x = "red";
-		console.log(x);
-		ctx.strokeStyle = x;
+$("#color1").click(function AddBorder(){
+			$(this).css({
+				'border':'3px solid #B40431',
+				'border-radius':'100%'});
+			x = "red";
+			console.log(x);
+			ctx.strokeStyle = x;
+
+		
 	});
 	
-$("#color2").click(function Peach(){
-		x = "#FF6666";
-		console.log(x);
-		ctx.strokeStyle = x;
+	
+	
+$("#color2").click(function AddBorder(){
+		$(this).css({
+				'border':'3px solid #FA8258',
+				'border-radius':'100%'});
+			x = "#ff6666";
+			console.log(x);
+			ctx.strokeStyle = x;
 	});
 	
 $("#color3").click(function Yellow(){
