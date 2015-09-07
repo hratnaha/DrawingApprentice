@@ -44,7 +44,7 @@ public class Decision_Engine {
 		int y = (int)(line.allPoints.get(0).y/10);
 		
 		decision = 1 + DQNJS.getAction(x,y);
-		System.out.println("Action taken by DQN-agent");
+		System.out.println("Action taken by DQN-agent: " + decision);
 		} catch (Exception e) {}
 		return decisionLine(decision);
 	}

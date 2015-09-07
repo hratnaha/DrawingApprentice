@@ -27,7 +27,6 @@ app.use(express.compress());
 app.use(express.static(__dirname + '/public', { maxAge: oneDay }));
 app.listen(process.env.PORT || 3000);
 
-
 var server = require('http').Server(app);
 var io = require('socket.io')(server);
 var isGrouping = false;

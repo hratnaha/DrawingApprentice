@@ -1536,7 +1536,7 @@ global.DQNAgent = DQNAgent;
 
 var env = {};
 env.getNumStates = function() { return 2; }
-env.getMaxNumActions = function() { return 9; }
+env.getMaxNumActions = function() { return 13; }
 
 // create the agent, yay!
 var spec = { alpha: 0.01 } // see full options on top of this page
