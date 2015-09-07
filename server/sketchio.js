@@ -14,6 +14,7 @@ java.classpath.push("commons-io.jar");
 java.classpath.push("commons-math3-3.3.jar");
 java.classpath.push("apprentice.jar");      // apprentice library
 java.classpath.push("core.jar");            // processing
+java.classpath.push("flexjson.jar");
 
 var Apprentice = java.import('jcocosketch.nodebridge.Apprentice');
 
@@ -34,7 +35,7 @@ server.listen(8080);
 
 io.on('connection', function (so) {
     var apprentice = new Apprentice();
-    
+
     so.on('canvasSize', function setSize(size) {
         //var d = JSON.parse(size);
         apprentice.setCanvasSize(size.width, size.height);
@@ -42,21 +43,57 @@ io.on('connection', function (so) {
 
     console.log("new client connected");
     so.emit('newconnection', { hello: 'world' });
+
+    so.on('getData', function(data) {
+        var userLines;
+        var computerLines;
+
+        apprentice.getUserLines(function(err, item) {
+            if (err) {
+                console.log(err);
+
+            } else {
+                userLines = item;
+                afterUserLines();
+            }
+        });
+
+        function afterUserLines() {
+            apprentice.getComputerLines(function(err, item) {
+                if (err) {
+                    console.log(err);
+                } else {
+                    computerLines = item;
+                    emitData();
+                }
+            });
+        }
+
+        function emitData() {
+            var allLines = {
+                userLines: userLines,
+                computerLines: computerLines
+            }
+
+            so.emit('allData', allLines);
+        }
+    });
+
     so.on('newStroke', function newStrokeReceived(data) {
         var d = JSON.parse(data);
-        
+
         var stroke = d.data;
-        
+
         var stroketime = java.newLong(stroke.timestamp);
         // categorize if it is grouping or not
         if (isGrouping)
             apprentice.startGroupingSync(stroketime);
         else
             apprentice.addNewStrokeSync(stroketime);
-        
+
         var pts = stroke.packetPoints;
         var returnSt = [];
-        
+
         // adding all the points in the stroke
         for (var i = 0; i < pts.length; i++) {
             var pt = pts[i];
@@ -64,21 +101,21 @@ io.on('connection', function (so) {
             apprentice.addPointSync(parseInt(pt.x, 10), parseInt(pt.y, 10), pttime, pt.id);
         }
         // Todo: reconstruct the message to send out
-        
+
         if (isGrouping) {
             apprentice.Grouping(function (err, result) {
                 if (result != null) {
                     for (var i = 0; i < result.sizeSync(); i++) {
                         var newline = result.getSync(i);
-                        
+
                         var newpkpts = [];
                         for (var j = 0; j < newline.sizeSync(); j++) {
                             var newpt = newline.getSync(j);
-                            
+
                             newpkpts.push(CreatePacketPoint(newpt));
                         }
                         stroke.packetPoints = newpkpts;
-                        
+
                         // decode to JSON and send the message
                         var resultmsg = JSON.stringify(stroke);
                         io.emit('respondStroke', resultmsg);
@@ -92,30 +129,30 @@ io.on('connection', function (so) {
                     var newpkpts = [];
                     for (var i = 0; i < result.sizeSync(); i++) {
                         var newpt = result.getSync(i);
-                        
+
                         newpkpts.push(CreatePacketPoint(newpt));
                     }
                     stroke.packetPoints = newpkpts;
-                    
+
                     // decode to JSON and send the message
                     var resultmsg = JSON.stringify(stroke);
                     io.emit('respondStroke', resultmsg);
                    //console.log("sending: " + resultmsg);
                 }
             });
-        }        
+        }
         so.broadcast.emit('respondStroke', JSON.stringify(d.data));
     });
-    
+
     function onVote(isUp) {
         var vote = isUp ? 1 : 0;
         apprentice.voteSync(vote);
     }
-    
+
     function onClear() {
         apprentice.clearSync();
     }
-    
+
     function onModeChanged(mode) {
         var m = JSON.parse(mode);
         if (m == 3)
@@ -147,7 +184,7 @@ function CreatePacketPoint(newpt) {
         timestamp : newpt.timestamp,
         pressure : 0          // to be implemented when the pressure is available
     };
-    
+
     return pkpt;
 }
 
