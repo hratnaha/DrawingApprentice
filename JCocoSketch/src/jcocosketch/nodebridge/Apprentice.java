@@ -8,9 +8,12 @@ import java.util.*;
 
 import jcocosketch.*;
 
+import flexjson.*;
+
 public class Apprentice {
 	ArrayList<SketchPoint> allPoints = new ArrayList<SketchPoint>();
 	ArrayList<Line> allLines = new ArrayList<Line>();
+	ArrayList<Line> compLines = new ArrayList<Line>();
 	long startTime;
 	TrajectorMode currentMode = TrajectorMode.Local; // 0 = local, 1 = regional,
 														// // 2 = global
@@ -113,6 +116,7 @@ public class Apprentice {
 					allLines.add(curline);
 
 					Line newline = engine.decision();
+          this.compLines.add(newLine);
 
 					ArrayList<Point> pts = newline.getAllPoints();
 					System.out.println(pts.size());
@@ -218,4 +222,16 @@ public class Apprentice {
 	public int PtCount() {
 		return this.allPoints.size();
 	}
+
+  public String getUserLines() {
+    JSONSerializer serializer = new JSONSerializer();
+    String userLines = serializer.deepSerialize(this.allLines);
+    return userLines;
+  }
+
+  public String getComputerLines() {
+    JSONSerializer serializer = new JSONSerializer();
+    String computerLines = serializer.deepSerialize(this.compLines);
+    return computerLines;
+  }
 }
