@@ -1,4 +1,4 @@
-var ioUri = "http://localhost:8080"; //"http://130.207.124.45"; //
+var ioUri = "http://localhost:8080"; //replace with the Websocket URL
 var output;
 var socket;
 var botCanvas = {};
@@ -14,12 +14,10 @@ function initWebSocket() {
     botCanvas.setAttribute('height', container.offsetHeight);
     
     output = document.getElementById("output");
-    socket = io.connect(ioUri); // for local version
-    //socket = io.connect(ioUri, { 'path': '/DrawingApprentice/socket.io' }); // for adam server
+    socket = io.connect(ioUri);
     
     socket.on('newconnection', onOpen);
     socket.on('respondStroke', onNewStroke);
-    socket.on('allData', onDataReceived);
     
 	var logo = document.getElementById("logo");
 	
@@ -38,12 +36,10 @@ function initWebSocket() {
 			ctx.strokeStyle = x;
 			ctx.globalAlpha = opacity2;
 			ctx.lineWidth = y;
-
+            i++;
 			console.log(botStroke.packetPoints[i].x);
 			moveLogo.style.left = botStroke.packetPoints[i].x - 70;
-            moveLogo.style.top = botStroke.packetPoints[i].y - 130;
-            
-            i++;
+			moveLogo.style.top = botStroke.packetPoints[i].y - 130;
 			//moveLogo.style.backgroundColor = "blue";
 			finishStroke = true;
 		
@@ -73,6 +69,13 @@ function initWebSocket() {
         }
     }, 20);
 	
+	
+	$('#ex8').slider().on('slideStop', function(ev){
+						<!--creativity level is ev.value/100-->
+						console.log( 'Current Creativity Value:' + ' ' + ev.value/100);
+						socket.emit("SetCreativty", ev.value/100);
+						});	
+
 
 }
 
@@ -217,3 +220,4 @@ function downloadData() {
     console.log('getting data...');
     socket.emit('getData');
 }
+
