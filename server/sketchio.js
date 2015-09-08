@@ -108,7 +108,10 @@ io.on('connection', function (so) {
                 host: 'localhost',
                 port: 3005,
                 path: '/user/1/session/1',
-                method: 'POST'
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
             };
 
             var req = http.request(options, function(res) {
@@ -120,10 +123,11 @@ io.on('connection', function (so) {
                     console.log(data);
                 });
             });
-            req.write(JSON.stringify({
+            var postData = JSON.stringify({
                 userLines: userLines,
                 computerLines: computerLines
-            }));
+            });
+            req.write(postData);
             req.end();
         }
     });
