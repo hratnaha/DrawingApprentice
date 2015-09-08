@@ -27,7 +27,8 @@ app.use(express.compress());
 app.use(express.static(__dirname + '/public', { maxAge: oneDay }));
 app.listen(process.env.PORT || 3000);
 
-var server = require('http').Server(app);
+var http = require('http');
+var server = http.Server(app);
 var io = require('socket.io')(server);
 var isGrouping = false;
 server.listen(8080);
@@ -76,6 +77,54 @@ io.on('connection', function (so) {
             }
 
             so.emit('allData', allLines);
+        }
+    });
+
+   so.on('saveDataOnDb', function(data) {
+        var userLines;
+        var computerLines;
+        apprentice.getUserLines(function(err, item) {
+            if(err) {
+                console.log(err);
+            } else {
+                userLines = item;
+                afterUserLines();
+            }
+        });
+
+        function afterUserLines() {
+            apprentice.getComputerLines(function(err, item) {
+                if (err) {
+                    console.log(err);
+                } else {
+                    computerLines = item;
+                    saveData();
+                }
+            });
+        }
+
+        function saveData() {
+            var options = {
+                host: 'localhost',
+                port: 3005,
+                path: '/user/1/session/1',
+                method: 'POST'
+            };
+
+            var req = http.request(options, function(res) {
+                var data = "";
+                res.on('data', function(chunk) {
+                    data += chunk;
+                });
+                res.on('end', function() {
+                    console.log(data);
+                });
+            });
+            req.write(JSON.stringify({
+                userLines: userLines,
+                computerLines: computerLines
+            }));
+            req.end();
         }
     });
 

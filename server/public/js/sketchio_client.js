@@ -12,24 +12,24 @@ function initWebSocket() {
 
     botCanvas.setAttribute('width', container.offsetWidth);
     botCanvas.setAttribute('height', container.offsetHeight);
-    
+
     output = document.getElementById("output");
     socket = io.connect(ioUri); // for local version
     //socket = io.connect(ioUri, { 'path': '/DrawingApprentice/socket.io' }); // for adam server
-    
+
     socket.on('newconnection', onOpen);
     socket.on('respondStroke', onNewStroke);
     socket.on('allData', onDataReceived);
-    
+
 	var logo = document.getElementById("logo");
-	
-	
+
+
     var i = 0;
     var botStroke = "";
     var ctx = botCanvas.getContext('2d');
     ctx.width = 0.1;
     var timer = setInterval(function () {
-        
+
         if (botStroke != "" && i < botStroke.packetPoints.length ) {
             ctx.lineTo(botStroke.packetPoints[i].x, botStroke.packetPoints[i].y);
 			console.log(botStroke.packetPoints[i].x);
@@ -42,12 +42,12 @@ function initWebSocket() {
 			console.log(botStroke.packetPoints[i].x);
 			moveLogo.style.left = botStroke.packetPoints[i].x - 70;
             moveLogo.style.top = botStroke.packetPoints[i].y - 130;
-            
+
             i++;
 			//moveLogo.style.backgroundColor = "blue";
 			finishStroke = true;
-		
-			
+
+
         } else if (curStroke.length > 0) {
             botStroke = curStroke.shift();
             ctx.beginPath();
@@ -60,8 +60,8 @@ function initWebSocket() {
 			//moveLogo.style.top = botStroke.packetPoints[i].y - 130;
 			//moveLogo.style.backgroundColor = "red";
 			finishStroke = true;
-	
-			
+
+
         } else if (botStroke != "") {
             bothInputContext.drawImage(botCanvas, 0, 0);
             ctx.clearRect(0, 0, botCanvas.width, botCanvas.height);
@@ -72,7 +72,7 @@ function initWebSocket() {
 			MoveLogoBack();
         }
     }, 20);
-	
+
 
 }
 
@@ -83,13 +83,13 @@ function MoveLogoBack () {
 	//moveLogo.style.left = '4em';
 	//moveLogo.style.top = '5em';
 			$('#logo').animate({
-					left: '5em', 
+					left: '5em',
 					top: '4em'},
 				"swing");
-	
-	console.log('logo left is ' + moveLogo.style.left);	
+
+	console.log('logo left is ' + moveLogo.style.left);
 	}
-	
+
 	}
 
 
@@ -105,20 +105,20 @@ function onNewStroke(data) {
 	logo.style.top = data.y;
 
 	//var botPts = botStroke.packetPoints;
-	
+
  //   if (botPts.length > 1) {
-        
+
  //       ctx.beginPath();
  //       ctx.moveTo(botPts[0].x, botPts[0].y);
 	//	var i = 0;
-		
+
 	//}
 }
 function onOpen(data) {
     var size = {
         width : container.offsetWidth,
         height: container.offsetHeight
-    };  
+    };
     socket.emit("canvasSize", size);
 }
 
@@ -169,7 +169,7 @@ function clearCanvas() {
 
 
 function setMode(mode) {
-   
+
     switch ($(this).val()) {
         case 'local':
             m = 0;
@@ -180,7 +180,7 @@ function setMode(mode) {
         case 'global':
             m = 2;
             break;
-    } 
+    }
     socket.emit('setMode', m);
 }
 
@@ -202,7 +202,7 @@ function ChangeMode3(){
 	socket.emit('setMode',0)
 }
 
-	
+
 function groupingMode(chk) {
 	if(chk)
 	   	socket.emit('setMode', 3);
@@ -216,4 +216,8 @@ function voteUpOrDown(isup) {
 function downloadData() {
     console.log('getting data...');
     socket.emit('getData');
+}
+function saveDataOnDb() {
+    console.log('saving data...');
+    socket.emit('saveDataOnDb');
 }
