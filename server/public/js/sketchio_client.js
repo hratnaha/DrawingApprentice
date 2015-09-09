@@ -18,7 +18,8 @@ function initWebSocket() {
     
     socket.on('newconnection', onOpen);
     socket.on('respondStroke', onNewStroke);
-    
+    socket.on('allData', onDataReceived);
+
 	var logo = document.getElementById("logo");
 	
 	
@@ -36,14 +37,15 @@ function initWebSocket() {
 			ctx.strokeStyle = x;
 			ctx.globalAlpha = opacity2;
 			ctx.lineWidth = y;
-            i++;
+            
 			console.log(botStroke.packetPoints[i].x);
 			moveLogo.style.left = botStroke.packetPoints[i].x - 70;
 			moveLogo.style.top = botStroke.packetPoints[i].y - 130;
-			//moveLogo.style.backgroundColor = "blue";
-			//finishStroke = true;
-		
 			
+            i++;
+            //moveLogo.style.backgroundColor = "blue";
+			//finishStroke = true;
+
         } else if (curStroke.length > 0) {
             botStroke = curStroke.shift();
             ctx.beginPath();
