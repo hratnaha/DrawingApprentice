@@ -20,7 +20,6 @@ var wsUri = "ws://localhost:21073"; //replace with the Websocket URL
   function onOpen(evt)
   {
     writeToScreen("CONNECTED");
-    //doSend("WebSocket Test");
   }
 
   function onClose(evt)

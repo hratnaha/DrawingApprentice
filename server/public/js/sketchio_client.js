@@ -20,7 +20,7 @@ function initWebSocket() {
     socket.on('newconnection', onOpen);
     socket.on('respondStroke', onNewStroke);
     socket.on('allData', onDataReceived);
-    
+
 	var logo = document.getElementById("logo");
 	
 	
@@ -38,16 +38,15 @@ function initWebSocket() {
 			ctx.strokeStyle = x;
 			ctx.globalAlpha = opacity2;
 			ctx.lineWidth = y;
-
+            
 			console.log(botStroke.packetPoints[i].x);
 			moveLogo.style.left = botStroke.packetPoints[i].x - 70;
-            moveLogo.style.top = botStroke.packetPoints[i].y - 130;
-            
-            i++;
-			//moveLogo.style.backgroundColor = "blue";
-			finishStroke = true;
-		
+			moveLogo.style.top = botStroke.packetPoints[i].y - 130;
 			
+            i++;
+            //moveLogo.style.backgroundColor = "blue";
+			//finishStroke = true;
+
         } else if (curStroke.length > 0) {
             botStroke = curStroke.shift();
             ctx.beginPath();
@@ -59,7 +58,7 @@ function initWebSocket() {
 			//moveLogo.style.left = botStroke.packetPoints[i].x - 70;
 			//moveLogo.style.top = botStroke.packetPoints[i].y - 130;
 			//moveLogo.style.backgroundColor = "red";
-			finishStroke = true;
+			//finishStroke = true;
 	
 			
         } else if (botStroke != "") {
@@ -68,34 +67,32 @@ function initWebSocket() {
             botStroke = "";
             i = 0;
 			//moveLogo.style.backgroundColor = "yellow";
-			finishStroke = false;
+			//finishStroke = false;
 			MoveLogoBack();
         }
     }, 20);
 	
-
+	
+	$('#ex8').slider().on('slideStop', function(ev){
+	//<!--creativity level is ev.value/100-->
+	    console.log( 'Current Creativity Value:' + ' ' + ev.value);
+	    socket.emit("SetCreativty", ev.value);
+	});
 }
 
 
 function MoveLogoBack () {
-	if(finishStroke==false){
-	//console.log("move");
-	//moveLogo.style.left = '4em';
-	//moveLogo.style.top = '5em';
-			$('#logo').animate({
-					left: '5em', 
-					top: '4em'},
-				"swing");
-	
+	$('#logo').animate({
+		    left: '5em', 
+		    top: '4em'},
+	    "swing");
 	console.log('logo left is ' + moveLogo.style.left);	
-	}
-	
-	}
+}
 
 
 function onNewStroke(data) {
-	moveLogo.style.left = "5em";
-			moveLogo.style.top = "4em";
+	//moveLogo.style.left = "5em";
+	//moveLogo.style.top = "4em";
     console.log(data);
     // decode the data into the new stroke
     var botStroke = JSON.parse(data);
@@ -142,10 +139,15 @@ function onDataReceived(allData) {
     }, 500);
 }
 
-function doSend(message) {
+function onTouchUp(message) {
     //writeToScreen("SENT: " + message);
     socket.emit('newStroke', message);
 }
+
+function onTouchDown() {
+    socket.emit('touchdown');
+}
+
 function writeToScreen(message) {
     var pre = document.createElement("p");
     pre.style.wordWrap = "break-word";
@@ -167,7 +169,6 @@ function clearCanvas() {
 }
 // change the mode base on the UI changes
 
-
 function setMode(mode) {
    
     switch ($(this).val()) {
@@ -183,8 +184,6 @@ function setMode(mode) {
     } 
     socket.emit('setMode', m);
 }
-
-
 
 function ChangeMode1(){
 	alert("Global");
@@ -209,11 +208,26 @@ function groupingMode(chk) {
 	else
 		socket.emit('setMode', 4);
 }
-function voteUpOrDown(isup) {
-    socket.emit('vote', isup);
+function UpVote() {
+    socket.emit('vote', 1);
+}
+
+function DownVote() {
+    socket.emit('vote', 0);
 }
 
 function downloadData() {
     console.log('getting data...');
     socket.emit('getData');
 }
+
+//function TurnOnOffAgent() {
+//    ison = !ison;
+//    if (ison) {
+//        console.log('turn agent on');
+//        socket.emit('setAgentOn', true);
+//    } else {
+//        console.log('turn agent off');
+//        socket.emit('setAgentOn', false);
+//    }
+//}
