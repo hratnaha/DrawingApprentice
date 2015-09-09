@@ -1398,7 +1398,10 @@
 			_setDataVal: function(val) {
 				this.element.setAttribute('data-value', val);
 				this.element.setAttribute('value', val);
-        this.element.value = val;
+       			this.element.value = val;
+	
+
+				
 			},
 			_trigger: function(evt, val) {
 				val = (val || val === 0) ? val : undefined;
@@ -1494,6 +1497,7 @@
 			},
 			_toPercentage: function(value) {
 				return this.options.scale.toPercentage.apply(this, [value]);
+				
 			},
 			_setTooltipPosition: function(){
 				var tooltips = [this.tooltip, this.tooltip_min, this.tooltip_max];

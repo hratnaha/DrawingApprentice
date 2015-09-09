@@ -7,6 +7,9 @@
 }
 /* CSS Document */
 
+body{
+	overflow:hidden;
+	}
 
 .navbar-customize{
 	-webkit-box-shadow: -3px 6px 17px -4px rgba(0,0,0,0.75);
@@ -27,8 +30,38 @@
 .btn-customize:hover{
 	background-color: #5793CC;
 	}
-
-
+.btn-vote{
+	border-radius:100%;
+	padding:1em 1em 1em 1em;
+	margin:0 1em 0 1em;
+	background-color:transparent;
+	}
+.btn-vote:hover{
+	transform: scale(1.5);
+	}
+#up{
+	color:#0BA923;
+	}
+#up:active{
+	color:#BDEBB4;
+	}
+#down{
+	color:#A80F1A;
+	}
+#down:active{
+	color:#F492A3;
+	}
+.btn-vote:hover{
+	opacity:.6;
+	}
+	
+	
+	
+	
+	
+	
+	
+	
 #toggle{
 	height:170px;
 	width:80%;
@@ -582,23 +615,13 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#5a5a5a', end
 	margin-top:150px;
 	}
 
-.vote{
-	width:130px;
-	height:130px;
-	position:absolute;
-	display:block;
-	z-index:99;
-	margin-left:80%;
-	margin-top:10%;
-	margin-bottom:10%;
-	}
 #up{
-	margin-top:250px;
-	margin-right:20px;
+	position:relative;
 	}
 #down{
-	margin-top:500px;
-	margin-right:20px;
+	position:relative;
+
+	float:left;
 	}
 
 .thumb_up{
