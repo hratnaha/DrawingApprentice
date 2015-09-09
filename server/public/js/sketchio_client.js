@@ -71,29 +71,20 @@ function initWebSocket() {
 	
 	
 	$('#ex8').slider().on('slideStop', function(ev){
-						<!--creativity level is ev.value/100-->
-						console.log( 'Current Creativity Value:' + ' ' + ev.value/100);
-						socket.emit("SetCreativty", ev.value/100);
-						});	
-
-
+	//<!--creativity level is ev.value/100-->
+	    console.log( 'Current Creativity Value:' + ' ' + ev.value);
+	    socket.emit("SetCreativty", ev.value);
+	});
 }
 
 
 function MoveLogoBack () {
-	//if(finishStroke==false){
-	//console.log("move");
-	//moveLogo.style.left = '4em';
-	//moveLogo.style.top = '5em';
-			$('#logo').animate({
-					left: '5em', 
-					top: '4em'},
-				"swing");
-	
+	$('#logo').animate({
+		    left: '5em', 
+		    top: '4em'},
+	    "swing");
 	console.log('logo left is ' + moveLogo.style.left);	
-	//}
-	
-	}
+}
 
 
 function onNewStroke(data) {
@@ -145,10 +136,15 @@ function onDataReceived(allData) {
     }, 500);
 }
 
-function doSend(message) {
+function onTouchUp(message) {
     //writeToScreen("SENT: " + message);
     socket.emit('newStroke', message);
 }
+
+function onTouchDown() {
+    socket.emit('touchdown');
+}
+
 function writeToScreen(message) {
     var pre = document.createElement("p");
     pre.style.wordWrap = "break-word";
@@ -170,7 +166,6 @@ function clearCanvas() {
 }
 // change the mode base on the UI changes
 
-
 function setMode(mode) {
    
     switch ($(this).val()) {
@@ -186,8 +181,6 @@ function setMode(mode) {
     } 
     socket.emit('setMode', m);
 }
-
-
 
 function ChangeMode1(){
 	alert("Global");
@@ -225,3 +218,13 @@ function downloadData() {
     socket.emit('getData');
 }
 
+//function TurnOnOffAgent() {
+//    ison = !ison;
+//    if (ison) {
+//        console.log('turn agent on');
+//        socket.emit('setAgentOn', true);
+//    } else {
+//        console.log('turn agent off');
+//        socket.emit('setAgentOn', false);
+//    }
+//}

@@ -43,11 +43,13 @@ public class Apprentice {
 		this.height = height;
 	}
 	
-	public void setCreativityLevel(float level){
-		DQNJS.setCreativity(level);
+	public void setCreativityLevel(int level){
+		float dlevel = (float)level / 100f;
+		DQNJS.setCreativity(dlevel);
+		System.out.println("Apprentice: set creativity level to " + dlevel);
 	}
 	
-	public void setAgentOn(boolean isOn){
+	public void setAgentOn(Boolean isOn){
 		AgentOff = !isOn;
 	}
 	

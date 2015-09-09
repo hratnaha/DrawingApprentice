@@ -46,20 +46,11 @@ io.on('connection', function (so) {
     console.log("new client connected");
     so.emit('newconnection', { hello: 'world' });
     
-    so.on('SetCreativity', function (level) {
-        var d = JSON.parse(level);
-        apprentice.setCreativityLevel();
-    });
-
-    so.on('TurnOnAgent', function (ison) {
-        apprentice.setAgentOn(isOn);
-    });
-
-    so.on('getData', function(data) {
+    function getData(data) {
         var userLines;
         var computerLines;
-
-        apprentice.getUserLines(function(err, item) {
+        
+        apprentice.getUserLines(function (err, item) {
             if (err) {
                 console.log(err);
 
@@ -68,9 +59,9 @@ io.on('connection', function (so) {
                 afterUserLines();
             }
         });
-
+        
         function afterUserLines() {
-            apprentice.getComputerLines(function(err, item) {
+            apprentice.getComputerLines(function (err, item) {
                 if (err) {
                     console.log(err);
                 } else {
@@ -79,32 +70,32 @@ io.on('connection', function (so) {
                 }
             });
         }
-
+        
         function emitData() {
             var allLines = {
                 userLines: userLines,
                 computerLines: computerLines
             }
-
+            
             so.emit('allData', allLines);
         }
-    });
+    }
 
-    so.on('newStroke', function newStrokeReceived(data) {
+    function onNewStrokeReceived(data) {
         var d = JSON.parse(data);
-
+        
         var stroke = d.data;
-
+        
         var stroketime = java.newLong(stroke.timestamp);
         // categorize if it is grouping or not
         if (isGrouping)
             apprentice.startGroupingSync(stroketime);
         else
             apprentice.addNewStrokeSync(stroketime);
-
+        
         var pts = stroke.packetPoints;
         var returnSt = [];
-
+        
         // adding all the points in the stroke
         for (var i = 0; i < pts.length; i++) {
             var pt = pts[i];
@@ -112,21 +103,21 @@ io.on('connection', function (so) {
             apprentice.addPointSync(parseInt(pt.x, 10), parseInt(pt.y, 10), pttime, pt.id);
         }
         // Todo: reconstruct the message to send out
-
+        
         if (isGrouping) {
             apprentice.Grouping(function (err, result) {
                 if (result != null) {
                     for (var i = 0; i < result.sizeSync(); i++) {
                         var newline = result.getSync(i);
-
+                        
                         var newpkpts = [];
                         for (var j = 0; j < newline.sizeSync(); j++) {
                             var newpt = newline.getSync(j);
-
+                            
                             newpkpts.push(CreatePacketPoint(newpt));
                         }
                         stroke.packetPoints = newpkpts;
-
+                        
                         // decode to JSON and send the message
                         var resultmsg = JSON.stringify(stroke);
                         io.emit('respondStroke', resultmsg);
@@ -140,7 +131,7 @@ io.on('connection', function (so) {
             if (timeout != "" || timeout != null) {
                 clearTimeout(timeout);
             }
-
+            
             timeout = setTimeout(function () {
                 apprentice.getDecision(function (err, results) {
                     if (results != null) {
@@ -164,9 +155,9 @@ io.on('connection', function (so) {
             }, 2000);
         }
         so.broadcast.emit('respondStroke', JSON.stringify(d.data));
-    });
+    }
 
-    function onVote(isUp) {
+    function vote(isUp) {
         var vote = isUp ? 1 : 0;
         apprentice.voteSync(vote);
     }
@@ -184,11 +175,26 @@ io.on('connection', function (so) {
         else
             apprentice.setModeSync(m);
     }
-
+    
+    so.on('SetCreativty', function (level) {
+        var d = JSON.parse(level);
+        apprentice.setCreativityLevel(d);
+    });
+    so.on('setAgentOn', function (ison) {
+        var isOnBool = JSON.parse(ison);
+        apprentice.setAgentOn(!isOnBool);
+    });
+    so.on('getData', getData);
+    so.on('touchdown', function () {
+        if (timeout != "" || timeout != null) {
+            clearTimeout(timeout);
+        }
+    });
+    so.on('newStroke', onNewStrokeReceived);
     so.on('setMode', onModeChanged);
     so.on('clear', onClear);
     so.on('submit', submitResult);
-    so.on('vote', onVote);
+    so.on('vote', vote);
 });
 
 function submitResult(d) {

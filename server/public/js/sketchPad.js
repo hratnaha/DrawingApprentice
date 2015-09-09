@@ -53,7 +53,6 @@ function sketchUtil() {
         curstroke.data.packetPoints.push(pkpt);
     }
     
-	
     // create a drawer which tracks touch movements
     var drawer = {
         isDrawing: false,
@@ -78,6 +77,7 @@ function sketchUtil() {
             context.beginPath();
             context.moveTo(coors.x, coors.y);
             this.isDrawing = true;
+
         },
         touchmove: function (coors) {
             if (this.isDrawing) {
@@ -94,7 +94,7 @@ function sketchUtil() {
             if (this.isDrawing) {
                 this.touchmove(coors);
                 var stringStroke = JSON.stringify(curstroke);
-                doSend(stringStroke);
+                onTouchUp(stringStroke);
                 
                 var height = canvas.height;
 

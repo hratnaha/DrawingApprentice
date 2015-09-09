@@ -125,13 +125,11 @@ put js files before css files
 					function TurnOnOffAgent() {
 						if (document.getElementById('Checkbox').checked) {
 							console.log("Agent is On");
-							TurnOnAgent();
-							socket.emit('TurnOnAgent', "true");
+							socket.emit('setAgentOn', "true");
 							
 						} else {
 							console.log("Agent is off");
-							TurnOffAgent();
-							socket.emit('TurnOnAgent', "false");
+							socket.emit('setAgentOn', "false");
 						}
 						
 					}
