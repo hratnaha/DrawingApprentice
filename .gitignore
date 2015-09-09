@@ -1,2 +1,7 @@
 server/node_modules/
 /server/obj
+JCocoSketch/lib/EMCOPT/.DS_Store
+server/.ntvs_analysis.dat
+server/.ntvs_analysis.dat.tmp
+server/DrawingApprenticeServer.v12.suo
+server/bin/Microsoft.NodejsTools.WebRole.dll

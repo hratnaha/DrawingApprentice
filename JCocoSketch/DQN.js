@@ -1536,7 +1536,7 @@ global.DQNAgent = DQNAgent;
 
 var env = {};
 env.getNumStates = function() { return 2; }
-env.getMaxNumActions = function() { return 13; }
+env.getMaxNumActions = function() { return 9; }
 
 // create the agent, yay!
 var spec = { alpha: 0.01 } // see full options on top of this page
@@ -1549,6 +1549,10 @@ function actDQN(x, y) {
 
 function learnDQN(rewardValue) {
     agent.learn(rewardValue); // the agent improves its Q,policy,model, etc. reward is a float
+}
+
+function setEpsilon(value) {
+  agent.epsilon = value;
 }
 
 function start() { // this is a test function

@@ -45,7 +45,7 @@ function initWebSocket() {
             
             i++;
 			//moveLogo.style.backgroundColor = "blue";
-			finishStroke = true;
+			//finishStroke = true;
 		
 			
         } else if (curStroke.length > 0) {
@@ -59,7 +59,7 @@ function initWebSocket() {
 			//moveLogo.style.left = botStroke.packetPoints[i].x - 70;
 			//moveLogo.style.top = botStroke.packetPoints[i].y - 130;
 			//moveLogo.style.backgroundColor = "red";
-			finishStroke = true;
+			//finishStroke = true;
 	
 			
         } else if (botStroke != "") {
@@ -68,7 +68,7 @@ function initWebSocket() {
             botStroke = "";
             i = 0;
 			//moveLogo.style.backgroundColor = "yellow";
-			finishStroke = false;
+			//finishStroke = false;
 			MoveLogoBack();
         }
     }, 20);
@@ -78,7 +78,7 @@ function initWebSocket() {
 
 
 function MoveLogoBack () {
-	if(finishStroke==false){
+	//if(finishStroke==false){
 	//console.log("move");
 	//moveLogo.style.left = '4em';
 	//moveLogo.style.top = '5em';
@@ -88,14 +88,14 @@ function MoveLogoBack () {
 				"swing");
 	
 	console.log('logo left is ' + moveLogo.style.left);	
-	}
+	//}
 	
 	}
 
 
 function onNewStroke(data) {
-	moveLogo.style.left = "5em";
-			moveLogo.style.top = "4em";
+	//moveLogo.style.left = "5em";
+	//moveLogo.style.top = "4em";
     console.log(data);
     // decode the data into the new stroke
     var botStroke = JSON.parse(data);
@@ -209,8 +209,12 @@ function groupingMode(chk) {
 	else
 		socket.emit('setMode', 4);
 }
-function voteUpOrDown(isup) {
-    socket.emit('vote', isup);
+function UpVote() {
+    socket.emit('vote', 1);
+}
+
+function DownVote() {
+    socket.emit('vote', 0);
 }
 
 function downloadData() {

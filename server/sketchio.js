@@ -33,6 +33,8 @@ var isGrouping = false;
 server.listen(8080);
 //server.listen(81); // for adam server
 
+var timeout;
+
 io.on('connection', function (so) {
     var apprentice = new Apprentice();
 
@@ -43,6 +45,15 @@ io.on('connection', function (so) {
 
     console.log("new client connected");
     so.emit('newconnection', { hello: 'world' });
+    
+    so.on('SetCreativity', function (level) {
+        var d = JSON.parse(level);
+        apprentice.setCreativityLevel();
+    });
+
+    so.on('TurnOnAgent', function (ison) {
+        apprentice.setAgentOn(isOn);
+    });
 
     so.on('getData', function(data) {
         var userLines;
@@ -124,22 +135,33 @@ io.on('connection', function (so) {
                 }
             });
         } else {
-            apprentice.decision(function (err, result) {
-                if (result != null) {
-                    var newpkpts = [];
-                    for (var i = 0; i < result.sizeSync(); i++) {
-                        var newpt = result.getSync(i);
+            apprentice.addLine();
+            
+            if (timeout != "" || timeout != null) {
+                clearTimeout(timeout);
+            }
 
-                        newpkpts.push(CreatePacketPoint(newpt));
-                    }
-                    stroke.packetPoints = newpkpts;
-
-                    // decode to JSON and send the message
-                    var resultmsg = JSON.stringify(stroke);
-                    io.emit('respondStroke', resultmsg);
+            timeout = setTimeout(function () {
+                apprentice.getDecision(function (err, results) {
+                    if (results != null) {
+                        for (var j = 0; j < results.sizeSync(); j++) {
+                            var newpkpts = [];
+                            var result = results.getSync(j);
+                            for (var i = 0; i < result.sizeSync(); i++) {
+                                var newpt = result.getSync(i);
+                                
+                                newpkpts.push(CreatePacketPoint(newpt));
+                            }
+                            stroke.packetPoints = newpkpts;
+                            
+                            // decode to JSON and send the message
+                            var resultmsg = JSON.stringify(stroke);
+                            io.emit('respondStroke', resultmsg);
+                        }
                    //console.log("sending: " + resultmsg);
-                }
-            });
+                    }
+                });
+            }, 2000);
         }
         so.broadcast.emit('respondStroke', JSON.stringify(d.data));
     });
