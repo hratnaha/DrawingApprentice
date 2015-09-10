@@ -47,7 +47,7 @@ io.on('connection', function (so) {
     console.log("new client connected");
     so.emit('newconnection', { hello: 'world' });
 
-    function getData(data) {
+    function getData() {
         var userLines;
         var computerLines;
 
@@ -82,7 +82,10 @@ io.on('connection', function (so) {
         }
     }
 
-    function onSaveDataOnDb(data) {
+    function onSaveDataOnDb(userId, sessionId) {
+        console.log(userId);
+        console.log(sessionId);
+
         var userLines;
         var computerLines;
         apprentice.getUserLines(function(err, item) {
@@ -109,7 +112,7 @@ io.on('connection', function (so) {
             var options = {
                 host: 'localhost',
                 port: 3005,
-                path: '/user/1/session/1',
+                path: '/user/' + userId + '/session/' + sessionId,
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'

@@ -218,8 +218,12 @@ function downloadData() {
     socket.emit('getData');
 }
 function saveDataOnDb() {
+    console.log('prompting user id.');
+    var userId = prompt('Please enter user id:', '1');
+    console.log('prompting session id.');
+    var sessionId = prompt('Please enter session id:', '1');
     console.log('saving data...');
-    socket.emit('saveDataOnDb');
+    socket.emit('saveDataOnDb', userId, sessionId);
 }
 
 //function TurnOnOffAgent() {
