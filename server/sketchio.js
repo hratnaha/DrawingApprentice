@@ -34,6 +34,8 @@ var isGrouping = false;
 server.listen(8080);
 //server.listen(81); // for adam server
 
+var timeout;
+
 io.on('connection', function (so) {
     var apprentice = new Apprentice();
 
@@ -45,11 +47,11 @@ io.on('connection', function (so) {
     console.log("new client connected");
     so.emit('newconnection', { hello: 'world' });
 
-    so.on('getData', function(data) {
+    function getData(data) {
         var userLines;
         var computerLines;
 
-        apprentice.getUserLines(function(err, item) {
+        apprentice.getUserLines(function (err, item) {
             if (err) {
                 console.log(err);
 
@@ -60,7 +62,7 @@ io.on('connection', function (so) {
         });
 
         function afterUserLines() {
-            apprentice.getComputerLines(function(err, item) {
+            apprentice.getComputerLines(function (err, item) {
                 if (err) {
                     console.log(err);
                 } else {
@@ -78,9 +80,9 @@ io.on('connection', function (so) {
 
             so.emit('allData', allLines);
         }
-    });
+    }
 
-   so.on('saveDataOnDb', function(data) {
+    function onSaveDataOnDb(data) {
         var userLines;
         var computerLines;
         apprentice.getUserLines(function(err, item) {
@@ -130,9 +132,9 @@ io.on('connection', function (so) {
             req.write(postData);
             req.end();
         }
-    });
+    }
 
-    so.on('newStroke', function newStrokeReceived(data) {
+    function onNewStrokeReceived(data) {
         var d = JSON.parse(data);
 
         var stroke = d.data;
@@ -177,27 +179,38 @@ io.on('connection', function (so) {
                 }
             });
         } else {
-            apprentice.decision(function (err, result) {
-                if (result != null) {
-                    var newpkpts = [];
-                    for (var i = 0; i < result.sizeSync(); i++) {
-                        var newpt = result.getSync(i);
+            apprentice.addLine();
 
-                        newpkpts.push(CreatePacketPoint(newpt));
-                    }
-                    stroke.packetPoints = newpkpts;
+            if (timeout != "" || timeout != null) {
+                clearTimeout(timeout);
+            }
 
-                    // decode to JSON and send the message
-                    var resultmsg = JSON.stringify(stroke);
-                    io.emit('respondStroke', resultmsg);
+            timeout = setTimeout(function () {
+                apprentice.getDecision(function (err, results) {
+                    if (results != null) {
+                        for (var j = 0; j < results.sizeSync(); j++) {
+                            var newpkpts = [];
+                            var result = results.getSync(j);
+                            for (var i = 0; i < result.sizeSync(); i++) {
+                                var newpt = result.getSync(i);
+
+                                newpkpts.push(CreatePacketPoint(newpt));
+                            }
+                            stroke.packetPoints = newpkpts;
+
+                            // decode to JSON and send the message
+                            var resultmsg = JSON.stringify(stroke);
+                            io.emit('respondStroke', resultmsg);
+                        }
                    //console.log("sending: " + resultmsg);
-                }
-            });
+                    }
+                });
+            }, 2000);
         }
         so.broadcast.emit('respondStroke', JSON.stringify(d.data));
-    });
+    }
 
-    function onVote(isUp) {
+    function vote(isUp) {
         var vote = isUp ? 1 : 0;
         apprentice.voteSync(vote);
     }
@@ -216,10 +229,26 @@ io.on('connection', function (so) {
             apprentice.setModeSync(m);
     }
 
+    so.on('SetCreativty', function (level) {
+        var d = JSON.parse(level);
+        apprentice.setCreativityLevel(d);
+    });
+    so.on('setAgentOn', function (ison) {
+        var isOnBool = JSON.parse(ison);
+        apprentice.setAgentOn(!isOnBool);
+    });
+    so.on('getData', getData);
+    so.on('touchdown', function () {
+        if (timeout != "" || timeout != null) {
+            clearTimeout(timeout);
+        }
+    });
+    so.on('saveDataOnDb', onSaveDataOnDb);
+    so.on('newStroke', onNewStrokeReceived);
     so.on('setMode', onModeChanged);
     so.on('clear', onClear);
     so.on('submit', submitResult);
-    so.on('vote', onVote);
+    so.on('vote', vote);
 });
 
 function submitResult(d) {

@@ -2,21 +2,22 @@ package jcocosketch.nodebridge;
 
 import processing.core.*;
 
+import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.util.*;
 
 import jcocosketch.*;
-
 import flexjson.*;
 
 public class Apprentice {
 	ArrayList<SketchPoint> allPoints = new ArrayList<SketchPoint>();
 	ArrayList<Line> allLines = new ArrayList<Line>();
 	ArrayList<Line> compLines = new ArrayList<Line>();
+	Turn curTurn = null;
+	boolean AgentOff = false;
 	long startTime;
-	TrajectorMode currentMode = TrajectorMode.Local; // 0 = local, 1 = regional,
-														// // 2 = global
+	TrajectorMode currentMode = TrajectorMode.Local; // 0 = local, 1 = regional, 2 = global
 	Boolean isGrouping = false;
 
 	ArrayList<Group> allGroups = new ArrayList<Group>();
@@ -27,12 +28,29 @@ public class Apprentice {
 	int width = 2100, height = 1080;
 
 	public Apprentice() {
+		DQNJS.isinit = false;
 		mainTree = new QuadTree(0, 0, width, height);
+		initializeNewTurn();
+	}
+
+	private void initializeNewTurn() {
+		curTurn = new Turn();
+		curTurn.startTurn();
 	}
 
 	public void setCanvasSize(int width, int height){
 		this.width = width;
 		this.height = height;
+	}
+	
+	public void setCreativityLevel(int level){
+		float dlevel = (float)level / 100f;
+		DQNJS.setCreativity(dlevel);
+		System.out.println("Apprentice: set creativity level to " + dlevel);
+	}
+	
+	public void setAgentOn(Boolean isOn){
+		AgentOff = !isOn;
 	}
 	
 	public void setMode(int mode_code) {
@@ -85,55 +103,61 @@ public class Apprentice {
 		this.allPoints.add(pt);
 	}
 
-	public ArrayList<SketchPoint> decision() {
-		ArrayList<SketchPoint> result = new ArrayList<SketchPoint>();
+	public void addLine(){
+		Line curline = createLine();
+		allLines.add(curline);
+		curTurn.addLine(curline);
+
+		this.allPoints = new ArrayList<SketchPoint>();
+	}
+	
+	public ArrayList<ArrayList<SketchPoint>> getDecision() {
 		try {
 			if (!isGrouping) {
-
-				if (currentMode == TrajectorMode.Local) {
-					Line curline = new Line();
-
-					for (SketchPoint pt : this.allPoints) {
-						Point newpt = new Point(pt.x, pt.y, curline.getLineID());
-						newpt.setTime(pt.timestamp);
-						curline.addPoint(newpt);
-						if (curline.getGroupID() != 1) {
-							newpt.setGroupID(curline.getGroupID());
+				curTurn.endTurn();
+				ArrayList<Line> turnLines = curTurn.getLines();
+				ArrayList<Line> comLines = new ArrayList<Line>();
+				if(!AgentOff){
+					
+					if(turnLines.size() > 0){
+						for(int i = 0; i < turnLines.size(); i++){
+							Line curLine = turnLines.get(i);
+								
+							int offset = 3;
+							if(allLines.size()>offset)
+								line2 = allLines.get(allLines.size()-offset);
+							else
+								line2 = curLine; ///can add other shapes to mutate with
+								
+							Decision_Engine engine = new Decision_Engine(curLine,
+									line2, (float) Math.sqrt(Math.pow(500, 2)
+											+ Math.pow(400, 2)));
+			
+							Line newline = engine.decision();
+							this.compLines.add(newline);
+							comLines.add(newline);
 						}
-						mainTree.set(pt.x, pt.y, newpt);
+							
 					}
-
-					int offset = 3;
-					if (allLines.size() > offset) {
-						line2 = allLines.get(allLines.size() - offset);
-					} else {
-						line2 = curline; // can add other shapes to mutate with
+					
+					ArrayList<ArrayList<SketchPoint>> results = new ArrayList<ArrayList<SketchPoint>>();
+						
+					for(Line newline : comLines){
+						ArrayList<SketchPoint> result = new ArrayList<SketchPoint>();
+						ArrayList<Point> pts = newline.getAllPoints();
+						//System.out.println(pts.size());
+						// for(PVector pt : pts){
+						for (int i = 0; i < pts.size(); i++) {
+							SketchPoint newpt = new SketchPoint();
+							newpt.x = pts.get(i).x;
+							newpt.y = pts.get(i).y;
+							result.add(newpt);
+						}
+						results.add(result);
 					}
-
-					Decision_Engine engine = new Decision_Engine(curline,
-							line2, (float) Math.sqrt(Math.pow(500, 2)
-									+ Math.pow(400, 2)));
-					allLines.add(curline);
-
-					Line newline = engine.decision();
-					this.compLines.add(newline);
-
-					ArrayList<Point> pts = newline.getAllPoints();
-					System.out.println(pts.size());
-					// for(PVector pt : pts){
-					for (int i = 0; i < pts.size(); i++) {
-						SketchPoint newpt = new SketchPoint();
-						newpt.x = pts.get(i).x;
-						newpt.y = pts.get(i).y;
-						result.add(newpt);
-					}
-
-					this.allPoints = new ArrayList<SketchPoint>();
-					return result;
-				} else if (currentMode == TrajectorMode.Regional) {
-
-				} else if (currentMode == TrajectorMode.Global) {
-
+						
+					initializeNewTurn();
+					return results;
 				}
 			}
 		} catch (Exception e) {
@@ -142,6 +166,21 @@ public class Apprentice {
 		System.out.println("return nothing");
 		this.allPoints = new ArrayList<SketchPoint>();
 		return null;
+	}
+
+	private Line createLine() {
+		Line curline = new Line();
+
+		for (SketchPoint pt : this.allPoints) {
+			Point newpt = new Point(pt.x, pt.y, curline.getLineID());
+			newpt.setTime(pt.timestamp);
+			curline.addPoint(newpt);
+			if (curline.getGroupID() != 1) {
+				newpt.setGroupID(curline.getGroupID());
+			}
+			mainTree.set(pt.x, pt.y, newpt);
+		}
+		return curline;
 	}
 
 	public static String getStackTrace(final Throwable throwable) {

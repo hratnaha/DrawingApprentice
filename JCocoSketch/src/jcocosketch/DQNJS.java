@@ -6,16 +6,20 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 
 public class DQNJS {
 
 	//static final String DQNJS_PATH = "/Users/Yashraj/git/DrawingApprentice/JCocoSketch/src/jcocosketch/DQN.js";
+	
+	// FIX THIS - path should point to the DQN.js file in the jcocosketch directory
+	// 
 	static final String DQNJS_PATH = "DQN.js";
 	static ScriptEngineManager manager = new ScriptEngineManager();
 	static ScriptEngine engine = manager.getEngineByName("JavaScript");
 	static Invocable inv;
-	static boolean isinit = false;
+	static public boolean isinit = false;
 	
 	
 	public static void init() throws IOException {
@@ -23,11 +27,11 @@ public class DQNJS {
 		if (!isinit) {
 			// read script file
 			try {
-				
+				Path pathToDQNJS = Paths.get(DQNJS_PATH);
 				engine.eval(Files.newBufferedReader(
-						Paths.get(DQNJS_PATH),
+						pathToDQNJS,
 						StandardCharsets.UTF_8));
-				
+				System.out.println("Deep RL Agent Initialized!");
 				isinit = true;
 
 			} catch (Exception e) {
@@ -83,6 +87,24 @@ public class DQNJS {
 		try {
 			getAction(x, y);
 			inv.invokeFunction("learnDQN", reward);
+
+		} catch (NoSuchMethodException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (ScriptException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+	}
+
+	public static void setCreativity(float value) {
+
+		inv = (Invocable) engine;
+
+		try {
+			
+			inv.invokeFunction("setEpsilon", value);
 
 		} catch (NoSuchMethodException e) {
 			// TODO Auto-generated catch block

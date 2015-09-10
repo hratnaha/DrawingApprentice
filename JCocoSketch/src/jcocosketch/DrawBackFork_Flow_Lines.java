@@ -654,23 +654,23 @@ public class DrawBackFork_Flow_Lines extends PApplet {
 			humanTurns.add(curTurn);
 			ArrayList<Line> turnLines = curTurn.getLines();
 			if (!AgentOff) {
-			if(turnLines.size() > 0){
-				if(perceptionMode.equals("local") || perceptionMode.equals("regional")){
-					for(int i = 0; i < turnLines.size(); i++){
-						curLine = turnLines.get(i);
-						if(perceptionMode.equals("local")){
-							localMode();
+				if(turnLines.size() > 0){
+					if(perceptionMode.equals("local") || perceptionMode.equals("regional")){
+						for(int i = 0; i < turnLines.size(); i++){
+							curLine = turnLines.get(i);
+							if(perceptionMode.equals("local")){
+								localMode();
+							}
+							if(perceptionMode.equals("regional")){
+								regionalMode();
+							}
 						}
-						if(perceptionMode.equals("regional")){
-							regionalMode();
-						}
+						curLine = null;
 					}
-					curLine = null;
 				}
+				curTurn = null;
+				userTurn = false;
 			}
-			curTurn = null;
-			userTurn = false;
-		}
 		}
 	}
 
