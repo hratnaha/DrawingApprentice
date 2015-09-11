@@ -128,7 +128,8 @@ public class Decision_Engine {
 			break;
 			
 		case 12:
-			newLine = m.generateBYCTMExploration(this.line);
+			newLine = m.Segment(this.line, 3, true);
+		//	newLine = m.generateBYCTMExploration(this.line);
 			break;
 			
 		case 13:
