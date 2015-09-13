@@ -1,75 +1,122 @@
-var ioUri = "http://localhost:8080"; //replace with the Websocket URL //"http://130.207.124.45"; //
+var ioUri = "http://localhost:8080"; //replace with the Websocket URL
 var output;
 var socket;
 var botCanvas = {};
 var isdrawing = false;
 var curStroke = [];
+var finishStroke = false;
 
 function initWebSocket() {
     botCanvas = document.getElementById('botpad');
+	moveLogo = document.getElementById("logo");
+
     botCanvas.setAttribute('width', container.offsetWidth);
     botCanvas.setAttribute('height', container.offsetHeight);
-
+    
     output = document.getElementById("output");
     socket = io.connect(ioUri);
-    //socket = io.connect(ioUri, {'path':'/DrawingApprentice/socket.io'});
-
+    
     socket.on('newconnection', onOpen);
     socket.on('respondStroke', onNewStroke);
-    socket.on('allData', onDataReceived);
-
+    
+	var logo = document.getElementById("logo");
+	
+	
     var i = 0;
     var botStroke = "";
     var ctx = botCanvas.getContext('2d');
-    //ctx.width = 0.1;
+    ctx.width = 0.1;
     var timer = setInterval(function () {
-
-        if (botStroke != "" && i < botStroke.packetPoints.length) {
+        
+        if (botStroke != "" && i < botStroke.packetPoints.length ) {
             ctx.lineTo(botStroke.packetPoints[i].x, botStroke.packetPoints[i].y);
+			console.log(botStroke.packetPoints[i].x);
+
             ctx.stroke();
 			ctx.strokeStyle = x;
-			ctx.globalAlpha = opacity;
+			ctx.globalAlpha = opacity2;
 			ctx.lineWidth = y;
             i++;
+			console.log(botStroke.packetPoints[i].x);
+			moveLogo.style.left = botStroke.packetPoints[i].x - 70;
+			moveLogo.style.top = botStroke.packetPoints[i].y - 130;
+			//moveLogo.style.backgroundColor = "blue";
+			finishStroke = true;
+		
+			
         } else if (curStroke.length > 0) {
             botStroke = curStroke.shift();
             ctx.beginPath();
             ctx.moveTo(botStroke.packetPoints[0].x, botStroke.packetPoints[0].y);
 			ctx.strokeStyle = x;
-			ctx.globalAlpha = opacity;
+			ctx.globalAlpha = opacity2;
 			ctx.lineWidth = y;
             i = 0;
+			//moveLogo.style.left = botStroke.packetPoints[i].x - 70;
+			//moveLogo.style.top = botStroke.packetPoints[i].y - 130;
+			//moveLogo.style.backgroundColor = "red";
+			finishStroke = true;
+	
+			
         } else if (botStroke != "") {
             bothInputContext.drawImage(botCanvas, 0, 0);
             ctx.clearRect(0, 0, botCanvas.width, botCanvas.height);
             botStroke = "";
             i = 0;
+			//moveLogo.style.backgroundColor = "yellow";
+			finishStroke = false;
         }
     }, 20);
+	
+
 }
+
+
+var timer2 = setInterval(function () {
+	if(finishStroke==false){
+	//console.log("move");
+	//moveLogo.style.left = '4em';
+	//moveLogo.style.top = '5em';
+			$('#logo').animate({
+					left: '5em', 
+					top: '4em'},
+				"swing");
+	
+	console.log('logo left is ' + moveLogo.style.left);	
+	}
+	
+	},500);
+
+
 function onNewStroke(data) {
-    //console.log(data);
+	moveLogo.style.left = "5em";
+			moveLogo.style.top = "4em";
+    console.log(data);
     // decode the data into the new stroke
     var botStroke = JSON.parse(data);
     curStroke.push(botStroke);
+	logo.style.position = "absolute";
+	logo.style.left = data.x;
+	logo.style.top = data.y;
 
 	//var botPts = botStroke.packetPoints;
-
+	
  //   if (botPts.length > 1) {
-
+        
  //       ctx.beginPath();
  //       ctx.moveTo(botPts[0].x, botPts[0].y);
 	//	var i = 0;
-
+		
 	//}
 }
 function onOpen(data) {
     var size = {
         width : container.offsetWidth,
         height: container.offsetHeight
-    };
+    };  
     socket.emit("canvasSize", size);
 }
+
 function onDataReceived(allData) {
     console.log('data received');
     console.log(allData);
@@ -117,7 +164,7 @@ function clearCanvas() {
 
 
 function setMode(mode) {
-
+   
     switch ($(this).val()) {
         case 'local':
             m = 0;
@@ -128,7 +175,7 @@ function setMode(mode) {
         case 'global':
             m = 2;
             break;
-    }
+    } 
     socket.emit('setMode', m);
 }
 
@@ -150,7 +197,7 @@ function ChangeMode3(){
 	socket.emit('setMode',0)
 }
 
-
+	
 function groupingMode(chk) {
 	if(chk)
 	   	socket.emit('setMode', 3);

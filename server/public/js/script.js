@@ -3,7 +3,8 @@
 var thickness = 0;
 var x = "#000000";
 var y = 0.5;
-var opacity = 1.0;
+var opacity = 1;
+var opacity2 = opacity/10;
 
 $( document ).ready(function() {
 console.log( "ready!" );
@@ -11,8 +12,8 @@ console.log( "ready!" );
 
 $(".saveForm").click(function AddWhiteBorder(){
 	$(this).css({
-		'border':'3px solid white',
-		'border-radius':'15px'});
+		'border':'3px solid #4e4e4e',
+		'border-radius':'100%'});
 	$(".saveForm").not(this).css({
 		'border':'none'
 		});
@@ -20,56 +21,56 @@ $(".saveForm").click(function AddWhiteBorder(){
 	});
 
 	
-$("#saveForm1").click(function Red(){
+$("#color1").click(function Red(){
 		x = "red";
 		console.log(x);
 		ctx.strokeStyle = x;
 	});
 	
-$("#saveForm2").click(function Peach(){
+$("#color2").click(function Peach(){
 		x = "#FF6666";
 		console.log(x);
 		ctx.strokeStyle = x;
 	});
 	
-$("#saveForm3").click(function Yellow(){
+$("#color3").click(function Yellow(){
 		x = "#FFFF33";
 		console.log(x);
 		ctx.strokeStyle = x;
 	});
 	
-$("#saveForm4").click(function Green(){
+$("#color4").click(function Green(){
 		x = "#33CC33";
 		console.log(x);
 		ctx.strokeStyle = x;
 	});
 	
-$("#saveForm5").click(function Purple(){
+$("#color5").click(function Purple(){
 		x = "#9933CC";
 		console.log(x);
 		ctx.strokeStyle = x;
 	});
 	
 	
-$("#saveForm6").click(function Blue(){
+$("#color6").click(function Blue(){
 		x = "#3366FF";
 		console.log(x);
 		ctx.strokeStyle = x;
 	});
 	
-$("#saveForm7").click(function White(){
+$("#color7").click(function White(){
 		x = "#FFFFFF ";
 		console.log(x);
 		ctx.strokeStyle = x;
 	});
 	
-$("#saveForm8").click(function Grey(){
+$("#color8").click(function Grey(){
 		x = "#A8A8A8";
 		console.log(x);
 		ctx.strokeStyle = x;
 	});
 	
-$("#saveForm9").click(function Black(){
+$("#color9").click(function Black(){
 		x = "#000000";
 		console.log(x);
 		ctx.strokeStyle = x;
@@ -97,20 +98,22 @@ $( "#toggle_button" ).click(function() {
 $(function AdjustOpacitySlider() {
 	var slider = $("#opacity_slider").slider({    
 			min: 0,
-			max: 1,
-			step: 0.05,
-			value: 0.8,
+			max: 100,
+			step: 5,
+			value: 80,
 			range: "min",  
 		    
 			create: function(event, ui) {
 					var tooltip = $('<div class="tooltip"/>');
-					$(event.target).find('.ui-slider-handle').append(tooltip);
-					$(ui.handle).find('.tooltip').text(ui.value);
+					//$(event.target).find('.ui-slider-handle').append(tooltip);
+					//$(ui.handle).find('.tooltip').text(ui.value);
+					$('.badge').text(ui.value);
 					},
 					
 			slide: function(event, ui) {
 					$("#opacity_slider").val(ui.value);
-					$(ui.handle).find('.tooltip').text(ui.value);
+					$('.badge').text(ui.value);
+					//$(ui.handle).find('.tooltip').text(ui.value);
 					opacity = $("#opacity_slider").slider('value');
 					console.log(opacity);
 				   },
@@ -118,6 +121,7 @@ $(function AdjustOpacitySlider() {
 					$('#hidden').attr('value', ui.value);
 					opacity = $("#opacity_slider").slider('value');
 					console.log(opacity);
+					$('.badge').text(ui.value);
 					}
 		
 		});
