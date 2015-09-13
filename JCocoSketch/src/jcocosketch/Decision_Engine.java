@@ -57,6 +57,7 @@ public class Decision_Engine {
 		
 		System.out.println("Action taken by DQN-agent: " + decision);
 		} catch (Exception e) {}
+		
 		return decisionLine(decision);
 	}
 
