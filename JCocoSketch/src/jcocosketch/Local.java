@@ -80,14 +80,13 @@ public class Local extends Decision_Engine{
 	
 	public void upvote() {
 	//	freq.addValue(decisionNumber);
-		DQNJS.learn(1.0f);
+		
 		freq.incrementValue(decisionNumber, 1);
 		
 		System.out.println("Incremented " + decisionNumber);
 	}
 	
 	public void downvote() {
-		DQNJS.learn(-0.9f);
 		freq.incrementValue(decisionNumber, -2);
 		System.out.println("decremented " + decisionNumber);
 	}

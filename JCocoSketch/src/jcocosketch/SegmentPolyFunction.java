@@ -41,13 +41,7 @@ public class SegmentPolyFunction {
 	}
 	
 	public Line getVariantLine() {
-		/*for(int i = 0; i <coeffs.length;++i) {
-			coeffs[i] = rand.nextInt(10) * Math.pow(8, -3);
-			System.out.print(" Coeffs "+ i + ": " + coeffs[i]);
-			
-		}*/
-		//coeffs[rand.nextInt(coeffs.length)] += Math.pow(Math.PI, -1*rand.nextInt(7) + rand.nextDouble());
-		//coeffs = this.swap(coeffs);
+		
 		float offsetY = 190;//30;
 		float offsetX = 0;
 		System.out.println();

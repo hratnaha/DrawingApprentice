@@ -1551,6 +1551,10 @@ function learnDQN(rewardValue) {
     agent.learn(rewardValue); // the agent improves its Q,policy,model, etc. reward is a float
 }
 
+function setEpsilon(value) {
+  agent.epsilon = value;
+}
+
 function start() { // this is a test function
 
   var x = 1;

@@ -1,6 +1,7 @@
 //var canvas = "{}";
 
 function sketchUtil() {
+	
     // get the canvas element and its context
     var container = document.getElementById('container');
     bothCanvas.setAttribute('width', container.offsetWidth);
@@ -11,6 +12,8 @@ function sketchUtil() {
     canvas.setAttribute('height', container.offsetHeight);
     var context = canvas.getContext('2d');
     context.lineWidth = 1;
+	
+	
     var curstroke;
     var strCounter = 0, pkptCounter = 0;
     var colorline;
@@ -67,12 +70,14 @@ function sketchUtil() {
                 context.strokeStyle = x;
 				console.log(x);
 				context.globalAlpha = opacity2;
+	
             } else {
                 colorline = document.getElementById('background').value;
                 context.strokeStyle = x;
                 //context.setLineDash([0]);
 				context.lineWidth = y;
 				context.globalAlpha = opacity2;
+	
             }
 
             context.beginPath();
@@ -85,7 +90,7 @@ function sketchUtil() {
                 context.stroke();
 				context.lineWidth = y;
 				context.globalAlpha = opacity2;
-                
+	
                 var json_coor = JSON.stringify(coors); //converting to json
                 pushNewPacketPoint(coors);
             }
@@ -94,7 +99,7 @@ function sketchUtil() {
             if (this.isDrawing) {
                 this.touchmove(coors);
                 var stringStroke = JSON.stringify(curstroke);
-                doSend(stringStroke);
+                onTouchUp(stringStroke);
                 
                 var height = canvas.height;
 

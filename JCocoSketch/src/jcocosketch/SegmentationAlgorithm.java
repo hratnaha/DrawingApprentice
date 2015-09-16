@@ -11,9 +11,9 @@ public class SegmentationAlgorithm {
 
 	public static SegmentPolyFunction ChopIntoSegments(Line line) {
 		
-		float x0 = line.allPoints.get(0).getX();
+		float x0 = line.allPoints.get(0).x;
 		
-		float x1 = line.allPoints.get(line.allPoints.size() - 1).getX();
+		float x1 = line.allPoints.get(line.allPoints.size() - 1).x;
 		
 		WeightedObservedPoints obs =  new WeightedObservedPoints();
 		

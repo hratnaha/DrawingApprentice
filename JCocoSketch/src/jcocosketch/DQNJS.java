@@ -19,7 +19,7 @@ public class DQNJS {
 	static ScriptEngineManager manager = new ScriptEngineManager();
 	static ScriptEngine engine = manager.getEngineByName("JavaScript");
 	static Invocable inv;
-	static boolean isinit = false;
+	static public boolean isinit = false;
 	
 	
 	public static void init() throws IOException {
@@ -87,6 +87,26 @@ public class DQNJS {
 		try {
 			getAction(x, y);
 			inv.invokeFunction("learnDQN", reward);
+
+		} catch (NoSuchMethodException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (ScriptException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+	}
+	
+	public static float creativityValue = 0.5f;
+
+	public static void setCreativity(float value) {
+		
+		inv = (Invocable) engine;
+		
+		try {
+			creativityValue = value;
+			inv.invokeFunction("setEpsilon", value);
 
 		} catch (NoSuchMethodException e) {
 			// TODO Auto-generated catch block

@@ -491,7 +491,8 @@ public class DrawBackFork_Flow_Lines extends PApplet {
 			//depreciated
 			//moved the code to save button click
 			//Kmeans test
-			KMeans.Cluster(allLines, 3);
+			//KMeans.Cluster(allLines, 3);
+			
 		}
 		//end serialization
 	}
@@ -633,7 +634,10 @@ public class DrawBackFork_Flow_Lines extends PApplet {
 		
 	}
 	
+	public boolean AgentOff = false;
+	
 	public void turnButton_click(GButton source, GEvent event) { 
+		
 		localSec = 0;
 		regionalSec = 0;
 		globalSec = 0;
@@ -649,27 +653,34 @@ public class DrawBackFork_Flow_Lines extends PApplet {
 			curTurn.endTurn();
 			humanTurns.add(curTurn);
 			ArrayList<Line> turnLines = curTurn.getLines();
-			
-			if(turnLines.size() > 0){
-				if(perceptionMode.equals("local") || perceptionMode.equals("regional")){
-					for(int i = 0; i < turnLines.size(); i++){
-						curLine = turnLines.get(i);
-						if(perceptionMode.equals("local")){
-							localMode();
+			if (!AgentOff) {
+				if(turnLines.size() > 0){
+					if(perceptionMode.equals("local") || perceptionMode.equals("regional")){
+						for(int i = 0; i < turnLines.size(); i++){
+							curLine = turnLines.get(i);
+							if(perceptionMode.equals("local")){
+								localMode();
+							}
+							if(perceptionMode.equals("regional")){
+								regionalMode();
+							}
 						}
-						if(perceptionMode.equals("regional")){
-							regionalMode();
-						}
+						curLine = null;
 					}
-					curLine = null;
 				}
+				curTurn = null;
+				userTurn = false;
 			}
-			curTurn = null;
-			userTurn = false;
 		}
 	}
 
 
+	public void TurnOffAgent() {
+		this.AgentOff = true;
+	}
+	public void TurnOnAgent() {
+		this.AgentOff = false;
+	}
 
 	private void saveToFIle(String filename) {
 		if (filename != null) {

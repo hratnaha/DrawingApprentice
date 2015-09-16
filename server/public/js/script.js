@@ -2,35 +2,45 @@
 //CANVAS JAVASCTIPT
 var thickness = 0;
 var x = "#000000";
-var y = 0.5;
+var y = 2;
 var opacity = 1;
 var opacity2 = opacity/10;
+var lineThickness;
 
 $( document ).ready(function() {
 console.log( "ready!" );
 
 
 $(".saveForm").click(function AddWhiteBorder(){
-	$(this).css({
-		'border':'3px solid #4e4e4e',
-		'border-radius':'100%'});
+	//$(this).css({
+	//	'border':'3px solid #4e4e4e',
+	//	'border-radius':'100%'});
 	$(".saveForm").not(this).css({
 		'border':'none'
 		});
-
-	});
+});
 
 	
-$("#color1").click(function Red(){
-		x = "red";
-		console.log(x);
-		ctx.strokeStyle = x;
+$("#color1").click(function AddBorder(){
+			$(this).css({
+				'border':'3px solid #B40431',
+				'border-radius':'100%'});
+			x = "red";
+			console.log(x);
+			ctx.strokeStyle = x;
+
+		
 	});
 	
-$("#color2").click(function Peach(){
-		x = "#FF6666";
-		console.log(x);
-		ctx.strokeStyle = x;
+	
+	
+$("#color2").click(function AddBorder(){
+		$(this).css({
+				'border':'3px solid #FA8258',
+				'border-radius':'100%'});
+			x = "#ff6666";
+			console.log(x);
+			ctx.strokeStyle = x;
 	});
 	
 $("#color3").click(function Yellow(){
@@ -131,7 +141,7 @@ $(function AdjustOpacitySlider() {
 	
 	
 $(function AdjustLineThickness() {
-		$("#line_thickness_slider").slider(
+		/*$("#line_thickness_slider").slider(
 			{step:1,
 			min:1,
 			max:5,
@@ -186,7 +196,20 @@ $(function AdjustLineThickness() {
 					}					
 	  		}//change function
 
-   });
+   });*/
+   
+   $('#ex14').slider().on('slideStop', function(ev){
+						//ctx.lineWidth = ev.value*20;
+						//lineThickness = ev.value*3;
+						//ctx.lineWidth = ev.value*20;
+						//ctx2.lineWidth = ev.value*20;
+						y = ev.value;
+						//ctx.lineWidth = y/2;
+						//y = ev.value*3;
+						//console.log( 'Current Thickness Value:' + ' ' + ctx.lineWidth);				
+	});	
+
+
 						
 });
 
@@ -256,6 +279,12 @@ function FullScreenCanvas() {
 
 
 }); //document ready
+
+
+
+	 
+
+
 
 
 function clearcanvas() {

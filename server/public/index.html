@@ -1,6 +1,7 @@
 <html>
 <head>
 <title>The Drawing Apprentice</title>
+
 <!--
 put js files before css files
 
@@ -14,20 +15,25 @@ put js files before css files
 	<script type="text/javascript" src="js/bootstrap.min.js"></script>
     <script type="text/javascript" src="js/bootstrap-slider.js"></script>
     <script type="text/javascript" src="js/circular-slider.js"></script>
+    <script type="text/javascript" src="js/FileSaver.min.js"></script>
     <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css" />
 	<link rel="stylesheet" type="text/css" href="css/jquery-ui.css" />
 	<link rel="stylesheet" type="text/css" href="css/jquery-ui-1.10.1.custom.min.css" />
     <link rel="stylesheet" type="text/css" href="css/bootstrap-slider.css" />
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
+    <link rel="stylesheet" type="text/css" href="css/normalize.css" />
+
+    <link rel="stylesheet" type="text/css" href="css/component.css" />
     <link rel="stylesheet" type="text/css" href="css/circular-slider.css" />
     <link rel="stylesheet" type="text/css" href="css/style.css" />
 
 </head>
 <body>
-<nav class="navbar navbar-default navbar-customize navbar-fixed-top">
-  <div class="container-fluid">
+<div class="navbar navbar-static-top navbar-customize">
+  <div class="navbar-inner">
     <!-- Brand and toggle get grouped for better mobile display -->
     <div class="navbar-header">
-      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#nav_toggle_content" aria-expanded="false">
         <span class="sr-only">Toggle navigation</span>
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
@@ -37,8 +43,8 @@ put js files before css files
     </div>
 
     <!-- Collect the nav links, forms, and other content for toggling -->
-    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-      <ul class="nav navbar-nav">
+    <div class="collapse navbar-collapse" id="nav_toggle_content">
+      <ul class="nav navbar-nav color">
       	<li>
             <div class="btn btn-md btn-color navbar-btn">
                 <input type="button" name="saveForm" class="btTxt submit saveForm" id="color1" />
@@ -84,59 +90,94 @@ put js files before css files
                 <input type="button" name="saveForm" class="btTxt submit saveForm" id="color9" />
             </div>
         </li>
-        <li>
+        <!--li>
             <div class="btn btn-md btn-color navbar-btn">
                 <input type="button" name="saveForm" class="btTxt submit saveForm" id="color10" />
             </div>
+        </li-->
+      </ul><!--color-->
+      <ul class="nav navbar-nav setting_buton">  	  
+        <li>
+            <button class="btn btn-default btn-lg" style="float:left;margin-left:1em;">
+           New
+            </button>
         </li>
-        
+         <li>
+            <button class="btn btn-default btn-lg" onClick="downloadData();" style="float:left;margin-left:1em;">
+           Download
+            </button>
+        </li>
+        <li>
+            <button class="btn btn-default btn-lg" style="float:left;margin-left:1em;">
+           Setting
+            </button>
+        </li>
+         <li>
+            <button class="btn btn-default btn-lg" id="trash" style="float:left;margin-left:1em;">
+           Trash
+            </button>
+        </li>  
+      </ul><!--setting_button-->
+            <label><input type="checkbox" id="Checkbox" onClick="TurnOnOffAgent();" value="" style="margin:1em 1em;"></label>
        
-      </ul>
-      <ul class="nav navbar-nav">  	  
-            <li>
-            	<button class="btn btn-default btn-lg btn-customize" style="float:left;margin-left:2em;">
-               New
-            	</button>
-            </li>
-             <li>
-            	<button class="btn btn-default btn-lg btn-customize" onclick="downloadData();" style="float:left;margin-left:2em;">
-               Download
-            	</button>
-            </li>
-            <li>
-            	<button class="btn btn-default btn-lg btn-customize" style="float:left;margin-left:2em;">
-               Setting
-            	</button>
-            </li>
-             <li>
-            	<button class="btn btn-default btn-lg btn-customize" id="trash" style="float:left;margin-left:2em;">
-               Trash
-            	</button>
-            </li>
-            <li>
-            	 <div class="checkbox" style="margin-left:3em;">
-                  <label><input id="checkbox" type="checkbox" value=""></label>
-                  <script>
-                  	$('#checkbox').click(function(){
-						if (this.checked) {
-							TurnOffAgent();
-							alert("Agent is turned off");
-						}
-						else{
-							TurnOnAgent();
-							alert("Agent is turned on");
-							}
-					}) 
-                  
-                  </script>
+    </div><!-- /#nav_toggle_content -->
+  <div class="navbar-inner row">
+         	<div class="col-lg-6">
+            	<div class="row">
+            	<input id="ex14" type="text" data-slider-ticks="[0, 5, 10, 15, 20]" data-slider-ticks-snap-bounds="30" data-slider-ticks-labels="['1', '5', '10', '15', '20']" />
                 </div>
-            </li>
-      </ul>
-               
-    </div><!-- /.navbar-collapse -->
+                <div class="row">
+                    <h4 style="margin-left:10em;margin-top:0;margin-bottom:0;color:black;">Line Thickness</h4>
+                </div>
+            
+               	<script>
+                	/*var slider = new Slider("#ex14", {
+					/	ticks: [1, 2, 3, 4, 5, 6],
+						ticks_positions: [0, 20, 40, 60, 80, 100],
+						ticks_labels: ['1', '2', '3', '4', '5', '6'],
+						ticks_snap_bounds: 1,
+						tooltip: 'hide'
+					});*/
+					
+					var slider = new Slider("#ex14", {
+						ticks: [1, 5, 10, 15, 20],
+						ticks_labels: ['1', '5', '10', '15', '20'],
+						ticks_positions: [0, 25, 50, 75, 100],
+						ticks_snap_bounds: 30
+					});
+
+
+	
+
+                </script>
+                <style>
+					.col-lg-6 .slider{
+						position:relative;
+						top:inherit;
+						width:30em;
+						margin-left:2em;
+						margin-top:2em;
+						}
+	
+                </style>
+           </div><!--slide_row_1-->
+           <div class="col-lg-6">      
+                       		 <!--========S L I D E R : http://seiyria.com/bootstrap-slider/==========-->
+        	<div class="row">
+            <input id="ex8" data-slider-id='ex1Slider' type="text" data-slider-min="0" data-slider-max="100" data-slider-step="1" data-slider-value="50" style="z-index:9999;"/>
+            </div>
+            <div class="row">
+            	<h4 style="margin-left:10em;margin-top:1em;margin-bottom:0;color:black;">Agent Creativity Level</h4>
+            </div>
+           
+              
+            </div><!--slider_row_2-->
+         
+         </div>
+   
   </div><!-- /.container-fluid -->
   
-</nav>
+</div>
 
 
 
@@ -325,18 +366,26 @@ put js files before css files
                     </div><!--modal-content-->
                 </div><!--/.modal-dialog-->
             </div><!--/.modal fade-->       	
-
-        		
-
-<!--===================================================-->
-
+    
     <div id="container">
     <div id="logo_placeholder"></div>
-         <div id="creativity_slider">
-        	<input id="ex8" data-slider-id='ex1Slider' type="text" data-slider-min="0" data-slider-max="100" data-slider-step="1" data-slider-value="14" style="z-index:9999;"/>
-            <h4 id="logo_title">Agent Creativity Level<br>(Slide to adjust)</h4>
+			 
+             
+             <!--========V O T E==========-->
+             <div class="voting_btn"  style="position:absolute;z-index:9999;top:35%;right:3em;">
+                 <div class="row">
+                    <button class="btn btn-vote" onClick="UpVote();" id="up"><i class="fa fa-arrow-circle-up fa-5x"></i></button>
+                 </div>
+                 <br><br><br>
+                 <div class="row">
+                    <button class="btn btn-vote" onClick="DownVote();" id="down"><i class="fa fa-arrow-circle-down fa-5x"></i></button>
+                 </div>
+             </div>
 
-            <style>
+        
+        
+            <div class="control-group">
+           <style>
 				#logo_title{
 					position:absolute;
 					top:14em;
@@ -354,6 +403,11 @@ put js files before css files
             	#ex1Slider .slider-selection {
 					background: #56DDF0;
 				}
+				.vote-up{
+					position:absolute;
+					top:20em;
+					left:3em;
+					}
 
             </style>
 			<script>
@@ -361,16 +415,21 @@ put js files before css files
 					tooltip: 'always'
 				});
 				
+				
 				// Without JQuery
 				var slider = new Slider("#ex8", {
 					tooltip: 'always'
 				});
-            
+				
+            	
+				
+				
+			
             </script>
         </div>
     
     
-    <div class="ui-widget-content" id="logo" style="width:9em;height:auto;z-index:9999;top: 4em;left: 5em;">
+    <div class="ui-widget-content" id="logo" style="width:9em;height:auto;z-index:9999;top: 3%;left: 90%;">
             <script type="text/javascript">
         
         $(function() {
