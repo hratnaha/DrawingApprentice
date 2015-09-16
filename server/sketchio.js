@@ -15,6 +15,7 @@ java.classpath.push("commons-math3-3.3.jar");
 java.classpath.push("apprentice.jar");      // apprentice library
 java.classpath.push("core.jar");            // processing
 java.classpath.push("flexjson.jar");
+java.classpath.push("ABAGAIL.jar");
 
 var Apprentice = java.import('jcocosketch.nodebridge.Apprentice');
 
@@ -190,7 +191,7 @@ io.on('connection', function (so) {
             clearTimeout(timeout);
         }
     });
-    so.on('newStroke', onNewStrokeReceived);
+    so.on('touchup', onNewStrokeReceived);
     so.on('setMode', onModeChanged);
     so.on('clear', onClear);
     so.on('submit', submitResult);

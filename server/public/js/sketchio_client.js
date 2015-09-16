@@ -3,11 +3,15 @@ var output;
 var socket;
 var botCanvas = {};
 var isdrawing = false;
+var ison = true;
 var curStroke = [];
 var finishStroke = false;
 
+var lineThickness; 
+
 function initWebSocket() {
     botCanvas = document.getElementById('botpad');
+	sketchPadCanvas = document.getElementById('sketchpad');
 	moveLogo = document.getElementById("logo");
 
     botCanvas.setAttribute('width', container.offsetWidth);
@@ -27,9 +31,18 @@ function initWebSocket() {
     var i = 0;
     var botStroke = "";
     var ctx = botCanvas.getContext('2d');
-    ctx.width = 0.1;
+	var ctx2 = sketchPadCanvas.getContext('2d');
+    ctx.lineWidth = 0.1;
     var timer = setInterval(function () {
-        
+       
+		$('#ex8').slider().on('slideStop', function(ev){
+			console.log( 'Current Creativity Value:' + ' ' + ev.value/100);
+			socket.emit("SetCreativty", ev.value);
+			//lineThickness = ev.value * 3;
+			//ctx.lineWidth = lineThickness;
+		});	
+		
+		
         if (botStroke != "" && i < botStroke.packetPoints.length ) {
             ctx.lineTo(botStroke.packetPoints[i].x, botStroke.packetPoints[i].y);
 			console.log(botStroke.packetPoints[i].x);
@@ -38,15 +51,12 @@ function initWebSocket() {
 			ctx.strokeStyle = x;
 			ctx.globalAlpha = opacity2;
 			ctx.lineWidth = y;
-            
 			console.log(botStroke.packetPoints[i].x);
 			moveLogo.style.left = botStroke.packetPoints[i].x - 70;
 			moveLogo.style.top = botStroke.packetPoints[i].y - 130;
-			
+			//moveLogo.style.backgroundColor = "blue";
+		
             i++;
-            //moveLogo.style.backgroundColor = "blue";
-			//finishStroke = true;
-
         } else if (curStroke.length > 0) {
             botStroke = curStroke.shift();
             ctx.beginPath();
@@ -58,7 +68,6 @@ function initWebSocket() {
 			//moveLogo.style.left = botStroke.packetPoints[i].x - 70;
 			//moveLogo.style.top = botStroke.packetPoints[i].y - 130;
 			//moveLogo.style.backgroundColor = "red";
-			//finishStroke = true;
 	
 			
         } else if (botStroke != "") {
@@ -67,32 +76,31 @@ function initWebSocket() {
             botStroke = "";
             i = 0;
 			//moveLogo.style.backgroundColor = "yellow";
-			//finishStroke = false;
 			MoveLogoBack();
         }
     }, 20);
-	
-	
-	$('#ex8').slider().on('slideStop', function(ev){
-	//<!--creativity level is ev.value/100-->
-	    console.log( 'Current Creativity Value:' + ' ' + ev.value);
-	    socket.emit("SetCreativty", ev.value);
-	});
+
 }
 
 
 function MoveLogoBack () {
-	$('#logo').animate({
-		    left: '5em', 
-		    top: '4em'},
-	    "swing");
+	if(finishStroke==false){
+	//console.log("move");
+	//moveLogo.style.left = '4em';
+	//moveLogo.style.top = '5em';
+			$('#logo').animate({
+					left: '90%', 
+					top: '3%'},
+				"swing");
+	
 	console.log('logo left is ' + moveLogo.style.left);	
+	}
 }
 
 
 function onNewStroke(data) {
-	//moveLogo.style.left = "5em";
-	//moveLogo.style.top = "4em";
+	moveLogo.style.left = "90%";
+			moveLogo.style.top = "3%";
     console.log(data);
     // decode the data into the new stroke
     var botStroke = JSON.parse(data);
@@ -140,8 +148,7 @@ function onDataReceived(allData) {
 }
 
 function onTouchUp(message) {
-    //writeToScreen("SENT: " + message);
-    socket.emit('newStroke', message);
+    socket.emit('touchup', message);
 }
 
 function onTouchDown() {
@@ -200,7 +207,6 @@ function ChangeMode3(){
 	alert("Local");
 	socket.emit('setMode',0)
 }
-
 	
 function groupingMode(chk) {
 	if(chk)
@@ -208,12 +214,13 @@ function groupingMode(chk) {
 	else
 		socket.emit('setMode', 4);
 }
-function UpVote() {
-    socket.emit('vote', 1);
-}
 
 function DownVote() {
     socket.emit('vote', 0);
+}
+
+function UpVote() {
+    socket.emit('vote', 1);
 }
 
 function downloadData() {
@@ -221,13 +228,13 @@ function downloadData() {
     socket.emit('getData');
 }
 
-//function TurnOnOffAgent() {
-//    ison = !ison;
-//    if (ison) {
-//        console.log('turn agent on');
-//        socket.emit('setAgentOn', true);
-//    } else {
-//        console.log('turn agent off');
-//        socket.emit('setAgentOn', false);
-//    }
-//}
+function TurnOnOffAgent() {
+    ison = !ison;
+    if (ison) {
+        console.log('turn agent on');
+        socket.emit('setAgentOn', true);
+    } else {
+        console.log('turn agent off');
+        socket.emit('setAgentOn', false);
+    }
+}

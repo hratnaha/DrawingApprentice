@@ -97,13 +97,15 @@ public class DQNJS {
 		}
 
 	}
+	
+	public static float creativityValue = 0.5f;
 
 	public static void setCreativity(float value) {
-
+		
 		inv = (Invocable) engine;
-
+		
 		try {
-			
+			creativityValue = value;
 			inv.invokeFunction("setEpsilon", value);
 
 		} catch (NoSuchMethodException e) {
