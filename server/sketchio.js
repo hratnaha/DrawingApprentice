@@ -191,7 +191,7 @@ io.on('connection', function (so) {
             clearTimeout(timeout);
         }
     });
-    so.on('newStroke', onNewStrokeReceived);
+    so.on('touchup', onNewStrokeReceived);
     so.on('setMode', onModeChanged);
     so.on('clear', onClear);
     so.on('submit', submitResult);
