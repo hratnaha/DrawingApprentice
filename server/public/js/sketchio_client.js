@@ -90,7 +90,7 @@ function MoveLogoBack () {
 	//moveLogo.style.top = '5em';
 			$('#logo').animate({
 					left: '90%', 
-					top: '3%'},
+					top: '-1em'},
 				"swing");
 	
 	console.log('logo left is ' + moveLogo.style.left);	

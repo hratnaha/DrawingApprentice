@@ -112,7 +112,8 @@ public class Decision_Engine {
 			break;
 		
 		case 3:
-			newLine = m.drawBackShade(this.line);
+			newLine = m.drawBackNoisy(this.line);
+			//m.drawBackShade(this.line);
 			break;
 			
 		case 10:
