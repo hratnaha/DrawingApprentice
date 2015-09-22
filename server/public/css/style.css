@@ -54,7 +54,7 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#e2e2e2', end
 	position:absolute;
 	width:100%;
 	background-color:#9A9A9A;
-	padding:1em 1em 1em 1em;
+	padding:.5em 1em 1em .5em;
 	}
 .btn-customize:hover{
 	background-color: #5793CC;
