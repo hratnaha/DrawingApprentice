@@ -15,6 +15,7 @@ java.classpath.push("commons-math3-3.3.jar");
 java.classpath.push("apprentice.jar");      // apprentice library
 java.classpath.push("core.jar");            // processing
 java.classpath.push("flexjson.jar");
+java.classpath.push("ABAGAIL.jar");
 
 var Apprentice = java.import('jcocosketch.nodebridge.Apprentice');
 
@@ -38,6 +39,8 @@ var timeout;
 
 io.on('connection', function (so) {
     var apprentice = new Apprentice();
+    var systemStartTime = (new Date()).getTime();
+    apprentice.setCurrentTime(systemStartTime);
 
     so.on('canvasSize', function setSize(size) {
         //var d = JSON.parse(size);
@@ -155,8 +158,9 @@ io.on('connection', function (so) {
         // adding all the points in the stroke
         for (var i = 0; i < pts.length; i++) {
             var pt = pts[i];
-            var pttime = java.newLong(pt.timestamp);
-            apprentice.addPointSync(parseInt(pt.x, 10), parseInt(pt.y, 10), pttime, pt.id);
+            var pttime = pt.timestamp;
+            //console.log(pt.timestamp);
+            apprentice.addPointSync(parseInt(pt.x, 10), parseInt(pt.y, 10), pt.timestamp, pt.id);
         }
         // Todo: reconstruct the message to send out
 
@@ -247,7 +251,7 @@ io.on('connection', function (so) {
         }
     });
     so.on('saveDataOnDb', onSaveDataOnDb);
-    so.on('newStroke', onNewStrokeReceived);
+    so.on('touchup', onNewStrokeReceived);
     so.on('setMode', onModeChanged);
     so.on('clear', onClear);
     so.on('submit', submitResult);

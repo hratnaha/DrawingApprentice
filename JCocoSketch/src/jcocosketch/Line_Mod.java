@@ -637,7 +637,7 @@ public class Line_Mod {
 		}
 		
 		//LEARN -- remove this for not performing learning with segmentation
-		NEATLearner.SimpleLearner(INPUT, OUTPUT);
+	//	NEATLearner.SimpleLearner(INPUT, OUTPUT);
 		
 		return MakeCompGenerated(newLine);
 	}

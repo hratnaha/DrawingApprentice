@@ -44,8 +44,20 @@ public class Decision_Engine {
 		int y = (int)(line.allPoints.get(0).y/10);
 		
 		decision = 1 + DQNJS.getAction(x,y);
+		float creativitySliderValue = DQNJS.creativityValue;
+		if (creativitySliderValue > 0 && creativitySliderValue < 0.33) {
+			decision = decision % 4;
+		}
+		else if (creativitySliderValue > 0.33 && creativitySliderValue < 0.66) {
+			decision = 3 + (decision % 7);
+		}
+		else {
+			decision = 9 + (decision % 5);
+		}
+		
 		System.out.println("Action taken by DQN-agent: " + decision);
 		} catch (Exception e) {}
+		
 		return decisionLine(decision);
 	}
 
@@ -60,20 +72,20 @@ public class Decision_Engine {
 		Line_Mod m = new Line_Mod(this.line, random);
 		Line newLine = new Line();
 		switch (decision) {
-		case 1:
+		case 4:
 			newLine = m.translation();
 			break;
-		case 2:
+		case 5:
 			newLine = m.reflection();
 			break;
-		case 3:
+		case 6:
 			newLine = m.scaling();
 			break;
-		case 4:
+		case 1:
 			newLine = m.drawBack(this.line);
 			break;
 			
-		case 5:
+		case 2:
 			newLine = m.drawBackNoisy(this.line);
 			break;
 			//Added new Decision cases, Sept8, 2014 by Kunwar Yashraj Singh
@@ -82,25 +94,26 @@ public class Decision_Engine {
 			System.out.println("Invoked the Second Experimental Mutation Function");
 			break;
 			*/
-		case 6:
+		case 7:
 			newLine = m.drawApproximation(this.line, true);
 			//newLine = m.Trim(newLine, 2160, 1440);
 			System.out.println("Cauchy Approximation");
 			break;
 			
-		case 7:
+		case 8:
 			newLine = m.drawPolynomial(false);
 		//	newLine = m.Trim(newLine, 2160, 1440);
 			System.out.println("Random Polynomial");
 			break;
 			
-		case 8:
+		case 9:
 			newLine = m.drawOnlyMutation(this.line, this.line2);
 			System.out.println("Invoked Only Mutation Algorithm");
 			break;
 		
-		case 9:
-			newLine = m.drawBackShade(this.line);
+		case 3:
+			newLine = m.drawBackNoisy(this.line);
+			//m.drawBackShade(this.line);
 			break;
 			
 		case 10:
@@ -117,10 +130,12 @@ public class Decision_Engine {
 			break;
 			
 		case 12:
-			newLine = m.generateBYCTMExploration(this.line);
+			newLine = m.Segment(this.line, 3, true);
+		//	newLine = m.generateBYCTMExploration(this.line);
 			break;
 			
 		case 13:
+			newLine = m.Segment(this.line, 2, true);
 		//	newLine = HopfieldAssociate.Generate(this.line);
 			break;
 			

@@ -16,7 +16,8 @@ public class Apprentice {
 	ArrayList<Line> compLines = new ArrayList<Line>();
 	Turn curTurn = null;
 	boolean AgentOff = false;
-	long startTime;
+	long strokeStartTime;
+	double systemStartTime = 0;
 	TrajectorMode currentMode = TrajectorMode.Local; // 0 = local, 1 = regional, 2 = global
 	Boolean isGrouping = false;
 
@@ -32,7 +33,12 @@ public class Apprentice {
 		mainTree = new QuadTree(0, 0, width, height);
 		initializeNewTurn();
 	}
-
+	
+	public void setCurrentTime(double now){
+		System.out.println("new apprentice start!! time: " + now);
+		this.systemStartTime = now;
+	}
+	
 	private void initializeNewTurn() {
 		curTurn = new Turn();
 		curTurn.startTurn();
@@ -89,17 +95,19 @@ public class Apprentice {
 	}
 
 	public void startGrouping(long strokeTimeStamp) {
-		this.startTime = strokeTimeStamp;
+		this.strokeStartTime = strokeTimeStamp - (long)systemStartTime;
 		isGrouping = true;
 	}
 
 	public void addNewStroke(long strokeTimeStamp) {
 		isGrouping = false;
-		this.startTime = strokeTimeStamp;
+		this.strokeStartTime = strokeTimeStamp - (long)systemStartTime;
 	}
 
-	public void addPoint(int x, int y, long timestamp, String id) {
-		SketchPoint pt = new SketchPoint(x, y, timestamp, id);
+	public void addPoint(int x, int y, double timestamp, String id) {
+		//long timestampLong = Long.parseLong(timestamp);
+		System.out.println(timestamp);
+		SketchPoint pt = new SketchPoint(x, y, (long)(timestamp - systemStartTime), id);
 		this.allPoints.add(pt);
 	}
 
@@ -145,12 +153,14 @@ public class Apprentice {
 					for(Line newline : comLines){
 						ArrayList<SketchPoint> result = new ArrayList<SketchPoint>();
 						ArrayList<Point> pts = newline.getAllPoints();
-						//System.out.println(pts.size());
+						newline.startTime = System.currentTimeMillis() - (long)this.systemStartTime;
+						System.out.println(newline.startTime);
 						// for(PVector pt : pts){
 						for (int i = 0; i < pts.size(); i++) {
 							SketchPoint newpt = new SketchPoint();
 							newpt.x = pts.get(i).x;
 							newpt.y = pts.get(i).y;
+							newpt.timestamp = System.currentTimeMillis() - (long)this.systemStartTime;//this.allPoints.get(j).timestamp;
 							result.add(newpt);
 						}
 						results.add(result);
@@ -238,7 +248,8 @@ public class Apprentice {
 						newpt.x = pts.get(j).x;
 						newpt.y = pts.get(j).y;
 						//newpt.id = this.allPoints.get(j).id;
-						newpt.timestamp = System.nanoTime();//this.allPoints.get(j).timestamp;
+						newpt.timestamp = System.nanoTime() - (long)systemStartTime;//this.allPoints.get(j).timestamp;
+						System.out.println(newpt.timestamp);
 						result.add(newpt);
 					}
 					results.add(result);
@@ -264,7 +275,9 @@ public class Apprentice {
 
   public String getUserLines() {
     JSONSerializer serializer = new JSONSerializer();
+    
     String userLines = serializer.deepSerialize(this.allLines);
+    //System.out.println(userLines);
     return userLines;
   }
 
