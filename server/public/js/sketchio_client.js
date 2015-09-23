@@ -33,15 +33,13 @@ function initWebSocket() {
     var ctx = botCanvas.getContext('2d');
 	var ctx2 = sketchPadCanvas.getContext('2d');
     ctx.lineWidth = 0.1;
+    
+    $('#ex8').slider().on('slideStop', function (ev) {
+        console.log('Current Creativity Value:' + ' ' + ev.value / 100);
+        socket.emit("SetCreativty", ev.value);
+    });	
+
     var timer = setInterval(function () {
-       
-		$('#ex8').slider().on('slideStop', function(ev){
-			console.log( 'Current Creativity Value:' + ' ' + ev.value/100);
-			socket.emit("SetCreativty", ev.value);
-			//lineThickness = ev.value * 3;
-			//ctx.lineWidth = lineThickness;
-		});	
-		
 		
         if (botStroke != "" && i < botStroke.packetPoints.length ) {
             ctx.lineTo(botStroke.packetPoints[i].x, botStroke.packetPoints[i].y);
