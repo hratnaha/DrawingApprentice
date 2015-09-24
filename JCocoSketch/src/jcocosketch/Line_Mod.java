@@ -779,5 +779,38 @@ public class Line_Mod {
 		return MakeCompGenerated(newLine);
 	}
 
+	public Line TranslateToOrigin(Line line) {
+    	Line newLine = new Line();
+    	int maxX = Integer.MAX_VALUE;
+    	int maxY = Integer.MAX_VALUE;
+    	for (int i = 0; i < line.allPoints.size(); ++i) {
+    		maxX = Math.min((int)line.allPoints.get(i).x, maxX);
+    		maxY = Math.min((int)line.allPoints.get(i).y, maxY);
+    	}
+    	for (int i = 0; i < line.allPoints.size(); ++i) {
+    		int X = (int) line.allPoints.get(i).x;
+    		int Y = (int) line.allPoints.get(i).y;
+    		X = X - maxX;
+    		Y = Y - maxY;
+    		newLine.allPoints.add(new Point(X,Y));
+    	}
+    	
+    	return newLine;
+    }
+    
+    public Line MoveTo(Line line, int x, int y) {
+    	Line origin = TranslateToOrigin(line);
+    	Line newLine = new Line();
+
+    	for (int i = 0; i < origin.allPoints.size(); ++i) {
+    		int X = (int) origin.allPoints.get(i).x;
+    		int Y = (int) origin.allPoints.get(i).y;
+    		X = X + x;
+    		Y = Y + y;
+    		newLine.allPoints.add(new Point(X,Y));
+    	}
+    	
+    	return newLine;
+    }
 
 }

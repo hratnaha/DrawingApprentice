@@ -71,22 +71,28 @@ public class Decision_Engine {
 		
 		Line_Mod m = new Line_Mod(this.line, random);
 		Line newLine = new Line();
+		int X = (int) line.allPoints.get(0).x;
+		int Y = (int) line.allPoints.get(0).y;
 		switch (decision) {
 		case 4:
 			newLine = m.translation();
+			newLine = m.MoveTo(newLine, X, Y);
 			break;
 		case 5:
 			newLine = m.reflection();
+			newLine = m.MoveTo(newLine, X, Y);
 			break;
 		case 6:
 			newLine = m.scaling();
 			break;
 		case 1:
 			newLine = m.drawBack(this.line);
+			newLine = m.MoveTo(newLine, X, Y);
 			break;
 			
 		case 2:
 			newLine = m.drawBackNoisy(this.line);
+			newLine = m.MoveTo(newLine, X, Y);
 			break;
 			//Added new Decision cases, Sept8, 2014 by Kunwar Yashraj Singh
 		/*case 5:
@@ -102,6 +108,7 @@ public class Decision_Engine {
 			
 		case 8:
 			newLine = m.drawPolynomial(false);
+			newLine = m.MoveTo(newLine, X, Y);
 		//	newLine = m.Trim(newLine, 2160, 1440);
 			System.out.println("Random Polynomial");
 			break;
@@ -113,6 +120,7 @@ public class Decision_Engine {
 		
 		case 3:
 			newLine = m.drawBackNoisy(this.line);
+			newLine = m.MoveTo(newLine, X, Y);
 			//m.drawBackShade(this.line);
 			break;
 			
