@@ -76,23 +76,20 @@ public class Decision_Engine {
 		switch (decision) {
 		case 4:
 			newLine = m.translation();
-			newLine = m.MoveTo(newLine, X, Y);
 			break;
 		case 5:
 			newLine = m.reflection();
-			newLine = m.MoveTo(newLine, X, Y);
 			break;
 		case 6:
 			newLine = m.scaling();
 			break;
 		case 1:
 			newLine = m.drawBack(this.line);
-			newLine = m.MoveTo(newLine, X, Y);
 			break;
 			
 		case 2:
 			newLine = m.drawBackNoisy(this.line);
-			newLine = m.MoveTo(newLine, X, Y);
+			
 			break;
 			//Added new Decision cases, Sept8, 2014 by Kunwar Yashraj Singh
 		/*case 5:
@@ -120,7 +117,6 @@ public class Decision_Engine {
 		
 		case 3:
 			newLine = m.drawBackNoisy(this.line);
-			newLine = m.MoveTo(newLine, X, Y);
 			//m.drawBackShade(this.line);
 			break;
 			
@@ -155,9 +151,13 @@ public class Decision_Engine {
 			break;
 			//newLine = 
 		}
+		//Force line to be drawn near input line
+		int offset = 20;
+		newLine = m.MoveTo(newLine, X, Y - offset);
+		
 		newLine = m.Trim(newLine, 2160, 1440);//newLine;
 		newLine.compGenerated = true;
-		
+
 		return newLine;
 	}
 
