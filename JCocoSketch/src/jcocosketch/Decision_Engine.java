@@ -153,6 +153,11 @@ public class Decision_Engine {
 		}
 		//Force line to be drawn near input line
 		int offset = 20;
+		if (Y > 700)
+			offset = -20;
+		else
+			offset = 20;
+		
 		newLine = m.MoveTo(newLine, X, Y - offset);
 		
 		newLine = m.Trim(newLine, 2160, 1440);//newLine;
