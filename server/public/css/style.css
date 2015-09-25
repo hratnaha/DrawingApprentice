@@ -697,7 +697,37 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#5a5a5a', end
 	background:url(images/global_button_normal.png) no-repeat;
 	}
 
+#logo_title{
+	position:absolute;
+	top:14em;
+	left:3em;
+	z-index:9999;
+	color:black;
+	}
+#slider{
+	z-index:9999;
+	position:absolute;
+	top:5em;
+	left:3em;
+	float:left;
+}
+#ex1Slider .slider-selection {
+	background: #56DDF0;
+}
+.vote-up{
+	position:absolute;
+	top:20em;
+	left:3em;
+	}
 
+.col-lg-6 .slider{
+		position:relative;
+		top:inherit;
+		width:30em;
+		margin-left:2em;
+		margin-top:2em;
+}
+	
 @media screen (max-width:400px){
 #line-thickness-title{display:none;}
 	}

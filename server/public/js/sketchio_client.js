@@ -35,8 +35,10 @@ function initWebSocket() {
     
     $('#ex8').slider().on('slideStop', function (ev) {
         console.log('Current Creativity Value:' + ' ' + ev.value / 100);
-        socket.emit("SetCreativty", ev.value);
+       
     });	
+	
+
 
     var timer = setInterval(function () {
 		
