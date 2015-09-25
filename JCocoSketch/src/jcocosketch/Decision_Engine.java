@@ -68,7 +68,7 @@ public class Decision_Engine {
 		//HopfieldAssociate.Init();
 		//HopfieldAssociate.Learn(this.line);
 		//System.out.println(ClassificationUtility.convertToPattern(line)[0][0]);
-		
+		boolean usedSegmentation = false;
 		Line_Mod m = new Line_Mod(this.line, random);
 		Line newLine = new Line();
 		int X = (int) line.allPoints.get(0).x;
@@ -99,13 +99,16 @@ public class Decision_Engine {
 			*/
 		case 7:
 			newLine = m.drawApproximation(this.line, true);
+			usedSegmentation = true;
+			newLine = moveSegmentation(m, newLine, X);
 			//newLine = m.Trim(newLine, 2160, 1440);
 			System.out.println("Cauchy Approximation");
 			break;
 			
 		case 8:
 			newLine = m.drawPolynomial(false);
-			newLine = m.MoveTo(newLine, X, Y);
+			usedSegmentation = true;
+			newLine = moveSegmentation(m, newLine, X);
 		//	newLine = m.Trim(newLine, 2160, 1440);
 			System.out.println("Random Polynomial");
 			break;
@@ -122,6 +125,8 @@ public class Decision_Engine {
 			
 		case 10:
 			newLine = m.Segment(this.line, 2, true);
+			newLine = moveSegmentation(m, newLine, X);
+			usedSegmentation = true;
 			//newLine = m.Segment(this.line, true);
 			//Print VIA NEAT LEARNING
 			//newLine = m.generateBYNEATLEARNING(newLine, 2);
@@ -131,15 +136,21 @@ public class Decision_Engine {
 		case 11:
 		//	newLine = m.generateBYCTMExploration(this.line);
 			newLine = m.SegmentAndCTM(this.line, 1);
+			newLine = moveSegmentation(m, newLine, X);
+			usedSegmentation = true;
 			break;
 			
 		case 12:
 			newLine = m.Segment(this.line, 3, true);
+			newLine = moveSegmentation(m, newLine, X);
+			usedSegmentation = true;
 		//	newLine = m.generateBYCTMExploration(this.line);
 			break;
 			
 		case 13:
 			newLine = m.Segment(this.line, 2, true);
+			newLine = moveSegmentation(m, newLine, X);
+			usedSegmentation = true;
 		//	newLine = HopfieldAssociate.Generate(this.line);
 			break;
 			
@@ -152,17 +163,27 @@ public class Decision_Engine {
 			//newLine = 
 		}
 		//Force line to be drawn near input line
-		int offset = 20;
-		if (Y > 700)
-			offset = -20;
-		else
-			offset = 20;
+		if(!usedSegmentation) {
+			int offset = 100;
+			if (Y > 700)
+				offset = -100;
+			else
+				offset = 100;
 		
-		newLine = m.MoveTo(newLine, X, Y - offset);
+			newLine = m.MoveTo(newLine, X, Y + offset);
+		}
 		
 		newLine = m.Trim(newLine, 2160, 1440);//newLine;
 		newLine.compGenerated = true;
 
+		return newLine;
+	}
+
+	private Line moveSegmentation(Line_Mod m, Line newLine, int X) {
+		int maxY = m.getMaxY(line);
+		int maxYSegment = m.getMaxY(newLine);
+		int offsetY = (maxY - maxYSegment)/4;
+		newLine = m.MoveTo(newLine, X, maxY + offsetY);
 		return newLine;
 	}
 

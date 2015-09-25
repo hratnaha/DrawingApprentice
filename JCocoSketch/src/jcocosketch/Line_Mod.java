@@ -798,6 +798,7 @@ public class Line_Mod {
     	return newLine;
     }
     
+	
     public Line MoveTo(Line line, int x, int y) {
     	Line origin = TranslateToOrigin(line);
     	Line newLine = new Line();
@@ -811,6 +812,18 @@ public class Line_Mod {
     	}
     	
     	return newLine;
+    }
+    
+    public int getMaxY(Line line) {
+    	
+    	int maxX = Integer.MIN_VALUE;
+    	int maxY = Integer.MIN_VALUE;
+    	for (int i = 0; i < line.allPoints.size(); ++i) {
+    		maxX = Math.max((int)line.allPoints.get(i).x, maxX);
+    		maxY = Math.max((int)line.allPoints.get(i).y, maxY);
+    	}
+    	
+    	return maxY;
     }
 
 }
