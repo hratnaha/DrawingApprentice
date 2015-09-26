@@ -128,46 +128,17 @@ put js files before css files
                 </div>
                 
                 <div class="row">
-            	<input id="ex14" type="text" data-slider-ticks="[0, 5, 10, 15, 20]" data-slider-ticks-snap-bounds="30" data-slider-ticks-labels="['1', '5', '10', '15', '20']" />
+            <input id="ex15" data-slider-id='ex1Slider' type="text" data-slider-min="1" data-slider-max="100" data-slider-step="1" data-slider-value="50" style="z-index:9999;margin-top:-1em;"/>
                 </div>
-              
-            
-               	<script>
-                	/*var slider = new Slider("#ex14", {
-					/	ticks: [1, 2, 3, 4, 5, 6],
-						ticks_positions: [0, 20, 40, 60, 80, 100],
-						ticks_labels: ['1', '2', '3', '4', '5', '6'],
-						ticks_snap_bounds: 1,
-						tooltip: 'hide'
-					});*/
-					
-					var slider = new Slider("#ex14", {
-						ticks: [1, 5, 10, 15, 20],
-						ticks_labels: ['1', '5', '10', '15', '20'],
-						ticks_positions: [0, 25, 50, 75, 100],
-						ticks_snap_bounds: 30
-					});
-
-
-	
-
-                </script>
-                <style>
-					.col-lg-6 .slider{
-						position:relative;
-						top:inherit;
-						width:30em;
-						margin-left:2em;
-						margin-top:2em;
-						}
-	
-                </style>
+             
+           
            </div><!--slide_row_1-->
            <div class="col-lg-6">      
                        		 <!--========S L I D E R : http://seiyria.com/bootstrap-slider/==========-->
             
             <div class="row">
             <h4 style="margin-left:10em;margin-bottom:-1em;color:black;">Agent Creativity Level</h4>
+            
             <input id="ex8" data-slider-id='ex1Slider' type="text" data-slider-min="0" data-slider-max="100" data-slider-step="1" data-slider-value="50" style="z-index:9999;margin-top:-1em;"/>
             </div>
             
@@ -387,44 +358,24 @@ put js files before css files
         
             <div class="control-group">
            <style>
-				#logo_title{
-					position:absolute;
-					top:14em;
-					left:3em;
-					z-index:9999;
-					color:black;
-					}
-				#slider{
-					z-index:9999;
-					position:absolute;
-					top:5em;
-					left:3em;
-					float:left;
-				}
-            	#ex1Slider .slider-selection {
-					background: #56DDF0;
-				}
-				.vote-up{
-					position:absolute;
-					top:20em;
-					left:3em;
-					}
-
+				
             </style>
 			<script>
             	$("#ex8").slider({
 					tooltip: 'always'
 				});
 				
+	
 				
 				// Without JQuery
 				var slider = new Slider("#ex8", {
 					tooltip: 'always'
 				});
 				
-            	
-				
-				
+				var slider = new Slider("#ex15", {
+					tooltip: 'always'
+				});
+	
 			
             </script>
         </div>
