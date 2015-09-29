@@ -198,12 +198,12 @@ $(function AdjustLineThickness() {
 
    });*/
    
-   $('#ex14').slider().on('slideStop', function(ev){
+   $('#ex15').slider().on('slideStop', function(ev){
 						//ctx.lineWidth = ev.value*20;
 						//lineThickness = ev.value*3;
 						//ctx.lineWidth = ev.value*20;
 						//ctx2.lineWidth = ev.value*20;
-						y = ev.value;
+						y = ev.value/3;
 						//ctx.lineWidth = y/2;
 						//y = ev.value*3;
 						//console.log( 'Current Thickness Value:' + ' ' + ctx.lineWidth);				

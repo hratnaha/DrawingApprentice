@@ -5,6 +5,8 @@
    src: url('../fonts/glyphicons-halflings-regular.eot');
    src: url('../fonts/glyphicons-halflings-regular.eot?#iefix') format('embedded-opentype'),url('../fonts/glyphicons-halflings-regular.woff') format('woff'), url('../fonts/glyphicons-halflings-regular.ttf') format('truetype'), url('../fonts/glyphicons-halflings-regular.svg#glyphicons-halflingsregular') format('svg');
 }
+
+
 /* CSS Document */
 
 body{
@@ -54,7 +56,7 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#e2e2e2', end
 	position:absolute;
 	width:100%;
 	background-color:#9A9A9A;
-	padding:1em 1em 1em 1em;
+	padding:.5em 1em 1em .5em;
 	}
 .btn-customize:hover{
 	background-color: #5793CC;
@@ -695,7 +697,37 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#5a5a5a', end
 	background:url(images/global_button_normal.png) no-repeat;
 	}
 
+#logo_title{
+	position:absolute;
+	top:14em;
+	left:3em;
+	z-index:9999;
+	color:black;
+	}
+#slider{
+	z-index:9999;
+	position:absolute;
+	top:5em;
+	left:3em;
+	float:left;
+}
+#ex1Slider .slider-selection {
+	background: #56DDF0;
+}
+.vote-up{
+	position:absolute;
+	top:20em;
+	left:3em;
+	}
 
+.col-lg-6 .slider{
+		position:relative;
+		top:inherit;
+		width:30em;
+		margin-left:2em;
+		margin-top:2em;
+}
+	
 @media screen (max-width:400px){
 #line-thickness-title{display:none;}
 	}

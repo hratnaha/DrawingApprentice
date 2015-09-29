@@ -12,13 +12,15 @@ public class Point extends PVector implements Comparable{
 	//private double x;
     //private double y;
     public Object opt_value;
-    public float timestamp; 
-
+    public long timestamp; 
+    public static long time = System.currentTimeMillis();
     public float groupID;
 
     public Point(float x, float y){
     	super(x, y);
     	this.lineID = 0;
+    	timestamp = System.currentTimeMillis();
+    	timestamp -= time;
     }
     /**
      * Creates a new point object.
@@ -30,15 +32,20 @@ public class Point extends PVector implements Comparable{
     public Point(float x, float y, float lineID) {
     	super(x, y);
         this.lineID = lineID;
+        timestamp = System.currentTimeMillis();
+        timestamp -= time;
     }
     public Point(float x, float y, Object opt_value) {
         super(x, y);
         this.opt_value = opt_value;
         this.lineID = 0;
+        timestamp = System.currentTimeMillis();
+        timestamp -= time;
     }
     
     public void setTime(long time){
     	timestamp = time; 
+    
     }
 
     public float getX() {

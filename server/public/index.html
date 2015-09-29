@@ -20,7 +20,7 @@ put js files before css files
 	<link rel="stylesheet" type="text/css" href="css/jquery-ui.css" />
 	<link rel="stylesheet" type="text/css" href="css/jquery-ui-1.10.1.custom.min.css" />
     <link rel="stylesheet" type="text/css" href="css/bootstrap-slider.css" />
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
+    <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css" />
     <link rel="stylesheet" type="text/css" href="css/normalize.css" />
 
     <link rel="stylesheet" type="text/css" href="css/component.css" />
@@ -123,53 +123,25 @@ put js files before css files
     </div><!-- /#nav_toggle_content -->
   <div class="navbar-inner row">
          	<div class="col-lg-6">
-            	<div class="row">
-            	<input id="ex14" type="text" data-slider-ticks="[0, 5, 10, 15, 20]" data-slider-ticks-snap-bounds="30" data-slider-ticks-labels="['1', '5', '10', '15', '20']" />
+            	  <div class="row">
+                   <h4 style="margin-left:10em;margin-top:0;margin-bottom:-1em;color:black;">Line Thickness</h4>
                 </div>
+                
                 <div class="row">
-                    <h4 style="margin-left:10em;margin-top:0;margin-bottom:0;color:black;">Line Thickness</h4>
+            <input id="ex15" data-slider-id='ex1Slider' type="text" data-slider-min="1" data-slider-max="100" data-slider-step="1" data-slider-value="50" style="z-index:9999;margin-top:-1em;"/>
                 </div>
-            
-               	<script>
-                	/*var slider = new Slider("#ex14", {
-					/	ticks: [1, 2, 3, 4, 5, 6],
-						ticks_positions: [0, 20, 40, 60, 80, 100],
-						ticks_labels: ['1', '2', '3', '4', '5', '6'],
-						ticks_snap_bounds: 1,
-						tooltip: 'hide'
-					});*/
-					
-					var slider = new Slider("#ex14", {
-						ticks: [1, 5, 10, 15, 20],
-						ticks_labels: ['1', '5', '10', '15', '20'],
-						ticks_positions: [0, 25, 50, 75, 100],
-						ticks_snap_bounds: 30
-					});
-
-
-	
-
-                </script>
-                <style>
-					.col-lg-6 .slider{
-						position:relative;
-						top:inherit;
-						width:30em;
-						margin-left:2em;
-						margin-top:2em;
-						}
-	
-                </style>
+             
+           
            </div><!--slide_row_1-->
            <div class="col-lg-6">      
                        		 <!--========S L I D E R : http://seiyria.com/bootstrap-slider/==========-->
-        	<div class="row">
-            <input id="ex8" data-slider-id='ex1Slider' type="text" data-slider-min="0" data-slider-max="100" data-slider-step="1" data-slider-value="50" style="z-index:9999;"/>
-            </div>
+            
             <div class="row">
-            	<h4 style="margin-left:10em;margin-top:1em;margin-bottom:0;color:black;">Agent Creativity Level</h4>
+            <h4 style="margin-left:10em;margin-bottom:-1em;color:black;">Agent Creativity Level</h4>
+            
+            <input id="ex8" data-slider-id='ex1Slider' type="text" data-slider-min="0" data-slider-max="100" data-slider-step="1" data-slider-value="50" style="z-index:9999;margin-top:-1em;"/>
             </div>
-           
+            
               
             </div><!--slider_row_2-->
          
@@ -386,50 +358,30 @@ put js files before css files
         
             <div class="control-group">
            <style>
-				#logo_title{
-					position:absolute;
-					top:14em;
-					left:3em;
-					z-index:9999;
-					color:black;
-					}
-				#slider{
-					z-index:9999;
-					position:absolute;
-					top:5em;
-					left:3em;
-					float:left;
-				}
-            	#ex1Slider .slider-selection {
-					background: #56DDF0;
-				}
-				.vote-up{
-					position:absolute;
-					top:20em;
-					left:3em;
-					}
-
+				
             </style>
 			<script>
             	$("#ex8").slider({
 					tooltip: 'always'
 				});
 				
+	
 				
 				// Without JQuery
 				var slider = new Slider("#ex8", {
 					tooltip: 'always'
 				});
 				
-            	
-				
-				
+				var slider = new Slider("#ex15", {
+					tooltip: 'always'
+				});
+	
 			
             </script>
         </div>
     
     
-    <div class="ui-widget-content" id="logo" style="width:9em;height:auto;z-index:9999;top: 3%;left: 90%;">
+    <div class="ui-widget-content" id="logo" style="width:9em;height:auto;z-index:9999;top:-1em;left: 90%;">
             <script type="text/javascript">
         
         $(function() {
