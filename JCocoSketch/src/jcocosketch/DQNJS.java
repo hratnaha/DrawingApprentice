@@ -11,11 +11,11 @@ import java.nio.file.Paths;
 
 public class DQNJS {
 
-	static final String DQNJS_PATH = "/Users/Yashraj/git/DrawingApprentice/JCocoSketch/src/jcocosketch/DQN.js";
+	//static final String DQNJS_PATH = "/Users/Yashraj/git/DrawingApprentice/JCocoSketch/src/jcocosketch/DQN.js";
 	
 	// FIX THIS - path should point to the DQN.js file in the jcocosketch directory
 	// 
-	//static final String DQNJS_PATH = "DQN.js";
+	static final String DQNJS_PATH = "DQN.js";
 	static ScriptEngineManager manager = new ScriptEngineManager();
 	static ScriptEngine engine = manager.getEngineByName("JavaScript");
 	static Invocable inv;
