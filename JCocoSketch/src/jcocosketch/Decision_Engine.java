@@ -45,7 +45,7 @@ public class Decision_Engine {
 		
 		decision = 1 + DQNJS.getAction(x,y);
 		float creativitySliderValue = DQNJS.creativityValue;
-		if (creativitySliderValue > 0 && creativitySliderValue < 0.33) {
+		if (creativitySliderValue >= 0 && creativitySliderValue < 0.33) {
 			decision = decision % 4;
 		}
 		else if (creativitySliderValue > 0.33 && creativitySliderValue < 0.66) {
