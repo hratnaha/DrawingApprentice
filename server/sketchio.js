@@ -28,7 +28,8 @@ app.use(express.compress());
 app.use(express.static(__dirname + '/public', { maxAge: oneDay }));
 app.listen(process.env.PORT || 3000);
 
-var server = require('http').Server(app);
+var http = require('http');
+var server = http.Server(app);
 var io = require('socket.io')(server);
 var isGrouping = false;
 //server.listen(8080);
@@ -48,11 +49,11 @@ io.on('connection', function (so) {
 
     console.log("new client connected");
     so.emit('newconnection', { hello: 'world' });
-    
-    function getData(data) {
+
+    function getData() {
         var userLines;
         var computerLines;
-        
+
         apprentice.getUserLines(function (err, item) {
             if (err) {
                 console.log(err);
@@ -62,7 +63,7 @@ io.on('connection', function (so) {
                 afterUserLines();
             }
         });
-        
+
         function afterUserLines() {
             apprentice.getComputerLines(function (err, item) {
                 if (err) {
@@ -73,32 +74,87 @@ io.on('connection', function (so) {
                 }
             });
         }
-        
+
         function emitData() {
             var allLines = {
                 userLines: userLines,
                 computerLines: computerLines
             }
-            
+
             so.emit('allData', allLines);
+        }
+    }
+
+    function onSaveDataOnDb(userId, sessionId) {
+        console.log(userId);
+        console.log(sessionId);
+
+        var userLines;
+        var computerLines;
+        apprentice.getUserLines(function(err, item) {
+            if(err) {
+                console.log(err);
+            } else {
+                userLines = item;
+                afterUserLines();
+            }
+        });
+
+        function afterUserLines() {
+            apprentice.getComputerLines(function(err, item) {
+                if (err) {
+                    console.log(err);
+                } else {
+                    computerLines = item;
+                    saveData();
+                }
+            });
+        }
+
+        function saveData() {
+            var options = {
+                host: 'localhost',
+                port: 3005,
+                path: '/user/' + userId + '/session/' + sessionId,
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            };
+
+            var req = http.request(options, function(res) {
+                var data = "";
+                res.on('data', function(chunk) {
+                    data += chunk;
+                });
+                res.on('end', function() {
+                    console.log(data);
+                });
+            });
+            var postData = JSON.stringify({
+                userLines: userLines,
+                computerLines: computerLines
+            });
+            req.write(postData);
+            req.end();
         }
     }
 
     function onNewStrokeReceived(data) {
         var d = JSON.parse(data);
-        
+
         var stroke = d.data;
-        
+
         var stroketime = java.newLong(stroke.timestamp);
         // categorize if it is grouping or not
         if (isGrouping)
             apprentice.startGroupingSync(stroketime);
         else
             apprentice.addNewStrokeSync(stroketime);
-        
+
         var pts = stroke.packetPoints;
         var returnSt = [];
-        
+
         // adding all the points in the stroke
         for (var i = 0; i < pts.length; i++) {
             var pt = pts[i];
@@ -107,21 +163,21 @@ io.on('connection', function (so) {
             apprentice.addPointSync(parseInt(pt.x, 10), parseInt(pt.y, 10), pt.timestamp, pt.id);
         }
         // Todo: reconstruct the message to send out
-        
+
         if (isGrouping) {
             apprentice.Grouping(function (err, result) {
                 if (result != null) {
                     for (var i = 0; i < result.sizeSync(); i++) {
                         var newline = result.getSync(i);
-                        
+
                         var newpkpts = [];
                         for (var j = 0; j < newline.sizeSync(); j++) {
                             var newpt = newline.getSync(j);
-                            
+
                             newpkpts.push(CreatePacketPoint(newpt));
                         }
                         stroke.packetPoints = newpkpts;
-                        
+
                         // decode to JSON and send the message
                         var resultmsg = JSON.stringify(stroke);
                         io.emit('respondStroke', resultmsg);
@@ -131,11 +187,11 @@ io.on('connection', function (so) {
             });
         } else {
             apprentice.addLine();
-            
+
             if (timeout != "" || timeout != null) {
                 clearTimeout(timeout);
             }
-            
+
             timeout = setTimeout(function () {
                 apprentice.getDecision(function (err, results) {
                     if (results != null) {
@@ -144,11 +200,11 @@ io.on('connection', function (so) {
                             var result = results.getSync(j);
                             for (var i = 0; i < result.sizeSync(); i++) {
                                 var newpt = result.getSync(i);
-                                
+
                                 newpkpts.push(CreatePacketPoint(newpt));
                             }
                             stroke.packetPoints = newpkpts;
-                            
+
                             // decode to JSON and send the message
                             var resultmsg = JSON.stringify(stroke);
                             io.emit('respondStroke', resultmsg);
@@ -179,7 +235,7 @@ io.on('connection', function (so) {
         else
             apprentice.setModeSync(m);
     }
-    
+
     so.on('SetCreativty', function (level) {
         var d = JSON.parse(level);
         apprentice.setCreativityLevel(d);
@@ -194,6 +250,7 @@ io.on('connection', function (so) {
             clearTimeout(timeout);
         }
     });
+    so.on('saveDataOnDb', onSaveDataOnDb);
     so.on('touchup', onNewStrokeReceived);
     so.on('setMode', onModeChanged);
     so.on('clear', onClear);

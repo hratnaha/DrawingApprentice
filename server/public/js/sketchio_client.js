@@ -7,7 +7,7 @@ var ison = true;
 var curStroke = [];
 var finishStroke = false;
 
-var lineThickness; 
+var lineThickness;
 
 function initWebSocket() {
     botCanvas = document.getElementById('botpad');
@@ -16,8 +16,9 @@ function initWebSocket() {
 
     botCanvas.setAttribute('width', container.offsetWidth);
     botCanvas.setAttribute('height', container.offsetHeight);
-    
+
     output = document.getElementById("output");
+
     //socket = io.connect(ioUri); // for local version
     socket = io.connect(ioUri, { 'path': '/DrawingApprentice/socket.io' }); // for adam server
     
@@ -26,21 +27,21 @@ function initWebSocket() {
     socket.on('allData', onDataReceived);
 
 	var logo = document.getElementById("logo");
-	
-	
+
+
     var i = 0;
     var botStroke = "";
     var ctx = botCanvas.getContext('2d');
 	var ctx2 = sketchPadCanvas.getContext('2d');
     ctx.lineWidth = 0.1;
-    
+
     $('#ex8').slider().on('slideStop', function (ev) {
         console.log('Current Creativity Value:' + ' ' + ev.value / 100);
         socket.emit("SetCreativty", ev.value);
-    });	
+    });
 
     var timer = setInterval(function () {
-		
+
         if (botStroke != "" && i < botStroke.packetPoints.length ) {
             ctx.lineTo(botStroke.packetPoints[i].x, botStroke.packetPoints[i].y);
 			console.log(botStroke.packetPoints[i].x);
@@ -49,11 +50,12 @@ function initWebSocket() {
 			ctx.strokeStyle = x;
 			ctx.globalAlpha = opacity2;
 			ctx.lineWidth = y;
-			console.log(botStroke.packetPoints[i].x);
+
+      console.log(botStroke.packetPoints[i].x);
 			moveLogo.style.left = botStroke.packetPoints[i].x - 70;
 			moveLogo.style.top = botStroke.packetPoints[i].y - 130;
 			//moveLogo.style.backgroundColor = "blue";
-		
+
             i++;
         } else if (curStroke.length > 0) {
             botStroke = curStroke.shift();
@@ -66,8 +68,8 @@ function initWebSocket() {
 			//moveLogo.style.left = botStroke.packetPoints[i].x - 70;
 			//moveLogo.style.top = botStroke.packetPoints[i].y - 130;
 			//moveLogo.style.backgroundColor = "red";
-	
-			
+
+
         } else if (botStroke != "") {
             bothInputContext.drawImage(botCanvas, 0, 0);
             ctx.clearRect(0, 0, botCanvas.width, botCanvas.height);
@@ -87,11 +89,11 @@ function MoveLogoBack () {
 	//moveLogo.style.left = '4em';
 	//moveLogo.style.top = '5em';
 			$('#logo').animate({
-					left: '90%', 
+					left: '90%',
 					top: '-1em'},
 				"swing");
-	
-	console.log('logo left is ' + moveLogo.style.left);	
+
+	console.log('logo left is ' + moveLogo.style.left);
 	}
 }
 
@@ -108,20 +110,20 @@ function onNewStroke(data) {
 	logo.style.top = data.y;
 
 	//var botPts = botStroke.packetPoints;
-	
+
  //   if (botPts.length > 1) {
-        
+
  //       ctx.beginPath();
  //       ctx.moveTo(botPts[0].x, botPts[0].y);
 	//	var i = 0;
-		
+
 	//}
 }
 function onOpen(data) {
     var size = {
         width : container.offsetWidth,
         height: container.offsetHeight
-    };  
+    };
     socket.emit("canvasSize", size);
 }
 
@@ -175,7 +177,7 @@ function clearCanvas() {
 // change the mode base on the UI changes
 
 function setMode(mode) {
-   
+
     switch ($(this).val()) {
         case 'local':
             m = 0;
@@ -186,7 +188,7 @@ function setMode(mode) {
         case 'global':
             m = 2;
             break;
-    } 
+    }
     socket.emit('setMode', m);
 }
 
@@ -205,7 +207,7 @@ function ChangeMode3(){
 	alert("Local");
 	socket.emit('setMode',0)
 }
-	
+
 function groupingMode(chk) {
 	if(chk)
 	   	socket.emit('setMode', 3);
@@ -224,6 +226,14 @@ function UpVote() {
 function downloadData() {
     console.log('getting data...');
     socket.emit('getData');
+}
+function saveDataOnDb() {
+    console.log('prompting user id.');
+    var userId = prompt('Please enter user id:', '1');
+    console.log('prompting session id.');
+    var sessionId = prompt('Please enter session id:', '1');
+    console.log('saving data...');
+    socket.emit('saveDataOnDb', userId, sessionId);
 }
 
 function TurnOnOffAgent() {

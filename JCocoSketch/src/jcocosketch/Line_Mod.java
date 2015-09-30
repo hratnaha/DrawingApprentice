@@ -312,7 +312,7 @@ public class Line_Mod {
 			line2 = line;
 		}
 		boolean reverse = true;
-		int reverse_offset = 50;
+		int reverse_offset = line.allPoints.size() /2;
 		float scale_factor = 1.2f;
 		// create a new Line of the current line, then newLine.drawLine();
 		Line newLine = new Line();
@@ -332,7 +332,7 @@ public class Line_Mod {
 				if(!reverse) {
 				float x1 = line2.allPoints.get(i).x;
 				float y1 = line2.allPoints.get(i).y;
-				Point newPoint = new Point(scale_factor*x1, y1, newLine.lineID);
+				Point newPoint = new Point(x1, scale_factor*y1, newLine.lineID);
 				newLine.allPoints.add(newPoint);
 				}
 				else {
@@ -344,7 +344,12 @@ public class Line_Mod {
 
 				//Point newPoint = new Point(scale_factor*x1, y1);
 				//newLine.allPoints.add(newPoint);
-			} else{}
+			} else{
+				float x1 = line.allPoints.get(i).x;
+				float y1 =  line.allPoints.get(i).y;
+				Point newPoint = new Point(x1, y1, newLine.lineID);
+				newLine.allPoints.add(newPoint);
+			}
 				// just add the point to the point array
 				//newLine.allPoints.add(line.allPoints.get(i));
 		}
@@ -516,7 +521,7 @@ public class Line_Mod {
 		double[][] cov = {{9, c}, {c, 16}};*/
 		// new leaf values 
 		double[] mean = {1, 2};
-		double c =4;
+		double c = 3;
 		double[][] cov = {{5, c}, {c, 10}};
 		RealMatrix covariance = MatrixUtils.createRealMatrix(cov); 
 		// Create a CorrelatedRandomVectorGenerator using rawGenerator for the components
@@ -763,8 +768,8 @@ public class Line_Mod {
 			double[] newCoeffs = new double[newYS.length];
 			
 			for (int x =0; x < newYS.length; ++x) {
-					newCoeffs[x] = pGen.coeffs[x] + newYS[x]*1.2 ;
-				
+					newCoeffs[x] = pGen.coeffs[x] + newYS[x] ;
+					newCoeffs[x] *= 0.4;
 			}
 			
 			pol.add(pGen.getVariantLine(200, newCoeffs, true));

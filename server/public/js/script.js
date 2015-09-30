@@ -227,32 +227,6 @@ $("#download").click(function(){
 
 
 
-$("#up").click(function(){
-		    voteUpOrDown(true);
-			console.log("Voted Up!");
-		});
-
-
-$("#down").click(function(){
-		    voteUpOrDown(false);
-			console.log("Voted Down!");
-		});
-		
-
-$("#global").click(function(){
-		setMode(mode);
-		console.log("global mode");
-	});
-
-$("#regional").click(function(){
-		setMode(mode);
-		console.log("regional mode");
-	});
-
-$("#local").click(function(){
-		setMode(mode);
-		console.log("local mode");
-	});
 
 
 function FullScreenCanvas() {
