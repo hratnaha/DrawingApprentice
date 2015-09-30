@@ -30,7 +30,7 @@ public class Apprentice {
 
 	public Apprentice() {
 		DQNJS.isinit = false;
-		DQNJS.setCreativity(0.5f);
+		//DQNJS.setCreativity(0.5f);
 		mainTree = new QuadTree(0, 0, width, height);
 		initializeNewTurn();
 	}
