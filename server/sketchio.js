@@ -32,8 +32,8 @@ var http = require('http');
 var server = http.Server(app);
 var io = require('socket.io')(server);
 var isGrouping = false;
-server.listen(8080);
-//server.listen(81); // for adam server
+//server.listen(8080);
+server.listen(81); // for adam server
 
 var timeout;
 
