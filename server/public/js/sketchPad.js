@@ -79,10 +79,11 @@ function sketchUtil() {
 				context.globalAlpha = opacity2;
 	
             }
-
+            
             context.beginPath();
             context.moveTo(coors.x, coors.y);
             this.isDrawing = true;
+            onTouchDown();
         },
         touchmove: function (coors) {
             if (this.isDrawing) {
