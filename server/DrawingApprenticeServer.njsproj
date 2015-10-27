@@ -20,12 +20,13 @@
   <ItemGroup>
     <Content Include="package.json" />
     <Content Include="README.md" />
+    <Compile Include="configuration\config.js" />
     <Compile Include="hello-world-server.js" />
+    <Compile Include="login.js" />
     <Compile Include="Sketch.js" />
     <Compile Include="sketchio.js" />
     <Content Include="public\canvas2.0.html" />
     <Content Include="public\canvas.html" />
-    <Content Include="public\doctor.html" />
     <Compile Include="public\jquery-1.8.2.js" />
     <Content Include="apprentice\images\bot.png" />
     <Content Include="apprentice\images\robot.png" />
@@ -38,6 +39,9 @@
     <Compile Include="public\js\sketchPad.js" />
     <Compile Include="public\js\sketchWS.js" />
     <Compile Include="public\js\socket.io.js" />
+    <Content Include="views\account.ejs" />
+    <Content Include="views\index.ejs" />
+    <Content Include="views\layout.ejs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="apprentice" />
@@ -53,6 +57,8 @@
     <Folder Include="apprentice\META-INF" />
     <Folder Include="apprentice\res" />
     <Folder Include="apprentice\utilities" />
+    <Folder Include="configuration\" />
+    <Folder Include="views\" />
     <Folder Include="public" />
     <Folder Include="public\js" />
   </ItemGroup>
