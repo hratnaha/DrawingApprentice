@@ -45,8 +45,8 @@ public class Decision_Engine {
 		
 		decision = 1 + DQNJS.getAction(x,y);
 		float creativitySliderValue = DQNJS.creativityValue;
-		if (creativitySliderValue > 0 && creativitySliderValue < 0.33) {
-			decision = decision % 4;
+		if (creativitySliderValue >= 0 && creativitySliderValue < 0.33) {
+			decision = 1+ decision % 4;
 		}
 		else if (creativitySliderValue > 0.33 && creativitySliderValue < 0.66) {
 			decision = 3 + (decision % 7);
@@ -76,20 +76,24 @@ public class Decision_Engine {
 		switch (decision) {
 		case 4:
 			newLine = m.translation();
+			usedSegmentation = true;
 			break;
 		case 5:
 			newLine = m.reflection();
+			usedSegmentation = true;
 			break;
 		case 6:
 			newLine = m.scaling();
+			usedSegmentation = true;
 			break;
 		case 1:
 			newLine = m.drawBack(this.line);
+			usedSegmentation = true;
 			break;
 			
 		case 2:
 			newLine = m.drawBackNoisy(this.line);
-			
+			usedSegmentation = true;
 			break;
 			//Added new Decision cases, Sept8, 2014 by Kunwar Yashraj Singh
 		/*case 5:
@@ -115,11 +119,15 @@ public class Decision_Engine {
 			
 		case 9:
 			newLine = m.drawOnlyMutation(this.line, this.line2);
+			usedSegmentation = true;
+			newLine = moveSegmentation(m, newLine, X);
 			System.out.println("Invoked Only Mutation Algorithm");
 			break;
 		
 		case 3:
 			newLine = m.drawBackNoisy(this.line);
+			
+			usedSegmentation = true;
 			//m.drawBackShade(this.line);
 			break;
 			
@@ -181,8 +189,8 @@ public class Decision_Engine {
 
 	private Line moveSegmentation(Line_Mod m, Line newLine, int X) {
 		int maxY = m.getMaxY(line);
-		int maxYSegment = m.getMaxY(newLine);
-		int offsetY = (maxY - maxYSegment)/4;
+		int maxYSegment = m.getMaxY(newLine) + 400;
+		int offsetY = (maxY - maxYSegment)/2;
 		newLine = m.MoveTo(newLine, X, maxY + offsetY);
 		return newLine;
 	}

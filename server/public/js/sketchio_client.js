@@ -42,14 +42,14 @@ function initWebSocket() {
 
         if (botStroke != "" && i < botStroke.packetPoints.length ) {
             ctx.lineTo(botStroke.packetPoints[i].x, botStroke.packetPoints[i].y);
-			console.log(botStroke.packetPoints[i].x);
+			//console.log(botStroke.packetPoints[i].x);
 
             ctx.stroke();
 			ctx.strokeStyle = x;
 			ctx.globalAlpha = opacity2;
 			ctx.lineWidth = y;
 
-      console.log(botStroke.packetPoints[i].x);
+            //console.log(botStroke.packetPoints[i].x);
 			moveLogo.style.left = botStroke.packetPoints[i].x - 70;
 			moveLogo.style.top = botStroke.packetPoints[i].y - 130;
 			//moveLogo.style.backgroundColor = "blue";
