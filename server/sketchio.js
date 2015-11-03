@@ -58,19 +58,55 @@ passport.use(new FacebookStrategy({
   function (accessToken, refreshToken, profile, done) {
     process.nextTick(function () {
         //Check whether the User exists or not using profile.id
-        if (config.use_database === 'true') {
-            connection.query("SELECT * from user_info where user_id=" + profile.id, function (err, rows, fields) {
-                if (err) throw err;
-                if (rows.length === 0) {
-                    console.log("There is no such user, adding now");
-                    connection.query("INSERT into user_info(user_id,user_name) VALUES('" + profile.id + "','" + profile.username + "')");
-                }
-                else {
-                    console.log("User already exists in database");
-                }
-            });
+        (function checkIfUserExists(userId, cb) {
+          // Query database server if userId exists. Call callback with its data or error.
+          var options = {
+              host: 'localhost',
+              port: 3005,
+              path: '/user/' + userId,
+              method: 'GET',
+              headers: {
+                  'Content-Type': 'application/json'
+              }
+          };
+
+          var request = http.request(options, function(response) {
+              var data = "";
+              response.on('data', function(chunk) {
+                  data += chunk;
+              });
+              response.on('end', function() {
+                  // This is the data we received from the database
+                  cb(data);
+                  console.log(data);
+              });
+          });
+          request.end();
+        })(profile.id, doneCheckingForUser);
+
+        function doneCheckingForUser(user_data) {
+          // user_data should be the user's info as it is saved in the database,
+          // plus any previous session info.
+          // If no user existed, it has been added with this id.
+
+          // TODO: use user_data to display sessions and allow the user to
+          // select one or create new.
+
+          return done(null, profile);
         }
-        return done(null, profile);
+        // if (config.use_database === 'true') {
+            // connection.query("SELECT * from user_info where user_id=" + profile.id, function (err, rows, fields) {
+                // if (err) throw err;
+                // if (rows.length === 0) {
+                    // console.log("There is no such user, adding now");
+                    // connection.query("INSERT into user_info(user_id,user_name) VALUES('" + profile.id + "','" + profile.username + "')");
+                // }
+                // else {
+                    // console.log("User already exists in database");
+                // }
+            // });
+        // }
+        // return done(null, profile);
     });
 }
 ));
