@@ -5,7 +5,7 @@
 */
 	"facebook_api_key" 		: "919570664792543",
     "facebook_api_secret"	: "5d28d4afbd48904ef5167861be9dd7ac",
-    "callback_url"			: "http://adam.cc.gatech.edu:3000/auth/facebook/callback",
+    "callback_url"			: "http://adam.cc.gatech.edu/DrawingApprentice/auth/facebook/callback",
     "use_database"			: "false",
     "host"					: "http://adam.cc.gatech.edu",
     "username"				: "root",
