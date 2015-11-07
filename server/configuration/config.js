@@ -3,9 +3,9 @@
 * This file contains the configurations information of Twitter login app.
 * It consists of Twitter app information, database information.
 */
-	"facebook_api_key" 		: "1668411693393703",
-    "facebook_api_secret"	: "d059a2cb9fda79d68964e82b96a28212",
-    "callback_url"			: "http://localhost:3000/auth/facebook/callback",
+	"facebook_api_key" 		: "919570664792543",
+    "facebook_api_secret"	: "5d28d4afbd48904ef5167861be9dd7ac",
+    "callback_url"			: "http://adam.cc.gatech.edu:3000/auth/facebook/callback",
     "use_database"			: "false",
     "host"					: "localhost",
     "username"				: "root",
