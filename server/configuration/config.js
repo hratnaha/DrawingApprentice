@@ -7,7 +7,7 @@
     "facebook_api_secret"	: "5d28d4afbd48904ef5167861be9dd7ac",
     "callback_url"			: "http://adam.cc.gatech.edu:3000/auth/facebook/callback",
     "use_database"			: "false",
-    "host"					: "localhost",
+    "host"					: "http://adam.cc.gatech.edu",
     "username"				: "root",
     "password"				: "",
     "database"				: ""
