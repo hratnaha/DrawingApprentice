@@ -61,7 +61,7 @@ function (accessToken, refreshToken, profile, done) {
         (function checkIfUserExists(userId, cb) {
             // Query database server if userId exists. Call callback with its data or error.
             var options = {
-                host: 'localhost',
+                host: 'http://adam.cc.gatech.edu',
                 port: 3005,
                 path: '/user/' + userId,
                 method: 'GET',
