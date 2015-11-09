@@ -61,9 +61,8 @@ function (accessToken, refreshToken, profile, done) {
         (function checkIfUserExists(userId, cb) {
             // Query database server if userId exists. Call callback with its data or error.
             var options = {
-                host: 'localhost',
-                port: 3005,
-                path: '/user/' + userId,
+                host: '130.207.124.45',
+                path: '/DrawingApprenticeDatabase/user/' + userId,
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json'

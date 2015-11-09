@@ -5,7 +5,7 @@
 */
 	"facebook_api_key" 		: "1668411693393703",
     "facebook_api_secret"	: "d059a2cb9fda79d68964e82b96a28212",
-    "callback_url"			: "http://localhost:3000/auth/facebook/callback",
+    "callback_url"			: "/auth/facebook/callback",
     "use_database"			: "false",
     "host"					: "localhost",
     "username"				: "root",
