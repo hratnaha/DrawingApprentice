@@ -5,9 +5,9 @@
 "use strict";
 process.title = 'sketch-server';
 var oneDay = 86400000;
-var ss = require("./Sketch");
 var java = require("java");
 
+// load java modules
 java.classpath.push("commons-lang3-3.1.jar");
 java.classpath.push("commons-io.jar");
 java.classpath.push("commons-math3-3.3.jar");
@@ -16,9 +16,10 @@ java.classpath.push("core.jar");            // processing
 java.classpath.push("flexjson.jar");
 java.classpath.push("ABAGAIL.jar");
 
+// Start the Drawing Apprentice server
 var Apprentice = java.import('jcocosketch.nodebridge.Apprentice');
 
-// set up express
+// initialize required module
 var express = require('express'),
     passport = require('passport'),
     util = require('util'),
@@ -26,75 +27,59 @@ var express = require('express'),
     session = require('express-session'),
     cookieParser = require('cookie-parser'),
     bodyParser = require('body-parser'),
-    config = require('./configuration/config'),
+    config = require('./configuration/facebookConfig'),
     mysql = require('mysql'),
     app = express();
 
-// Define MySQL parameter in Config.js file.
-// Todo: Should switch to Mongo database later
-var connection = mysql.createConnection({
-    host     : config.host,
-    user     : config.username,
-    password : config.password,
-    database : config.database
-});
-//Connect to Database only if Config.js parameter is set.
-if (config.use_database === 'true') {
-    connection.connect();
-}
 // Passport session setup.
 passport.serializeUser(function (user, done) {
-    done(null, user);
+    done(null, user.id);
 });
 passport.deserializeUser(function (obj, done) {
     done(null, obj);
 });
-// Use the FacebookStrategy within Passport.
-passport.use(new FacebookStrategy({
-    clientID: config.facebook_api_key,
-    clientSecret: config.facebook_api_secret ,
-    callbackURL: config.callback_url
-},
-function (accessToken, refreshToken, profile, done) {
-    process.nextTick(function () {
-        //Check whether the User exists or not using profile.id
-        (function checkIfUserExists(userId, cb) {
-            // Query database server if userId exists. Call callback with its data or error.
-            var options = {
-                host: '130.207.124.45',
-                path: '/DrawingApprenticeDatabase/user/' + userId,
-                method: 'GET',
-                headers: {
-                    'Content-Type': 'application/json'
-                }
-            };
-            
-            var request = http.request(options, function (response) {
-                var data = "";
-                response.on('data', function (chunk) {
-                    data += chunk;
-                });
-                response.on('end', function () {
-                    // This is the data we received from the database
-                    cb(data);
-                    console.log(data);
-                });
-            });
-            request.end();
-        })(profile.id, doneCheckingForUser);
+// Use FacebookStrategy within Passport.
+passport.use(
+    new FacebookStrategy(
+        config,
+        function (accessToken, refreshToken, profile, done) {
+            process.nextTick(function () {
+                //Check whether the User exists or not using profile.id
+                (function checkIfUserExists(userId, cb) {
+                    // Query database server if userId exists. Call callback with its data or error.
+                    var options = {
+                        host: '130.207.124.45',
+                        path: '/DrawingApprenticeDatabase/user/' + userId,
+                        method: 'GET',
+                        headers: {'Content-Type': 'application/json'}
+                    };
+                    var request = http.request(options, function (response) {
+                        var data = "";
+                        response.on('data', function (chunk) {
+                            data += chunk;
+                        });
+                        response.on('end', function () {
+                            // This is the data we received from the database
+                            cb(data);
+                            console.log(data);
+                        });
+                    });
+                    request.end();
+                })(profile.id, doneCheckingForUser);
         
-        function doneCheckingForUser(user_data) {
-            // user_data should be the user's info as it is saved in the database,
-            // plus any previous session info.
-            // If no user existed, it has been added with this id.
+                function doneCheckingForUser(user_data) {
+                    // user_data should be the user's info as it is saved in the database,
+                    // plus any previous session info.
+                    // If no user existed, it has been added with this id.
             
-            // TODO: use user_data to display sessions and allow the user to
-            // select one or create new.
+                    // TODO: use user_data to display sessions and allow the user to
+                    // select one or create new.
             
-            return done(null, profile);
-        }
-    });
-}
+                    return done(null, profile);
+                }
+            }
+        );
+    }
 ));
 app.set('views', __dirname + '/views');
 app.set('view engine', 'ejs');
@@ -106,16 +91,16 @@ app.use(passport.session());
 app.use(express.static(__dirname + '/public'));
 
 app.get('/', function (req, res) {
-    res.render('index', { user: req.user });
+    res.render('index', { user: req});
 });
-app.get('/account', ensureAuthenticated, function (req, res) {
-    res.render('account', { user: req.user });
+app.get('/app', ensureAuthenticated, function (req, res) {
+    res.render('app', { user: req });
 });
 app.get('/auth/facebook', passport.authenticate('facebook', { scope: 'email' }));
 app.get('/auth/facebook/callback',
-    passport.authenticate('facebook', { successRedirect : '/app.html', failureRedirect: '/login' }),
+    passport.authenticate('facebook'),//, { successRedirect : '/app.html', failureRedirect: '/login' }),
     function (req, res) {
-        res.redirect('/');
+        res.redirect('/app');
     }
 );
 app.get('/logout', function (req, res) {
@@ -124,7 +109,7 @@ app.get('/logout', function (req, res) {
 });
 function ensureAuthenticated(req, res, next) {
     if (req.isAuthenticated()) { return next(); }
-    res.redirect('/login')
+    res.redirect('/');
 }
 
 app.listen(3000);
