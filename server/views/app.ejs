@@ -385,6 +385,7 @@ put js files before css files
     <div class="ui-widget-content" id="logo" style="width:9em;height:auto;z-index:9999;top:-1em;left: 90%;">
             <script type="text/javascript">
         var userData = <%- user %>;
+		var sessionId = <%- JSON.stringify(sessionId) %>;
 
         $(function() {
         $( "#logo" ).draggable();

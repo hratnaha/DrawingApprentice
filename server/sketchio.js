@@ -20,20 +20,16 @@ java.classpath.push("ABAGAIL.jar");
 var Apprentice = java.import('jcocosketch.nodebridge.Apprentice');
 
 // initialize required module
-var express = require('express'),
-    passport = require('passport'),
-    util = require('util'),
-    FacebookStrategy = require('passport-facebook').Strategy,
-    session = require('express-session'),
-    cookieParser = require('cookie-parser'),
-    bodyParser = require('body-parser'),
-    config = require('./configuration/facebookConfig'),
-    mysql = require('mysql'),
-    app = express();
-
-// Holds user data for current session.
-var userData;
-var userProfile;
+var express             = require('express'),
+    passport            = require('passport'),
+    util                = require('util'),
+    FacebookStrategy    = require('passport-facebook').Strategy,
+    session             = require('express-session'),
+    cookieParser        = require('cookie-parser'),
+    bodyParser          = require('body-parser'),
+    facebookConfig      = require('./configuration/facebookConfig'),
+    mongoConfig         = require('./configuration/mongoServerConfig'),
+    app                 = express();
 
 // Passport session setup.
 passport.serializeUser(function (user, done) {
@@ -46,17 +42,18 @@ passport.deserializeUser(function (obj, done) {
 // Use FacebookStrategy within Passport.
 passport.use(
     new FacebookStrategy(
-        config,
+        facebookConfig,
         function (accessToken, refreshToken, profile, done) {
             process.nextTick(function () {
                 //Check whether the User exists or not using profile.id
                 (function checkIfUserExists(userId, cb) {
                     // Query database server if userId exists. Call callback with its data or error.
                     var options = {
-                        host: '130.207.124.45',
-                        path: '/DrawingApprenticeDatabase/user/' + userId,
-                        method: 'GET',
-                        headers: {'Content-Type': 'application/json'}
+                        host:       mongoConfig.host,
+                        port:       mongoConfig.port,
+                        path:       mongoConfig.base_path + userId,
+                        headers:    mongoConfig.headers,
+                        method:     'GET'
                     };
                     var request = http.request(options, function (response) {
                         var data = "";
@@ -79,7 +76,6 @@ passport.use(
             
                     // TODO: use user_data to display sessions and allow the user to
                     // select one or create new.
-                    userData = data;
                     return done(null, profile);
                 }
             }
@@ -99,7 +95,7 @@ app.get('/', function (req, res) {
     res.render('index', { user: req});
 });
 app.get('/app', ensureAuthenticated, function (req, res) {
-    res.render('app', { user: req.user._raw });
+    res.render('app', { user: req.user._raw, sessionId: req.sessionID });
 });
 app.get('/auth/facebook', passport.authenticate('facebook', { scope: 'email' }));
 app.get('/auth/facebook/callback',
@@ -132,18 +128,21 @@ io.on('connection', function (so) {
     var apprentice = new Apprentice();
     var systemStartTime = (new Date()).getTime();
     var timeout;
-    var curUser;
-
+    var userProfile;
+    var sessionID;
+    
     apprentice.setCurrentTime(systemStartTime);
 
     console.log("new client connected");
-    so.emit('newconnection', { hello: 'world' });
     
+    so.emit('newconnection', { hello: "world" });
+
     function onOpen(hello) {
         apprentice.setCanvasSize(hello.width, hello.height);
-        curUser = hello.user;
+        userProfile = hello.user;
+        sessionID = hello.sessionId;
     }
-
+    
     function getData() {
         var userLines;
         var computerLines;
@@ -179,9 +178,11 @@ io.on('connection', function (so) {
         }
     }
 
-    function onSaveDataOnDb(userId, sessionId) {
+    function onSaveDataOnDb() {
+        var userId = userProfile.id;
+        
         console.log(userId);
-        console.log(sessionId);
+        console.log(sessionID);
 
         var userLines;
         var computerLines;
@@ -207,13 +208,11 @@ io.on('connection', function (so) {
 
         function saveData() {
             var options = {
-                host: 'localhost',
-                port: 3005,
-                path: '/user/' + userId + '/session/' + sessionId,
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                }
+                host:       mongoConfig.host,
+                port:       mongoConfig.port,
+                path:       mongoConfig.base_path + userId + '/session/' + sessionID,
+                method:     'POST',
+                headers:    mongoConfig.headers
             };
 
             var req = http.request(options, function(res) {
@@ -230,7 +229,6 @@ io.on('connection', function (so) {
                 age_range: userProfile['age_range'],
                 gender: userProfile['gender'],
                 email: userProfile['email'],
-
                 userLines: userLines,
                 computerLines: computerLines
             });
@@ -350,7 +348,7 @@ io.on('connection', function (so) {
             clearTimeout(timeout);
         }
     });
-    so.on('saveDataOnDb', onSaveDataOnDb);
+    so.on('disconnect', onSaveDataOnDb);
     so.on('touchup', onNewStrokeReceived);
     so.on('setMode', onModeChanged);
     so.on('clear', onClear);

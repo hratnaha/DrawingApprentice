@@ -22,9 +22,9 @@ function initWebSocket() {
     socket.on('newconnection', onOpen);
     socket.on('respondStroke', onNewStroke);
     socket.on('allData', onDataReceived);
+    socket.on('disconnected', saveDataOnDb);
 
 	var logo = document.getElementById("logo");
-
 
     var i = 0;
     var botStroke = "";
@@ -121,7 +121,8 @@ function onOpen(data) {
     var hello = {
         width : container.offsetWidth,
         height: container.offsetHeight,
-        user: userData
+        user: userData,
+        sessionId: sessionId
     };
     socket.emit("onOpen", hello);
 }
@@ -227,13 +228,12 @@ function downloadData() {
     socket.emit('getData');
 }
 
-$.unload(saveDataOnDb);
+//$.unload(saveDataOnDb);
 
 function saveDataOnDb() {
     console.log('userId is... ' + userData.id);
     var userId = userData.id;
-    console.log('saving new session with id... ' + getNumSessions());
-    var sessionId = getNumSessions();
+    console.log('saving new session with id... ' + sessionId);
     console.log('saving data...');
     socket.emit('saveDataOnDb', userId, sessionId);
 }
