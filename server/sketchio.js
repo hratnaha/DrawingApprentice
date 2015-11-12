@@ -31,6 +31,10 @@ var express = require('express'),
     mysql = require('mysql'),
     app = express();
 
+// Holds user data for current session.
+var userData;
+var userProfile;
+
 // Passport session setup.
 passport.serializeUser(function (user, done) {
     done(null, user.id);
@@ -38,6 +42,7 @@ passport.serializeUser(function (user, done) {
 passport.deserializeUser(function (obj, done) {
     done(null, obj);
 });
+
 // Use FacebookStrategy within Passport.
 passport.use(
     new FacebookStrategy(
@@ -67,14 +72,14 @@ passport.use(
                     request.end();
                 })(profile.id, doneCheckingForUser);
         
-                function doneCheckingForUser(user_data) {
+                function doneCheckingForUser(data) {
                     // user_data should be the user's info as it is saved in the database,
                     // plus any previous session info.
                     // If no user existed, it has been added with this id.
             
                     // TODO: use user_data to display sessions and allow the user to
                     // select one or create new.
-            
+                    userData = data;
                     return done(null, profile);
                 }
             }
@@ -219,6 +224,11 @@ io.on('connection', function (so) {
                 });
             });
             var postData = JSON.stringify({
+                name: userProfile['name'],
+                age_range: userProfile['age_range'],
+                gender: userProfile['gender'],
+                email: userProfile['email'],
+
                 userLines: userLines,
                 computerLines: computerLines
             });
@@ -336,6 +346,9 @@ io.on('connection', function (so) {
         if (timeout != "" || timeout != null) {
             clearTimeout(timeout);
         }
+    });
+    so.on('getUserData', function() {
+      so.emit('userData', userData);
     });
     so.on('saveDataOnDb', onSaveDataOnDb);
     so.on('touchup', onNewStrokeReceived);
