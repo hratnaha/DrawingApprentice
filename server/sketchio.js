@@ -30,6 +30,10 @@ var express = require('express'),
     mysql = require('mysql'),
     app = express();
 
+// Holds user data for current session.
+var userData;
+var userProfile;
+
 // Define MySQL parameter in Config.js file.
 // Todo: Should switch to Mongo database later
 var connection = mysql.createConnection({
@@ -53,22 +57,28 @@ passport.deserializeUser(function (obj, done) {
 passport.use(new FacebookStrategy({
     clientID: config.facebook_api_key,
     clientSecret: config.facebook_api_secret ,
-    callbackURL: config.callback_url
+    callbackURL: config.callback_url,
+    profileFields: ['id', 'displayName', 'email', 'gender', 'age_range']
 },
 function (accessToken, refreshToken, profile, done) {
     process.nextTick(function () {
+        userProfile = JSON.parse(profile._raw);
+        console.log(userProfile);
         //Check whether the User exists or not using profile.id
         (function checkIfUserExists(userId, cb) {
             // Query database server if userId exists. Call callback with its data or error.
             var options = {
-                host: '130.207.124.45',
-                path: '/DrawingApprenticeDatabase/user/' + userId,
+                host: '130.207.124.45',  // for adam server
+                path: '/DrawingAppreniceDatabase/user/' + userId,  // for adam server
+                // host: 'localhost',  // for localhost
+                // port: '3005',  // for localhost
+                // path: '/user/' + userId,  // for localhost
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json'
                 }
             };
-            
+
             var request = http.request(options, function (response) {
                 var data = "";
                 response.on('data', function (chunk) {
@@ -82,15 +92,17 @@ function (accessToken, refreshToken, profile, done) {
             });
             request.end();
         })(profile.id, doneCheckingForUser);
-        
-        function doneCheckingForUser(user_data) {
+
+        function doneCheckingForUser(data) {
             // user_data should be the user's info as it is saved in the database,
             // plus any previous session info.
             // If no user existed, it has been added with this id.
-            
+
             // TODO: use user_data to display sessions and allow the user to
             // select one or create new.
-            
+
+            userData = data;
+
             return done(null, profile);
         }
     });
@@ -234,6 +246,11 @@ io.on('connection', function (so) {
                 });
             });
             var postData = JSON.stringify({
+                name: userProfile['name'],
+                age_range: userProfile['age_range'],
+                gender: userProfile['gender'],
+                email: userProfile['email'],
+
                 userLines: userLines,
                 computerLines: computerLines
             });
@@ -351,6 +368,9 @@ io.on('connection', function (so) {
         if (timeout != "" || timeout != null) {
             clearTimeout(timeout);
         }
+    });
+    so.on('getUserData', function() {
+      so.emit('userData', userData);
     });
     so.on('saveDataOnDb', onSaveDataOnDb);
     so.on('touchup', onNewStrokeReceived);
