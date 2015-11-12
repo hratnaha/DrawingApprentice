@@ -16,6 +16,7 @@ put js files before css files
     <script type="text/javascript" src="js/bootstrap-slider.js"></script>
     <script type="text/javascript" src="js/circular-slider.js"></script>
     <script type="text/javascript" src="js/FileSaver.min.js"></script>
+
     <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css" />
 	<link rel="stylesheet" type="text/css" href="css/jquery-ui.css" />
 	<link rel="stylesheet" type="text/css" href="css/jquery-ui-1.10.1.custom.min.css" />
@@ -383,7 +384,8 @@ put js files before css files
     
     <div class="ui-widget-content" id="logo" style="width:9em;height:auto;z-index:9999;top:-1em;left: 90%;">
             <script type="text/javascript">
-        
+        var userData = <%- user %>;
+
         $(function() {
         $( "#logo" ).draggable();
         });

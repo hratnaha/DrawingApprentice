@@ -6,8 +6,6 @@ var isdrawing = false;
 var ison = true;
 var curStroke = [];
 var finishStroke = false;
-var userData;
-
 var lineThickness;
 
 function initWebSocket() {
@@ -24,13 +22,6 @@ function initWebSocket() {
     socket.on('newconnection', onOpen);
     socket.on('respondStroke', onNewStroke);
     socket.on('allData', onDataReceived);
-    socket.on('userData', function(data) {
-      userData = JSON.parse(data);
-      console.log('userId received: ' + userData.id);
-      console.log('userData: ' + JSON.stringify(userData));
-    });
-
-    socket.emit('getUserData');
 
 	var logo = document.getElementById("logo");
 

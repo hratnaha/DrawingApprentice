@@ -37,7 +37,7 @@ var userProfile;
 
 // Passport session setup.
 passport.serializeUser(function (user, done) {
-    done(null, user.id);
+    done(null, user);
 });
 passport.deserializeUser(function (obj, done) {
     done(null, obj);
@@ -73,7 +73,7 @@ passport.use(
                 })(profile.id, doneCheckingForUser);
         
                 function doneCheckingForUser(data) {
-                    // user_data should be the user's info as it is saved in the database,
+                    // data should be the user's info as it is saved in the database,
                     // plus any previous session info.
                     // If no user existed, it has been added with this id.
             
@@ -99,11 +99,11 @@ app.get('/', function (req, res) {
     res.render('index', { user: req});
 });
 app.get('/app', ensureAuthenticated, function (req, res) {
-    res.render('app', { user: req });
+    res.render('app', { user: req.user._raw });
 });
 app.get('/auth/facebook', passport.authenticate('facebook', { scope: 'email' }));
 app.get('/auth/facebook/callback',
-    passport.authenticate('facebook'),//, { successRedirect : '/app.html', failureRedirect: '/login' }),
+    passport.authenticate('facebook'),
     function (req, res) {
         res.redirect('/app');
     }
@@ -127,11 +127,12 @@ var isGrouping = false;
 server.listen(8080);
 //server.listen(81); // for adam server
 
-var timeout;
-
 io.on('connection', function (so) {
+    // set up scope varialbes
     var apprentice = new Apprentice();
     var systemStartTime = (new Date()).getTime();
+    var timeout;
+
     apprentice.setCurrentTime(systemStartTime);
 
     so.on('canvasSize', function setSize(size) {
@@ -346,9 +347,6 @@ io.on('connection', function (so) {
         if (timeout != "" || timeout != null) {
             clearTimeout(timeout);
         }
-    });
-    so.on('getUserData', function() {
-      so.emit('userData', userData);
     });
     so.on('saveDataOnDb', onSaveDataOnDb);
     so.on('touchup', onNewStrokeReceived);
