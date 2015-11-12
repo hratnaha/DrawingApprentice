@@ -118,11 +118,12 @@ function onNewStroke(data) {
 }
 
 function onOpen(data) {
-    var size = {
+    var hello = {
         width : container.offsetWidth,
-        height: container.offsetHeight
+        height: container.offsetHeight,
+        user: userData
     };
-    socket.emit("canvasSize", size);
+    socket.emit("onOpen", hello);
 }
 
 function onDataReceived(allData) {

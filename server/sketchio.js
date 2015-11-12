@@ -132,16 +132,17 @@ io.on('connection', function (so) {
     var apprentice = new Apprentice();
     var systemStartTime = (new Date()).getTime();
     var timeout;
+    var curUser;
 
     apprentice.setCurrentTime(systemStartTime);
 
-    so.on('canvasSize', function setSize(size) {
-        //var d = JSON.parse(size);
-        apprentice.setCanvasSize(size.width, size.height);
-    });
-
     console.log("new client connected");
     so.emit('newconnection', { hello: 'world' });
+    
+    function onOpen(hello) {
+        apprentice.setCanvasSize(hello.width, hello.height);
+        curUser = hello.user;
+    }
 
     function getData() {
         var userLines;
@@ -333,7 +334,8 @@ io.on('connection', function (so) {
         else
             apprentice.setModeSync(m);
     }
-
+    
+    so.on('onOpen', onOpen);
     so.on('SetCreativty', function (level) {
         var d = JSON.parse(level);
         apprentice.setCreativityLevel(d);
