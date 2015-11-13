@@ -5,9 +5,9 @@
 "use strict";
 process.title = 'sketch-server';
 var oneDay = 86400000;
-var ss = require("./Sketch");
 var java = require("java");
 
+// load java modules
 java.classpath.push("commons-lang3-3.1.jar");
 java.classpath.push("commons-io.jar");
 java.classpath.push("commons-math3-3.3.jar");
@@ -16,32 +16,21 @@ java.classpath.push("core.jar");            // processing
 java.classpath.push("flexjson.jar");
 java.classpath.push("ABAGAIL.jar");
 
+// Start the Drawing Apprentice server
 var Apprentice = java.import('jcocosketch.nodebridge.Apprentice');
 
-// set up express
-var express = require('express'),
-    passport = require('passport'),
-    util = require('util'),
-    FacebookStrategy = require('passport-facebook').Strategy,
-    session = require('express-session'),
-    cookieParser = require('cookie-parser'),
-    bodyParser = require('body-parser'),
-    config = require('./configuration/config'),
-    mysql = require('mysql'),
-    app = express();
+// initialize required module
+var express             = require('express'),
+    passport            = require('passport'),
+    util                = require('util'),
+    FacebookStrategy    = require('passport-facebook').Strategy,
+    session             = require('express-session'),
+    cookieParser        = require('cookie-parser'),
+    bodyParser          = require('body-parser'),
+    facebookConfig      = require('./configuration/facebookConfig'),
+    mongoConfig         = require('./configuration/mongoServerConfig'),
+    app                 = express();
 
-// Define MySQL parameter in Config.js file.
-// Todo: Should switch to Mongo database later
-var connection = mysql.createConnection({
-    host     : config.host,
-    user     : config.username,
-    password : config.password,
-    database : config.database
-});
-//Connect to Database only if Config.js parameter is set.
-if (config.use_database === 'true') {
-    connection.connect();
-}
 // Passport session setup.
 passport.serializeUser(function (user, done) {
     done(null, user);
@@ -49,30 +38,49 @@ passport.serializeUser(function (user, done) {
 passport.deserializeUser(function (obj, done) {
     done(null, obj);
 });
-// Use the FacebookStrategy within Passport.
-passport.use(new FacebookStrategy({
-    clientID: config.facebook_api_key,
-    clientSecret: config.facebook_api_secret ,
-    callbackURL: config.callback_url
-},
-  function (accessToken, refreshToken, profile, done) {
-    process.nextTick(function () {
-        //Check whether the User exists or not using profile.id
-        if (config.use_database === 'true') {
-            connection.query("SELECT * from user_info where user_id=" + profile.id, function (err, rows, fields) {
-                if (err) throw err;
-                if (rows.length === 0) {
-                    console.log("There is no such user, adding now");
-                    connection.query("INSERT into user_info(user_id,user_name) VALUES('" + profile.id + "','" + profile.username + "')");
+
+// Use FacebookStrategy within Passport.
+passport.use(
+    new FacebookStrategy(
+        facebookConfig,
+        function (accessToken, refreshToken, profile, done) {
+            process.nextTick(function () {
+                //Check whether the User exists or not using profile.id
+                (function checkIfUserExists(userId, cb) {
+                    // Query database server if userId exists. Call callback with its data or error.
+                    var options = {
+                        host:       mongoConfig.host,
+                        port:       mongoConfig.port,
+                        path:       mongoConfig.base_path + userId,
+                        headers:    mongoConfig.headers,
+                        method:     'GET'
+                    };
+                    var request = http.request(options, function (response) {
+                        var data = "";
+                        response.on('data', function (chunk) {
+                            data += chunk;
+                        });
+                        response.on('end', function () {
+                            // This is the data we received from the database
+                            cb(data);
+                            console.log(data);
+                        });
+                    });
+                    request.end();
+                })(profile.id, doneCheckingForUser);
+        
+                function doneCheckingForUser(data) {
+                    // data should be the user's info as it is saved in the database,
+                    // plus any previous session info.
+                    // If no user existed, it has been added with this id.
+            
+                    // TODO: use user_data to display sessions and allow the user to
+                    // select one or create new.
+                    return done(null, profile);
                 }
-                else {
-                    console.log("User already exists in database");
-                }
-            });
-        }
-        return done(null, profile);
-    });
-}
+            }
+        );
+    }
 ));
 app.set('views', __dirname + '/views');
 app.set('view engine', 'ejs');
@@ -84,24 +92,25 @@ app.use(passport.session());
 app.use(express.static(__dirname + '/public'));
 
 app.get('/', function (req, res) {
-    res.render('index', { user: req.user });
+    res.render('index', { user: req});
 });
-app.get('/account', ensureAuthenticated, function (req, res) {
-    res.render('account', { user: req.user });
+app.get('/app', ensureAuthenticated, function (req, res) {
+    res.render('app', { user: req.user._raw, sessionId: req.sessionID });
 });
 app.get('/auth/facebook', passport.authenticate('facebook', { scope: 'email' }));
 app.get('/auth/facebook/callback',
-  passport.authenticate('facebook', { successRedirect : '/app.html', failureRedirect: '/login' }),
-  function (req, res) {
-    res.redirect('/');
-});
+    passport.authenticate('facebook'),
+    function (req, res) {
+        res.redirect('/app');
+    }
+);
 app.get('/logout', function (req, res) {
     req.logout();
     res.redirect('/');
 });
 function ensureAuthenticated(req, res, next) {
     if (req.isAuthenticated()) { return next(); }
-    res.redirect('/login')
+    res.redirect('/');
 }
 
 app.listen(3000);
@@ -114,21 +123,26 @@ var isGrouping = false;
 server.listen(8080);
 //server.listen(81); // for adam server
 
-var timeout;
-
 io.on('connection', function (so) {
+    // set up scope varialbes
     var apprentice = new Apprentice();
     var systemStartTime = (new Date()).getTime();
+    var timeout;
+    var userProfile;
+    var sessionID;
+    
     apprentice.setCurrentTime(systemStartTime);
 
-    so.on('canvasSize', function setSize(size) {
-        //var d = JSON.parse(size);
-        apprentice.setCanvasSize(size.width, size.height);
-    });
-
     console.log("new client connected");
-    so.emit('newconnection', { hello: 'world' });
+    
+    so.emit('newconnection', { hello: "world" });
 
+    function onOpen(hello) {
+        apprentice.setCanvasSize(hello.width, hello.height);
+        userProfile = hello.user;
+        sessionID = hello.sessionId;
+    }
+    
     function getData() {
         var userLines;
         var computerLines;
@@ -164,9 +178,11 @@ io.on('connection', function (so) {
         }
     }
 
-    function onSaveDataOnDb(userId, sessionId) {
+    function onSaveDataOnDb() {
+        var userId = userProfile.id;
+        
         console.log(userId);
-        console.log(sessionId);
+        console.log(sessionID);
 
         var userLines;
         var computerLines;
@@ -192,13 +208,11 @@ io.on('connection', function (so) {
 
         function saveData() {
             var options = {
-                host: 'localhost',
-                port: 3005,
-                path: '/user/' + userId + '/session/' + sessionId,
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                }
+                host:       mongoConfig.host,
+                port:       mongoConfig.port,
+                path:       mongoConfig.base_path + userId + '/session/' + sessionID,
+                method:     'POST',
+                headers:    mongoConfig.headers
             };
 
             var req = http.request(options, function(res) {
@@ -211,6 +225,10 @@ io.on('connection', function (so) {
                 });
             });
             var postData = JSON.stringify({
+                name: userProfile['name'],
+                age_range: userProfile['age_range'],
+                gender: userProfile['gender'],
+                email: userProfile['email'],
                 userLines: userLines,
                 computerLines: computerLines
             });
@@ -314,7 +332,8 @@ io.on('connection', function (so) {
         else
             apprentice.setModeSync(m);
     }
-
+    
+    so.on('onOpen', onOpen);
     so.on('SetCreativty', function (level) {
         var d = JSON.parse(level);
         apprentice.setCreativityLevel(d);
@@ -329,7 +348,7 @@ io.on('connection', function (so) {
             clearTimeout(timeout);
         }
     });
-    so.on('saveDataOnDb', onSaveDataOnDb);
+    so.on('disconnect', onSaveDataOnDb);
     so.on('touchup', onNewStrokeReceived);
     so.on('setMode', onModeChanged);
     so.on('clear', onClear);

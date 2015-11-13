@@ -6,7 +6,6 @@ var isdrawing = false;
 var ison = true;
 var curStroke = [];
 var finishStroke = false;
-
 var lineThickness;
 
 function initWebSocket() {
@@ -23,9 +22,9 @@ function initWebSocket() {
     socket.on('newconnection', onOpen);
     socket.on('respondStroke', onNewStroke);
     socket.on('allData', onDataReceived);
+    socket.on('disconnected', saveDataOnDb);
 
 	var logo = document.getElementById("logo");
-
 
     var i = 0;
     var botStroke = "";
@@ -117,12 +116,15 @@ function onNewStroke(data) {
 
 	//}
 }
+
 function onOpen(data) {
-    var size = {
+    var hello = {
         width : container.offsetWidth,
-        height: container.offsetHeight
+        height: container.offsetHeight,
+        user: userData,
+        sessionId: sessionId
     };
-    socket.emit("canvasSize", size);
+    socket.emit("onOpen", hello);
 }
 
 function onDataReceived(allData) {
@@ -225,13 +227,25 @@ function downloadData() {
     console.log('getting data...');
     socket.emit('getData');
 }
+
+//$.unload(saveDataOnDb);
+
 function saveDataOnDb() {
-    console.log('prompting user id.');
-    var userId = prompt('Please enter user id:', '1');
-    console.log('prompting session id.');
-    var sessionId = prompt('Please enter session id:', '1');
+    console.log('userId is... ' + userData.id);
+    var userId = userData.id;
+    console.log('saving new session with id... ' + sessionId);
     console.log('saving data...');
     socket.emit('saveDataOnDb', userId, sessionId);
+}
+
+function getNumSessions() {
+  var numSessions = 0;
+  for (var key in userData) {
+    if (key.substring(0, 7) === "session") {
+      numSessions++;
+    }
+  }
+  return numSessions;
 }
 
 function TurnOnOffAgent() {
