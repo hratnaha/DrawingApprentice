@@ -29,6 +29,8 @@ var express             = require('express'),
     bodyParser          = require('body-parser'),
     facebookConfig      = require('./configuration/facebookConfig'),
     mongoConfig         = require('./configuration/mongoServerConfig'),
+    strategies          = require('./strategies'),
+    http                = require('http'),
     app                 = express();
 
 // Passport session setup.
@@ -40,48 +42,7 @@ passport.deserializeUser(function (obj, done) {
 });
 
 // Use FacebookStrategy within Passport.
-passport.use(
-    new FacebookStrategy(
-        facebookConfig,
-        function (accessToken, refreshToken, profile, done) {
-            process.nextTick(function () {
-                //Check whether the User exists or not using profile.id
-                (function checkIfUserExists(userId, cb) {
-                    // Query database server if userId exists. Call callback with its data or error.
-                    var options = {
-                        host:       mongoConfig.host,
-                        port:       mongoConfig.port,
-                        path:       mongoConfig.base_path + userId,
-                        headers:    mongoConfig.headers,
-                        method:     'GET'
-                    };
-                    var request = http.request(options, function (response) {
-                        var data = "";
-                        response.on('data', function (chunk) {
-                            data += chunk;
-                        });
-                        response.on('end', function () {
-                            // This is the data we received from the database
-                            cb(data);
-                            console.log(data);
-                        });
-                    });
-                    request.end();
-                })(profile.id, doneCheckingForUser);
-        
-                function doneCheckingForUser(data) {
-                    // data should be the user's info as it is saved in the database,
-                    // plus any previous session info.
-                    // If no user existed, it has been added with this id.
-            
-                    // TODO: use user_data to display sessions and allow the user to
-                    // select one or create new.
-                    return done(null, profile);
-                }
-            }
-        );
-    }
-));
+passport.use(strategies.Facebook);
 app.set('views', __dirname + '/views');
 app.set('view engine', 'ejs');
 app.use(cookieParser());
@@ -116,7 +77,6 @@ function ensureAuthenticated(req, res, next) {
 app.listen(3000);
 
 // set up socket io server
-var http = require('http');
 var server = http.Server(app);
 var io = require('socket.io')(server);
 var isGrouping = false;
