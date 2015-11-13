@@ -253,8 +253,10 @@ function TurnOnOffAgent() {
     if (ison) {
         console.log('turn agent on');
         socket.emit('setAgentOn', true);
+		console.log(ison);
     } else {
         console.log('turn agent off');
         socket.emit('setAgentOn', false);
+		console.log(ison);
     }
 }
