@@ -41,8 +41,12 @@ passport.deserializeUser(function (obj, done) {
     done(null, obj);
 });
 
-// Use FacebookStrategy within Passport.
+// Use various strategies.
 passport.use(strategies.Facebook);
+passport.use(strategies.Google);
+
+//=====================Set Up Express App=====================\\
+// Set up express app
 app.set('views', __dirname + '/views');
 app.set('view engine', 'ejs');
 app.use(cookieParser());
@@ -52,29 +56,41 @@ app.use(passport.initialize());
 app.use(passport.session());
 app.use(express.static(__dirname + '/public'));
 
+// log-in page for now
 app.get('/', function (req, res) {
     res.render('index', { user: req});
 });
-app.get('/app', ensureAuthenticated, function (req, res) {
-    res.render('app', { user: req.user._raw, sessionId: req.sessionID });
-});
-app.get('/auth/facebook', passport.authenticate('facebook', { scope: 'email' }));
-app.get('/auth/facebook/callback',
-    passport.authenticate('facebook'),
-    function (req, res) {
-        res.redirect('/app');
-    }
-);
-app.get('/logout', function (req, res) {
-    req.logout();
-    res.redirect('/');
-});
+// ensure authentication if the user directly connect to /app page
 function ensureAuthenticated(req, res, next) {
     if (req.isAuthenticated()) { return next(); }
     res.redirect('/');
 }
-
+app.get('/app', ensureAuthenticated, function (req, res) {
+    res.render('app', { user: req.user._raw, sessionId: req.sessionID });
+});
+// facebook authentication
+app.get('/auth/facebook', passport.authenticate('facebook', { scope: 'email' }));
+app.get('/auth/facebook/callback',
+    passport.authenticate('facebook', { failureRedirect: '/' }),
+    function (req, res) {
+        res.redirect('/app');
+    }
+);
+// google authentication
+app.get('/auth/google', passport.authenticate('google', { scope: 'https://www.googleapis.com/auth/plus.login' }));
+app.get('/auth/google/callback', 
+    passport.authenticate('google', { failureRedirect: '/login' }),
+    function (req, res) {
+        res.redirect('/app');
+});
+// when log-out
+app.get('/logout', function (req, res) {
+    req.logout();
+    res.redirect('/');
+});
+// Start to listen the app
 app.listen(3000);
+//=====================Finished Express App Set Up=====================\\
 
 // set up socket io server
 var server = http.Server(app);
