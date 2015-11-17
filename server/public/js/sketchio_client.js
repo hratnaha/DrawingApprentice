@@ -7,8 +7,6 @@ var isdrawing = false;
 var ison = true;
 var curStroke = [];
 var finishStroke = false;
-var userData;
-
 var lineThickness;
 
 function initWebSocket() {
@@ -27,16 +25,9 @@ function initWebSocket() {
     socket.on('newconnection', onOpen);
     socket.on('respondStroke', onNewStroke);
     socket.on('allData', onDataReceived);
-    socket.on('userData', function(data) {
-      userData = JSON.parse(data);
-      console.log('userId received: ' + userData.id);
-      console.log('userData: ' + JSON.stringify(userData));
-    });
-
-    socket.emit('getUserData');
+    socket.on('disconnected', saveDataOnDb);
 
 	var logo = document.getElementById("logo");
-
 
     var i = 0;
     var botStroke = "";
@@ -130,11 +121,13 @@ function onNewStroke(data) {
 }
 
 function onOpen(data) {
-    var size = {
+    var hello = {
         width : container.offsetWidth,
-        height: container.offsetHeight
+        height: container.offsetHeight,
+        user: userData,
+        sessionId: sessionId
     };
-    socket.emit("canvasSize", size);
+    socket.emit("onOpen", hello);
 }
 
 function onDataReceived(allData) {
@@ -238,13 +231,12 @@ function downloadData() {
     socket.emit('getData');
 }
 
-$.unload(saveDataOnDb);
+//$.unload(saveDataOnDb);
 
 function saveDataOnDb() {
     console.log('userId is... ' + userData.id);
     var userId = userData.id;
-    console.log('saving new session with id... ' + getNumSessions());
-    var sessionId = getNumSessions();
+    console.log('saving new session with id... ' + sessionId);
     console.log('saving data...');
     socket.emit('saveDataOnDb', userId, sessionId);
 }
@@ -264,8 +256,10 @@ function TurnOnOffAgent() {
     if (ison) {
         console.log('turn agent on');
         socket.emit('setAgentOn', true);
+		console.log(ison);
     } else {
         console.log('turn agent off');
         socket.emit('setAgentOn', false);
+		console.log(ison);
     }
 }
