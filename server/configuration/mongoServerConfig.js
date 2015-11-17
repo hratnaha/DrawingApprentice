@@ -1,6 +1,8 @@
 ﻿module.exports = {
-	"host" 		            : "130.207.124.45",                   
-    "base_path"	            : "/DrawingApprenticeDatabase/user/",   
+	"host" 		            : "130.207.124.45",
+    "base_path"	            : "/DrawingApprenticeDatabase/user/",
     "headers"               : { 'Content-Type': 'application/json' },
     "port"			        : "80",
+    "user"              : "admin",
+    "pass"              : "anyLongConvolutedPassword"
 }
