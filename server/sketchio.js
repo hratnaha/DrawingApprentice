@@ -78,7 +78,7 @@ app.get('/auth/facebook/callback',
 );
 // google authentication
 app.get('/auth/google', passport.authenticate('google', { scope: 'https://www.googleapis.com/auth/plus.login' }));
-app.get('/auth/google/callback', 
+app.get('/auth/google/callback',
     passport.authenticate('google', { failureRedirect: '/login' }),
     function (req, res) {
         res.redirect('/app');
@@ -106,11 +106,11 @@ io.on('connection', function (so) {
     var timeout;
     var userProfile;
     var sessionID;
-    
+
     apprentice.setCurrentTime(systemStartTime);
 
     console.log("new client connected");
-    
+
     so.emit('newconnection', { hello: "world" });
 
     function onOpen(hello) {
@@ -118,7 +118,7 @@ io.on('connection', function (so) {
         userProfile = hello.user;
         sessionID = hello.sessionId;
     }
-    
+
     function getData() {
         var userLines;
         var computerLines;
@@ -156,7 +156,7 @@ io.on('connection', function (so) {
 
     function onSaveDataOnDb() {
         var userId = userProfile.id;
-        
+
         console.log(userId);
         console.log(sessionID);
 
@@ -187,6 +187,7 @@ io.on('connection', function (so) {
                 host:       mongoConfig.host,
                 port:       mongoConfig.port,
                 path:       mongoConfig.base_path + userId + '/session/' + sessionID,
+                auth:       mongoConfig.user + ":" + mongoConfig.pass,
                 method:     'POST',
                 headers:    mongoConfig.headers
             };
@@ -308,7 +309,7 @@ io.on('connection', function (so) {
         else
             apprentice.setModeSync(m);
     }
-    
+
     so.on('onOpen', onOpen);
     so.on('SetCreativty', function (level) {
         var d = JSON.parse(level);
