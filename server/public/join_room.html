@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>The Drawing Apprentice</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="css/bootstrap.css" rel="stylesheet">
+    <link rel="stylesheet" href="fonts/font-awesome/css/font-awesome.min.css">
+    
+
+    <!-- Montserrat Sans -->
+    <link href='http://fonts.googleapis.com/css?family=Montserrat:400, 700' rel='stylesheet' type='text/css'>        
+    <!-- Lato Font -->
+    <link href='http://fonts.googleapis.com/css?family=Lato:300,700' rel='stylesheet' type='text/css'>
+
+    <!-- Stylesheet -->
+    <link href="css/style.css" rel="stylesheet">
+    <!--[if lt IE 9]>
+      <script src="js/respond.min.js"></script>
+    <![endif]-->
+
+	
+	
+  </head>
+
+  <body class="blue">
+   <div id="fb-root"></div>
+			<script>(function(d, s, id) {
+              var js, fjs = d.getElementsByTagName(s)[0];
+              if (d.getElementById(id)) return;
+              js = d.createElement(s); js.id = id;
+              js.src = "//connect.facebook.net/en_US/sdk.js#xfbml=1&version=v2.5";
+              fjs.parentNode.insertBefore(js, fjs);
+            }(document, 'script', 'facebook-jssdk'));</script>
+    <div id="navbar" class="navbar navbar-inverse">
+      <div class="container">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand scroll" href="dapp_index.html"><i class="fa fa-pencil"></i><span>THE DRAWING APPRENTICE</span></a>
+        </div>
+        <div class="collapse navbar-collapse">
+          <ul class="nav navbar-nav">
+             <li class="dropdown">
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown">SESSIONS<i class="fa fa-caret-down"></i></a>
+              <ul class="dropdown-menu">
+                <li><a href="company-blue.html">START A SESSION</a></li>
+                <li><a href="company-green.html">JOIN A SESSION</a></li>
+                <li><a href="company-green.html">REOPEN A SESSION</a></li>
+              </ul>
+            </li>
+            <li><a class="scroll hidden" href="#home"></a></li>
+            <li><a class="scroll" href="#services">GALLERY</a></li>
+            <li><a class="scroll" href="#clients">MEET THE TEAM</a></li>
+            <li><a class="scroll" href="#portfolio">ABOUT DAPP</a></li>
+            <li><a class="scroll" href="#contact">CONTACT</a></li>
+          </ul>
+        </div><!--/.nav-collapse -->
+      </div>
+    </div>    
+    <!-- All Page Modals -->      
+    <div class="modals">
+      <div class="modal fade" id="contact-form" tabindex="-1" role="dialog">
+        <div class="wrapper">
+
+          <div class="container text-center">
+            <a class="close" data-dismiss="modal" href=""><i class="icon-remove"></i></a>            
+            <h1 class="text-center">Contact Us</h1>
+
+            <form role="form">
+              <div class="form-group">
+                <label for="exampleInputName"><i class="icon-tag"></i></label>
+                <input type="text" class="form-control" id="exampleInputName" placeholder="Full Name" required>
+                <div class="clearfix"></div>
+              </div>
+              <div class="form-group">
+                <label for="exampleInputEmail1"><i class="icon-inbox"></i></label>
+                <input type="email" class="form-control" id="exampleInputEmail1" placeholder="Enter email" required>
+                <div class="clearfix"></div>
+              </div>
+              <div class="form-group textarea">
+                <label for="exampleInputMessage"><i class="icon-pencil"></i></label>
+                <textarea rows="6" class="form-control" id="exampleInputMessage" placeholder="Write Message" required></textarea>
+                <div class="clearfix"></div>
+              </div>
+
+              <button type="submit" class="btn">SEND MESSAGE</button>
+            </form>
+          </div>
+
+        </div><!-- /.content -->      
+      </div><!-- /.modal -->      
+
+    
+    <div id="services" class="section gray">
+      <div class="container">
+
+        <div class="content">
+          <div class="text-center">
+            <h2 class="title">Join an Existing Session</h2>            
+          </div>
+          
+                 <div class="icon-wrapper">
+                  <span class="new-session"><i class="fa fa-gear"></i></span>
+                </div>
+          <div class="row">
+            <div class="col-md-1 col-sm-1 col-xs-12"></div>
+            <div class="col-md-10 col-sm-12 col-xs-12">
+              <p class="description center-block" style="padding:0 auto;">
+              	Select an existing room and start drawing with other players. 
+              </p>
+            </div>
+            <div class="col-md-1 col-sm-1 col-xs-12"></div>
+          </div>
+          <div class="row">
+          	<div class="col-lg-offset-2 col-lg-8">
+          	<input class="form-control" placeholder="Search by User ID"></input>
+            </div>
+          </div>
+          <br>
+           <div class="row">
+          	<div class="col-lg-offset-3 col-lg-2 col-md-offset-3 col-sm-hidden col-xs-hidden" style="height:1.5em;border-bottom:1px solid black;">  </div>
+			<div class="col-lg-2 col-md-6 col-sm-12 col-xs-12">
+            	<h4 style="text-align:center;">OR</h4>
+            </div>
+          	<div class="col-lg-2 col-md-2 col-sm-hidden col-xs-hidden" style="height:1.5em;border-bottom:1px solid black;">  </div>
+          
+          </div>
+          
+          <div class="row dropdown open">
+          	<form class="dropdown-toggle" style="text-align:center;">
+              <select name="existing_rooms">
+                <option value="volvo">View Existing Rooms</option>
+                <option value="saab">Room 1</option>
+                <option value="fiat">Room 2</option>
+                <option value="audi">Room 3</option>
+              </select>
+             
+            </form>
+          </div>
+          
+          <div class="row">
+            <div class="col-md-12 col-sm-12 col-xs-12">
+              <div class="service">
+                   <button class="btn btn-success btn-lg">Join an existing room</button>
+              </div>
+              </div>
+              <div class="col-md-12 col-sm-12 col-xs-12">
+              <div class="service">
+              	   <button class="btn btn-success btn-lg">Didn't see anything interesting? Create a new room!</button>
+              </div>
+           	  </div>
+          </div>
+
+
+        </div><!-- /.content -->
+      </div>
+    </div>
+
+
+
+
+    <div id="footer" class="section">
+      <div class="container">
+        <div class="row">
+          <div class="col-md-6 col-sm-6 col-xs-12">
+            <p>&copy; 2015, Made by <a href="http://webdesigncrowd.com">The Drawing Apprentice</a></p>   
+          </div>
+          <div class="col-md-6 col-sm-6 col-xs-12">
+            <div class="">
+            <p class="social-media">
+              <a href="#" data-toggle="tooltip" title="twitter"><i class="fa fa-twitter"></i></a>
+              <a href="#" data-toggle="tooltip" title="facebook"><i class="fa fa-facebook"></i></a>
+              <a href="#" data-toggle="tooltip" title="linkedin"><i class="fa fa-linkedin"></i></a>
+              <a href="#" data-toggle="tooltip" title="github"><i class="fa fa-github"></i></a>
+            </p>
+         </div>
+        </div>
+      </div>  
+    </div>
+
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="js/jquery-1.9.1.min.js"></script>
+    <script src="js/modernizr.custom.js"></script>
+    <script src="js/masonry.pkgd.min.js"></script>
+    <script src="js/imagesloaded.pkgd.min.js"></script>
+		<script src="js/bootstrap.min.js"></script>
+    <script src="js/classie.js"></script>
+    <script src="js/AnimOnScroll.js"></script>
+    <script type="text/javascript"
+      src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDAe64UN6rxbgDo8hzspyTofIGXBiNcE_U&sensor=false">
+    </script>
+    <script src="js/init.js"></script>
+
+  </body>
+</html>
