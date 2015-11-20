@@ -62,7 +62,9 @@ app.get('/', function (req, res) {
 });
 // ensure authentication if the user directly connect to /app page
 function ensureAuthenticated(req, res, next) {
+    console.log("check if authenticated!!");
     if (req.isAuthenticated()) { return next(); }
+    console.log("authentication failed");
     res.redirect('/');
 }
 app.get('/app', ensureAuthenticated, function (req, res) {
@@ -73,7 +75,8 @@ app.get('/auth/facebook', passport.authenticate('facebook', { scope: 'email' }))
 app.get('/auth/facebook/callback',
     passport.authenticate('facebook', { failureRedirect: '/' }),
     function (req, res) {
-        res.redirect('/app');
+        console.log("facebook authentication succeeded!! proceed to app");
+        res.redirect('/DrawingApprentice/app');
     }
 );
 // google authentication
@@ -81,7 +84,8 @@ app.get('/auth/google', passport.authenticate('google', { scope: 'https://www.go
 app.get('/auth/google/callback',
     passport.authenticate('google', { failureRedirect: '/login' }),
     function (req, res) {
-        res.redirect('/app');
+        console.log("google authentication succeeded!! proceed to app");
+        res.redirect('/DrawingApprentice/app');
 });
 // when log-out
 app.get('/logout', function (req, res) {
