@@ -118,7 +118,8 @@ io.on('connection', function (so) {
     so.emit('newconnection', { hello: "world" });
 
     function onOpen(hello) {
-        apprentice.setCanvasSize(hello.width, hello.height);
+        console.log(hello);
+	apprentice.setCanvasSize(hello.width, hello.height);
         userProfile = hello.user;
         sessionID = hello.sessionId;
     }
