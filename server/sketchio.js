@@ -76,7 +76,7 @@ app.get('/auth/facebook/callback',
     passport.authenticate('facebook', { failureRedirect: '/' }),
     function (req, res) {
         console.log("facebook authentication succeeded!! proceed to app");
-        res.redirect('/DrawingApprentice/app');
+        res.redirect('/DrawingApprentice/app/');
     }
 );
 // google authentication
@@ -85,7 +85,7 @@ app.get('/auth/google/callback',
     passport.authenticate('google', { failureRedirect: '/login' }),
     function (req, res) {
         console.log("google authentication succeeded!! proceed to app");
-        res.redirect('/DrawingApprentice/app');
+        res.redirect('/DrawingApprentice/app/');
 });
 // when log-out
 app.get('/logout', function (req, res) {
