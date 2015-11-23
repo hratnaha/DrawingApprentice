@@ -15,7 +15,7 @@
   "dependencies": {
     "express": "^4.13.3",
 	"express-session": "^1.7",
-    "java": "^0.3.4",
+    "java": "latest",
     "socket.io": "^1.0.6",
     "websocket": "^1.0.8",
 	"passport": "0.2.1",
