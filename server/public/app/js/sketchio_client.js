@@ -7,6 +7,8 @@ var ison = true;
 var curStroke = [];
 var finishStroke = false;
 var lineThickness;
+var totalScore = 0;
+var scoreGiven = 0;
 
 function initWebSocket() {
     botCanvas = document.getElementById('botpad');
@@ -23,6 +25,7 @@ function initWebSocket() {
     socket.on('respondStroke', onNewStroke);
     socket.on('allData', onDataReceived);
     socket.on('disconnected', saveDataOnDb);
+	socket.on('updateScore', onUpdateScore);
 
 	var logo = document.getElementById("logo");
 
@@ -220,7 +223,8 @@ function DownVote() {
 }
 
 function UpVote() {
-    socket.emit('vote', 1);
+    console.log("upvoted"); 
+	socket.emit('vote', 1);
 }
 
 function downloadData() {
@@ -260,3 +264,18 @@ function TurnOnOffAgent() {
 		console.log(ison);
     }
 }
+
+function onUpdateScore(isUp){
+	var score = JSON.parse(isUp);
+	console.log("Inside update score:" + " " + totalScore);
+	if(score=='1'){
+		totalScore += 10;
+		console.log('total score = ' + totalScore); 
+		}
+	else if(score=='0'  && totalScore>10){
+		totalScore -= 10;
+		console.log('total score = ' + totalScore); 
+		}
+	console.log("totalScore is:" + " " + totalScore);
+	//getElementbyID('#score').innerHTML = totalScore;
+	}

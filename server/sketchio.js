@@ -292,8 +292,10 @@ io.on('connection', function (so) {
     }
 
     function vote(isUp) {
-        var vote = isUp ? 1 : 0;
-        apprentice.voteSync(vote);
+		var vote = isUp ? 1 : 0;
+		var resultVote = JSON.stringify(isUp); 
+		io.emit('updateScore', resultVote);
+        apprentice.voteSync(vote); 
     }
 
     function onClear() {
