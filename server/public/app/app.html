@@ -140,6 +140,22 @@ put js files before css files
             <h4 style="margin-left:10em;margin-bottom:-1em;color:black;">Agent Creativity Level</h4>
             
             <input id="ex8" data-slider-id='ex1Slider' type="text" data-slider-min="0" data-slider-max="100" data-slider-step="1" data-slider-value="50" style="z-index:9999;margin-top:-1em;"/>
+            <script>
+            $("#ex8").slider({
+					tooltip: 'always'
+				});
+	
+				// Without JQuery
+				var slider = new Slider("#ex8", {
+					tooltip: 'always'
+				});
+				
+				var slider = new Slider("#ex15", {
+					tooltip: 'always'
+				});
+	
+			
+            </script>
             </div>
             
               
@@ -348,7 +364,18 @@ put js files before css files
                  <div class="row">
                     <button class="btn btn-vote" onClick="UpVote();" id="up"><i class="fa fa-arrow-circle-up fa-5x"></i></button>
                  </div>
-                 <br><br><br>
+                 
+                 <div id="score">
+                 	<p>test</p>
+                 	<style>
+                    	#score{
+							width:6em;
+							height:4em;
+							border:1px solid black;
+							font-size:14px;
+							}
+                    </style>
+                 </div>
                  <div class="row">
                     <button class="btn btn-vote" onClick="DownVote();" id="down"><i class="fa fa-arrow-circle-down fa-5x"></i></button>
                  </div>
@@ -357,27 +384,7 @@ put js files before css files
         
         
             <div class="control-group">
-           <style>
-				
-            </style>
-			<script>
-            	$("#ex8").slider({
-					tooltip: 'always'
-				});
-				
-	
-				
-				// Without JQuery
-				var slider = new Slider("#ex8", {
-					tooltip: 'always'
-				});
-				
-				var slider = new Slider("#ex15", {
-					tooltip: 'always'
-				});
-	
-			
-            </script>
+
         </div>
     
     

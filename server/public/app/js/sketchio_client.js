@@ -271,10 +271,12 @@ function onUpdateScore(isUp){
 	if(score=='1'){
 		totalScore += 10;
 		console.log('total score = ' + totalScore); 
+		document.getElementById("score").innerHTML = "total score = " + totalScore;
 		}
 	else if(score=='0'  && totalScore>10){
 		totalScore -= 10;
 		console.log('total score = ' + totalScore); 
+	    document.getElementById("score").innerHTML = "total score = " + totalScore;
 		}
 	console.log("totalScore is:" + " " + totalScore);
 	//getElementbyID('#score').innerHTML = totalScore;

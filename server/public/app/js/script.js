@@ -278,3 +278,4 @@ $("#grouping").click(function(){
 		groupingMode(true);
 	}
 });
+
