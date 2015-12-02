@@ -20,18 +20,17 @@ java.classpath.push("ABAGAIL.jar");
 var Apprentice = java.import('jcocosketch.nodebridge.Apprentice');
 
 // initialize required module
-var express             = require('express'),
-    passport            = require('passport'),
-    util                = require('util'),
-    FacebookStrategy    = require('passport-facebook').Strategy,
-    session             = require('express-session'),
-    cookieParser        = require('cookie-parser'),
-    bodyParser          = require('body-parser'),
-    facebookConfig      = require('./configuration/facebookConfig'),
-    mongoConfig         = require('./configuration/mongoServerConfig'),
-    strategies          = require('./strategies'),
-    http                = require('http'),
-    app                 = express();
+var express = require('express'),
+    passport = require('passport'),
+    util = require('util'),
+    session = require('express-session'),
+    cookieParser = require('cookie-parser'),
+    bodyParser = require('body-parser'),
+    mongoConfig = require('./configuration/mongoServerConfig'),
+    strategies = require('./strategies'),
+    http = require('http'),
+    app = express();
+    //Canvas              = require('canvas');
 
 // Passport session setup.
 passport.serializeUser(function (user, done) {
@@ -46,7 +45,6 @@ passport.use(strategies.Facebook);
 passport.use(strategies.Google);
 
 //=====================Set Up Express App=====================\\
-// Set up express app
 app.set('views', __dirname + '/views');
 app.set('view engine', 'ejs');
 app.use(cookieParser());
@@ -90,9 +88,9 @@ app.get('/logout', function (req, res) {
 });
 // Start to listen the app
 app.listen(3000);
-//=====================Finished Express App Set Up=====================\\
+//===================== Finished Express App Set Up ===================\\
 
-// set up socket io server
+//===================== Set up socket io server =====================\\
 var server = http.Server(app);
 var io = require('socket.io')(server);
 var isGrouping = false;
@@ -100,12 +98,13 @@ server.listen(8080);
 //server.listen(81); // for adam server
 
 io.on('connection', function (so) {
-    // set up scope varialbes
+    // set up closure varialbes
     var apprentice = new Apprentice();
     var systemStartTime = (new Date()).getTime();
     var timeout;
     var userProfile;
     var sessionID;
+    var canvasSize = {width: 0, height: 0};
 
     apprentice.setCurrentTime(systemStartTime);
 
@@ -114,9 +113,13 @@ io.on('connection', function (so) {
     so.emit('newconnection', { hello: "world" });
 
     function onOpen(hello) {
-        apprentice.setCanvasSize(hello.width, hello.height);
-        userProfile = hello.user;
-        sessionID = hello.sessionId;
+        if (hello) {
+            canvasSize.width = hello.width;
+            canvasSize.height = hello.height;
+            apprentice.setCanvasSize(hello.width, hello.height);
+            userProfile = hello.user;
+            sessionID = hello.sessionId;
+        }
     }
 
     function getData() {
@@ -155,62 +158,64 @@ io.on('connection', function (so) {
     }
 
     function onSaveDataOnDb() {
-        var userId = userProfile.id;
-
-        console.log(userId);
-        console.log(sessionID);
-
-        var userLines;
-        var computerLines;
-        apprentice.getUserLines(function(err, item) {
-            if(err) {
-                console.log(err);
-            } else {
-                userLines = item;
-                afterUserLines();
-            }
-        });
-
-        function afterUserLines() {
-            apprentice.getComputerLines(function(err, item) {
-                if (err) {
+        if(userProfile){
+            var userId = userProfile.id;
+    
+            console.log(userId);
+            console.log(sessionID);
+    
+            var userLines;
+            var computerLines;
+            apprentice.getUserLines(function(err, item) {
+                if(err) {
                     console.log(err);
                 } else {
-                    computerLines = item;
-                    saveData();
+                    userLines = item;
+                    afterUserLines();
                 }
             });
-        }
-
-        function saveData() {
-            var options = {
-                host:       mongoConfig.host,
-                port:       mongoConfig.port,
-                path:       mongoConfig.base_path + userId + '/session/' + sessionID,
-                auth:       mongoConfig.user + ":" + mongoConfig.pass,
-                method:     'POST',
-                headers:    mongoConfig.headers
-            };
-
-            var req = http.request(options, function(res) {
-                var data = "";
-                res.on('data', function(chunk) {
-                    data += chunk;
+    
+            function afterUserLines() {
+                apprentice.getComputerLines(function(err, item) {
+                    if (err) {
+                        console.log(err);
+                    } else {
+                        computerLines = item;
+                        saveData();
+                    }
                 });
-                res.on('end', function() {
-                    console.log(data);
+            }
+    
+            function saveData() {
+                var options = {
+                    host:       mongoConfig.host,
+                    port:       mongoConfig.port,
+                    path:       mongoConfig.base_path + userId + '/session/' + sessionID,
+                    auth:       mongoConfig.user + ":" + mongoConfig.pass,
+                    method:     'POST',
+                    headers:    mongoConfig.headers
+                };
+    
+                var req = http.request(options, function(res) {
+                    var data = "";
+                    res.on('data', function(chunk) {
+                        data += chunk;
+                    });
+                    res.on('end', function() {
+                        console.log(data);
+                    });
                 });
-            });
-            var postData = JSON.stringify({
-                name: userProfile['name'],
-                age_range: userProfile['age_range'],
-                gender: userProfile['gender'],
-                email: userProfile['email'],
-                userLines: userLines,
-                computerLines: computerLines
-            });
-            req.write(postData);
-            req.end();
+                var postData = JSON.stringify({
+                    name: userProfile['name'],
+                    age_range: userProfile['age_range'],
+                    gender: userProfile['gender'],
+                    email: userProfile['email'],
+                    userLines: userLines,
+                    computerLines: computerLines
+                });
+                req.write(postData);
+                req.end();
+            }
         }
     }
 
@@ -332,6 +337,8 @@ io.on('connection', function (so) {
     so.on('submit', submitResult);
     so.on('vote', vote);
 });
+//===================== Finished Socket io server Set Up ====================\\
+
 
 function submitResult(d) {
     submit(d, function (error, result) {
