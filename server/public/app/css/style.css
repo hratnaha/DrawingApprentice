@@ -727,6 +727,7 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#5a5a5a', end
 		margin-left:2em;
 		margin-top:2em;
 }
+
 	
 @media screen (max-width:400px){
 #line-thickness-title{display:none;}
