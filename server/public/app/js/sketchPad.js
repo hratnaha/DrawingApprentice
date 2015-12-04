@@ -35,6 +35,7 @@ function sketchUtil() {
                     b: 0,
                     a: 1
                 },
+                lineWidth : y,
                 packetPoints : []
             }
         };
