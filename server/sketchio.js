@@ -27,10 +27,10 @@ var express = require('express'),
     cookieParser = require('cookie-parser'),
     bodyParser = require('body-parser'),
     mongoConfig = require('./configuration/mongoServerConfig'),
-    strategies = require('./strategies'),
+    strategies = require('./strategies'), 
     http = require('http'),
-    app = express();
-    //Canvas              = require('canvas');
+    app = express(),
+    canvas2D = require('./dappCanvas');
 
 // Passport session setup.
 passport.serializeUser(function (user, done) {
@@ -187,6 +187,8 @@ io.on('connection', function (so) {
             }
     
             function saveData() {
+                canvas2D.SaveStrokesIntoPng(canvasSize, sessionID, userLines, computerLines);
+                
                 var options = {
                     host:       mongoConfig.host,
                     port:       mongoConfig.port,
