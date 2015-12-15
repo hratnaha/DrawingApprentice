@@ -2,7 +2,7 @@
  * @author Chih-Pin Hsiao
  * @email: chipin01@gmail.com
  */
-"use strict";
+//"use strict";
 process.title = 'sketch-server';
 var oneDay = 86400000;
 var java = require("java");
@@ -151,7 +151,7 @@ io.on('connection', function (so) {
             var allLines = {
                 userLines: userLines,
                 computerLines: computerLines
-            }
+            };
 
             so.emit('allData', allLines);
         }

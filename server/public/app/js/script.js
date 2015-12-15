@@ -1,7 +1,6 @@
 
 //CANVAS JAVASCTIPT
 var thickness = 0;
-var x = "#000000";
 var y = 2;
 var opacity = 1;
 var opacity2 = opacity/10;
@@ -25,9 +24,9 @@ $("#color1").click(function AddBorder(){
 			$(this).css({
 				'border':'3px solid #B40431',
 				'border-radius':'100%'});
-			x = "red";
-			console.log(x);
-			ctx.strokeStyle = x;
+			tipColor = "red";
+			console.log(tipColor);
+			ctx.strokeStyle = tipColor;
 
 		
 	});
@@ -38,52 +37,52 @@ $("#color2").click(function AddBorder(){
 		$(this).css({
 				'border':'3px solid #FA8258',
 				'border-radius':'100%'});
-			x = "#ff6666";
-			console.log(x);
-			ctx.strokeStyle = x;
+			tipColor = "#ff6666";
+			console.log(tipColor);
+			ctx.strokeStyle = tipColor;
 	});
 	
 $("#color3").click(function Yellow(){
-		x = "#FFFF33";
-		console.log(x);
-		ctx.strokeStyle = x;
+		tipColor = "#FFFF33";
+		console.log(tipColor);
+		ctx.strokeStyle = tipColor;
 	});
 	
 $("#color4").click(function Green(){
-		x = "#33CC33";
-		console.log(x);
-		ctx.strokeStyle = x;
+		tipColor = "#33CC33";
+		console.log(tipColor);
+		ctx.strokeStyle = tipColor;
 	});
 	
 $("#color5").click(function Purple(){
-		x = "#9933CC";
-		console.log(x);
-		ctx.strokeStyle = x;
+		tipColor = "#9933CC";
+		console.log(tipColor);
+		ctx.strokeStyle = tipColor;
 	});
 	
 	
 $("#color6").click(function Blue(){
-		x = "#3366FF";
-		console.log(x);
-		ctx.strokeStyle = x;
+		tipColor = "#3366FF";
+		console.log(tipColor);
+		ctx.strokeStyle = tipColor;
 	});
 	
 $("#color7").click(function White(){
-		x = "#FFFFFF ";
-		console.log(x);
-		ctx.strokeStyle = x;
+		tipColor = "#FFFFFF ";
+		console.log(tipColor);
+		ctx.strokeStyle = tipColor;
 	});
 	
 $("#color8").click(function Grey(){
-		x = "#A8A8A8";
-		console.log(x);
-		ctx.strokeStyle = x;
+		tipColor = "#A8A8A8";
+		console.log(tipColor);
+		ctx.strokeStyle = tipColor;
 	});
 	
 $("#color9").click(function Black(){
-		x = "#000000";
-		console.log(x);
-		ctx.strokeStyle = x;
+		tipColor = "#000000";
+		console.log(tipColor);
+		ctx.strokeStyle = tipColor;
 	});
 
 console.log("saveForms all loaded");

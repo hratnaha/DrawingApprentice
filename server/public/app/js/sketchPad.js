@@ -35,6 +35,7 @@ function sketchUtil() {
                     b: 0,
                     a: 1
                 },
+                lineWidth : y,
                 packetPoints : []
             }
         };
@@ -67,17 +68,18 @@ function sketchUtil() {
 				
 				//alert("grouping checked");
                 context.setLineDash([5]);
-                context.strokeStyle = x;
-				console.log(x);
+                context.strokeStyle = tipColor;
+				console.log(tipColor);
 				context.globalAlpha = opacity2;
+				
 	
             } else {
                 colorline = document.getElementById('background').value;
-                context.strokeStyle = x;
+                context.strokeStyle = tipColor;
                 //context.setLineDash([0]);
 				context.lineWidth = y;
 				context.globalAlpha = opacity2;
-	
+			
             }
 
             context.beginPath();
@@ -90,7 +92,6 @@ function sketchUtil() {
                 context.stroke();
 				context.lineWidth = y;
 				context.globalAlpha = opacity2;
-	
                 var json_coor = JSON.stringify(coors); //converting to json
                 pushNewPacketPoint(coors);
             }
@@ -100,13 +101,12 @@ function sketchUtil() {
                 this.touchmove(coors);
                 var stringStroke = JSON.stringify(curstroke);
                 onTouchUp(stringStroke);
-                
                 var height = canvas.height;
 
                 this.isDrawing = false;
 				//if (document.getElementById('grouping').clicked == true) {
                 if (!$('#grouping').hasClass("isGrouping"))
-                    bothInputContext.drawImage(canvas, 0, 0);
+                  bothInputContext.drawImage(canvas, 0, 0);
 
                 context.clearRect(0, 0, canvas.width, canvas.height);
             }
@@ -215,3 +215,4 @@ function pressure1() {
     });
 }
 pressure1();
+
