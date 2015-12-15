@@ -170,7 +170,11 @@ io.on('connection', function (so) {
                 if(err) {
                     console.log(err);
                 } else {
-                    userLines = item;
+                    try{
+                        userLines = JSON.parse(item);
+                    }catch(e){
+                        console.log(e);
+                    }
                     afterUserLines();
                 }
             });
@@ -180,7 +184,11 @@ io.on('connection', function (so) {
                     if (err) {
                         console.log(err);
                     } else {
-                        computerLines = item;
+                        try{
+                            computerLines = JSON.parse(item);
+                        }catch(e){
+                            console.log(e)
+                        }
                         saveData();
                     }
                 });
