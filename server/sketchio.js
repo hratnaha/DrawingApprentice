@@ -2,7 +2,7 @@
  * @author Chih-Pin Hsiao
  * @email: chipin01@gmail.com
  */
-"use strict";
+//"use strict";
 process.title = 'sketch-server';
 var oneDay = 86400000;
 var java = require("java");
@@ -27,10 +27,10 @@ var express = require('express'),
     cookieParser = require('cookie-parser'),
     bodyParser = require('body-parser'),
     mongoConfig = require('./configuration/mongoServerConfig'),
-    strategies = require('./strategies'),
+    strategies = require('./strategies'), 
     http = require('http'),
-    app = express();
-    //Canvas              = require('canvas');
+    app = express(),
+    canvas2D = require('./dappCanvas');
 
 // Passport session setup.
 passport.serializeUser(function (user, done) {
@@ -152,7 +152,7 @@ io.on('connection', function (so) {
             var allLines = {
                 userLines: userLines,
                 computerLines: computerLines
-            }
+            };
 
             so.emit('allData', allLines);
         }
@@ -171,7 +171,11 @@ io.on('connection', function (so) {
                 if(err) {
                     console.log(err);
                 } else {
-                    userLines = item;
+                    try{
+                        userLines = JSON.parse(item);
+                    }catch(e){
+                        console.log(e);
+                    }
                     afterUserLines();
                 }
             });
@@ -181,13 +185,19 @@ io.on('connection', function (so) {
                     if (err) {
                         console.log(err);
                     } else {
-                        computerLines = item;
+                        try{
+                            computerLines = JSON.parse(item);
+                        }catch(e){
+                            console.log(e)
+                        }
                         saveData();
                     }
                 });
             }
     
             function saveData() {
+                canvas2D.SaveStrokesIntoPng(canvasSize, sessionID, userLines, computerLines);
+                
                 var options = {
                     host:       mongoConfig.host,
                     port:       mongoConfig.port,

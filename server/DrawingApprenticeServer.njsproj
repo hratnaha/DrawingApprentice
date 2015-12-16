@@ -23,7 +23,6 @@
     <Content Include="package.json" />
     <Content Include="README.md" />
     <Compile Include="configuration\mongoServerConfig.js" />
-    <Compile Include="hello-world-server.js" />
     <Compile Include="login.js" />
     <Compile Include="sketchio.js" />
     <Content Include="apprentice\images\bot.png" />

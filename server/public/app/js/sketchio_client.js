@@ -9,6 +9,7 @@ var finishStroke = false;
 var lineThickness;
 var totalScore = 0;
 var scoreGiven = 0;
+var tipColor = "#000000";
 
 function initWebSocket() {
     botCanvas = document.getElementById('botpad');
@@ -47,10 +48,14 @@ function initWebSocket() {
 			//console.log(botStroke.packetPoints[i].x);
 
             ctx.stroke();
-			ctx.strokeStyle = x;
+			//ctx.strokeStyle = tipColor;
 			ctx.globalAlpha = opacity2;
 			ctx.lineWidth = y;
-
+			$("#tip").css({fill: tipColor});
+			$("#tip-highlight").css({
+				fill: '#F0F0F0',
+				opacity: .5,
+				});
             //console.log(botStroke.packetPoints[i].x);
 			moveLogo.style.left = botStroke.packetPoints[i].x - 70;
 			moveLogo.style.top = botStroke.packetPoints[i].y - 130;
@@ -61,9 +66,14 @@ function initWebSocket() {
             botStroke = curStroke.shift();
             ctx.beginPath();
             ctx.moveTo(botStroke.packetPoints[0].x, botStroke.packetPoints[0].y);
-			ctx.strokeStyle = x;
+			ctx.strokeStyle = tipColor;
 			ctx.globalAlpha = opacity2;
 			ctx.lineWidth = y;
+			$("#tip").css({fill: tipColor});
+			$("#tip-highlight").css({
+				fill: '#F0F0F0',
+				opacity: .5,
+				});
             i = 0;
 			//moveLogo.style.left = botStroke.packetPoints[i].x - 70;
 			//moveLogo.style.top = botStroke.packetPoints[i].y - 130;
@@ -74,6 +84,11 @@ function initWebSocket() {
             bothInputContext.drawImage(botCanvas, 0, 0);
             ctx.clearRect(0, 0, botCanvas.width, botCanvas.height);
             botStroke = "";
+			$("#tip").css({fill: tipColor});
+			$("#tip-highlight").css({
+				fill: '#F0F0F0',
+				opacity: .5,
+				});
             i = 0;
 			//moveLogo.style.backgroundColor = "yellow";
 			MoveLogoBack();
