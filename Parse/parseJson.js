@@ -1,37 +1,59 @@
 var fs = require('fs');
-var obj;
-//1443715920243userLines.json
-fs.readFile('1443715920243userLines.json', 'utf8', function (err, data) {
-    if (err) throw err;
-    var str = JSON.stringify(data);
-    str = str.replace(/\\/g, "");
-    str = str.slice(2, -1);
-    
-    obj = JSON.parse(str);
-    
-    var stream = fs.createWriteStream("1443715920243userLines.csv");
-    stream.once('open', function (fd) {
-        stream.write("strokeID, isCompGenerated, lineID, time, x, y, groupID\n");
-        var i = 0;
-        for (var strokeID in obj) {
-            var stroke = obj[strokeID];
-            var points = stroke["allPoints"];
-            var isComp = stroke["compGenerated"];
-            for (var ptID in points) {
-                var pt = points[ptID];
-                var time = pt["timestamp"];
-                var x = pt["x"];
-                var y = pt["y"];
-                var lineID = pt["lineID"];
-                var groupID = pt["groupID"];
-                stream.write(strokeID + ", " + isComp + ", " + lineID + ", " + time + ", " + x + ", " + y + ", " + groupID + "\n");
-                console.log("line: " + strokeID + ", point" + i);
+var files = ["P5_T2_userLines.txt", "P5_T2_computerLines.txt"];
+var objs = [];
 
-                i = i + 1;
-            }
+//1443715920243userLines.json
+
+function readJsonAndWriteCSV(filename) {
+    fs.readFile(filename, 'utf8', function (err, data) {
+        if (err) throw err;
+        var str = JSON.stringify(data);
+        str = str.replace(/\\/g, "");
+        str = str.slice(2, -1);
+        
+        objs.push(JSON.parse(str));
+
+        if (objs.length === files.length) {
+            var stream = fs.createWriteStream("P5_T2_combined_4.csv");
+            stream.once('open', function (fd) {
+                
+                stream.write("strokeID, isCompGenerated, lineID, time, timeStamp, x, y, groupID\n");
+                var i = 0;
+                
+                for (var objID in objs) {
+                    var obj = objs[objID];
+                    for (var strokeID in obj) {
+                        var stroke = obj[strokeID];
+                        var points = stroke["allPoints"];
+                        var isComp = stroke["compGenerated"];
+                        for (var ptID in points) {
+                            var pt = points[ptID];
+                            var timeStamp = pt["timestamp"];
+                            var time = pt["time"];
+                            if (timeStamp < 1400000000000) {
+                                var tmptime = timeStamp;
+                                timeStamp = time;
+                                time = tmptime;
+                            }
+                            var x = pt["x"];
+                            var y = pt["y"];
+                            var lineID = pt["lineID"];
+                            var groupID = pt["groupID"];
+                            stream.write(strokeID + ", " + isComp + ", " + lineID + ", " + time + ", " + timeStamp + ", " + x + ", " + y + ", " + groupID + "\n");
+                            console.log("line: " + strokeID + ", point" + i);
+                            
+                            i = i + 1;
+                        }
+                    }
+                }
+
+                stream.end();
+            });
         }
-        stream.end();
+        //console.log(obj);
     });
-    
-    //console.log(obj);
-});
+}
+
+for (var fileID in files)
+    readJsonAndWriteCSV(files[fileID]);
+

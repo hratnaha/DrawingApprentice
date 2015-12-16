@@ -104,7 +104,8 @@ io.on('connection', function (so) {
     var timeout;
     var userProfile;
     var sessionID;
-    var canvasSize = {width: 0, height: 0};
+    var canvasSize = { width: 0, height: 0 };
+    var totalScore = 0; 
 
     apprentice.setCurrentTime(systemStartTime);
 
@@ -306,10 +307,14 @@ io.on('connection', function (so) {
         so.broadcast.emit('respondStroke', JSON.stringify(d.data));
     }
 
-    function vote(isUp) {
-		var vote = isUp ? 1 : 0;
-		var resultVote = JSON.stringify(isUp); 
-		io.emit('updateScore', resultVote);
+    function vote(isUp, score) {
+        var vote = isUp ? 1 : 0;
+        if (isUp)
+            totalScore += 10; 
+        else
+            totalScore -= 10; 
+        //totalScore = isUp ? (totalScore + 10) : (totalScore - 10); 
+		io.emit('updateScore', JSON.stringify(totalScore));
         apprentice.voteSync(vote); 
     }
 
