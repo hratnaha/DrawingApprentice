@@ -219,12 +219,12 @@ function groupingMode(chk) {
 }
 
 function DownVote() {
-    socket.emit('vote', 0);
+    socket.emit('vote', 0, totalScore);
 }
 
 function UpVote() {
     console.log("upvoted"); 
-	socket.emit('vote', 1);
+	socket.emit('vote', 1, totalScore);
 }
 
 function downloadData() {
@@ -265,19 +265,23 @@ function TurnOnOffAgent() {
     }
 }
 
-function onUpdateScore(isUp){
-	var score = JSON.parse(isUp);
-	console.log("Inside update score:" + " " + totalScore);
+function onUpdateScore(newScore){
+    var score = JSON.parse(newScore);
+    totalScore = score; 
+    console.log("Inside update score:" + " " + totalScore);
+    /*
 	if(score=='1'){
 		totalScore += 10;
 		console.log('total score = ' + totalScore); 
 		document.getElementById("score").innerHTML = "total score = " + totalScore;
 		}
-	else if(score=='0'  && totalScore>10){
+	else if(score=='0'  /*&& totalScore>10){
 		totalScore -= 10;
 		console.log('total score = ' + totalScore); 
 	    document.getElementById("score").innerHTML = "total score = " + totalScore;
-		}
+    }
+        */
+     document.getElementById("score").innerHTML = "total score = " + totalScore;
 	console.log("totalScore is:" + " " + totalScore);
 	//getElementbyID('#score').innerHTML = totalScore;
 	}
