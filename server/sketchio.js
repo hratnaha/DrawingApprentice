@@ -275,7 +275,7 @@ io.on('connection', function (so) {
                 }
             });
         } else {
-            apprentice.addLine();
+            apprentice.addLine(stroke.color.r, stroke.color.g, stroke.color.b, stroke.color.a, stroke.lineWidth);
 
             if (timeout != "" || timeout != null) {
                 clearTimeout(timeout);

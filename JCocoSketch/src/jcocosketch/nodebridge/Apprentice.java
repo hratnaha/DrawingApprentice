@@ -112,12 +112,21 @@ public class Apprentice {
 		this.allPoints.add(pt);
 	}
 
-	public void addLine(){
+	public void addLine(float r, float g, float b, float a, float thickness){
 		Line curline = createLine();
-		allLines.add(curline);
-		curTurn.addLine(curline);
 
-		this.allPoints = new ArrayList<SketchPoint>();
+		try{
+			curline.setColor(r, g, b, a);
+			System.out.println("set thickness");
+			curline.setThickness(thickness);
+			System.out.println("add all lines");
+			allLines.add(curline);
+			System.out.println("add cur lines");
+			curTurn.addLine(curline);
+			this.allPoints = new ArrayList<SketchPoint>();
+		}catch(Exception e){
+			System.out.println(e.toString());
+		}
 	}
 	
 	public ArrayList<ArrayList<SketchPoint>> getDecision() {
@@ -126,7 +135,10 @@ public class Apprentice {
 				curTurn.endTurn();
 				ArrayList<Line> turnLines = curTurn.getLines();
 				ArrayList<Line> comLines = new ArrayList<Line>();
+				
+				System.out.println("turnlines: " + turnLines.size());
 				if(!AgentOff){
+					System.out.println("agents is on!!");
 					
 					if(turnLines.size() > 0){
 						for(int i = 0; i < turnLines.size(); i++){

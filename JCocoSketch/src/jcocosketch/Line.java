@@ -3,6 +3,7 @@ package jcocosketch;
 import processing.core.*;
 
 import java.util.*;
+import java.awt.Color;
 
 import utilities.PVecUtilities;
 
@@ -18,10 +19,11 @@ public class Line {
 	public float ymin = -1;
 	public float xmax = -1;
 	public float ymax = -1;
-	public int color = 0;
+	private Color color;
 	public boolean compGenerated = false; 
 	boolean isSelected = false;
 	Random rand = new Random();
+	private float thickness;
 
 
 	// convert all reference of ponts to pvec
@@ -394,12 +396,22 @@ public class Line {
 		System.out.println(lineID);
 	}
 	
-	public void setColor(int color) {
-		this.color = color;
+	public void setColor(float r, float g, float b, float a) {		
+		this.color = new Color(r, g, b, a);
+		System.out.println("r: " + r + "; g: " + g + "b: " + b + "a: " + a);
 	}
 	
-	public int getColor() {
+	
+	public Color getColor() {
 		return this.color;
+	}
+	
+	public void setThickness(float thickness){
+		this.thickness = thickness;
+	}
+
+	public float getThickness(){
+		return this.thickness;
 	}
 	
 	public int segmentsTotal() {

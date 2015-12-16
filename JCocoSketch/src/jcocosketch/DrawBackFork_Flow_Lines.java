@@ -158,7 +158,7 @@ public class DrawBackFork_Flow_Lines extends PApplet {
 			if(mouseButton == LEFT){
 				curLine = new Line();
 				//curLine.setStart(new PVector(mouseX, mouseY));
-				curLine.setColor(humanColor);
+				//curLine.setColor(humanColor);
 				allLines.add(curLine);
 			}
 			if(mouseButton == RIGHT){
