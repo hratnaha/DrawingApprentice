@@ -196,7 +196,7 @@ io.on('connection', function (so) {
             }
     
             function saveData() {
-                canvas2D.SaveStrokesIntoPng(canvasSize, sessionID, userLines, computerLines);
+                canvas2D.SaveStrokesIntoPngGM(canvasSize, sessionID, userLines, computerLines);
                 
                 var options = {
                     host:       mongoConfig.host,
@@ -276,7 +276,13 @@ io.on('connection', function (so) {
                 }
             });
         } else {
-            apprentice.addLine(stroke.color.r, stroke.color.g, stroke.color.b, stroke.color.a, stroke.lineWidth);
+            var r = java.newFloat(parseFloat(stroke.color.r));
+            var g = java.newFloat(parseFloat(stroke.color.g));
+            var b = java.newFloat(parseFloat(stroke.color.b));
+            var a = java.newFloat(parseFloat(stroke.color.a));
+            var thickness = java.newFloat(parseFloat(stroke.lineWidth));
+            
+            apprentice.addLine(r, g, b, a, thickness);
 
             if (timeout != "" || timeout != null) {
                 clearTimeout(timeout);

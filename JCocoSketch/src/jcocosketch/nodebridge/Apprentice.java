@@ -113,9 +113,11 @@ public class Apprentice {
 	}
 
 	public void addLine(float r, float g, float b, float a, float thickness){
-		Line curline = createLine();
-
+		System.out.println("add new line");
+		
 		try{
+			Line curline = createLine();
+			System.out.println("set colors");
 			curline.setColor(r, g, b, a);
 			System.out.println("set thickness");
 			curline.setThickness(thickness);
@@ -193,7 +195,7 @@ public class Apprentice {
 
 	private Line createLine() {
 		Line curline = new Line();
-
+		
 		for (SketchPoint pt : this.allPoints) {
 			Point newpt = new Point(pt.x, pt.y, curline.getLineID());
 			newpt.setTime(pt.timestamp);

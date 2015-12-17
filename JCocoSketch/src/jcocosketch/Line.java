@@ -3,7 +3,6 @@ package jcocosketch;
 import processing.core.*;
 
 import java.util.*;
-import java.awt.Color;
 
 import utilities.PVecUtilities;
 
@@ -19,7 +18,10 @@ public class Line {
 	public float ymin = -1;
 	public float xmax = -1;
 	public float ymax = -1;
-	private Color color;
+	public float colorR;
+	public float colorG;
+	public float colorB;
+	public float colorA;
 	public boolean compGenerated = false; 
 	boolean isSelected = false;
 	Random rand = new Random();
@@ -397,13 +399,14 @@ public class Line {
 	}
 	
 	public void setColor(float r, float g, float b, float a) {		
-		this.color = new Color(r, g, b, a);
-		System.out.println("r: " + r + "; g: " + g + "b: " + b + "a: " + a);
-	}
-	
-	
-	public Color getColor() {
-		return this.color;
+		try{
+			this.colorA = a;
+			this.colorG = g;
+			this.colorB = b;
+			this.colorR = r;
+		}catch(Exception e){
+			System.out.println(e.toString());
+		}
 	}
 	
 	public void setThickness(float thickness){

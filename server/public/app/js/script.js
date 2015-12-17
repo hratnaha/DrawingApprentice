@@ -26,9 +26,7 @@ $("#color1").click(function AddBorder(){
 				'border-radius':'100%'});
 			tipColor = "red";
 			console.log(tipColor);
-			ctx.strokeStyle = tipColor;
-
-		
+			//ctx.strokeStyle = tipColor;
 	});
 	
 	
@@ -39,50 +37,50 @@ $("#color2").click(function AddBorder(){
 				'border-radius':'100%'});
 			tipColor = "#ff6666";
 			console.log(tipColor);
-			ctx.strokeStyle = tipColor;
+			//ctx.strokeStyle = tipColor;
 	});
 	
 $("#color3").click(function Yellow(){
 		tipColor = "#FFFF33";
 		console.log(tipColor);
-		ctx.strokeStyle = tipColor;
+		//ctx.strokeStyle = tipColor;
 	});
 	
 $("#color4").click(function Green(){
 		tipColor = "#33CC33";
 		console.log(tipColor);
-		ctx.strokeStyle = tipColor;
+		//ctx.strokeStyle = tipColor;
 	});
 	
 $("#color5").click(function Purple(){
 		tipColor = "#9933CC";
 		console.log(tipColor);
-		ctx.strokeStyle = tipColor;
+		//ctx.strokeStyle = tipColor;
 	});
 	
 	
 $("#color6").click(function Blue(){
 		tipColor = "#3366FF";
 		console.log(tipColor);
-		ctx.strokeStyle = tipColor;
+		//ctx.strokeStyle = tipColor;
 	});
 	
 $("#color7").click(function White(){
 		tipColor = "#FFFFFF ";
 		console.log(tipColor);
-		ctx.strokeStyle = tipColor;
+		//ctx.strokeStyle = tipColor;
 	});
 	
 $("#color8").click(function Grey(){
 		tipColor = "#A8A8A8";
 		console.log(tipColor);
-		ctx.strokeStyle = tipColor;
+		//ctx.strokeStyle = tipColor;
 	});
 	
 $("#color9").click(function Black(){
 		tipColor = "#000000";
 		console.log(tipColor);
-		ctx.strokeStyle = tipColor;
+		//ctx.strokeStyle = tipColor;
 	});
 
 console.log("saveForms all loaded");
@@ -252,13 +250,24 @@ function FullScreenCanvas() {
 
 
 }); //document ready
-
-
-
 	 
+function componentToHex(c) {
+    var hex = c.toString(16);
+    return hex.length == 1 ? "0" + hex : hex;
+}
 
+function rgbToHex(r, g, b) {
+    return "#" + componentToHex(r) + componentToHex(g) + componentToHex(b);
+}
 
-
+function hexToRgb(hex) {
+    var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+    return result ? {
+        r: parseInt(result[1], 16),
+        g: parseInt(result[2], 16),
+        b: parseInt(result[3], 16)
+    } : null;
+}
 
 function clearcanvas() {
 		alert("clear canvas!!!");

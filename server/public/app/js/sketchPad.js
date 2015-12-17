@@ -21,6 +21,10 @@ function sketchUtil() {
     function createNewStroke() {
         strCounter++;
         pkptCounter = 0;
+        var color =  hexToRgb(context.strokeStyle);
+        var colorR = color.r / 255;
+        var colorG = color.g / 255;
+        var colorB = color.b / 255;
         
         var now = (new Date()).getTime();
         var newstroke = {
@@ -30,10 +34,10 @@ function sketchUtil() {
                 timestamp : now,
                 id : "stroke_" + strCounter,
                 color : {
-                    r: 1,
-                    g: 0,
-                    b: 0,
-                    a: 1
+                    r: colorR,
+                    g: colorG,
+                    b: colorB,
+                    a: opacity2
                 },
                 lineWidth : y,
                 packetPoints : []
@@ -51,7 +55,7 @@ function sketchUtil() {
             y : coors.y,
             timestamp : now,
             pressure : pressurevalue,
-            color: colorline          //passing color in hex form
+            color: tipColor          //passing color in hex form
         };
         
         curstroke.data.packetPoints.push(pkpt);
@@ -62,14 +66,14 @@ function sketchUtil() {
     var drawer = {
         isDrawing: false,
         touchstart: function (coors) {
+            colorline = document.getElementById('background').value;
             curstroke = createNewStroke();
 			if ($('#grouping').hasClass("isGrouping")){
             //if ($("#cboxGrouping").attr('checked') == "checked") {
-				
 				//alert("grouping checked");
                 context.setLineDash([5]);
                 context.strokeStyle = tipColor;
-				console.log(tipColor);
+				//console.log(tipColor);
 				context.globalAlpha = opacity2;
 				
 	
@@ -81,7 +85,7 @@ function sketchUtil() {
 				context.globalAlpha = opacity2;
 			
             }
-
+            curstroke = createNewStroke();
             context.beginPath();
             context.moveTo(coors.x, coors.y);
             this.isDrawing = true;
