@@ -8,13 +8,13 @@ var oneDay = 86400000;
 var java = require("java");
 
 // load java modules
-java.classpath.push("commons-lang3-3.1.jar");
-java.classpath.push("commons-io.jar");
-java.classpath.push("commons-math3-3.3.jar");
-java.classpath.push("apprentice.jar");      // apprentice library
-java.classpath.push("core.jar");            // processing
-java.classpath.push("flexjson.jar");
-java.classpath.push("ABAGAIL.jar");
+java.classpath.push("./jars/commons-lang3-3.1.jar");
+java.classpath.push("./jars/commons-io.jar");
+java.classpath.push("./jars/commons-math3-3.3.jar");
+java.classpath.push("./jars/apprentice.jar");      // apprentice library
+java.classpath.push("./jars/core.jar");            // processing
+java.classpath.push("./jars/flexjson.jar");
+java.classpath.push("./jars/ABAGAIL.jar");
 
 // Start the Drawing Apprentice server
 var Apprentice = java.import('jcocosketch.nodebridge.Apprentice');
@@ -196,7 +196,7 @@ io.on('connection', function (so) {
             }
     
             function saveData() {
-                canvas2D.SaveStrokesIntoPngGM(canvasSize, sessionID, userLines, computerLines);
+                canvas2D.ConvertDrawingToPng(canvasSize, sessionID, userLines, computerLines);
                 
                 var options = {
                     host:       mongoConfig.host,
@@ -240,7 +240,7 @@ io.on('connection', function (so) {
         if (isGrouping)
             apprentice.startGroupingSync(stroketime);
         else
-            apprentice.addNewStrokeSync(stroketime);
+            apprentice.createStrokeSync(stroketime);
 
         var pts = stroke.packetPoints;
         var returnSt = [];
@@ -282,7 +282,7 @@ io.on('connection', function (so) {
             var a = java.newFloat(parseFloat(stroke.color.a));
             var thickness = java.newFloat(parseFloat(stroke.lineWidth));
             
-            apprentice.addLine(r, g, b, a, thickness);
+            apprentice.endStroke(r, g, b, a, thickness);
 
             if (timeout != "" || timeout != null) {
                 clearTimeout(timeout);

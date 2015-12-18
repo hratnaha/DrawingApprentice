@@ -75,7 +75,7 @@ module.exports = {
             });
         }
     },
-    SaveStrokesIntoPngGM: function(canvasSize, sessionID, userLines, computerLines){
+    ConvertDrawingToPng: function(canvasSize, sessionID, userLines, computerLines){
         var ctx = gm(canvasSize.width, canvasSize.height, "#ffffff")
             .fill("transparent");
             
@@ -93,11 +93,18 @@ module.exports = {
                 ctx.drawPolyline(pts);
             }
         }
+        var alllines = [];
+        alllines = alllines.concat(userLines);
+        alllines = alllines.concat(computerLines);
         
-        for(var lineID in userLines)
-            drawLine(userLines[lineID]);
-        for(var lineID in computerLines)
-            drawLine(computerLines[lineID]);
+        alllines.sort(function(a, b){
+           if(a.startTime > b.startTime) return 1;
+           if(a.startTime < b.startTime) return -1;
+           return 0;
+        });
+        
+        for(var lineID in alllines)
+            drawLine(alllines[lineID]);
                 
         ctx.write(__dirname + '/session_pic/' + sessionID + '.png', function (err) {
             console.log(err);
