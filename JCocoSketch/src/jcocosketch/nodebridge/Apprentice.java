@@ -30,10 +30,16 @@ public class Apprentice {
 	int width = 2100, height = 1080;
 
 	public Apprentice() {
-		DQNJS.isinit = false;
-		DQNJS.setCreativity(0.5f);
 		mainTree = new QuadTree(0, 0, width, height);
 		initializeNewTurn();
+		try {
+			DQNJS.isinit = false;
+			DQNJS.init();
+			DQNJS.setCreativity(0.5f);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 	public void setCurrentTime(double now) {
@@ -129,7 +135,7 @@ public class Apprentice {
 			curTurn.addLine(curline);
 			this.allPoints = new ArrayList<SketchPoint>();
 		} catch (Exception e) {
-			System.out.println(e.toString());
+			e.printStackTrace();
 		}
 	}
 

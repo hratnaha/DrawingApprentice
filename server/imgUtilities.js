@@ -5,7 +5,13 @@
 "use strict";
 
 var fs = require('fs'),
-    gm = require('gm');
+    gm;
+    
+try{
+    gm = require('gm').subClass({imageMagick: true});; 
+}catch(err){
+    console.log(err);
+}
 
 function componentToHex(c) {
     var hex = c.toString(16);
@@ -30,43 +36,51 @@ function hexToRgb(hex) {
 
 module.exports = {
     ConvertDrawingToPng: function(canvasSize, sessionID, userLines, computerLines){
-        var ctx = gm(canvasSize.width, canvasSize.height, "#ffffff")
-            .fill("transparent");
-            
-        function drawLine(line){
-            if(line.allPoints && line.allPoints.length > 0){
-                var hexColor = rgbToHex(line.colorR, line.colorG, line.colorB);
-                console.log(hexColor);
-                ctx.stroke(hexColor, line.thickness);
-                var pts = [];
-                for(var ptID in line.allPoints){
-                    var pt = line.allPoints[ptID];
-                    pts.push(pt.x, pt.y); 
-                }
-                //console.log(pts);
-                ctx.drawPolyline(pts);
-            }
-        }
-        var alllines = [];
-        alllines = alllines.concat(userLines);
-        alllines = alllines.concat(computerLines);
-        
-        alllines.sort(function(a, b){
-           if(a.startTime > b.startTime) return 1;
-           if(a.startTime < b.startTime) return -1;
-           return 0;
-        });
-        
-        for(var lineID in alllines)
-            drawLine(alllines[lineID]);
+        if(gm){
+            var ctx = gm(canvasSize.width, canvasSize.height, "#ffffff")
+                .fill("transparent");
                 
-        ctx.write(__dirname + '/session_pic/' + sessionID + '.png', function (err) {
-            console.log(err);
-        });
-        
-        ctx.resize(80, 120);
-        ctx.write(__dirname + '/session_pic/' + sessionID + '_thumb.png', function (err) {
-            console.log(err);
-        });
+            function drawLine(line){
+                if(line.allPoints && line.allPoints.length > 0){
+                    var hexColor = rgbToHex(line.colorR, line.colorG, line.colorB);
+                    console.log(hexColor);
+                    ctx.stroke(hexColor, line.thickness);
+                    var pts = [];
+                    for(var ptID in line.allPoints){
+                        var pt = line.allPoints[ptID];
+                        pts.push(pt.x, pt.y); 
+                    }
+                    console.log("num of points: " + pts.length);
+                    //if(pts.length < 500)
+                        ctx.drawPolyline(pts);
+                }
+            }
+            var alllines = [];
+            alllines = alllines.concat(userLines);
+            alllines = alllines.concat(computerLines);
+            
+            alllines.sort(function(a, b){
+                if(a.startTime > b.startTime) return 1;
+                if(a.startTime < b.startTime) return -1;
+                return 0;
+            });
+            
+            for(var lineID in alllines)
+                drawLine(alllines[lineID]);
+            
+            console.log("prepare to save the original image!!");
+            ctx.write(__dirname + '/session_pic/' + sessionID + '.png', function (err) {
+                //console.log(computerLines);
+                if(err)
+                    console.log(err);
+            });
+            
+            console.log("prepare to save the thumbnail image!!");
+            ctx.resize(80, 120);
+            ctx.write(__dirname + '/session_pic/' + sessionID + '_thumb.png', function (err) {
+                if(err)
+                    console.log(err);
+            });
+        }
     }
 }
