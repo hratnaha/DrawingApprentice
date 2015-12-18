@@ -30,7 +30,7 @@ var express = require('express'),
     strategies = require('./strategies'), 
     http = require('http'),
     app = express(),
-    canvas2D = require('./dappCanvas');
+    canvas2D = require('./imgUtilities');
 
 // Passport session setup.
 passport.serializeUser(function (user, done) {
