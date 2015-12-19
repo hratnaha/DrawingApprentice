@@ -55,6 +55,7 @@ public class Apprentice {
 	public void setCanvasSize(int width, int height) {
 		this.width = width;
 		this.height = height;
+		mainTree = new QuadTree(0, 0, width, height);
 	}
 
 	public void setCreativityLevel(int level) {
@@ -113,9 +114,9 @@ public class Apprentice {
 
 	public void addPoint(int x, int y, double timestamp, String id) {
 		// long timestampLong = Long.parseLong(timestamp);
-		System.out.println(timestamp);
 		SketchPoint pt = new SketchPoint(x, y,
 				(long) (timestamp - systemStartTime), id);
+		//System.out.println("(" + pt.x + ", " + pt.y + ")");
 		this.allPoints.add(pt);
 	}
 
@@ -213,15 +214,18 @@ public class Apprentice {
 
 	private Line createLine() {
 		Line curline = new Line();
-
-		for (SketchPoint pt : this.allPoints) {
-			Point newpt = new Point(pt.x, pt.y, curline.getLineID());
-			newpt.setTime(pt.timestamp);
-			curline.addPoint(newpt);
-			if (curline.getGroupID() != 1) {
-				newpt.setGroupID(curline.getGroupID());
+		try{
+			for (SketchPoint pt : this.allPoints) {
+				Point newpt = new Point(pt.x, pt.y, curline.getLineID());
+				newpt.setTime(pt.timestamp);
+				curline.addPoint(newpt);
+				if (curline.getGroupID() != 1) {
+					newpt.setGroupID(curline.getGroupID());
+				}
+				mainTree.set(pt.x, pt.y, newpt);
 			}
-			mainTree.set(pt.x, pt.y, newpt);
+		}catch(Exception e){
+			System.out.println(e.getStackTrace());
 		}
 		return curline;
 	}

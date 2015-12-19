@@ -8,7 +8,7 @@ var fs = require('fs'),
     gm;
     
 try{
-    gm = require('gm').subClass({imageMagick: true});; 
+    gm = require('gm').subClass({imageMagick: true}); 
 }catch(err){
     console.log(err);
 }
