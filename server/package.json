@@ -25,7 +25,8 @@
     "passport-google-oauth": "latest",
     "socket.io": "^1.0.6",
     "websocket": "^1.0.8",
-    "canvas": "^1.3.4"
+    "canvas": "^1.3.4",
+    "gm": "~1.21.1"
   },
   "author": "Chih-Pin Hsiao",
   "license": "BSD",

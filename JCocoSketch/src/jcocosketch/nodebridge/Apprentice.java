@@ -161,7 +161,7 @@ public class Apprentice {
 							else
 								line2 = curLine; // /can add other shapes to
 													// mutate with
-
+							System.out.println("used line length: " + line2.getAllPoints().size());
 							Decision_Engine engine = new Decision_Engine(
 									curLine, line2, (float) Math.sqrt(Math.pow(
 											500, 2) + Math.pow(400, 2)));
@@ -208,6 +208,7 @@ public class Apprentice {
 			System.out.println(getStackTrace(e));
 		}
 		System.out.println("return nothing");
+		initializeNewTurn();
 		this.allPoints = new ArrayList<SketchPoint>();
 		return null;
 	}
