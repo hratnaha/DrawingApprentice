@@ -108,8 +108,8 @@ put js files before css files
             </button>
         </li>
         <li>
-            <button class="btn btn-default btn-lg" style="float:left;margin-left:1em;">
-           Setting
+            <button class="btn btn-default btn-lg" onClick ="testFunction()"style="float:left;margin-left:1em;">
+           Settings
             </button>
         </li>
          <li>
@@ -121,6 +121,13 @@ put js files before css files
             <label><input type="checkbox" id="Checkbox" onClick="TurnOnOffAgent();" value="" style="margin:1em 1em;"></label>
        
     </div><!-- /#nav_toggle_content -->
+
+      <script>
+          function testFunction(){
+          document.getElementById('label').value = "Tested"; 
+          }
+          </script>
+
   <div class="navbar-inner row">
          	<div class="col-lg-6">
             	  <div class="row">
@@ -133,11 +140,17 @@ put js files before css files
              
            
            </div><!--slide_row_1-->
+
+      
+      
+
+
+
            <div class="col-lg-6">      
                        		 <!--========S L I D E R : http://seiyria.com/bootstrap-slider/==========-->
             
             <div class="row">
-                <h4 style="margin-left:10em;margin-bottom:-1em;color:black;">Agent Creativity Level</h4>
+                <h4 style="margin-left:10em;margin-top:0;margin-bottom:-1em;color:black;">Agent Creativity Level</h4>
             </div>
             <div class="row">
                 <input id="ex8" data-slider-id='ex1Slider' type="text" data-slider-min="0" data-slider-max="100" data-slider-step="1" data-slider-value="50" style="z-index:9999;margin-top:-1em;"/>
@@ -159,6 +172,21 @@ put js files before css files
 			
             </script>
             </div>
+
+      <div class="col-lg-6">
+          <div class="row">
+              <h4 style="margin-left:2em;margin-top:0;margin-bottom:-1em;color:black;">You Are Drawing:</h4>
+          </div>
+          <input class="row" id="label" type="text" value="Object Type">
+              <style>
+                  #label{
+                  width:6em;
+                  height:2em;
+                  font-size:14px;
+                  }
+              </style>
+          </input>
+      </div>
             
               
             </div><!--slider_row_2-->
@@ -368,7 +396,7 @@ put js files before css files
                  </div>
                  
                  <div id="score">
-                 	<p>test</p>
+                 	<p>testing</p>
                  	<style>
                     	#score{
 							width:6em;

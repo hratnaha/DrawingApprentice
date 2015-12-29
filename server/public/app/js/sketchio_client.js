@@ -26,7 +26,8 @@ function initWebSocket() {
     socket.on('respondStroke', onNewStroke);
     socket.on('allData', onDataReceived);
     socket.on('disconnected', saveDataOnDb);
-	socket.on('updateScore', onUpdateScore);
+    socket.on('updateScore', onUpdateScore);
+    socket.on('classifyObject', onClassifyObject)
 
 	var logo = document.getElementById("logo");
 
@@ -299,4 +300,10 @@ function onUpdateScore(newScore){
      document.getElementById("score").innerHTML = "total score = " + totalScore;
 	console.log("totalScore is:" + " " + totalScore);
 	//getElementbyID('#score').innerHTML = totalScore;
-	}
+}
+
+function onClassifyObject(label){
+    var newLabel = JSON.parse(label)
+    document.getElementById('label').value = newLabel;
+}
+

@@ -337,6 +337,11 @@ io.on('connection', function (so) {
         else
             apprentice.setModeSync(m);
     }
+    
+    function classifyObject(objectLabel){
+        var label = JSON.stringify(objectLabel)
+        io.emit('classifyObject', label)
+    }
 
     so.on('onOpen', onOpen);
     so.on('SetCreativty', function (level) {
