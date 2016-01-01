@@ -27,12 +27,14 @@ var express = require('express'),
     cookieParser = require('cookie-parser'),
     bodyParser = require('body-parser'),
     mongoConfig = require('./configuration/mongoServerConfig'),
-    strategies = require('./strategies'), 
+    strategies = require('./strategies'),
     http = require('http'),
     app = express(),
     canvas2D = require('./imgUtilities'),
     uuid = require('node-uuid'),
-    onlineRooms = [];
+    curRooms = {},
+    roomsInfo = [],
+    onlineUsers = {};
 
 // Passport session setup.
 passport.serializeUser(function (user, done) {
@@ -60,26 +62,58 @@ app.use('/session_pic', express.static(__dirname + '/session_pic'));
 
 // log-in page for now
 app.get('/', function (req, res) {
-    res.render('index', { user: req});
+    res.render('index', { user: req });
 });
 
-app.get('/api/rooms', function(req, res){ res.json(onlineRooms);});
+app.get('/room/create', function (req, res) {
+    res.json(roomsInfo);
+});
 
-app.post('/api/rooms', function(req, res){
+app.post('/room/create', function (req, res) {
     var roomInfo = req.body;
-    var newRoom = {};
-    newRoom.name = roomInfo.name;
-    newRoom.id = uuid.v4();
-    newRoom.host = "chipin01"; // hard-coded for now;
-    newRoom.pic = '';
-    canvas2D.CreateBlankThumb(newRoom.id);
-    newRoom.thumb = '/session_pic/'+newRoom.id+'_thumb.png';
-    res.json(newRoom);
+    var newRoomInfo = {};
+    newRoomInfo.name = roomInfo.name;
+    newRoomInfo.fullpic = '';
+    newRoomInfo.id = uuid.v4();
+    newRoomInfo.host = "chipin01"; // hard-coded for now;
+    newRoomInfo.players = [];
+    canvas2D.CreateBlankThumb(newRoomInfo.id);
+    newRoomInfo.thumb = '/session_pic/' + newRoomInfo.id + '_thumb.png';
+    res.json(newRoomInfo);
+    roomsInfo.push(newRoomInfo);
     
     var apprentice = new Apprentice();
-    newRoom.apprentice = apprentice;
+    apprentice.setCurrentTime((new Date()).getTime());
     
-    onlineRooms.push(newRoom);
+    var newRoom = {};
+    newRoom.broadcast = function(evtname,msg){
+        for(var i=0;i<this.so.length;i++){
+            var tarso = this.so[i];
+            tarso.emit(evtname, msg);
+        }
+    };
+    newRoom.players = [];
+    newRoom.so = [];
+    newRoom.apprentice = apprentice;
+    curRooms[newRoomInfo.id] = newRoom;
+});
+
+app.post('/room/join', function (req, res) {
+    // 1. check if the room exists
+    var msg = req.body;
+    var room = curRooms[msg.id];
+    var roomInfo = getRoom(msg.id);
+    // 2. if yes, then add a player inside of the room.players attributes
+    //   so that the room knows there is a new player joining in.
+    if (room && roomInfo && onlineUsers[msg.newPlayer.id]) {
+        var newPlayer = onlineUsers[msg.newPlayer.id];
+        roomInfo.players.push(msg.newPlayer.id);
+        newPlayer.curRoom = msg.id;
+        room.players.push(newPlayer);
+        // 3. tell the client to redirect to app page
+        var rmsg = {isSucceed: true};
+        res.json(rmsg);
+    }
 });
 
 // ensure authentication
@@ -87,25 +121,30 @@ function ensureAuthenticated(req, res, next) {
     if (req.isAuthenticated()) { return next(); }
     res.redirect('/');
 }
+function authenticationSucceed(req, res){
+    onlineUsers[req.user.id] = req.user;
+    res.redirect('/admin_room');//res.redirect('/app');
+}
 // if the user pass thorugh authentication, render the app
 app.get('/app', ensureAuthenticated, function (req, res) {
     res.render('app', { user: req.user._raw, sessionId: req.sessionID });
 });
+app.get('/admin_room', ensureAuthenticated, function (req, res) {
+    res.render('admin_room', { user: req.user._raw });
+});
+
 // facebook authentication
 app.get('/auth/facebook', passport.authenticate('facebook', { scope: 'email' }));
 app.get('/auth/facebook/callback',
     passport.authenticate('facebook', { failureRedirect: '/' }),
-    function (req, res) {
-        res.redirect('/app');
-    }
+    authenticationSucceed
 );
 // google authentication
 app.get('/auth/google', passport.authenticate('google', { scope: 'https://www.googleapis.com/auth/plus.login' }));
 app.get('/auth/google/callback',
     passport.authenticate('google', { failureRedirect: '/login' }),
-    function (req, res) {
-        res.redirect('/app');
-});
+    authenticationSucceed
+);
 // when log-out
 app.get('/logout', function (req, res) {
     req.logout();
@@ -124,23 +163,29 @@ server.listen(8080);
 
 io.on('connection', function (so) {
     // set up closure varialbes
-    var apprentice; 
-    var systemStartTime = (new Date()).getTime();
+    var apprentice;
+    var room;
     var timeout;
     var userProfile;
     var sessionID;
     var canvasSize = { width: 0, height: 0 };
-    var totalScore = 0; 
+    var totalScore = 0;
+    
 
+    
     console.log("new client connected");
 
     so.emit('newconnection', { hello: "world" });
 
     function onOpen(hello) {
         if (hello) {
-            apprentice = new Apprentice();
-            apprentice.setCurrentTime(systemStartTime);
-            
+            if(onlineUsers[hello.user.id]){
+                var thisPlayer = onlineUsers[hello.user.id];
+                room = curRooms[thisPlayer.curRoom];
+                room.so.push(so);
+            }
+            apprentice = room ? room.apprentice : new Apprentice();
+
             canvasSize.width = hello.width;
             canvasSize.height = hello.height;
             apprentice.setCanvasSize(hello.width, hello.height);
@@ -185,60 +230,60 @@ io.on('connection', function (so) {
     }
 
     function onSaveDataOnDb() {
-        if(userProfile){
+        if (userProfile) {
             var userId = userProfile.id;
-    
+
             console.log(userId);
             console.log(sessionID);
-    
+
             var userLines;
             var computerLines;
-            apprentice.getUserLines(function(err, item) {
-                if(err) {
+            apprentice.getUserLines(function (err, item) {
+                if (err) {
                     console.log(err);
                 } else {
-                    try{
+                    try {
                         userLines = JSON.parse(item);
-                    }catch(e){
+                    } catch (e) {
                         console.log(e);
                     }
                     afterUserLines();
                 }
             });
-    
+
             function afterUserLines() {
-                apprentice.getComputerLines(function(err, item) {
+                apprentice.getComputerLines(function (err, item) {
                     if (err) {
                         console.log(err);
                     } else {
-                        try{
+                        try {
                             computerLines = JSON.parse(item);
-                        }catch(e){
+                        } catch (e) {
                             console.log(e)
                         }
                         saveData();
                     }
                 });
             }
-    
+
             function saveData() {
                 canvas2D.ConvertDrawingToPng(canvasSize, sessionID, userLines, computerLines);
-                
+
                 var options = {
-                    host:       mongoConfig.host,
-                    port:       mongoConfig.port,
-                    path:       mongoConfig.base_path + userId + '/session/' + sessionID,
-                    auth:       mongoConfig.user + ":" + mongoConfig.pass,
-                    method:     'POST',
-                    headers:    mongoConfig.headers
+                    host: mongoConfig.host,
+                    port: mongoConfig.port,
+                    path: mongoConfig.base_path + userId + '/session/' + sessionID,
+                    auth: mongoConfig.user + ":" + mongoConfig.pass,
+                    method: 'POST',
+                    headers: mongoConfig.headers
                 };
-    
-                var req = http.request(options, function(res) {
+
+                var req = http.request(options, function (res) {
                     var data = "";
-                    res.on('data', function(chunk) {
+                    res.on('data', function (chunk) {
                         data += chunk;
                     });
-                    res.on('end', function() {
+                    res.on('end', function () {
                         console.log(data);
                     });
                 });
@@ -296,7 +341,7 @@ io.on('connection', function (so) {
 
                         // decode to JSON and send the message
                         var resultmsg = JSON.stringify(stroke);
-                        io.emit('respondStroke', resultmsg);
+                        so.emit('respondStroke', resultmsg);
                         apprentice.setModeSync(0);
                     }
                 }
@@ -307,7 +352,7 @@ io.on('connection', function (so) {
             var b = java.newFloat(parseFloat(stroke.color.b));
             var a = java.newFloat(parseFloat(stroke.color.a));
             var thickness = java.newFloat(parseFloat(stroke.lineWidth));
-            
+
             apprentice.endStroke(r, g, b, a, thickness);
 
             if (timeout != "" || timeout != null) {
@@ -329,25 +374,33 @@ io.on('connection', function (so) {
 
                             // decode to JSON and send the message
                             var resultmsg = JSON.stringify(stroke);
-                            io.emit('respondStroke', resultmsg);
+                            if(room)
+                                room.broadcast('respondStroke', resultmsg);
+                            //so.emit('respondStroke', resultmsg);
                         }
-                   //console.log("sending: " + resultmsg);
+                        //console.log("sending: " + resultmsg);
                     }
                 });
             }, 2000);
         }
-        so.broadcast.emit('respondStroke', JSON.stringify(d.data));
+        for(var i=0;i<room.so.length;i++){
+            var tarso = room.so[i];
+            if(tarso != so)
+                tarso.emit('respondStroke', JSON.stringify(d.data));
+        }
     }
 
     function vote(isUp, score) {
         var vote = isUp ? 1 : 0;
         if (isUp)
-            totalScore += 10; 
+            totalScore += 10;
         else
             totalScore -= 10; 
         //totalScore = isUp ? (totalScore + 10) : (totalScore - 10); 
-		io.emit('updateScore', JSON.stringify(totalScore));
-        apprentice.voteSync(vote); 
+        if(room)
+            room.broadcast('updateScore', JSON.stringify(totalScore));
+
+        apprentice.voteSync(vote);
     }
 
     function onClear() {
@@ -363,10 +416,10 @@ io.on('connection', function (so) {
         else
             apprentice.setModeSync(m);
     }
-    
-    function classifyObject(objectLabel){
+
+    function classifyObject(objectLabel) {
         var label = JSON.stringify(objectLabel)
-        io.emit('classifyObject', label)
+        so.emit('classifyObject', label)
     }
 
     so.on('onOpen', onOpen);
@@ -393,6 +446,15 @@ io.on('connection', function (so) {
 });
 //===================== Finished Socket io server Set Up ====================\\
 
+//===================== Utility Functions ====================\\
+
+function getRoom(roomID) {
+    for (var i = 0; i < roomsInfo.length; i++) {
+        var existingRoom = roomsInfo[i];
+        if (existingRoom.id == roomID)
+            return existingRoom;
+    }
+}
 
 function submitResult(d) {
     submit(d, function (error, result) {
@@ -403,11 +465,11 @@ function submitResult(d) {
 function CreatePacketPoint(newpt) {
     // construct a new packet point
     var pkpt = {
-        id : newpt.id,
-        x : newpt.x,
-        y : newpt.y,
-        timestamp : newpt.timestamp,
-        pressure : 0          // to be implemented when the pressure is available
+        id: newpt.id,
+        x: newpt.x,
+        y: newpt.y,
+        timestamp: newpt.timestamp,
+        pressure: 0          // to be implemented when the pressure is available
     };
 
     return pkpt;
