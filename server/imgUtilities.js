@@ -35,7 +35,14 @@ function hexToRgb(hex) {
 }
 
 module.exports = {
-    ConvertDrawingToPng: function(canvasSize, sessionID, userLines, computerLines){
+    CreateBlankThumb: function(picName){
+        var ctx = gm(80, 60, "#ffffff");
+        ctx.write(__dirname + '/session_pic/' + picName + '_thumb.png', function (err) {
+                if(err)
+                    console.log(err);
+        });
+    },
+    ConvertDrawingToPng: function(canvasSize, picName, userLines, computerLines){
         if(gm){
             var ctx = gm(canvasSize.width, canvasSize.height, "#ffffff")
                 .fill("transparent");
@@ -67,17 +74,13 @@ module.exports = {
             
             for(var lineID in alllines)
                 drawLine(alllines[lineID]);
-            
-            console.log("prepare to save the original image!!");
-            ctx.write(__dirname + '/session_pic/' + sessionID + '.png', function (err) {
+            ctx.write(__dirname + '/session_pic/' + picName + '.png', function (err) {
                 //console.log(computerLines);
                 if(err)
                     console.log(err);
             });
-            
-            console.log("prepare to save the thumbnail image!!");
-            ctx.resize(80, 120);
-            ctx.write(__dirname + '/session_pic/' + sessionID + '_thumb.png', function (err) {
+            ctx.resize(80, 60);
+            ctx.write(__dirname + '/session_pic/' + picName + '_thumb.png', function (err) {
                 if(err)
                     console.log(err);
             });

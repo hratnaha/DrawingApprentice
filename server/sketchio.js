@@ -30,7 +30,9 @@ var express = require('express'),
     strategies = require('./strategies'), 
     http = require('http'),
     app = express(),
-    canvas2D = require('./imgUtilities');
+    canvas2D = require('./imgUtilities'),
+    uuid = require('node-uuid'),
+    onlineRooms = [];
 
 // Passport session setup.
 passport.serializeUser(function (user, done) {
@@ -49,20 +51,43 @@ app.set('views', __dirname + '/views');
 app.set('view engine', 'ejs');
 app.use(cookieParser());
 app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.json());
 app.use(session({ secret: 'keyboard cat', key: 'sid' }));
 app.use(passport.initialize());
 app.use(passport.session());
 app.use(express.static(__dirname + '/public'));
+app.use('/session_pic', express.static(__dirname + '/session_pic'));
 
 // log-in page for now
 app.get('/', function (req, res) {
     res.render('index', { user: req});
 });
-// ensure authentication if the user directly connect to /app page
+
+app.get('/api/rooms', function(req, res){ res.json(onlineRooms);});
+
+app.post('/api/rooms', function(req, res){
+    var roomInfo = req.body;
+    var newRoom = {};
+    newRoom.name = roomInfo.name;
+    newRoom.id = uuid.v4();
+    newRoom.host = "chipin01"; // hard-coded for now;
+    newRoom.pic = '';
+    canvas2D.CreateBlankThumb(newRoom.id);
+    newRoom.thumb = '/session_pic/'+newRoom.id+'_thumb.png';
+    res.json(newRoom);
+    
+    var apprentice = new Apprentice();
+    newRoom.apprentice = apprentice;
+    
+    onlineRooms.push(newRoom);
+});
+
+// ensure authentication
 function ensureAuthenticated(req, res, next) {
     if (req.isAuthenticated()) { return next(); }
     res.redirect('/');
 }
+// if the user pass thorugh authentication, render the app
 app.get('/app', ensureAuthenticated, function (req, res) {
     res.render('app', { user: req.user._raw, sessionId: req.sessionID });
 });
@@ -99,7 +124,7 @@ server.listen(8080);
 
 io.on('connection', function (so) {
     // set up closure varialbes
-    var apprentice = new Apprentice();
+    var apprentice; 
     var systemStartTime = (new Date()).getTime();
     var timeout;
     var userProfile;
@@ -107,14 +132,15 @@ io.on('connection', function (so) {
     var canvasSize = { width: 0, height: 0 };
     var totalScore = 0; 
 
-    apprentice.setCurrentTime(systemStartTime);
-
     console.log("new client connected");
 
     so.emit('newconnection', { hello: "world" });
 
     function onOpen(hello) {
         if (hello) {
+            apprentice = new Apprentice();
+            apprentice.setCurrentTime(systemStartTime);
+            
             canvasSize.width = hello.width;
             canvasSize.height = hello.height;
             apprentice.setCanvasSize(hello.width, hello.height);

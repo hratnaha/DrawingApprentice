@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" ng-app="appHall">
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -11,7 +11,6 @@
     <!-- Bootstrap core CSS -->
     <link href="css/bootstrap.css" rel="stylesheet">
     <link rel="stylesheet" href="fonts/font-awesome/css/font-awesome.min.css">
-    
 
     <!-- Montserrat Sans -->
     <link href='http://fonts.googleapis.com/css?family=Montserrat:400, 700' rel='stylesheet' type='text/css'>        
@@ -23,9 +22,10 @@
     <!--[if lt IE 9]>
       <script src="js/respond.min.js"></script>
     <![endif]-->
-
-	
-	
+    
+    <script type="text/javascript" src="js/angular.js"></script>
+    <script type="text/javascript" src="js/angular-resource.js"></script>
+    <script type="text/javascript" src="js/controllers/adminController.js"></script>
   </head>
 
   <body class="blue">
@@ -103,61 +103,27 @@
     <div id="services" class="section gray">
       <div class="container">
 
-        <div class="content">
+        <div class="content" ng-controller="hallController">
           <div class="text-center">
-            <h2 class="title">Join an Existing Session</h2>            
+                <h1 class="title">Join an Existing Session</h2>            
           </div>
-          
-                 <div class="icon-wrapper">
-                  <span class="new-session"><i class="fa fa-gear"></i></span>
+          <div class="row room-list">
+                <h2>There are {{rooms.length}} rooms.</h2>
+
+                <div ng-repeat="room in rooms" class="room-body">
+                    <img class="room-thumb" alt="" src={{room.thumb}} />
+                    <div class="room-name">{{room.name}}</div>
+                    <div class="room-host">Host: {{room.host}}</div>
+                    <button class="btn btn-success btn-lg room-join">Join</button>
                 </div>
-          <div class="row">
-            <div class="col-md-1 col-sm-1 col-xs-12"></div>
-            <div class="col-md-10 col-sm-12 col-xs-12">
-              <p class="description center-block" style="padding:0 auto;">
-              	Select an existing room and start drawing with other players. 
-              </p>
-            </div>
-            <div class="col-md-1 col-sm-1 col-xs-12"></div>
           </div>
-          <div class="row">
-          	<div class="col-lg-offset-2 col-lg-8">
-          	<input class="form-control" placeholder="Search by User ID"></input>
-            </div>
-          </div>
-          <br>
-           <div class="row">
-          	<div class="col-lg-offset-3 col-lg-2 col-md-offset-3 col-sm-hidden col-xs-hidden" style="height:1.5em;border-bottom:1px solid black;">  </div>
-			<div class="col-lg-2 col-md-6 col-sm-12 col-xs-12">
-            	<h4 style="text-align:center;">OR</h4>
-            </div>
-          	<div class="col-lg-2 col-md-2 col-sm-hidden col-xs-hidden" style="height:1.5em;border-bottom:1px solid black;">  </div>
-          
-          </div>
-          
-          <div class="row dropdown open">
-          	<form class="dropdown-toggle" style="text-align:center;">
-              <select name="existing_rooms">
-                <option value="volvo">View Existing Rooms</option>
-                <option value="saab">Room 1</option>
-                <option value="fiat">Room 2</option>
-                <option value="audi">Room 3</option>
-              </select>
-             
-            </form>
-          </div>
-          
-          <div class="row">
-            <div class="col-md-12 col-sm-12 col-xs-12">
+          <div class="row">            
               <div class="service">
-                   <button class="btn btn-success btn-lg">Join an existing room</button>
+                  <form ng-submit="createRoom()">
+                    <input type="text" placeholder="room name" ng-model="roomName"></input>
+                    <button class="btn btn-success btn-lg">Create a new room!</button>
+                    </form>
               </div>
-              </div>
-              <div class="col-md-12 col-sm-12 col-xs-12">
-              <div class="service">
-              	   <button class="btn btn-success btn-lg">Didn't see anything interesting? Create a new room!</button>
-              </div>
-           	  </div>
           </div>
 
 
@@ -194,12 +160,9 @@
     <script src="js/modernizr.custom.js"></script>
     <script src="js/masonry.pkgd.min.js"></script>
     <script src="js/imagesloaded.pkgd.min.js"></script>
-		<script src="js/bootstrap.min.js"></script>
+	<script src="js/bootstrap.min.js"></script>
     <script src="js/classie.js"></script>
     <script src="js/AnimOnScroll.js"></script>
-    <script type="text/javascript"
-      src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDAe64UN6rxbgDo8hzspyTofIGXBiNcE_U&sensor=false">
-    </script>
     <script src="js/init.js"></script>
 
   </body>
