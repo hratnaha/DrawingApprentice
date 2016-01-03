@@ -393,7 +393,7 @@ put js files before css files
             <script type="text/javascript">
         var userData = <%- user %>;
 		var sessionId = <%- JSON.stringify(sessionId) %>;      
-
+        var roomId = <%- JSON.stringify(roomId) %>;
 
         $(function() {
         $( "#logo" ).draggable();
@@ -724,9 +724,9 @@ put js files before css files
 <script type="text/javascript">
     var bothCanvas = document.getElementById("both");
     var bothInputContext = bothCanvas.getContext("2d");
-
+    
     window.addEventListener("load", initWebSocket, false);
-    window.addEventListener('load', sketchUtil, false);
+    window.addEventListener("load", sketchUtil, false);
 
     //document.getElementById('trash').addEventListener('click', function () {
       //  sketchpad.width = sketchpad.width;

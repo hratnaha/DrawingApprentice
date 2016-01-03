@@ -13,7 +13,14 @@ function sketchUtil() {
     var context = canvas.getContext('2d');
     context.lineWidth = 1;
 	
-	
+	if(roomId != ""){
+        var img = new Image();
+        img.onload = function(){
+            bothInputContext.drawImage(img,0,0);
+        };
+        img.src = "/session_pic/" + roomId + ".png";
+    }
+    
     var curstroke;
     var strCounter = 0, pkptCounter = 0;
     var colorline;

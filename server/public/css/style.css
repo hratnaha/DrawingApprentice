@@ -2259,9 +2259,9 @@ label {
       .social-media a { padding: 0 10px; }
 
   }
-/*.room-body{
-    
-}*/
+.room-body{
+    padding-bottom: 15px;    
+}
 
 .room-thumb{
     display: inline-block;

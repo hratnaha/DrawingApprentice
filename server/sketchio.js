@@ -26,11 +26,10 @@ var express = require('express'),
     session = require('express-session'),
     cookieParser = require('cookie-parser'),
     bodyParser = require('body-parser'),
-    mongoConfig = require('./configuration/mongoServerConfig'),
     strategies = require('./strategies'),
     http = require('http'),
     app = express(),
-    canvas2D = require('./imgUtilities'),
+    canvas2D = require('./libImage'),
     uuid = require('node-uuid'),
     curRooms = {},
     roomsInfo = [],
@@ -108,7 +107,7 @@ app.post('/room/join', function (req, res) {
     if (room && roomInfo && onlineUsers[msg.newPlayer.id]) {
         var newPlayer = onlineUsers[msg.newPlayer.id];
         roomInfo.players.push(msg.newPlayer.id);
-        newPlayer.curRoom = msg.id;
+        newPlayer.curRoom = roomInfo.id;
         room.players.push(newPlayer);
         // 3. tell the client to redirect to app page
         var rmsg = {isSucceed: true};
@@ -127,7 +126,13 @@ function authenticationSucceed(req, res){
 }
 // if the user pass thorugh authentication, render the app
 app.get('/app', ensureAuthenticated, function (req, res) {
-    res.render('app', { user: req.user._raw, sessionId: req.sessionID });
+    var user = onlineUsers[req.user.id];
+    var roomID = '';
+    if(user){
+        roomID = user.curRoom;
+    }
+    // need to tell the client to load the existing jpg
+    res.render('app', { user: req.user._raw, sessionId: req.sessionID, roomId: roomID});
 });
 app.get('/admin_room', ensureAuthenticated, function (req, res) {
     res.render('admin_room', { user: req.user._raw });
@@ -163,6 +168,7 @@ server.listen(8080);
 
 io.on('connection', function (so) {
     // set up closure varialbes
+    var utilDatabase = require('./libDatabase');
     var apprentice;
     var room;
     var timeout;
@@ -170,8 +176,6 @@ io.on('connection', function (so) {
     var sessionID;
     var canvasSize = { width: 0, height: 0 };
     var totalScore = 0;
-    
-
     
     console.log("new client connected");
 
@@ -185,12 +189,13 @@ io.on('connection', function (so) {
                 room.so.push(so);
             }
             apprentice = room ? room.apprentice : new Apprentice();
-
             canvasSize.width = hello.width;
             canvasSize.height = hello.height;
             apprentice.setCanvasSize(hello.width, hello.height);
             userProfile = hello.user;
-            sessionID = hello.sessionId;
+            sessionID = thisPlayer.curRoom;
+            
+            utilDatabase.initializeParameters(userProfile, sessionID, apprentice, canvasSize);
         }
     }
 
@@ -229,78 +234,6 @@ io.on('connection', function (so) {
         }
     }
 
-    function onSaveDataOnDb() {
-        if (userProfile) {
-            var userId = userProfile.id;
-
-            console.log(userId);
-            console.log(sessionID);
-
-            var userLines;
-            var computerLines;
-            apprentice.getUserLines(function (err, item) {
-                if (err) {
-                    console.log(err);
-                } else {
-                    try {
-                        userLines = JSON.parse(item);
-                    } catch (e) {
-                        console.log(e);
-                    }
-                    afterUserLines();
-                }
-            });
-
-            function afterUserLines() {
-                apprentice.getComputerLines(function (err, item) {
-                    if (err) {
-                        console.log(err);
-                    } else {
-                        try {
-                            computerLines = JSON.parse(item);
-                        } catch (e) {
-                            console.log(e)
-                        }
-                        saveData();
-                    }
-                });
-            }
-
-            function saveData() {
-                canvas2D.ConvertDrawingToPng(canvasSize, sessionID, userLines, computerLines);
-
-                var options = {
-                    host: mongoConfig.host,
-                    port: mongoConfig.port,
-                    path: mongoConfig.base_path + userId + '/session/' + sessionID,
-                    auth: mongoConfig.user + ":" + mongoConfig.pass,
-                    method: 'POST',
-                    headers: mongoConfig.headers
-                };
-
-                var req = http.request(options, function (res) {
-                    var data = "";
-                    res.on('data', function (chunk) {
-                        data += chunk;
-                    });
-                    res.on('end', function () {
-                        console.log(data);
-                    });
-                });
-                var postData = JSON.stringify({
-                    name: userProfile['name'],
-                    age_range: userProfile['age_range'],
-                    gender: userProfile['gender'],
-                    email: userProfile['email'],
-                    userLines: userLines,
-                    computerLines: computerLines
-                });
-                req.write(postData);
-                req.end();
-            }
-        }
-    }
-
     function onNewStrokeReceived(data) {
         var d = JSON.parse(data);
 
@@ -314,13 +247,10 @@ io.on('connection', function (so) {
             apprentice.createStrokeSync(stroketime);
 
         var pts = stroke.packetPoints;
-        var returnSt = [];
 
         // adding all the points in the stroke
         for (var i = 0; i < pts.length; i++) {
             var pt = pts[i];
-            var pttime = pt.timestamp;
-            //console.log(pt.timestamp);
             apprentice.addPointSync(parseInt(pt.x, 10), parseInt(pt.y, 10), pt.timestamp, pt.id);
         }
         // Todo: reconstruct the message to send out
@@ -376,7 +306,6 @@ io.on('connection', function (so) {
                             var resultmsg = JSON.stringify(stroke);
                             if(room)
                                 room.broadcast('respondStroke', resultmsg);
-                            //so.emit('respondStroke', resultmsg);
                         }
                         //console.log("sending: " + resultmsg);
                     }
@@ -437,7 +366,7 @@ io.on('connection', function (so) {
             clearTimeout(timeout);
         }
     });
-    so.on('disconnect', onSaveDataOnDb);
+    so.on('disconnect', utilDatabase.onSaveDataOnDb);
     so.on('touchup', onNewStrokeReceived);
     so.on('setMode', onModeChanged);
     so.on('clear', onClear);
