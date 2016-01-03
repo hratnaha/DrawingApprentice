@@ -101,13 +101,10 @@ function initWebSocket() {
 
 function MoveLogoBack () {
 	if(finishStroke==false){
-	//console.log("move");
-	//moveLogo.style.left = '4em';
-	//moveLogo.style.top = '5em';
-			$('#logo').animate({
-					left: '90%',
-					top: '-1em'},
-				"swing");
+    $('#logo').animate({
+            left: '90%',
+            top: '-1em'},
+        "swing");
 
 	console.log('logo left is ' + moveLogo.style.left);
 	}
@@ -116,7 +113,7 @@ function MoveLogoBack () {
 
 function onNewStroke(data) {
 	moveLogo.style.left = "90%";
-			moveLogo.style.top = "3%";
+	moveLogo.style.top = "3%";
     console.log(data);
     // decode the data into the new stroke
     var botStroke = JSON.parse(data);
@@ -124,16 +121,6 @@ function onNewStroke(data) {
 	logo.style.position = "absolute";
 	logo.style.left = data.x;
 	logo.style.top = data.y;
-
-	//var botPts = botStroke.packetPoints;
-
- //   if (botPts.length > 1) {
-
- //       ctx.beginPath();
- //       ctx.moveTo(botPts[0].x, botPts[0].y);
-	//	var i = 0;
-
-	//}
 }
 
 function onOpen(data) {
