@@ -183,6 +183,7 @@ io.on('connection', function (so) {
 
     function onOpen(hello) {
         if (hello) {
+            var thisPlayer;
             if(onlineUsers[hello.user.id]){
                 var thisPlayer = onlineUsers[hello.user.id];
                 room = curRooms[thisPlayer.curRoom];
@@ -193,7 +194,7 @@ io.on('connection', function (so) {
             canvasSize.height = hello.height;
             apprentice.setCanvasSize(hello.width, hello.height);
             userProfile = hello.user;
-            sessionID = thisPlayer.curRoom;
+            sessionID = thisPlayer ? thisPlayer.curRoom : uuid.v4();
             
             utilDatabase.initializeParameters(userProfile, sessionID, apprentice, canvasSize);
         }
@@ -306,16 +307,20 @@ io.on('connection', function (so) {
                             var resultmsg = JSON.stringify(stroke);
                             if(room)
                                 room.broadcast('respondStroke', resultmsg);
+                            else
+                                so.emit('respondStroke', resultmsg);
                         }
                         //console.log("sending: " + resultmsg);
                     }
                 });
             }, 2000);
         }
-        for(var i=0;i<room.so.length;i++){
-            var tarso = room.so[i];
-            if(tarso != so)
-                tarso.emit('respondStroke', JSON.stringify(d.data));
+        if(room){
+            for(var i=0;i<room.so.length;i++){
+                var tarso = room.so[i];
+                if(tarso != so)
+                    tarso.emit('respondStroke', JSON.stringify(d.data));
+            }
         }
     }
 
