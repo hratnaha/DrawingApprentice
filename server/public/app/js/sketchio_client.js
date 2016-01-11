@@ -235,6 +235,15 @@ function downloadData() {
     socket.emit('getData');
 }
 
+
+function downloadCanvas(link) {
+    link.href = document.getElementById('both').toDataURL();
+    console.log(link);
+    console.log(link.href);
+    link.download = 'test.png';
+}
+
+
 //$.unload(saveDataOnDb);
 
 function saveDataOnDb() {
