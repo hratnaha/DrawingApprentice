@@ -114,6 +114,10 @@ put js files before css files
             <a class="btn btn-default btn-lg" style="float:left;margin-left:1em;height:47px;line-height:12px" onclick="downloadCanvas(this)">Download</a>
         </li>
 
+          <li>
+              <button id="group" class="btn btn-default btn-lg" style="float:left;margin-left:1em;"onclick="changeGrouping()"> Group </button>
+          </li>  
+
       </ul><!--setting_button-->
             <label><input type="checkbox" id="Checkbox" onClick="TurnOnOffAgent();" value="" style="margin:1em 1em;"></label>
        
@@ -123,15 +127,6 @@ put js files before css files
           function testFunction(){
           document.getElementById('label').value = "Tested"; 
           }
-
-          var button = document.getElementById('btn-download');
-          button.addEventListener('click', function (e) {
-          var canvas = document.getElementById('both'); 
-          console.log(canvas); 
-          var dataURL = canvas.toDataURL('image/png');
-          console.log(dataURL); 
-          button.href = dataURL;
-          });
           </script>
 
   <div class="navbar-inner row">
