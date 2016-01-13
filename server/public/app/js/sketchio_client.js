@@ -44,9 +44,9 @@ function initWebSocket() {
 
     var timer = setInterval(function () {
 
-        if (botStroke != "" && i < botStroke.packetPoints.length ) {
-            ctx.lineTo(botStroke.packetPoints[i].x, botStroke.packetPoints[i].y);
-			//console.log(botStroke.packetPoints[i].x);
+        if (botStroke != "" && i < botStroke.allPoints.length ) {
+            ctx.lineTo(botStroke.allPoints[i].x, botStroke.allPoints[i].y);
+			//console.log(botStroke.allPoints[i].x);
 
             ctx.stroke();
 			//ctx.strokeStyle = tipColor;
@@ -57,16 +57,16 @@ function initWebSocket() {
 				fill: '#F0F0F0',
 				opacity: .5,
 				});
-            //console.log(botStroke.packetPoints[i].x);
-			moveLogo.style.left = botStroke.packetPoints[i].x - 70;
-			moveLogo.style.top = botStroke.packetPoints[i].y - 130;
+            //console.log(botStroke.allPoints[i].x);
+			moveLogo.style.left = botStroke.allPoints[i].x - 70;
+			moveLogo.style.top = botStroke.allPoints[i].y - 130;
 			//moveLogo.style.backgroundColor = "blue";
 
             i++;
         } else if (curStroke.length > 0) {
             botStroke = curStroke.shift();
             ctx.beginPath();
-            ctx.moveTo(botStroke.packetPoints[0].x, botStroke.packetPoints[0].y);
+            ctx.moveTo(botStroke.allPoints[0].x, botStroke.allPoints[0].y);
 			ctx.strokeStyle = tipColor;
 			ctx.globalAlpha = opacity2;
 			ctx.lineWidth = y;
@@ -76,8 +76,8 @@ function initWebSocket() {
 				opacity: .5,
 				});
             i = 0;
-			//moveLogo.style.left = botStroke.packetPoints[i].x - 70;
-			//moveLogo.style.top = botStroke.packetPoints[i].y - 130;
+			//moveLogo.style.left = botStroke.allPoints[i].x - 70;
+			//moveLogo.style.top = botStroke.allPoints[i].y - 130;
 			//moveLogo.style.backgroundColor = "red";
 
 

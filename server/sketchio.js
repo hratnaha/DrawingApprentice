@@ -33,7 +33,9 @@ var express = require('express'),
     uuid = require('node-uuid'),
     curRooms = {},
     roomsInfo = [],
-    onlineUsers = {};
+    onlineUsers = {},
+    Room = Room = require('./lib_GameHall/gameroom');;
+
 
 // Passport session setup.
 passport.serializeUser(function (user, done) {
@@ -80,28 +82,20 @@ app.post('/room/create', function (req, res) {
     newRoomInfo.thumb = '/session_pic/' + newRoomInfo.id + '_thumb.png';
     res.json(newRoomInfo);
     roomsInfo.push(newRoomInfo);
-    
+    // initialize apprentice
     var apprentice = new Apprentice();
     apprentice.setCurrentTime((new Date()).getTime());
+    // create a room
+    var room = new Room(newRoomInfo, apprentice);
     
-    var newRoom = {};
-    newRoom.broadcast = function(evtname,msg){
-        for(var i=0;i<this.so.length;i++){
-            var tarso = this.so[i];
-            tarso.emit(evtname, msg);
-        }
-    };
-    newRoom.players = [];
-    newRoom.so = [];
-    newRoom.apprentice = apprentice;
-    curRooms[newRoomInfo.id] = newRoom;
+    curRooms[newRoomInfo.id] = room;
 });
 
 app.post('/room/join', function (req, res) {
     // 1. check if the room exists
     var msg = req.body;
     var room = curRooms[msg.id];
-    var roomInfo = getRoom(msg.id);
+    var roomInfo = room ? room.roomInfo : null;
     // 2. if yes, then add a player inside of the room.players attributes
     //   so that the room knows there is a new player joining in.
     if (room && roomInfo && onlineUsers[msg.newPlayer.id]) {
@@ -174,7 +168,6 @@ io.on('connection', function (so) {
     var timeout;
     var userProfile;
     var sessionID;
-    var canvasSize = { width: 0, height: 0 };
     var totalScore = 0;
     
     console.log("new client connected");
@@ -187,16 +180,14 @@ io.on('connection', function (so) {
             if(onlineUsers[hello.user.id]){
                 var thisPlayer = onlineUsers[hello.user.id];
                 room = curRooms[thisPlayer.curRoom];
-                room.so.push(so);
+                room.sockets.push(so);
             }
             apprentice = room ? room.apprentice : new Apprentice();
-            canvasSize.width = hello.width;
-            canvasSize.height = hello.height;
-            apprentice.setCanvasSize(hello.width, hello.height);
+            room.setCanvasSize(hello.width, hello.height);
             userProfile = hello.user;
             sessionID = thisPlayer ? thisPlayer.curRoom : uuid.v4();
             
-            utilDatabase.initializeParameters(userProfile, sessionID, apprentice, canvasSize);
+            utilDatabase.initializeParameters(userProfile, sessionID, apprentice, room.canvasSize);
         }
     }
 
@@ -247,7 +238,7 @@ io.on('connection', function (so) {
         else
             apprentice.createStrokeSync(stroketime);
 
-        var pts = stroke.packetPoints;
+        var pts = stroke.allPoints;
 
         // adding all the points in the stroke
         for (var i = 0; i < pts.length; i++) {
@@ -268,7 +259,7 @@ io.on('connection', function (so) {
 
                             newpkpts.push(CreatePacketPoint(newpt));
                         }
-                        stroke.packetPoints = newpkpts;
+                        stroke.allPoints = newpkpts;
 
                         // decode to JSON and send the message
                         var resultmsg = JSON.stringify(stroke);
@@ -301,23 +292,27 @@ io.on('connection', function (so) {
 
                                 newpkpts.push(CreatePacketPoint(newpt));
                             }
-                            stroke.packetPoints = newpkpts;
-
+                            var compStroke = JSON.parse(JSON.stringify(stroke));
+                            compStroke.allPoints = newpkpts;
+                            compStroke.time = (new Date()).getTime();
+                            
                             // decode to JSON and send the message
-                            var resultmsg = JSON.stringify(stroke);
+                            var resultmsg = JSON.stringify(compStroke);
                             if(room)
                                 room.broadcast('respondStroke', resultmsg);
                             else
                                 so.emit('respondStroke', resultmsg);
+                            // draw the pic after sending the strokes back to the client
+                            // to save a little bit time
+                            room.addStroke(stroke, compStroke);
                         }
-                        //console.log("sending: " + resultmsg);
                     }
                 });
             }, 2000);
         }
         if(room){
-            for(var i=0;i<room.so.length;i++){
-                var tarso = room.so[i];
+            for(var i=0;i<room.sockets.length;i++){
+                var tarso = room.sockets[i];
                 if(tarso != so)
                     tarso.emit('respondStroke', JSON.stringify(d.data));
             }
@@ -381,14 +376,6 @@ io.on('connection', function (so) {
 //===================== Finished Socket io server Set Up ====================\\
 
 //===================== Utility Functions ====================\\
-
-function getRoom(roomID) {
-    for (var i = 0; i < roomsInfo.length; i++) {
-        var existingRoom = roomsInfo[i];
-        if (existingRoom.id == roomID)
-            return existingRoom;
-    }
-}
 
 function submitResult(d) {
     submit(d, function (error, result) {

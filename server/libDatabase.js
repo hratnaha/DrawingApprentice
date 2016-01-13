@@ -24,6 +24,7 @@ module.exports = {
 
             var userLines;
             var computerLines;
+
             apprentice.getUserLines(function (err, item) {
                 if (err) {
                     console.log(err);

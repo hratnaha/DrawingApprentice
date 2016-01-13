@@ -47,7 +47,7 @@ function sketchUtil() {
                     a: opacity2
                 },
                 lineWidth : y,
-                packetPoints : []
+                allPoints : []
             }
         };
         return newstroke;
@@ -65,7 +65,7 @@ function sketchUtil() {
             color: tipColor          //passing color in hex form
         };
         
-        curstroke.data.packetPoints.push(pkpt);
+        curstroke.data.allPoints.push(pkpt);
     }
     
 	

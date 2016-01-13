@@ -25,7 +25,7 @@ public class Line {
 	public boolean compGenerated = false; 
 	boolean isSelected = false;
 	Random rand = new Random();
-	private float thickness;
+	public float lineWidth;
 
 
 	// convert all reference of ponts to pvec
@@ -410,11 +410,11 @@ public class Line {
 	}
 	
 	public void setThickness(float thickness){
-		this.thickness = thickness;
+		this.lineWidth = thickness;
 	}
 
 	public float getThickness(){
-		return this.thickness;
+		return this.lineWidth;
 	}
 	
 	public int segmentsTotal() {

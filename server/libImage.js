@@ -10,7 +10,7 @@ var fs = require('fs'),
 try{
     gm = require('gm').subClass({imageMagick: true}); 
 }catch(err){
-    console.log(err);
+    console.error(err);
 }
 
 function componentToHex(c) {
@@ -35,33 +35,54 @@ function hexToRgb(hex) {
 }
 
 module.exports = {
+    //Iinitialize the drawing context that has white background
+    // and transparent filling in of the drawing lines
+    Initialize : function(width, height){
+        if(gm){
+            var ctx = gm(width, height, "#ffffff")
+                .fill("transparent");
+            return ctx;
+        }
+    },
+    InitializeFromFile : function(file){
+      if(gm){
+          var ctx = gm(file)
+            .fill("transparent");
+            return ctx;
+      }  
+    },
     CreateBlankThumb: function(picName){
-        var ctx = gm(80, 60, "#ffffff");
-        ctx.write(__dirname + '/session_pic/' + picName + '_thumb.png', function (err) {
-                if(err)
-                    console.log(err);
-        });
+        if(gm){
+            var ctx = gm(80, 60, "#ffffff");
+            ctx.write(__dirname + '/session_pic/' + picName + '_thumb.png', function (err) {
+                    if(err)
+                        console.log(err);
+            });
+        }
+    },
+    DrawLine : function(ctx, line){
+        if(line.allPoints && line.allPoints.length > 0){
+            var lineColor;
+            if(line.color){
+                lineColor = rgbToHex(line.color.r, line.color.g, line.color.b);
+            }else
+                lineColor = rgbToHex(line.colorR, line.colorG, line.colorB);
+            //console.log(hexColor);
+            ctx.stroke(lineColor, line.lineWidth);
+            var pts = [];
+            for(var ptID in line.allPoints){
+                var pt = line.allPoints[ptID];
+                pts.push(pt.x, pt.y);
+            }
+            //console.log("num of points: " + pts.length);
+            //if(pts.length < 500)
+            ctx.drawPolyline(pts);
+        }
     },
     ConvertDrawingToPng: function(canvasSize, picName, userLines, computerLines){
         if(gm){
-            var ctx = gm(canvasSize.width, canvasSize.height, "#ffffff")
-                .fill("transparent");
-                
-            function drawLine(line){
-                if(line.allPoints && line.allPoints.length > 0){
-                    var hexColor = rgbToHex(line.colorR, line.colorG, line.colorB);
-                    console.log(hexColor);
-                    ctx.stroke(hexColor, line.thickness);
-                    var pts = [];
-                    for(var ptID in line.allPoints){
-                        var pt = line.allPoints[ptID];
-                        pts.push(pt.x, pt.y); 
-                    }
-                    console.log("num of points: " + pts.length);
-                    //if(pts.length < 500)
-                        ctx.drawPolyline(pts);
-                }
-            }
+            var ctx = this.Initialize(canvasSize.width, canvasSize.height);
+         
             var alllines = [];
             alllines = alllines.concat(userLines);
             alllines = alllines.concat(computerLines);
@@ -73,17 +94,21 @@ module.exports = {
             });
             
             for(var lineID in alllines)
-                drawLine(alllines[lineID]);
-            ctx.write(__dirname + '/session_pic/' + picName + '.png', function (err) {
-                //console.log(computerLines);
-                if(err)
-                    console.log(err);
-            });
-            ctx.resize(80, 60);
-            ctx.write(__dirname + '/session_pic/' + picName + '_thumb.png', function (err) {
-                if(err)
-                    console.log(err);
-            });
+                this.DrawLine(ctx, alllines[lineID]);
+            
+            this.SaveToFile(ctx, picName);
         }
+    },
+    SaveToFile : function(ctx, picName, isThumb, handleError){
+        if(gm){
+            var filename = isThumb ? picName + "_thumb" : picName;
+            filename = __dirname + '/session_pic/' + filename + '.png'; 
+            ctx.write(filename, function (err) {
+                if(err) console.error(err);
+                if(handleError != null && typeof handleError === "function"){
+                    handleError.call(this, filename, err);
+                }
+            });
+        }        
     }
 }
