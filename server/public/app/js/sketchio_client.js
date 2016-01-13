@@ -182,6 +182,26 @@ function clearCanvas() {
 }
 // change the mode base on the UI changes
 
+var isGrouping = false;
+function changeGrouping(){
+    if (isGrouping) {
+        isGrouping = false;
+        $('#group').removeClass('active')
+        socket.emit('setMode', 4);
+    }
+    else {
+        isGrouping = true;
+        $('#group').addClass('active')
+        socket.emit('setMode', 3);
+    }
+}
+
+function setGroupLabel(label){
+    var groupLabel = label;
+    //stringify and emit the label to server
+
+}
+
 function setMode(mode) {
 
     switch ($(this).val()) {
@@ -201,7 +221,6 @@ function setMode(mode) {
 function ChangeMode1(){
 	alert("Global");
 	socket.emit('setMode',2);
-
 }
 
 function ChangeMode2(){
@@ -215,10 +234,13 @@ function ChangeMode3(){
 }
 
 function groupingMode(chk) {
-	if(chk)
-	   	socket.emit('setMode', 3);
-	else
-		socket.emit('setMode', 4);
+    console.log("Grouping mode chk=" + chk); 
+    if (chk) {
+        socket.emit('setMode', 3);
+    }
+    else {
+        socket.emit('setMode', 4);
+    }
 }
 
 function DownVote() {
@@ -234,6 +256,15 @@ function downloadData() {
     console.log('getting data...');
     socket.emit('getData');
 }
+
+
+function downloadCanvas(link) {
+    link.href = document.getElementById('both').toDataURL();
+    console.log(link);
+    console.log(link.href);
+    link.download = 'test.png';
+}
+
 
 //$.unload(saveDataOnDb);
 

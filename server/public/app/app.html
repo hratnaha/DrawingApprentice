@@ -89,15 +89,17 @@ put js files before css files
       </ul><!--color-->
       <ul class="nav navbar-nav setting_buton">  	  
         <li>
-            <button class="btn btn-default btn-lg" style="float:left;margin-left:1em;">
-           New
+            <button class="btn btn-default btn-lg" onClick ="location.href = '/admin_room'" style="float:left;margin-left:1em;">
+           Exit
             </button>
         </li>
+        <!--What is the link to get to the room selection? -->
          <li>
-            <button class="btn btn-default btn-lg" onClick="downloadData();" style="float:left;margin-left:1em;">
+            <button class="btn btn-default btn-lg" onClick="downloadCanvas(this);" style="float:left;margin-left:1em; display:none">
            Download
             </button>
         </li>
+          <!--Instead of downloading the line data, this button should download a PNG image -->
         <li>
             <button class="btn btn-default btn-lg" onClick ="testFunction()"style="float:left;margin-left:1em;">
            Settings
@@ -105,9 +107,17 @@ put js files before css files
         </li>
          <li>
             <button class="btn btn-default btn-lg" id="trash" style="float:left;margin-left:1em;">
-           Trash
+           Restart
             </button>
         </li>  
+        <li>
+            <a class="btn btn-default btn-lg" style="float:left;margin-left:1em;height:47px;line-height:12px" onclick="downloadCanvas(this)">Download</a>
+        </li>
+
+          <li>
+              <button id="group" class="btn btn-default btn-lg" style="float:left;margin-left:1em;"onclick="changeGrouping()"> Group </button>
+          </li>  
+
       </ul><!--setting_button-->
             <label><input type="checkbox" id="Checkbox" onClick="TurnOnOffAgent();" value="" style="margin:1em 1em;"></label>
        

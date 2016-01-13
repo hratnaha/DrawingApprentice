@@ -75,9 +75,10 @@ function sketchUtil() {
         touchstart: function (coors) {
             colorline = document.getElementById('background').value;
             curstroke = createNewStroke();
-			if ($('#grouping').hasClass("isGrouping")){
+			if ($('#group').hasClass("active")){
             //if ($("#cboxGrouping").attr('checked') == "checked") {
-				//alert("grouping checked");
+                //alert("grouping checked");
+                console.log("Grouping checked"); 
                 context.setLineDash([5]);
                 context.strokeStyle = tipColor;
 				//console.log(tipColor);
@@ -87,7 +88,7 @@ function sketchUtil() {
             } else {
                 colorline = document.getElementById('background').value;
                 context.strokeStyle = tipColor;
-                //context.setLineDash([0]);
+                context.setLineDash([0]);
 				context.lineWidth = y;
 				context.globalAlpha = opacity2;
 			
@@ -116,10 +117,14 @@ function sketchUtil() {
 
                 this.isDrawing = false;
 				//if (document.getElementById('grouping').clicked == true) {
-                if (!$('#grouping').hasClass("isGrouping"))
-                  bothInputContext.drawImage(canvas, 0, 0);
-
-                context.clearRect(0, 0, canvas.width, canvas.height);
+                if (!$('#group').hasClass("active")) {
+                    bothInputContext.drawImage(canvas, 0, 0);
+                }
+                else {
+                    var label = prompt("Please enter the type of object you drew:", "Object");
+                    changeGrouping();
+                    context.clearRect(0, 0, canvas.width, canvas.height);
+                }
             }
         }
     };
