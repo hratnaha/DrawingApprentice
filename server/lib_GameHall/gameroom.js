@@ -4,7 +4,8 @@
 */
 "use strict";
 
-var canvas2D = require('../libImage');
+var canvas2D = require('../libImage'),
+    uuid = require('node-uuid');
 
 class gameroom {
     constructor(roomInfo, apprentice){
@@ -12,11 +13,22 @@ class gameroom {
         this.sockets = [];
         this.compStrokes = [];
         this.userStrokes = [];
-        this.roomInfo = roomInfo;
+        this.roomInfo = roomInfo ? roomInfo : this.createRoomInfo();
         this.apprentice = apprentice;
         this.canvasSize = { width: 0, height: 0 };
         this.indexULines = 0;
         this.indexCLines = 0;
+    }
+    createRoomInfo(){
+        var roomInfo = {};
+        roomInfo.name = "";
+        roomInfo.fullpic = '';
+        roomInfo.id = uuid.v4();
+        roomInfo.host = "chipin01"; // hard-coded for now;
+        roomInfo.players = [];
+        canvas2D.CreateBlankThumb(roomInfo.id);
+        roomInfo.thumb = '/session_pic/' + roomInfo.id + '_thumb.png';
+        return roomInfo;
     }
     broadcast(evtname,msg){
         for(var i=0;i<this.sockets.length;i++){

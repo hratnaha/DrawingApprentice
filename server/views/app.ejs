@@ -33,128 +33,144 @@ put js files before css files
 
     <!-- Collect the nav links, forms, and other content for toggling -->
     <div class="collapse navbar-collapse" id="nav_toggle_content">
-      <ul class="nav navbar-nav color">
-      	<li>
-            <div class="btn btn-md btn-color navbar-btn">
-                <input type="button" name="saveForm" class="btTxt submit saveForm" id="color1" />
-            </div>
-        </li>
-        <li>
-            <div class="btn btn-md btn-color navbar-btn">
-                <input type="button" name="saveForm" class="btTxt submit saveForm" id="color2" />
-            </div>
-        </li>
-        <li>
-            <div class="btn btn-md btn-color navbar-btn">
-                <input type="button" name="saveForm" class="btTxt submit saveForm" id="color3" />
-            </div>
-        </li>
-        <li>
-            <div class="btn btn-md btn-color navbar-btn">
-                <input type="button" name="saveForm" class="btTxt submit saveForm" id="color4" />
-            </div>
-        </li>
-        <li>
-            <div class="btn btn-md btn-color navbar-btn">
-                <input type="button" name="saveForm" class="btTxt submit saveForm" id="color5" />
-            </div>
-        </li>
-        <li>
-            <div class="btn btn-md btn-color navbar-btn">
-                <input type="button" name="saveForm" class="btTxt submit saveForm" id="color6" />
-            </div>
-        </li>
-        <li>
-            <div class="btn btn-md btn-color navbar-btn">
-                <input type="button" name="saveForm" class="btTxt submit saveForm" id="color7" />
-            </div>
-        </li>
-        <li>
-            <div class="btn btn-md btn-color navbar-btn">
-                <input type="button" name="saveForm" class="btTxt submit saveForm" id="color8" />
-            </div>
-        </li>
-        <li>
-            <div class="btn btn-md btn-color navbar-btn">
-                <input type="button" name="saveForm" class="btTxt submit saveForm" id="color9" />
-            </div>
-        </li>
-        <!--li>
-            <div class="btn btn-md btn-color navbar-btn">
-                <input type="button" name="saveForm" class="btTxt submit saveForm" id="color10" />
-            </div>
-        </li-->
-      </ul><!--color-->
-      <ul class="nav navbar-nav setting_buton">  	  
-        <li>
-            <button class="btn btn-default btn-lg" style="float:left;margin-left:1em;">
-           New
-            </button>
-        </li>
-         <li>
-            <button class="btn btn-default btn-lg" onClick="downloadData();" style="float:left;margin-left:1em;">
-           Download
-            </button>
-        </li>
-        <li>
-            <button class="btn btn-default btn-lg" style="float:left;margin-left:1em;">
-           Setting
-            </button>
-        </li>
-         <li>
-            <button class="btn btn-default btn-lg" id="trash" style="float:left;margin-left:1em;">
-           Trash
-            </button>
-        </li>  
-      </ul><!--setting_button-->
-            <label><input type="checkbox" id="Checkbox" onClick="TurnOnOffAgent();" value="" style="margin:1em 1em;"></label>
-       
+<ul class="nav navbar-nav color">
+    <li>
+        <div class="btn btn-md btn-color navbar-btn">
+            <input type="button" name="saveForm" class="btTxt submit saveForm" id="color1" />
+        </div>
+    </li>
+    <li>
+        <div class="btn btn-md btn-color navbar-btn">
+            <input type="button" name="saveForm" class="btTxt submit saveForm" id="color2" />
+        </div>
+    </li>
+    <li>
+        <div class="btn btn-md btn-color navbar-btn">
+            <input type="button" name="saveForm" class="btTxt submit saveForm" id="color3" />
+        </div>
+    </li>
+    <li>
+        <div class="btn btn-md btn-color navbar-btn">
+            <input type="button" name="saveForm" class="btTxt submit saveForm" id="color4" />
+        </div>
+    </li>
+    <li>
+        <div class="btn btn-md btn-color navbar-btn">
+            <input type="button" name="saveForm" class="btTxt submit saveForm" id="color5" />
+        </div>
+    </li>
+    <li>
+        <div class="btn btn-md btn-color navbar-btn">
+            <input type="button" name="saveForm" class="btTxt submit saveForm" id="color6" />
+        </div>
+    </li>
+    <li>
+        <div class="btn btn-md btn-color navbar-btn">
+            <input type="button" name="saveForm" class="btTxt submit saveForm" id="color7" />
+        </div>
+    </li>
+    <li>
+        <div class="btn btn-md btn-color navbar-btn">
+            <input type="button" name="saveForm" class="btTxt submit saveForm" id="color8" />
+        </div>
+    </li>
+    <li>
+        <div class="btn btn-md btn-color navbar-btn">
+            <input type="button" name="saveForm" class="btTxt submit saveForm" id="color9" />
+        </div>
+    </li>
+</ul><!--color-->
+<ul class="nav navbar-nav setting_buton">  	  
+    <li>
+        <button class="btn btn-default btn-lg" onClick ="location.href = '/admin_room'" style="float:left;margin-left:1em;">
+        Exit
+        </button>
+    </li>
+    <!--What is the link to get to the room selection? -->
+    <li>
+        <button class="btn btn-default btn-lg" onClick="downloadCanvas(this);" style="float:left;margin-left:1em; display:none">
+        Download
+        </button>
+    </li>
+        <!--Instead of downloading the line data, this button should download a PNG image -->
+    <li>
+        <button class="btn btn-default btn-lg" onClick ="settingFunction()"style="float:left;margin-left:1em;">
+        Settings
+        </button>
+    </li>
+    <li>
+        <button class="btn btn-default btn-lg" id="trash" style="float:left;margin-left:1em;">
+        Restart
+        </button>
+    </li>  
+    <li>
+        <a class="btn btn-default btn-lg" style="float:left;margin-left:1em;height:47px;line-height:12px" onclick="downloadCanvas(this)">
+        Download
+        </a>
+    </li>
+    <li>
+        <button id="group" class="btn btn-default btn-lg" style="float:left;margin-left:1em;"onclick="changeGrouping()">
+        Group
+        </button>
+    </li>
+</ul><!--setting_button-->
+<label><input type="checkbox" id="Checkbox" onClick="TurnOnOffAgent();" value="" style="margin:1em 1em;"></label>       
     </div><!-- /#nav_toggle_content -->
-  <div class="navbar-inner row">
+<script>
+    function settingFunction(){
+        document.getElementById('label').value = "Tested"; 
+    }
+</script>
+<!--========S L I D E R : http://seiyria.com/bootstrap-slider/==========-->
+        <div class="navbar-inner row">
          	<div class="col-lg-6">
-            	  <div class="row">
-                   <h4 style="margin-left:10em;margin-top:0;margin-bottom:-1em;color:black;">Line Thickness</h4>
-                </div>
+<div class="row">
+    <h4 style="margin-left:10em;margin-top:0;margin-bottom:-1em;color:black;">Line Thickness</h4>
+</div>
                 
-                <div class="row">
-            <input id="ex15" data-slider-id='ex1Slider' type="text" data-slider-min="1" data-slider-max="100" data-slider-step="1" data-slider-value="50" style="z-index:9999;margin-top:-1em;"/>
-                </div>
-             
-           
+<div class="row">
+    <input id="ex15" data-slider-id='ex1Slider' type="text" data-slider-min="1" data-slider-max="100" data-slider-step="1" data-slider-value="50" style="z-index:9999;margin-top:-1em;"/>
+</div>
            </div><!--slide_row_1-->
            <div class="col-lg-6">      
-                       		 <!--========S L I D E R : http://seiyria.com/bootstrap-slider/==========-->
-            <div class="row">
-                <h4 style="margin-left:10em;margin-bottom:-1em;color:black;">Agent Creativity Level</h4>
-            </div>
-            <div class="row">
-                <input id="ex8" data-slider-id='ex1Slider' type="text" data-slider-min="0" data-slider-max="100" data-slider-step="1" data-slider-value="50" style="z-index:9999;margin-top:-1em;"/>
-            </div>
-            <script>
-            $("#ex8").slider({
-					tooltip: 'always'
-				});
-	
-				// Without JQuery
-				var slider = new Slider("#ex8", {
-					tooltip: 'always'
-				});
-				
-				var slider = new Slider("#ex15", {
-					tooltip: 'always'
-				});
-	
-			
-            </script>
-            </div>
-            
-              
-            </div><!--slider_row_2-->
-         
-         </div>
-   
-  </div><!-- /.container-fluid -->
-  
+<div class="row">
+    <h4 style="margin-left:10em;margin-top:0;margin-bottom:-1em;color:black;">Agent Creativity Level</h4>
+</div>
+<div class="row">
+    <input id="ex8" data-slider-id='ex1Slider' type="text" data-slider-min="0" data-slider-max="100" data-slider-step="1" data-slider-value="50" style="z-index:9999;margin-top:-1em;"/>
+</div>
+            </div><!--slide_row_2-->
+<script>
+    $("#ex8").slider({
+            tooltip: 'always'
+        });
+
+        // Without JQuery
+        var slider = new Slider("#ex8", {
+            tooltip: 'always'
+        });
+        
+        var slider = new Slider("#ex15", {
+            tooltip: 'always'
+        });
+</script>
+
+            <div class="col-lg-6">
+<div class="row">
+    <h4 style="margin-left:2em;margin-top:0;margin-bottom:-1em;color:black;">You Are Drawing:</h4>
+</div>
+<input class="row" id="label" type="text" value="Object Type">
+    <style>
+        #label{
+        width:6em;
+        height:2em;
+        font-size:14px;
+        }
+    </style>
+</input>
+            </div>  
+        </div>
+    </div>
 </div>
               
 <div class="modal fade" id="new" role="dialog" data-backdrop="static">
@@ -222,7 +238,7 @@ put js files before css files
                  </div>
                  
                  <div id="score">
-                 	<p>test</p>
+                 	<p>testing</p>
                  	<style>
                     	#score{
 							width:6em;

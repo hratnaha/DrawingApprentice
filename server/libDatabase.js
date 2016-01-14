@@ -16,7 +16,7 @@ module.exports = {
         canvasSize = size;
     },
     onSaveDataOnDb: function () {
-        if (userProfile) {
+        if (userProfile && userProfile != "") {
             var userId = userProfile.id;
 
             console.log(userId);

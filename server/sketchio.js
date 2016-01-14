@@ -182,7 +182,14 @@ io.on('connection', function (so) {
                 room = curRooms[thisPlayer.curRoom];
                 room.sockets.push(so);
             }
-            apprentice = room ? room.apprentice : new Apprentice();
+
+            if(!room){
+                apprentice = new Apprentice();
+                room = new Room(null, apprentice);
+            }
+            else
+                apprentice = room.apprentice;
+            
             room.setCanvasSize(hello.width, hello.height);
             userProfile = hello.user;
             sessionID = thisPlayer ? thisPlayer.curRoom : uuid.v4();
@@ -298,7 +305,7 @@ io.on('connection', function (so) {
                             
                             // decode to JSON and send the message
                             var resultmsg = JSON.stringify(compStroke);
-                            if(room)
+                            if(room && room.sockets.length > 0)
                                 room.broadcast('respondStroke', resultmsg);
                             else
                                 so.emit('respondStroke', resultmsg);
