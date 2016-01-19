@@ -26,11 +26,16 @@ var express = require('express'),
     session = require('express-session'),
     cookieParser = require('cookie-parser'),
     bodyParser = require('body-parser'),
-    mongoConfig = require('./configuration/mongoServerConfig'),
-    strategies = require('./strategies'), 
+    strategies = require('./strategies'),
     http = require('http'),
     app = express(),
-    canvas2D = require('./imgUtilities');
+    canvas2D = require('./libImage'),
+    uuid = require('node-uuid'),
+    curRooms = {},
+    roomsInfo = [],
+    onlineUsers = {},
+    Room = Room = require('./lib_GameHall/gameroom');;
+
 
 // Passport session setup.
 passport.serializeUser(function (user, done) {
@@ -49,38 +54,96 @@ app.set('views', __dirname + '/views');
 app.set('view engine', 'ejs');
 app.use(cookieParser());
 app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.json());
 app.use(session({ secret: 'keyboard cat', key: 'sid' }));
 app.use(passport.initialize());
 app.use(passport.session());
 app.use(express.static(__dirname + '/public'));
+app.use('/session_pic', express.static(__dirname + '/session_pic'));
 
 // log-in page for now
 app.get('/', function (req, res) {
-    res.render('index', { user: req});
+    res.render('index', { user: req });
 });
-// ensure authentication if the user directly connect to /app page
+
+app.get('/room/create', function (req, res) {
+    res.json(roomsInfo);
+});
+
+app.post('/room/create', function (req, res) {
+    var roomInfo = req.body;
+    var newRoomInfo = {};
+    newRoomInfo.name = roomInfo.name;
+    newRoomInfo.fullpic = '';
+    newRoomInfo.id = uuid.v4();
+    newRoomInfo.host = "chipin01"; // hard-coded for now;
+    newRoomInfo.players = [];
+    canvas2D.CreateBlankThumb(newRoomInfo.id);
+    newRoomInfo.thumb = '/session_pic/' + newRoomInfo.id + '_thumb.png';
+    res.json(newRoomInfo);
+    roomsInfo.push(newRoomInfo);
+    // initialize apprentice
+    var apprentice = new Apprentice();
+    apprentice.setCurrentTime((new Date()).getTime());
+    // create a room
+    var room = new Room(newRoomInfo, apprentice);
+    
+    curRooms[newRoomInfo.id] = room;
+});
+
+app.post('/room/join', function (req, res) {
+    // 1. check if the room exists
+    var msg = req.body;
+    var room = curRooms[msg.id];
+    var roomInfo = room ? room.roomInfo : null;
+    // 2. if yes, then add a player inside of the room.players attributes
+    //   so that the room knows there is a new player joining in.
+    if (room && roomInfo && onlineUsers[msg.newPlayer.id]) {
+        var newPlayer = onlineUsers[msg.newPlayer.id];
+        roomInfo.players.push(msg.newPlayer.id);
+        newPlayer.curRoom = roomInfo.id;
+        room.players.push(newPlayer);
+        // 3. tell the client to redirect to app page
+        var rmsg = {isSucceed: true};
+        res.json(rmsg);
+    }
+});
+
+// ensure authentication
 function ensureAuthenticated(req, res, next) {
     if (req.isAuthenticated()) { return next(); }
     res.redirect('/');
 }
+function authenticationSucceed(req, res){
+    onlineUsers[req.user.id] = req.user;
+    res.redirect('/admin_room');//res.redirect('/app');
+}
+// if the user pass thorugh authentication, render the app
 app.get('/app', ensureAuthenticated, function (req, res) {
-    res.render('app', { user: req.user._raw, sessionId: req.sessionID });
+    var user = onlineUsers[req.user.id];
+    var roomID = '';
+    if(user){
+        roomID = user.curRoom;
+    }
+    // need to tell the client to load the existing jpg
+    res.render('app', { user: req.user._raw, sessionId: req.sessionID, roomId: roomID});
 });
+app.get('/admin_room', ensureAuthenticated, function (req, res) {
+    res.render('admin_room', { user: req.user._raw });
+});
+
 // facebook authentication
 app.get('/auth/facebook', passport.authenticate('facebook', { scope: 'email' }));
 app.get('/auth/facebook/callback',
     passport.authenticate('facebook', { failureRedirect: '/' }),
-    function (req, res) {
-        res.redirect('/app');
-    }
+    authenticationSucceed
 );
 // google authentication
 app.get('/auth/google', passport.authenticate('google', { scope: 'https://www.googleapis.com/auth/plus.login' }));
 app.get('/auth/google/callback',
     passport.authenticate('google', { failureRedirect: '/login' }),
-    function (req, res) {
-        res.redirect('/app');
-});
+    authenticationSucceed
+);
 // when log-out
 app.get('/logout', function (req, res) {
     req.logout();
@@ -99,27 +162,39 @@ server.listen(8080);
 
 io.on('connection', function (so) {
     // set up closure varialbes
-    var apprentice = new Apprentice();
-    var systemStartTime = (new Date()).getTime();
+    var utilDatabase = require('./libDatabase');
+    var apprentice;
+    var room;
     var timeout;
     var userProfile;
     var sessionID;
-    var canvasSize = { width: 0, height: 0 };
-    var totalScore = 0; 
-
-    apprentice.setCurrentTime(systemStartTime);
-
+    var totalScore = 0;
+    
     console.log("new client connected");
 
     so.emit('newconnection', { hello: "world" });
 
     function onOpen(hello) {
         if (hello) {
-            canvasSize.width = hello.width;
-            canvasSize.height = hello.height;
-            apprentice.setCanvasSize(hello.width, hello.height);
+            var thisPlayer;
+            if(onlineUsers[hello.user.id]){
+                var thisPlayer = onlineUsers[hello.user.id];
+                room = curRooms[thisPlayer.curRoom];
+                room.sockets.push(so);
+            }
+
+            if(!room){
+                apprentice = new Apprentice();
+                room = new Room(null, apprentice);
+            }
+            else
+                apprentice = room.apprentice;
+            
+            room.setCanvasSize(hello.width, hello.height);
             userProfile = hello.user;
-            sessionID = hello.sessionId;
+            sessionID = thisPlayer ? thisPlayer.curRoom : uuid.v4();
+            
+            utilDatabase.initializeParameters(userProfile, sessionID, apprentice, room.canvasSize);
         }
     }
 
@@ -158,78 +233,6 @@ io.on('connection', function (so) {
         }
     }
 
-    function onSaveDataOnDb() {
-        if(userProfile){
-            var userId = userProfile.id;
-    
-            console.log(userId);
-            console.log(sessionID);
-    
-            var userLines;
-            var computerLines;
-            apprentice.getUserLines(function(err, item) {
-                if(err) {
-                    console.log(err);
-                } else {
-                    try{
-                        userLines = JSON.parse(item);
-                    }catch(e){
-                        console.log(e);
-                    }
-                    afterUserLines();
-                }
-            });
-    
-            function afterUserLines() {
-                apprentice.getComputerLines(function(err, item) {
-                    if (err) {
-                        console.log(err);
-                    } else {
-                        try{
-                            computerLines = JSON.parse(item);
-                        }catch(e){
-                            console.log(e)
-                        }
-                        saveData();
-                    }
-                });
-            }
-    
-            function saveData() {
-                canvas2D.ConvertDrawingToPng(canvasSize, sessionID, userLines, computerLines);
-                
-                var options = {
-                    host:       mongoConfig.host,
-                    port:       mongoConfig.port,
-                    path:       mongoConfig.base_path + userId + '/session/' + sessionID,
-                    auth:       mongoConfig.user + ":" + mongoConfig.pass,
-                    method:     'POST',
-                    headers:    mongoConfig.headers
-                };
-    
-                var req = http.request(options, function(res) {
-                    var data = "";
-                    res.on('data', function(chunk) {
-                        data += chunk;
-                    });
-                    res.on('end', function() {
-                        console.log(data);
-                    });
-                });
-                var postData = JSON.stringify({
-                    name: userProfile['name'],
-                    age_range: userProfile['age_range'],
-                    gender: userProfile['gender'],
-                    email: userProfile['email'],
-                    userLines: userLines,
-                    computerLines: computerLines
-                });
-                req.write(postData);
-                req.end();
-            }
-        }
-    }
-
     function onNewStrokeReceived(data) {
         var d = JSON.parse(data);
 
@@ -242,14 +245,11 @@ io.on('connection', function (so) {
         else
             apprentice.createStrokeSync(stroketime);
 
-        var pts = stroke.packetPoints;
-        var returnSt = [];
+        var pts = stroke.allPoints;
 
         // adding all the points in the stroke
         for (var i = 0; i < pts.length; i++) {
             var pt = pts[i];
-            var pttime = pt.timestamp;
-            //console.log(pt.timestamp);
             apprentice.addPointSync(parseInt(pt.x, 10), parseInt(pt.y, 10), pt.timestamp, pt.id);
         }
         // Todo: reconstruct the message to send out
@@ -266,11 +266,11 @@ io.on('connection', function (so) {
 
                             newpkpts.push(CreatePacketPoint(newpt));
                         }
-                        stroke.packetPoints = newpkpts;
+                        stroke.allPoints = newpkpts;
 
                         // decode to JSON and send the message
                         var resultmsg = JSON.stringify(stroke);
-                        io.emit('respondStroke', resultmsg);
+                        so.emit('respondStroke', resultmsg);
                         apprentice.setModeSync(0);
                     }
                 }
@@ -281,7 +281,7 @@ io.on('connection', function (so) {
             var b = java.newFloat(parseFloat(stroke.color.b));
             var a = java.newFloat(parseFloat(stroke.color.a));
             var thickness = java.newFloat(parseFloat(stroke.lineWidth));
-            
+
             apprentice.endStroke(r, g, b, a, thickness);
 
             if (timeout != "" || timeout != null) {
@@ -299,29 +299,44 @@ io.on('connection', function (so) {
 
                                 newpkpts.push(CreatePacketPoint(newpt));
                             }
-                            stroke.packetPoints = newpkpts;
-
+                            var compStroke = JSON.parse(JSON.stringify(stroke));
+                            compStroke.allPoints = newpkpts;
+                            compStroke.time = (new Date()).getTime();
+                            
                             // decode to JSON and send the message
-                            var resultmsg = JSON.stringify(stroke);
-                            io.emit('respondStroke', resultmsg);
+                            var resultmsg = JSON.stringify(compStroke);
+                            if(room && room.sockets.length > 0)
+                                room.broadcast('respondStroke', resultmsg);
+                            else
+                                so.emit('respondStroke', resultmsg);
+                            // draw the pic after sending the strokes back to the client
+                            // to save a little bit time
+                            room.addStroke(stroke, compStroke);
                         }
-                   //console.log("sending: " + resultmsg);
                     }
                 });
             }, 2000);
         }
-        so.broadcast.emit('respondStroke', JSON.stringify(d.data));
+        if(room){
+            for(var i=0;i<room.sockets.length;i++){
+                var tarso = room.sockets[i];
+                if(tarso != so)
+                    tarso.emit('respondStroke', JSON.stringify(d.data));
+            }
+        }
     }
 
     function vote(isUp, score) {
         var vote = isUp ? 1 : 0;
         if (isUp)
-            totalScore += 10; 
+            totalScore += 10;
         else
             totalScore -= 10; 
         //totalScore = isUp ? (totalScore + 10) : (totalScore - 10); 
-		io.emit('updateScore', JSON.stringify(totalScore));
-        apprentice.voteSync(vote); 
+        if(room)
+            room.broadcast('updateScore', JSON.stringify(totalScore));
+
+        apprentice.voteSync(vote);
     }
 
     function onClear() {
@@ -336,6 +351,11 @@ io.on('connection', function (so) {
             isGrouping = false;
         else
             apprentice.setModeSync(m);
+    }
+
+    function classifyObject(objectLabel) {
+        var label = JSON.stringify(objectLabel)
+        so.emit('classifyObject', label)
     }
 
     so.on('onOpen', onOpen);
@@ -353,7 +373,7 @@ io.on('connection', function (so) {
             clearTimeout(timeout);
         }
     });
-    so.on('disconnect', onSaveDataOnDb);
+    so.on('disconnect', utilDatabase.onSaveDataOnDb);
     so.on('touchup', onNewStrokeReceived);
     so.on('setMode', onModeChanged);
     so.on('clear', onClear);
@@ -362,6 +382,7 @@ io.on('connection', function (so) {
 });
 //===================== Finished Socket io server Set Up ====================\\
 
+//===================== Utility Functions ====================\\
 
 function submitResult(d) {
     submit(d, function (error, result) {
@@ -372,11 +393,11 @@ function submitResult(d) {
 function CreatePacketPoint(newpt) {
     // construct a new packet point
     var pkpt = {
-        id : newpt.id,
-        x : newpt.x,
-        y : newpt.y,
-        timestamp : newpt.timestamp,
-        pressure : 0          // to be implemented when the pressure is available
+        id: newpt.id,
+        x: newpt.x,
+        y: newpt.y,
+        timestamp: newpt.timestamp,
+        pressure: 0          // to be implemented when the pressure is available
     };
 
     return pkpt;

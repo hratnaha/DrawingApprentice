@@ -26,7 +26,8 @@ function initWebSocket() {
     socket.on('respondStroke', onNewStroke);
     socket.on('allData', onDataReceived);
     socket.on('disconnected', saveDataOnDb);
-	socket.on('updateScore', onUpdateScore);
+    socket.on('updateScore', onUpdateScore);
+    socket.on('classifyObject', onClassifyObject)
 
 	var logo = document.getElementById("logo");
 
@@ -43,9 +44,9 @@ function initWebSocket() {
 
     var timer = setInterval(function () {
 
-        if (botStroke != "" && i < botStroke.packetPoints.length ) {
-            ctx.lineTo(botStroke.packetPoints[i].x, botStroke.packetPoints[i].y);
-			//console.log(botStroke.packetPoints[i].x);
+        if (botStroke != "" && i < botStroke.allPoints.length ) {
+            ctx.lineTo(botStroke.allPoints[i].x, botStroke.allPoints[i].y);
+			//console.log(botStroke.allPoints[i].x);
 
             ctx.stroke();
 			//ctx.strokeStyle = tipColor;
@@ -56,16 +57,16 @@ function initWebSocket() {
 				fill: '#F0F0F0',
 				opacity: .5,
 				});
-            //console.log(botStroke.packetPoints[i].x);
-			moveLogo.style.left = botStroke.packetPoints[i].x - 70;
-			moveLogo.style.top = botStroke.packetPoints[i].y - 130;
+            //console.log(botStroke.allPoints[i].x);
+			moveLogo.style.left = botStroke.allPoints[i].x - 70;
+			moveLogo.style.top = botStroke.allPoints[i].y - 130;
 			//moveLogo.style.backgroundColor = "blue";
 
             i++;
         } else if (curStroke.length > 0) {
             botStroke = curStroke.shift();
             ctx.beginPath();
-            ctx.moveTo(botStroke.packetPoints[0].x, botStroke.packetPoints[0].y);
+            ctx.moveTo(botStroke.allPoints[0].x, botStroke.allPoints[0].y);
 			ctx.strokeStyle = tipColor;
 			ctx.globalAlpha = opacity2;
 			ctx.lineWidth = y;
@@ -75,8 +76,8 @@ function initWebSocket() {
 				opacity: .5,
 				});
             i = 0;
-			//moveLogo.style.left = botStroke.packetPoints[i].x - 70;
-			//moveLogo.style.top = botStroke.packetPoints[i].y - 130;
+			//moveLogo.style.left = botStroke.allPoints[i].x - 70;
+			//moveLogo.style.top = botStroke.allPoints[i].y - 130;
 			//moveLogo.style.backgroundColor = "red";
 
 
@@ -100,13 +101,10 @@ function initWebSocket() {
 
 function MoveLogoBack () {
 	if(finishStroke==false){
-	//console.log("move");
-	//moveLogo.style.left = '4em';
-	//moveLogo.style.top = '5em';
-			$('#logo').animate({
-					left: '90%',
-					top: '-1em'},
-				"swing");
+    $('#logo').animate({
+            left: '90%',
+            top: '-1em'},
+        "swing");
 
 	console.log('logo left is ' + moveLogo.style.left);
 	}
@@ -115,7 +113,7 @@ function MoveLogoBack () {
 
 function onNewStroke(data) {
 	moveLogo.style.left = "90%";
-			moveLogo.style.top = "3%";
+	moveLogo.style.top = "3%";
     console.log(data);
     // decode the data into the new stroke
     var botStroke = JSON.parse(data);
@@ -123,16 +121,6 @@ function onNewStroke(data) {
 	logo.style.position = "absolute";
 	logo.style.left = data.x;
 	logo.style.top = data.y;
-
-	//var botPts = botStroke.packetPoints;
-
- //   if (botPts.length > 1) {
-
- //       ctx.beginPath();
- //       ctx.moveTo(botPts[0].x, botPts[0].y);
-	//	var i = 0;
-
-	//}
 }
 
 function onOpen(data) {
@@ -194,6 +182,26 @@ function clearCanvas() {
 }
 // change the mode base on the UI changes
 
+var isGrouping = false;
+function changeGrouping(){
+    if (isGrouping) {
+        isGrouping = false;
+        $('#group').removeClass('active')
+        socket.emit('setMode', 4);
+    }
+    else {
+        isGrouping = true;
+        $('#group').addClass('active')
+        socket.emit('setMode', 3);
+    }
+}
+
+function setGroupLabel(label){
+    var groupLabel = label;
+    //stringify and emit the label to server
+
+}
+
 function setMode(mode) {
 
     switch ($(this).val()) {
@@ -213,7 +221,6 @@ function setMode(mode) {
 function ChangeMode1(){
 	alert("Global");
 	socket.emit('setMode',2);
-
 }
 
 function ChangeMode2(){
@@ -227,10 +234,13 @@ function ChangeMode3(){
 }
 
 function groupingMode(chk) {
-	if(chk)
-	   	socket.emit('setMode', 3);
-	else
-		socket.emit('setMode', 4);
+    console.log("Grouping mode chk=" + chk); 
+    if (chk) {
+        socket.emit('setMode', 3);
+    }
+    else {
+        socket.emit('setMode', 4);
+    }
 }
 
 function DownVote() {
@@ -246,6 +256,15 @@ function downloadData() {
     console.log('getting data...');
     socket.emit('getData');
 }
+
+
+function downloadCanvas(link) {
+    link.href = document.getElementById('both').toDataURL();
+    console.log(link);
+    console.log(link.href);
+    link.download = 'test.png';
+}
+
 
 //$.unload(saveDataOnDb);
 
@@ -299,4 +318,10 @@ function onUpdateScore(newScore){
      document.getElementById("score").innerHTML = "total score = " + totalScore;
 	console.log("totalScore is:" + " " + totalScore);
 	//getElementbyID('#score').innerHTML = totalScore;
-	}
+}
+
+function onClassifyObject(label){
+    var newLabel = JSON.parse(label)
+    document.getElementById('label').value = newLabel;
+}
+

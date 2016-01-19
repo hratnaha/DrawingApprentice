@@ -13,7 +13,14 @@ function sketchUtil() {
     var context = canvas.getContext('2d');
     context.lineWidth = 1;
 	
-	
+	if(roomId != ""){
+        var img = new Image();
+        img.onload = function(){
+            bothInputContext.drawImage(img,0,0);
+        };
+        img.src = "/session_pic/" + roomId + ".png";
+    }
+    
     var curstroke;
     var strCounter = 0, pkptCounter = 0;
     var colorline;
@@ -40,7 +47,7 @@ function sketchUtil() {
                     a: opacity2
                 },
                 lineWidth : y,
-                packetPoints : []
+                allPoints : []
             }
         };
         return newstroke;
@@ -58,7 +65,7 @@ function sketchUtil() {
             color: tipColor          //passing color in hex form
         };
         
-        curstroke.data.packetPoints.push(pkpt);
+        curstroke.data.allPoints.push(pkpt);
     }
     
 	
@@ -68,9 +75,10 @@ function sketchUtil() {
         touchstart: function (coors) {
             colorline = document.getElementById('background').value;
             curstroke = createNewStroke();
-			if ($('#grouping').hasClass("isGrouping")){
+			if ($('#group').hasClass("active")){
             //if ($("#cboxGrouping").attr('checked') == "checked") {
-				//alert("grouping checked");
+                //alert("grouping checked");
+                console.log("Grouping checked"); 
                 context.setLineDash([5]);
                 context.strokeStyle = tipColor;
 				//console.log(tipColor);
@@ -80,7 +88,7 @@ function sketchUtil() {
             } else {
                 colorline = document.getElementById('background').value;
                 context.strokeStyle = tipColor;
-                //context.setLineDash([0]);
+                context.setLineDash([0]);
 				context.lineWidth = y;
 				context.globalAlpha = opacity2;
 			
@@ -109,10 +117,14 @@ function sketchUtil() {
 
                 this.isDrawing = false;
 				//if (document.getElementById('grouping').clicked == true) {
-                if (!$('#grouping').hasClass("isGrouping"))
-                  bothInputContext.drawImage(canvas, 0, 0);
-
-                context.clearRect(0, 0, canvas.width, canvas.height);
+                if (!$('#group').hasClass("active")) {
+                    bothInputContext.drawImage(canvas, 0, 0);
+                }
+                else {
+                    var label = prompt("Please enter the type of object you drew:", "Object");
+                    changeGrouping();
+                    context.clearRect(0, 0, canvas.width, canvas.height);
+                }
             }
         }
     };

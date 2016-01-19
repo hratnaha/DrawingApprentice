@@ -1,4 +1,4 @@
-@charset "UTF-8";
+﻿@charset "UTF-8";
 
 @font-face {
    font-family: 'Glyphicons Halflings';
@@ -48,7 +48,7 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#e2e2e2', end
     border-color: #5EACEA;
     border: 2px solid #5EACEA;
     border-radius: .2em;
-    width: 4em;
+    width: 6em;
 	margin-top:.2em;
 	
 	}
@@ -727,6 +727,19 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#5a5a5a', end
 		margin-left:2em;
 		margin-top:2em;
 }
+.col-lg-6{
+    width:33%;
+}
+
+#label{
+		position:relative;
+		top:inherit;
+		width:30em;
+		margin-left:4em;
+		margin-top:20px;
+}
+
+
 
 	
 @media screen (max-width:400px){
