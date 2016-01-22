@@ -260,6 +260,13 @@ function rgbToHex(r, g, b) {
     return "#" + componentToHex(r) + componentToHex(g) + componentToHex(b);
 }
 
+function rgbDoubleToHex(r, g, b) {
+    r = r * 255;
+    g = g * 255;
+    b = b * 255;
+    return "#" + componentToHex(r) + componentToHex(g) + componentToHex(b);
+}
+
 function hexToRgb(hex) {
     var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
     return result ? {
