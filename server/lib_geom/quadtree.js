@@ -28,8 +28,9 @@ LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
 OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
 WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
+"use strict";
 
-;(function(window, Math) {
+class Quadtree {
  	
 	 /*
 	  * Quadtree Constructor
@@ -38,25 +39,25 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 	  * @param Integer max_levels		(optional) total max levels inside root Quadtree (default: 4) 
 	  * @param Integer level		(optional) deepth level, required for subnodes  
 	  */
-	function Quadtree( bounds, max_objects, max_levels, level ) {
+	constructor( bounds, max_objects, max_levels, level ) {
 		
-		this.max_objects	= max_objects || 10;
-		this.max_levels		= max_levels || 4;
+		this.max_objects= max_objects || 10;
+		this.max_levels	= max_levels || 4;
 		
 		this.level 		= level || 0;
-		this.bounds 		= bounds;
+		this.bounds 	= bounds;
 		
-		this.objects 		= [];
+		this.objects 	= [];
 		this.nodes 		= [];
-	};
+	}
 	
 	
 	/*
 	 * Split the node into 4 subnodes
 	 */
-	Quadtree.prototype.split = function() {
+	split(){
 		
-		var 	nextLevel	= this.level + 1,
+		var nextLevel	= this.level + 1,
 			subWidth	= Math.round( this.bounds.width / 2 ),
 			subHeight 	= Math.round( this.bounds.height / 2 ),
 			x 		= Math.round( this.bounds.x ),
@@ -93,7 +94,7 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 			width	: subWidth, 
 			height	: subHeight
 		}, this.max_objects, this.max_levels, nextLevel);
-	};
+	}
 	
 	
 	/*
@@ -101,9 +102,9 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 	 * @param Object pRect		bounds of the area to be checked, with x, y, width, height
 	 * @return Integer		index of the subnode (0-3), or -1 if pRect cannot completely fit within a subnode and is part of the parent node
 	 */
-	Quadtree.prototype.getIndex = function( pRect ) {
+	getIndex( pRect ) {
 		
-		var 	index 			= -1,
+		var index = -1,
 			verticalMidpoint 	= this.bounds.x + (this.bounds.width / 2),
 			horizontalMidpoint 	= this.bounds.y + (this.bounds.height / 2),
 	 
@@ -131,7 +132,7 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 		}
 	 
 		return index;
-	};
+	}
 	
 	
 	/*
@@ -140,7 +141,7 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 	 * objects to their corresponding subnodes.
 	 * @param Object pRect		bounds of the object to be added, with x, y, width, height
 	 */
-	Quadtree.prototype.insert = function( pRect ) {
+	insert( pRect ) {
 		
 		var 	i = 0,
 	 		index;
@@ -176,7 +177,7 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 			 	}
 		 	}
 		}
-	 };
+	 }
 	 
 	 
 	/*
@@ -184,7 +185,7 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 	 * @param Object pRect		bounds of the object to be checked, with x, y, width, height
 	 * @Return Array		array with all detected objects
 	 */
-	Quadtree.prototype.retrieve = function( pRect ) {
+	retrieve( pRect ) {
 	 	
 		var 	index = this.getIndex( pRect ),
 			returnObjects = this.objects;
@@ -205,13 +206,13 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 		}
 	 
 		return returnObjects;
-	};
-	
+	}
+
 	
 	/*
 	 * Clear the quadtree
 	 */
-	Quadtree.prototype.clear = function() {
+	clear () {
 		
 		this.objects = [];
 	 
@@ -222,9 +223,6 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 		}
 
 		this.nodes = [];
-	};
-
-	//make Quadtree available in the global namespace
-	window.Quadtree = Quadtree;	
-
-})(window, Math);
+	}
+}
+module.exports = Quadtree;

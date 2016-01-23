@@ -5,6 +5,7 @@
 "use strict";
 
 var canvas2D = require('../libImage'),
+    Quadtree = require('../lib_geom/quadtree'),
     uuid = require('node-uuid');
 
 class gameroom {
@@ -40,6 +41,9 @@ class gameroom {
         this.userStrokes.push(userline);
         this.compStrokes.push(computerline);
         
+        // add the user line and the computer line into the quadtree
+        
+        // update the server pic every 10 user lines
         if(this.userStrokes.length > 0 && this.userStrokes.length % 10 == 0){
             // draw both user lines and computer lines
             var drawingContext = canvas2D.Initialize(this.canvasSize.width, this.canvasSize.height);
@@ -68,6 +72,8 @@ class gameroom {
         this.canvasSize.width = Math.max(width, this.canvasSize.width);
         this.canvasSize.height = Math.max(height, this.canvasSize.height);
         this.apprentice.setCanvasSize(this.canvasSize.width, this.canvasSize.height);
+        var bound = {x: 0, y: 0, width: this.canvasSize.width, height: this.canvasSize.height};
+        this.quadtree = new Quadtree(bound, 10, 5);
     }
 }
 module.exports = gameroom;
