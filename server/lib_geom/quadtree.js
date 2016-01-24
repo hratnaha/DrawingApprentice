@@ -143,7 +143,7 @@ class Quadtree {
 	 */
 	insert( pRect ) {
 		
-		var 	i = 0,
+		var i = 0,
 	 		index;
 	 	
 	 	//if we have subnodes ...

@@ -8,6 +8,19 @@ var canvas2D = require('../libImage'),
     Quadtree = require('../lib_geom/quadtree'),
     uuid = require('node-uuid');
 
+function insertLineSegments(quadtree, stroke){
+    for(var ptID = 0 ; ptID < stroke.allPoints.length-1; ptID++){
+        var pt1 = stroke.allPoints[ptID];
+        var pt2 = stroke.allPoints[ptID + 1];
+        var left = pt1.x < pt2.x ? pt1.x : pt2.x;
+        var top = pt1.y < pt2.y ? pt1.y : pt2.y;
+        var bwidth = Math.abs(pt1.x - pt2.x);
+        var bheight = Math.abs(pt1.y - pt2.y);
+        var bound = {x: left, y: top, width: bwidth, height: bheight, fromline: stroke};
+        quadtree.insert(bound);
+    }
+}
+
 class gameroom {
     constructor(roomInfo, apprentice){
         this.players = [];
@@ -42,6 +55,10 @@ class gameroom {
         this.compStrokes.push(computerline);
         
         // add the user line and the computer line into the quadtree
+        if(this.quadtree){
+            insertLineSegments(this.quadtree, userline);
+            insertLineSegments(this.quadtree, computerline);
+        }
         
         // update the server pic every 10 user lines
         if(this.userStrokes.length > 0 && this.userStrokes.length % 10 == 0){
