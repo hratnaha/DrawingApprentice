@@ -268,15 +268,15 @@ public class Apprentice {
 
 				int size_main = this.allGroups.size() - 1;
 				int size_lines = this.allGroups.get(size_main).getSize() - 1;
-				int preAlgo = -1;
+				int preDecision = -1;
 				for (int i = 0; i < this.allGroups.get(size_main).getSize(); ++i) {
 					Line l1 = this.allGroups.get(size_main).lines.get(i);
 					Decision_Engine engine = new Decision_Engine(l1, line2,
 							(float) Math.sqrt(Math.pow(width, 2)
 									+ Math.pow(height, 2)));
 
-					Line l = engine.decision(preAlgo);
-					preAlgo = engine.curDecisionID;
+					Line l = engine.decision(preDecision);
+					preDecision = engine.curDecisionID;
 					l.compGenerated = true;
 
 					// System.out.println("line generated");
