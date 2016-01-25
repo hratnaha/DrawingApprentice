@@ -258,9 +258,23 @@ function downloadData() {
 
 
 function downloadCanvas(link) {
-    link.href = document.getElementById('both').toDataURL();
-    console.log(link);
-    console.log(link.href);
+    var canvas = document.getElementById('both');
+    var context = canvas.getContext('2d'); 
+    var w = canvas.width;
+    var h = canvas.height;
+
+    var data = context.getImageData(0, 0, w, h);
+    var compositeOperation = canvas.globalCompositeOperation;
+    context.globalCompositeOperation = "destination-over";
+    context.fillStyle = "#FFFFFF";
+    context.fillRect(0, 0, w, h);
+    var imageData = canvas.toDataURL("image/PNG");
+    
+    context.clearRect(0, 0, w, h);
+    context.putImageData(data, 0, 0);
+    context.globalCompositeOperation = compositeOperation; 
+    
+    link.href = imageData; 
     link.download = 'test.png';
 }
 
