@@ -71,6 +71,7 @@ class gameroom {
         }
     }
     addStroke(userStroke, so){
+        // for closure variable
         var thisobj = this;
         
         this.userStrokes.push(userStroke);
