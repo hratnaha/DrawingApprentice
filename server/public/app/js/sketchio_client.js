@@ -48,18 +48,16 @@ function initWebSocket() {
 
         if (botStroke != "" && i < botStroke.allPoints.length ) {
             ctx.lineTo(botStroke.allPoints[i].x, botStroke.allPoints[i].y);
-			//console.log(botStroke.allPoints[i].x);
 
             ctx.stroke();
 			//ctx.strokeStyle = botColor;
-			ctx.globalAlpha = opacity2;
-			ctx.lineWidth = y;
+            ctx.globalAlpha = opacity2;
+            ctx.lineWidth = botStroke.lineWidth; 
 			$("#tip").css({fill: botColor});
 			$("#tip-highlight").css({
 				fill: '#F0F0F0',
 				opacity: .5,
 				});
-            //console.log(botStroke.allPoints[i].x);
 			moveLogo.style.left = botStroke.allPoints[i].x - 70;
 			moveLogo.style.top = botStroke.allPoints[i].y - 130;
 			//moveLogo.style.backgroundColor = "blue";
@@ -71,16 +69,14 @@ function initWebSocket() {
             ctx.beginPath();
             ctx.moveTo(botStroke.allPoints[0].x, botStroke.allPoints[0].y);
 			ctx.strokeStyle = botColor;
-			ctx.globalAlpha = opacity2;
-			ctx.lineWidth = y;
+            ctx.globalAlpha = opacity2;
+            ctx.lineWidth = botStroke.lineWidth;
 			$("#tip").css({fill: botColor});
 			$("#tip-highlight").css({
 				fill: '#F0F0F0',
 				opacity: .5,
 				});
             i = 0;
-			//moveLogo.style.left = botStroke.allPoints[i].x - 70;
-			//moveLogo.style.top = botStroke.allPoints[i].y - 130;
 			//moveLogo.style.backgroundColor = "red";
 
 
@@ -306,21 +302,8 @@ function onUpdateScore(newScore){
     var score = JSON.parse(newScore);
     totalScore = score; 
     console.log("Inside update score:" + " " + totalScore);
-    /*
-	if(score=='1'){
-		totalScore += 10;
-		console.log('total score = ' + totalScore); 
-		document.getElementById("score").innerHTML = "total score = " + totalScore;
-		}
-	else if(score=='0'  /*&& totalScore>10){
-		totalScore -= 10;
-		console.log('total score = ' + totalScore); 
-	    document.getElementById("score").innerHTML = "total score = " + totalScore;
-    }
-        */
      document.getElementById("score").innerHTML = "total score = " + totalScore;
 	console.log("totalScore is:" + " " + totalScore);
-	//getElementbyID('#score').innerHTML = totalScore;
 }
 
 function onClassifyObject(label){
