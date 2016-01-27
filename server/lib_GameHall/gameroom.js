@@ -207,7 +207,7 @@ class gameroom {
         this.canvasSize.height = Math.max(height, this.canvasSize.height);
         this.apprentice.setCanvasSize(this.canvasSize.width, this.canvasSize.height);
         var bound = {x: 0, y: 0, width: this.canvasSize.width, height: this.canvasSize.height};
-        this.quadtree = new Quadtree(bound, 100, 5, 0, this, onReaching4thLevel);
+        this.quadtree = new Quadtree(bound, 50, 5, 0, this, onReaching4thLevel);
     }
     onModeChanged(m) {
         

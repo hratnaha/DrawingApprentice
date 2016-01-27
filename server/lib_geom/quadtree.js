@@ -71,7 +71,7 @@ class Quadtree {
 			y	: y, 
 			width	: subWidth, 
 			height	: subHeight
-		}, this.max_objects, this.max_levels, nextLevel, this.reach4thLevel);
+		}, this.max_objects, this.max_levels, nextLevel, this.room, this.reach4thLevel);
 		
 		//top left node
 		this.nodes[1] = new Quadtree({
@@ -79,7 +79,7 @@ class Quadtree {
 			y	: y, 
 			width	: subWidth, 
 			height	: subHeight
-		}, this.max_objects, this.max_levels, nextLevel, this.reach4thLevel);
+		}, this.max_objects, this.max_levels, nextLevel, this.room, this.reach4thLevel);
 		
 		//bottom left node
 		this.nodes[2] = new Quadtree({
@@ -87,7 +87,7 @@ class Quadtree {
 			y	: y + subHeight, 
 			width	: subWidth, 
 			height	: subHeight
-		}, this.max_objects, this.max_levels, nextLevel, this.reach4thLevel);
+		}, this.max_objects, this.max_levels, nextLevel, this.room, this.reach4thLevel);
 		
 		//bottom right node
 		this.nodes[3] = new Quadtree({
@@ -95,7 +95,7 @@ class Quadtree {
 			y	: y + subHeight, 
 			width	: subWidth, 
 			height	: subHeight
-		}, this.max_objects, this.max_levels, nextLevel, this.reach4thLevel);
+		}, this.max_objects, this.max_levels, nextLevel, this.room, this.reach4thLevel);
         
         if(this.level == 4 && !this.hasReacted){
             // get all the lines in this node
