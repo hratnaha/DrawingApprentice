@@ -255,7 +255,8 @@ io.on('connection', function (so) {
         apprentice.clearSync();
     }
 
-    function onModeChanged(m){
+    function onSetMode(mode){
+        var m = JSON.parse(mode);
         if(room){
             room.onModeChanged(m);
         }
@@ -281,7 +282,7 @@ io.on('connection', function (so) {
     });
     so.on('disconnect', utilDatabase.onSaveDataOnDb);
     so.on('touchup', onNewStrokeReceived);
-    so.on('setMode', onModeChanged);
+    so.on('setMode', onSetMode);
     so.on('clear', onClear);
     so.on('submit', submitResult);
     so.on('vote', vote);

@@ -57,7 +57,7 @@ public class Regional extends Decision_Engine {
 	
 	public Line decision() {
 		
-			return local.decision();
+			return local.decision(-1);
 		
 		//return local.decisionLine(0);
 	}

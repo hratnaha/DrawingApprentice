@@ -77,7 +77,9 @@ class gameroom {
         }
     }
     addStroke(userStroke, so){
+        // for closure variable
         var thisobj = this;
+        
         this.userStrokes.push(userStroke);
         insertLineSegments(this.quadtree, userStroke);
         
@@ -147,15 +149,15 @@ class gameroom {
                             compStroke.time = (new Date()).getTime();
                             
                             // decode to JSON and send the message
-                            // and send it to all the players
                             var resultmsg = JSON.stringify(compStroke);
-                            thisobj.broadcast('respondStroke', resultmsg);
-                            
-                            // Old code for dealing with the case without game room involved
-                            /*if(room && room.sockets.length > 0)
-                                room.broadcast('respondStroke', resultmsg);
-                            else
-                                so.emit('respondStroke', resultmsg);*/
+                            // and send it to all the players
+                            if(thisobj.sockets.length > 0){
+                                for(var i=0;i<thisobj.sockets.length;i++){
+                                    var tarso = thisobj.sockets[i];
+                                    tarso.emit('respondStroke', resultmsg);
+                                }
+                            }else
+                                so.emit('respondStroke', resultmsg);
                             
                             thisobj.compStrokes.push(compStroke);
                             insertLineSegments(thisobj.quadtree, compStroke);
@@ -169,7 +171,7 @@ class gameroom {
         for(var i=0;i<this.sockets.length;i++){
             var tarso = this.sockets[i];
             if(tarso != so)
-                tarso.emit('respondStroke', JSON.stringify(d.data));
+                tarso.emit('respondStroke', JSON.stringify(userStroke));
         }
         
         
@@ -207,8 +209,8 @@ class gameroom {
         var bound = {x: 0, y: 0, width: this.canvasSize.width, height: this.canvasSize.height};
         this.quadtree = new Quadtree(bound, 100, 5, 0, this, onReaching4thLevel);
     }
-    onModeChanged(mode) {
-        var m = JSON.parse(mode);
+    onModeChanged(m) {
+        
         if (m == 3)
             this.isGrouping = true;
         else if (m == 4)
