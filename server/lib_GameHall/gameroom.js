@@ -35,6 +35,12 @@ function CreatePacketPoint(newpt) {
 
     return pkpt;
 }
+function onReaching4thLevel(strokes){
+    console.log(strokes.length);
+    
+    
+}
+
 class gameroom {
     constructor(roomInfo, apprentice){
         this.players = [];
@@ -71,6 +77,7 @@ class gameroom {
         }
     }
     addStroke(userStroke, so){
+        var thisobj = this;
         this.userStrokes.push(userStroke);
         insertLineSegments(this.quadtree, userStroke);
         
@@ -125,7 +132,7 @@ class gameroom {
             }
 
             this.timeout = setTimeout(function () {
-                this.apprentice.getDecision(function (err, results) {
+                thisobj.apprentice.getDecision(function (err, results) {
                     if (results != null) {
                         for (var j = 0; j < results.sizeSync(); j++) {
                             var newpkpts = [];
@@ -142,7 +149,7 @@ class gameroom {
                             // decode to JSON and send the message
                             // and send it to all the players
                             var resultmsg = JSON.stringify(compStroke);
-                            this.broadcast('respondStroke', resultmsg);
+                            thisobj.broadcast('respondStroke', resultmsg);
                             
                             // Old code for dealing with the case without game room involved
                             /*if(room && room.sockets.length > 0)
@@ -150,10 +157,10 @@ class gameroom {
                             else
                                 so.emit('respondStroke', resultmsg);*/
                             
-                            this.compStrokes.push(compStroke);
-                            insertLineSegments(this.quadtree, compStroke);
+                            thisobj.compStrokes.push(compStroke);
+                            insertLineSegments(thisobj.quadtree, compStroke);
                             
-                            this.updateServerPic();
+                            thisobj.updateServerPic();
                         }
                     }
                 });
@@ -198,7 +205,7 @@ class gameroom {
         this.canvasSize.height = Math.max(height, this.canvasSize.height);
         this.apprentice.setCanvasSize(this.canvasSize.width, this.canvasSize.height);
         var bound = {x: 0, y: 0, width: this.canvasSize.width, height: this.canvasSize.height};
-        this.quadtree = new Quadtree(bound, 10, 5);
+        this.quadtree = new Quadtree(bound, 100, 5, 0, this, onReaching4thLevel);
     }
     onModeChanged(mode) {
         var m = JSON.parse(mode);

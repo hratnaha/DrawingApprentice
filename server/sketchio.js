@@ -255,7 +255,11 @@ io.on('connection', function (so) {
         apprentice.clearSync();
     }
 
-    
+    function onModeChanged(m){
+        if(room){
+            room.onModeChanged(m);
+        }
+    }
 
     function classifyObject(objectLabel) {
         var label = JSON.stringify(objectLabel)
@@ -277,7 +281,7 @@ io.on('connection', function (so) {
     });
     so.on('disconnect', utilDatabase.onSaveDataOnDb);
     so.on('touchup', onNewStrokeReceived);
-    so.on('setMode', room.onModeChanged);
+    so.on('setMode', onModeChanged);
     so.on('clear', onClear);
     so.on('submit', submitResult);
     so.on('vote', vote);

@@ -39,7 +39,7 @@ class Quadtree {
 	  * @param Integer max_levels		(optional) total max levels inside root Quadtree (default: 4) 
 	  * @param Integer level		(optional) deepth level, required for subnodes  
 	  */
-	constructor( bounds, max_objects, max_levels, level ) {
+	constructor( bounds, max_objects, max_levels, level, room, reach4thLevel ) {
 		
 		this.max_objects= max_objects || 10;
 		this.max_levels	= max_levels || 4;
@@ -49,6 +49,8 @@ class Quadtree {
 		
 		this.objects 	= [];
 		this.nodes 		= [];
+        this.room       = room;
+        this.reach4thLevel = reach4thLevel;
 	}
 	
 	
@@ -69,7 +71,7 @@ class Quadtree {
 			y	: y, 
 			width	: subWidth, 
 			height	: subHeight
-		}, this.max_objects, this.max_levels, nextLevel);
+		}, this.max_objects, this.max_levels, nextLevel, this.reach4thLevel);
 		
 		//top left node
 		this.nodes[1] = new Quadtree({
@@ -77,7 +79,7 @@ class Quadtree {
 			y	: y, 
 			width	: subWidth, 
 			height	: subHeight
-		}, this.max_objects, this.max_levels, nextLevel);
+		}, this.max_objects, this.max_levels, nextLevel, this.reach4thLevel);
 		
 		//bottom left node
 		this.nodes[2] = new Quadtree({
@@ -85,7 +87,7 @@ class Quadtree {
 			y	: y + subHeight, 
 			width	: subWidth, 
 			height	: subHeight
-		}, this.max_objects, this.max_levels, nextLevel);
+		}, this.max_objects, this.max_levels, nextLevel, this.reach4thLevel);
 		
 		//bottom right node
 		this.nodes[3] = new Quadtree({
@@ -93,7 +95,21 @@ class Quadtree {
 			y	: y + subHeight, 
 			width	: subWidth, 
 			height	: subHeight
-		}, this.max_objects, this.max_levels, nextLevel);
+		}, this.max_objects, this.max_levels, nextLevel, this.reach4thLevel);
+        
+        if(this.level == 4 && !this.hasReacted){
+            // get all the lines in this node
+            var allStrokes = {};
+            
+            for(var i=0;i<this.objects.length;i++){
+                var rect = this.objects[i];
+                var stroke = rect.fromline;
+                if(stroke && !allStrokes[stroke.id])
+                    allStrokes[stroke.id] = stroke;
+            }
+            this.hasReacted = true;
+            this.reach4thLevel.call(this.room, allStrokes);
+        }
 	}
 	
 	
