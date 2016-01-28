@@ -4,6 +4,7 @@ var socket;
 var botCanvas = {};
 var isdrawing = false;
 var ison = true;
+var randomLines = false; //use random lines? 
 var curStroke = [];
 var finishStroke = false;
 var lineThickness;
@@ -310,6 +311,24 @@ function TurnOnOffAgent() {
         socket.emit('setAgentOn', false);
 		console.log(ison);
     }
+}
+
+function setAgentState(agentState){
+    if (agentState) {
+        socket.emit('setAgentOn', true);
+        console.log('turn agent on');
+    }
+    else {
+        socket.emit('setAgentOn', false);
+        console.log('turn agent off');
+    }
+}
+
+function setRandom(randomState){
+    if (randomState)
+        randomLines = true;
+    else
+        randomLines = false; 
 }
 
 function onUpdateScore(newScore){

@@ -364,8 +364,9 @@ io.on('connection', function (so) {
         apprentice.setCreativityLevel(d);
     });
     so.on('setAgentOn', function (ison) {
+        console.log("Setting the agent to: " + ison); 
         var isOnBool = JSON.parse(ison);
-        apprentice.setAgentOn(!isOnBool);
+        apprentice.setAgentOn(isOnBool);
     });
     so.on('getData', getData);
     so.on('touchdown', function () {
