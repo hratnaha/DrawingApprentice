@@ -48,18 +48,16 @@ function initWebSocket() {
 
         if (botStroke != "" && i < botStroke.allPoints.length ) {
             ctx.lineTo(botStroke.allPoints[i].x, botStroke.allPoints[i].y);
-			//console.log(botStroke.allPoints[i].x);
 
             ctx.stroke();
 			//ctx.strokeStyle = botColor;
-			ctx.globalAlpha = opacity2;
-			ctx.lineWidth = y;
+            ctx.globalAlpha = opacity2;
+            ctx.lineWidth = botStroke.lineWidth; 
 			$("#tip").css({fill: botColor});
 			$("#tip-highlight").css({
 				fill: '#F0F0F0',
 				opacity: .5,
 				});
-            //console.log(botStroke.allPoints[i].x);
 			moveLogo.style.left = botStroke.allPoints[i].x - 70;
 			moveLogo.style.top = botStroke.allPoints[i].y - 130;
 			//moveLogo.style.backgroundColor = "blue";
@@ -71,16 +69,14 @@ function initWebSocket() {
             ctx.beginPath();
             ctx.moveTo(botStroke.allPoints[0].x, botStroke.allPoints[0].y);
 			ctx.strokeStyle = botColor;
-			ctx.globalAlpha = opacity2;
-			ctx.lineWidth = y;
+            ctx.globalAlpha = opacity2;
+            ctx.lineWidth = botStroke.lineWidth;
 			$("#tip").css({fill: botColor});
 			$("#tip-highlight").css({
 				fill: '#F0F0F0',
 				opacity: .5,
 				});
             i = 0;
-			//moveLogo.style.left = botStroke.allPoints[i].x - 70;
-			//moveLogo.style.top = botStroke.allPoints[i].y - 130;
 			//moveLogo.style.backgroundColor = "red";
 
 
@@ -262,9 +258,23 @@ function downloadData() {
 
 
 function downloadCanvas(link) {
-    link.href = document.getElementById('both').toDataURL();
-    console.log(link);
-    console.log(link.href);
+    var canvas = document.getElementById('both');
+    var context = canvas.getContext('2d'); 
+    var w = canvas.width;
+    var h = canvas.height;
+
+    var data = context.getImageData(0, 0, w, h);
+    var compositeOperation = canvas.globalCompositeOperation;
+    context.globalCompositeOperation = "destination-over";
+    context.fillStyle = "#FFFFFF";
+    context.fillRect(0, 0, w, h);
+    var imageData = canvas.toDataURL("image/PNG");
+    
+    context.clearRect(0, 0, w, h);
+    context.putImageData(data, 0, 0);
+    context.globalCompositeOperation = compositeOperation; 
+    
+    link.href = imageData; 
     link.download = 'test.png';
 }
 
@@ -306,21 +316,8 @@ function onUpdateScore(newScore){
     var score = JSON.parse(newScore);
     totalScore = score; 
     console.log("Inside update score:" + " " + totalScore);
-    /*
-	if(score=='1'){
-		totalScore += 10;
-		console.log('total score = ' + totalScore); 
-		document.getElementById("score").innerHTML = "total score = " + totalScore;
-		}
-	else if(score=='0'  /*&& totalScore>10){
-		totalScore -= 10;
-		console.log('total score = ' + totalScore); 
-	    document.getElementById("score").innerHTML = "total score = " + totalScore;
-    }
-        */
      document.getElementById("score").innerHTML = "total score = " + totalScore;
 	console.log("totalScore is:" + " " + totalScore);
-	//getElementbyID('#score').innerHTML = totalScore;
 }
 
 function onClassifyObject(label){
