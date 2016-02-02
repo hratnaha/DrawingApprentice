@@ -42,7 +42,7 @@ public class Local extends Decision_Engine{
 	private int decisionNumber = 0;
 	
 	@Override
-	public Line decision() {
+	public Line decision(int predecision) {
 		/*int decision = generateNumberByFreq(freq, numAlgorithms); //1 + random.nextInt(11);
 		//freq.addValue(decision);
 		decisionNumber = decision;
@@ -61,7 +61,7 @@ public class Local extends Decision_Engine{
 		//rprog.finishTraining();
 		*/
 		//return super.decisionLine(decision);
-		return super.decision();
+		return super.decision(predecision);
 	}
 
 	public int generateNumberByFreq(Frequency f, int numAlgorithms) {
