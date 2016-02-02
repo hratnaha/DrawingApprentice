@@ -99,14 +99,14 @@ module.exports = {
             this.SaveToFile(ctx, picName);
         }
     },
-    SaveToFile : function(ctx, picName, isThumb, handleError){
+    SaveToFile : function(ctx, picName, isThumb, callback){
         if(gm){
             var filename = isThumb ? picName + "_thumb" : picName;
             filename = __dirname + '/session_pic/' + filename + '.png'; 
             ctx.write(filename, function (err) {
                 if(err) console.error(err);
-                if(handleError != null && typeof handleError === "function"){
-                    handleError.call(this, filename, err);
+                if(callback != null && typeof callback === "function"){
+                    callback.call(this, filename, err);
                 }
             });
         }        

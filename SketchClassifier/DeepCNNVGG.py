@@ -600,9 +600,10 @@ def iterate_minibatches(inputs, targets, batchsize, shuffle=False):
             excerpt = slice(start_idx, start_idx + batchsize)
         yield inputs[excerpt], targets[excerpt]
 
-network = {}
+
 class SketchNet:
     def recognize_Image(self, filePath):
+        print("recognize....")
         print(filePath)
         from skimage import filters
         from skimage import color
@@ -631,19 +632,18 @@ class SketchNet:
         data.append(img)
         feature = np.array(data)
         feature = feature.reshape((-1, 1, 224, 224))
-        #output = network.get_output_for(feature)
-        output = lasagne.layers.get_output(network,feature,deterministic=True)
-        print(output)
+        output = lasagne.layers.get_output(self.network,feature,deterministic=True)
         #output = np.array(output)
         classes = np.argmax(output.eval())
         duration = time.time() - startTime
         print(categories[classes])
         print(duration)
+        return categories[classes]
 
     def __init__(self):
         model = 'cnn'
         # Load the dataset
-        load = False
+        self.load = False
         print("Loading data...")
         X_train, y_train, X_val, y_val, X_test, y_test = load_dataset()
 
@@ -659,7 +659,7 @@ class SketchNet:
         param = np.load('model_VGG.npz')
         lasagne.layers.set_all_param_values(network, param['arr_0'])
         print("loaded paramters from saved model")
-        load = True
+        self.load = True
 
         # Create a loss expression for training, i.e., a scalar objective we want
         # to minimize (for our multi-class problem, it is the cross-entropy loss):
@@ -694,26 +694,32 @@ class SketchNet:
         # Compile a second function computing the validation loss and accuracy:
         val_fn = theano.function([input_var, target_var], [test_loss, test_acc])
 
-        if load:
-            self.recognize_Image('data/png/airplane/70.png')
-            self.recognize_Image('data/png/airplane/79.png')
-            self.recognize_Image('data/png/alarm clock/100.png')
-            self.recognize_Image('data/png/alarm clock/120.png')
-            self.recognize_Image('data/png/angel/170.png')
-            self.recognize_Image('data/png/angel/190.png')
-            self.recognize_Image('data/png/ant/277.png')
-            self.recognize_Image('data/png/ant/299.png')
-            self.recognize_Image('data/png/apple/335.png')
-            self.recognize_Image('data/png/apple/381.png')
-            self.recognize_Image('data/png/arm/440.png')
-            self.recognize_Image('data/png/arm/480.png')
-            self.recognize_Image('data/png/armchair/520.png')
-            self.recognize_Image('data/png/armchair/559.png')
-            self.recognize_Image('data/png/ashtray/611.png')
-            self.recognize_Image('data/png/ashtray/635.png')
-            self.recognize_Image('data/png/axe/685.png')
-            self.recognize_Image('data/png/axe/714.png')
-            self.recognize_Image('data/png/backpack/733.png')
-            self.recognize_Image('data/png/backpack/777.png')
+        self.network = network
 
-testStart = SketchNet()
+s = zerorpc.Server(SketchNet())
+s.bind("tcp://0.0.0.0:4242")
+s.run()
+
+# testStart = SketchNet()
+
+# if testStart.load:
+    # testStart.recognize_Image('data/png/airplane/70.png')
+    # testStart.recognize_Image('data/png/airplane/79.png')
+    # testStart.recognize_Image('data/png/alarm clock/100.png')
+    # testStart.recognize_Image('data/png/alarm clock/120.png')
+    # testStart.recognize_Image('data/png/angel/170.png')
+    # testStart.recognize_Image('data/png/angel/190.png')
+    # testStart.recognize_Image('data/png/ant/277.png')
+    # testStart.recognize_Image('data/png/ant/299.png')
+    # testStart.recognize_Image('data/png/apple/335.png')
+    # testStart.recognize_Image('data/png/apple/381.png')
+    # testStart.recognize_Image('data/png/arm/440.png')
+    # testStart.recognize_Image('data/png/arm/480.png')
+    # testStart.recognize_Image('data/png/armchair/520.png')
+    # testStart.recognize_Image('data/png/armchair/559.png')
+    # testStart.recognize_Image('data/png/ashtray/611.png')
+    # testStart.recognize_Image('data/png/ashtray/635.png')
+    # testStart.recognize_Image('data/png/axe/685.png')
+    # testStart.recognize_Image('data/png/axe/714.png')
+    # testStart.recognize_Image('data/png/backpack/733.png')
+    # testStart.recognize_Image('data/png/backpack/777.png')

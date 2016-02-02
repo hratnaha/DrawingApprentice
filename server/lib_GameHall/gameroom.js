@@ -42,17 +42,19 @@ function onReaching4thLevel(strokes){
 }
 
 class gameroom {
-    constructor(roomInfo, apprentice){
+    constructor(roomInfo, apprentice, sketchClassfier){
         this.players = [];
         this.sockets = [];
         this.compStrokes = [];
         this.userStrokes = [];
+        this.userTurnStrokes = [];
         this.roomInfo = roomInfo ? roomInfo : this.createRoomInfo();
         this.apprentice = apprentice;
         this.canvasSize = { width: 0, height: 0 };
         this.indexULines = 0;
         this.indexCLines = 0;
         this.isGrouping = false;
+        this.sketchClassfier = sketchClassfier;
     }
     createRoomInfo(){
         var roomInfo = {};
@@ -77,9 +79,11 @@ class gameroom {
         }
     }
     addStroke(userStroke, so){
-        // for closure variable
+        // for closure variable for the "this" object in the call back
         var thisobj = this;
         
+        this.userTurnStrokes.push(userStroke);
+        var tmpUserTurnStrokes = this.userTurnStrokes; // for closure variable as well
         this.userStrokes.push(userStroke);
         insertLineSegments(this.quadtree, userStroke);
         
@@ -134,9 +138,29 @@ class gameroom {
             }
 
             this.timeout = setTimeout(function () {
+                // For testing the results from the sketch classfier!!
+                
+                // create the pic for recognizing using canvas2D
+                var turnContext = canvas2D.Initialize(thisobj.canvasSize.width, thisobj.canvasSize.height);
+                for(var i = 0; i < tmpUserTurnStrokes.length; i++){
+                    canvas2D.DrawLine(turnContext, tmpUserTurnStrokes[i]);
+                }
+                canvas2D.SaveToFile(turnContext, "tmpname", false, function(filename, err){
+                    if(!err){
+                        // recognize the image using sketchClass
+                        thisobj.sketchClassfier.invoke("recognize_Image", filename, function(error, result) {
+                            // report back to the client
+                            console.log(result);
+                            so.emit('classifyObject', result);
+                        });
+                    }
+                });
+                this.userTurnStrokes = [];
+                
                 thisobj.apprentice.getDecision(function (err, results) {
                     if (results != null) {
-                        for (var j = 0; j < results.sizeSync(); j++) {
+                        var rsize = results.sizeSync();
+                        for (var j = 0; j < rsize; j++) {
                             var newpkpts = [];
                             var result = results.getSync(j);
                             for (var i = 0; i < result.sizeSync(); i++) {
@@ -144,6 +168,11 @@ class gameroom {
 
                                 newpkpts.push(CreatePacketPoint(newpt));
                             }
+                            
+                            // \/\/\/\/\/\/\/\/\/\/\/\/\/\/
+                            // Bug!! The color of the computer stroke will be the same as the last user stroke
+                            // not from it's original strokes
+                            // \/\/\/\/\/\/\/\/\/\/\/\/\/\/
                             var compStroke = JSON.parse(JSON.stringify(userStroke));
                             compStroke.allPoints = newpkpts;
                             compStroke.time = (new Date()).getTime();
@@ -194,6 +223,7 @@ class gameroom {
             this.indexULines = 0;
             var id = this.roomInfo.id; 
             canvas2D.SaveToFile(drawingContext, id, false, function(filename, err){
+                // draw the thumbnail
                 if(!err){
                     var thumbContext = canvas2D.InitializeFromFile(filename).resize(80,60);
                     canvas2D.SaveToFile(thumbContext, id, true);
@@ -210,7 +240,6 @@ class gameroom {
         this.quadtree = new Quadtree(bound, 50, 5, 0, this, onReaching4thLevel);
     }
     onModeChanged(m) {
-        
         if (m == 3)
             this.isGrouping = true;
         else if (m == 4)

@@ -31,11 +31,15 @@ var express = require('express'),
     app = express(),
     canvas2D = require('./libImage'),
     uuid = require('node-uuid'),
+    zerorpc = require("zerorpc"),
     curRooms = {},
     roomsInfo = [],
     onlineUsers = {},
     Room = Room = require('./lib_GameHall/gameroom');;
 
+// setting up the local 
+var sketchClassfier = new zerorpc.Client();
+sketchClassfier.connect("tcp://127.0.0.1:4242");
 
 // Passport session setup.
 passport.serializeUser(function (user, done) {
@@ -86,7 +90,7 @@ app.post('/room/create', function (req, res) {
     var apprentice = new Apprentice();
     apprentice.setCurrentTime((new Date()).getTime());
     // create a room
-    var room = new Room(newRoomInfo, apprentice);
+    var room = new Room(newRoomInfo, apprentice, sketchClassfier);
     
     curRooms[newRoomInfo.id] = room;
 });
@@ -183,7 +187,7 @@ io.on('connection', function (so) {
 
             if(!room){
                 apprentice = new Apprentice();
-                room = new Room(null, apprentice);
+                room = new Room(null, apprentice, sketchClassfier);
             }
             else
                 apprentice = room.apprentice;
@@ -260,11 +264,6 @@ io.on('connection', function (so) {
         if(room){
             room.onModeChanged(m);
         }
-    }
-
-    function classifyObject(objectLabel) {
-        var label = JSON.stringify(objectLabel)
-        so.emit('classifyObject', label)
     }
 
     so.on('onOpen', onOpen);
