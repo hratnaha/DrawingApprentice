@@ -16,6 +16,7 @@ public class Apprentice {
 	ArrayList<Line> compLines = new ArrayList<Line>();
 	Turn curTurn = null;
 	boolean AgentOff = false;
+	boolean HoldAlgo = false;
 	long strokeStartTime;
 	double systemStartTime = 0;
 	TrajectorMode currentMode = TrajectorMode.Local; // 0 = local, 1 = regional,
@@ -65,9 +66,8 @@ public class Apprentice {
 	}
 
 	public void setAgentOn(Boolean isOn) {
-		AgentOff = !isOn;
+		this.AgentOff = !isOn;
 	}
-
 	public void setMode(int mode_code) {
 		System.out.println("change to mode: " + mode_code);
 		switch (mode_code) {
@@ -152,6 +152,7 @@ public class Apprentice {
 					System.out.println("agents is on!!");
 
 					if (turnLines.size() > 0) {
+						int preAlgo = -1;
 						for (int i = 0; i < turnLines.size(); i++) {
 							Line curLine = turnLines.get(i);
 
@@ -166,7 +167,9 @@ public class Apprentice {
 									curLine, line2, (float) Math.sqrt(Math.pow(
 											500, 2) + Math.pow(400, 2)));
 
-							Line newline = engine.decision();
+							Line newline = engine.decision(preAlgo);
+							// get the no. of decision and store it
+							preAlgo = engine.curDecisionID;
 							// Todo: color and thickness should be included in
 							// the engine
 							newline.setColor(curLine.colorR, curLine.colorG,
@@ -265,14 +268,15 @@ public class Apprentice {
 
 				int size_main = this.allGroups.size() - 1;
 				int size_lines = this.allGroups.get(size_main).getSize() - 1;
-
+				int preDecision = -1;
 				for (int i = 0; i < this.allGroups.get(size_main).getSize(); ++i) {
 					Line l1 = this.allGroups.get(size_main).lines.get(i);
 					Decision_Engine engine = new Decision_Engine(l1, line2,
 							(float) Math.sqrt(Math.pow(width, 2)
 									+ Math.pow(height, 2)));
 
-					Line l = engine.decision();
+					Line l = engine.decision(preDecision);
+					preDecision = engine.curDecisionID;
 					l.compGenerated = true;
 
 					// System.out.println("line generated");
