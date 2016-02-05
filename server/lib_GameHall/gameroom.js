@@ -7,8 +7,10 @@
 var java = require("java"),
     canvas2D = require('../libImage'),
     Quadtree = require('../lib_geom/quadtree'),
-    uuid = require('node-uuid');
+    uuid = require('node-uuid'),
+    fs = require("fs");
 
+var waitForTurn = 2000;
 function insertLineSegments(quadtree, stroke){
     if(quadtree && stroke.allPoints){
         for(var ptID = 0 ; ptID < stroke.allPoints.length-1; ptID++){
@@ -40,9 +42,14 @@ function onReaching4thLevel(strokes){
     
     
 }
-
+var enum_RoomType = {
+    solo        : 1,
+    human       : 2,
+    apprentice  : 3,
+    recorded    : 4
+};
 class gameroom {
-    constructor(roomInfo, apprentice){
+    constructor(roomInfo, apprentice, roomType){
         this.players = [];
         this.sockets = [];
         this.compStrokes = [];
@@ -50,9 +57,13 @@ class gameroom {
         this.roomInfo = roomInfo ? roomInfo : this.createRoomInfo();
         this.apprentice = apprentice;
         this.canvasSize = { width: 0, height: 0 };
-        this.indexULines = 0;
-        this.indexCLines = 0;
+        this.indexULines = 0;   // for counting the number of user strokes the user has drawn
+        this.indexCLines = 0;   // for counting the number of computer strokes the room has drawn
+        this.indexRLines = 0;   // for counting the number of recorded strokes used in the program
+        this.indexPLines = 0;   // for counting the number strokes processed by apprentice
         this.isGrouping = false;
+        this.numTurnStrokes = 0;
+        this.setRoomType(roomType ? roomType : enum_RoomType.apprentice);
     }
     createRoomInfo(){
         var roomInfo = {};
@@ -64,6 +75,30 @@ class gameroom {
         canvas2D.CreateBlankThumb(roomInfo.id);
         roomInfo.thumb = '/session_pic/' + roomInfo.id + '_thumb.png';
         return roomInfo;
+    }
+    setRoomType(type){
+        this.roomtype = type;
+        if(this.roomtype != enum_RoomType.apprentice){
+            this.apprentice.setAgentOn(false);
+            if(this.roomtype == enum_RoomType.recorded){
+                var filepath = this.recordedPath ? 
+                    this.recordedPath : __dirname + '/prev_session/1_userLines.json';
+                var thisobj = this;
+                fs.readFile(filepath, 'utf8', (err, data)=>{
+                   if (err) throw err;
+                   console.log(err);
+                   if(!err){
+                        var str = JSON.stringify(data);
+                        str = str.replace(/\\/g, "");
+                        str = str.slice(2, -1);
+                        
+                        thisobj.recordedData = JSON.parse(str);
+                   }
+                });
+            }
+        }else{
+            this.apprentice.setAgentOn(true);
+        }
     }
     broadcast(evtname,msg){
         for(var i=0;i<this.sockets.length;i++){
@@ -79,6 +114,7 @@ class gameroom {
     addStroke(userStroke, so){
         // for closure variable
         var thisobj = this;
+        this.numTurnStrokes++;
         
         this.userStrokes.push(userStroke);
         insertLineSegments(this.quadtree, userStroke);
@@ -134,47 +170,72 @@ class gameroom {
             }
 
             this.timeout = setTimeout(function () {
-                thisobj.apprentice.getDecision(function (err, results) {
-                    if (results != null) {
-                        for (var j = 0; j < results.sizeSync(); j++) {
-                            var newpkpts = [];
-                            var result = results.getSync(j);
-                            for (var i = 0; i < result.sizeSync(); i++) {
-                                var newpt = result.getSync(i);
-
-                                newpkpts.push(CreatePacketPoint(newpt));
-                            }
-                            var compStroke = JSON.parse(JSON.stringify(userStroke));
-                            compStroke.allPoints = newpkpts;
-                            compStroke.time = (new Date()).getTime();
+                switch(thisobj.roomtype){
+                    case enum_RoomType.recorded:
+                        if(thisobj.recordedData){
                             
-                            // decode to JSON and send the message
-                            var resultmsg = JSON.stringify(compStroke);
-                            // and send it to all the players
-                            if(thisobj.sockets.length > 0){
-                                for(var i=0;i<thisobj.sockets.length;i++){
-                                    var tarso = thisobj.sockets[i];
-                                    tarso.emit('respondStroke', resultmsg);
-                                }
-                            }else
+                            for(var i = thisobj.numTurnStrokes; i>0;i--){
+                                var curStroke = thisobj.recordedData[thisobj.indexRLines];
+                                curStroke.color = thisobj.userStrokes[thisobj.indexRLines].color;
+                                curStroke.lineWidth = thisobj.userStrokes[thisobj.indexRLines].lineWidth;
+                                var resultmsg = JSON.stringify(curStroke);
                                 so.emit('respondStroke', resultmsg);
-                            
-                            thisobj.compStrokes.push(compStroke);
-                            insertLineSegments(thisobj.quadtree, compStroke);
-                            
-                            thisobj.updateServerPic();
+                                thisobj.indexRLines++;
+                            }
+                            // update the server pic
+                            // thisobj.updateServerPic();
                         }
-                    }
-                });
-            }, 2000);
+                    break;
+                    case enum_RoomType.apprentice:
+                        thisobj.apprentice.getDecision(function (err, results) {
+                            if (results != null) {
+                                var resultSize = results.sizeSync();
+                                for (var j = 0; j < resultSize; j++) {
+                                    // deal with the case when the subject switch between 
+                                    // random mode and apprentice mode
+                                    var curStIndex = thisobj.indexRLines >= thisobj.userStrokes.length ?
+                                        thisobj.userStrokes.length - 1 : thisobj.indexRLines;   
+                                    var curStroke = thisobj.userStrokes[curStIndex];
+                                    var newpkpts = [];
+                                    var result = results.getSync(j);
+                                    for (var i = 0; i < result.sizeSync(); i++) {
+                                        var newpt = result.getSync(i);
+                                        newpkpts.push(CreatePacketPoint(newpt));
+                                    }
+                                    var compStroke = JSON.parse(JSON.stringify(curStroke));
+                                    compStroke.allPoints = newpkpts;
+                                    compStroke.time = (new Date()).getTime();
+
+                                    // decode to JSON and send the message
+                                    var resultmsg = JSON.stringify(compStroke);
+                                    // and send it to all the players
+                                    if(thisobj.sockets.length > 0){
+                                        for(var i=0;i<thisobj.sockets.length;i++){
+                                            var tarso = thisobj.sockets[i];
+                                            tarso.emit('respondStroke', resultmsg);
+                                        }
+                                    }else
+                                        so.emit('respondStroke', resultmsg);
+                                    
+                                    thisobj.compStrokes.push(compStroke);
+                                    insertLineSegments(thisobj.quadtree, compStroke);
+                                    
+                                    thisobj.updateServerPic();
+                                    thisobj.indexRLines++;
+                                }
+                            }
+                        });
+                    break;
+                }
+                thisobj.numTurnStrokes = 0; // clean to 0;
+            }, waitForTurn);
         }
+        
         for(var i=0;i<this.sockets.length;i++){
             var tarso = this.sockets[i];
             if(tarso != so)
                 tarso.emit('respondStroke', JSON.stringify(userStroke));
         }
-        
-        
     }
     updateServerPic(){
         // update the server pic every 10 user lines

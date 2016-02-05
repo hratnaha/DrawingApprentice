@@ -124,38 +124,33 @@ put js files before css files
     </div><!-- /#nav_toggle_content -->
 
       <script>
-          function testFunction(){
-          document.getElementById('label').value = "Tested"; 
-          }
+function testFunction(){
+    document.getElementById('label').value = "Tested"; 
+}
 
-          function testFunction2(value){
-          /*
-          A = Baseline (setAgentOn = false; useRandom = false;)
-          B = Human (setAgentOn = false; useRandom = false;)
-          C = Random (setAgentOn = false; useRandom = true; )
-          D = Agent on (setAgentOn = true; useRandom = false;)
-          */
-
-          if (value=="A"){
-            setAgentState(false); 
-            setRandom(false); 
-          }
-          else if (value=="B"){
-              setAgentState(false);
-              setRandom(false);
-          }
-          else if (value=="C"){
-              setAgentState(false);
-              setRandom(true);
-          }
-          else if (value=="D"){
-              setAgentState(true);
-              setRandom(false);
-          }
-
-
-          console.log("The value of radio is: " + value); 
-          }
+function testFunction2(value){
+    /*
+    A = Baseline (setAgentOn = false; useRandom = false;)
+    B = Human (setAgentOn = false; useRandom = false;)
+    C = Random (setAgentOn = false; useRandom = true; )
+    D = Agent on (setAgentOn = true; useRandom = false;)
+    */
+    switch(value){
+        case "A":
+        setRoomType(1);
+        break;
+        case "B":
+        setRoomType(2);
+        break;
+        case "C":
+        setRoomType(4);
+        break;
+        case "D":
+        setRoomType(3);
+        break;
+    }
+    console.log("The value of radio is: " + value); 
+}
           </script>
 
   <div class="navbar-inner row">

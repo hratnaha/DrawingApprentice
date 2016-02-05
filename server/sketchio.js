@@ -272,10 +272,11 @@ io.on('connection', function (so) {
         var d = JSON.parse(level);
         apprentice.setCreativityLevel(d);
     });
-    so.on('setAgentOn', function (ison) {
-        console.log("Setting the agent to: " + ison); 
-        var isOnBool = JSON.parse(ison);
-        apprentice.setAgentOn(isOnBool);
+    so.on('setRoomType', function (type) {
+        var t = JSON.parse(type);
+        if(room){
+            room.setRoomType(t);
+        }
     });
     so.on('getData', getData);
     so.on('touchdown', function () {

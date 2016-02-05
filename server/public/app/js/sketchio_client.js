@@ -313,22 +313,8 @@ function TurnOnOffAgent() {
     }
 }
 
-function setAgentState(agentState){
-    if (agentState) {
-        socket.emit('setAgentOn', true);
-        console.log('turn agent on');
-    }
-    else {
-        socket.emit('setAgentOn', false);
-        console.log('turn agent off');
-    }
-}
-
-function setRandom(randomState){
-    if (randomState)
-        randomLines = true;
-    else
-        randomLines = false; 
+function setRoomType(type){
+    socket.emit('setRoomType', type);
 }
 
 function onUpdateScore(newScore){
