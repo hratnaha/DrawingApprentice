@@ -156,7 +156,6 @@ app.listen(3000);
 //===================== Set up socket io server =====================\\
 var server = http.Server(app);
 var io = require('socket.io')(server);
-var isGrouping = false;
 server.listen(8080);
 //server.listen(81); // for adam server
 
@@ -165,7 +164,6 @@ io.on('connection', function (so) {
     var utilDatabase = require('./libDatabase');
     var apprentice;
     var room;
-    var timeout;
     var userProfile;
     var sessionID;
     var totalScore = 0;
@@ -178,7 +176,7 @@ io.on('connection', function (so) {
         if (hello) {
             var thisPlayer;
             if(onlineUsers[hello.user.id]){
-                var thisPlayer = onlineUsers[hello.user.id];
+                thisPlayer = onlineUsers[hello.user.id];
                 room = curRooms[thisPlayer.curRoom];
                 room.sockets.push(so);
             }
@@ -237,93 +235,7 @@ io.on('connection', function (so) {
         var d = JSON.parse(data);
 
         var stroke = d.data;
-
-        var stroketime = java.newLong(stroke.timestamp);
-        // categorize if it is grouping or not
-        if (isGrouping)
-            apprentice.startGroupingSync(stroketime);
-        else
-            apprentice.createStrokeSync(stroketime);
-
-        var pts = stroke.allPoints;
-
-        // adding all the points in the stroke
-        for (var i = 0; i < pts.length; i++) {
-            var pt = pts[i];
-            apprentice.addPointSync(parseInt(pt.x, 10), parseInt(pt.y, 10), pt.timestamp, pt.id);
-        }
-        // Todo: reconstruct the message to send out
-
-        if (isGrouping) {
-            apprentice.Grouping(function (err, result) {
-                if (result != null) {
-                    for (var i = 0; i < result.sizeSync(); i++) {
-                        var newline = result.getSync(i);
-
-                        var newpkpts = [];
-                        for (var j = 0; j < newline.sizeSync(); j++) {
-                            var newpt = newline.getSync(j);
-
-                            newpkpts.push(CreatePacketPoint(newpt));
-                        }
-                        stroke.allPoints = newpkpts;
-
-                        // decode to JSON and send the message
-                        var resultmsg = JSON.stringify(stroke);
-                        so.emit('respondStroke', resultmsg);
-                        apprentice.setModeSync(0);
-                    }
-                }
-            });
-        } else {
-            var r = java.newFloat(parseFloat(stroke.color.r));
-            var g = java.newFloat(parseFloat(stroke.color.g));
-            var b = java.newFloat(parseFloat(stroke.color.b));
-            var a = java.newFloat(parseFloat(stroke.color.a));
-            var thickness = java.newFloat(parseFloat(stroke.lineWidth));
-
-            apprentice.endStroke(r, g, b, a, thickness);
-
-            if (timeout != "" || timeout != null) {
-                clearTimeout(timeout);
-            }
-
-            timeout = setTimeout(function () {
-                apprentice.getDecision(function (err, results) {
-                    if (results != null) {
-                        for (var j = 0; j < results.sizeSync(); j++) {
-                            var newpkpts = [];
-                            var result = results.getSync(j);
-                            for (var i = 0; i < result.sizeSync(); i++) {
-                                var newpt = result.getSync(i);
-
-                                newpkpts.push(CreatePacketPoint(newpt));
-                            }
-                            var compStroke = JSON.parse(JSON.stringify(stroke));
-                            compStroke.allPoints = newpkpts;
-                            compStroke.time = (new Date()).getTime();
-                            
-                            // decode to JSON and send the message
-                            var resultmsg = JSON.stringify(compStroke);
-                            if(room && room.sockets.length > 0)
-                                room.broadcast('respondStroke', resultmsg);
-                            else
-                                so.emit('respondStroke', resultmsg);
-                            // draw the pic after sending the strokes back to the client
-                            // to save a little bit time
-                            room.addStroke(stroke, compStroke);
-                        }
-                    }
-                });
-            }, 2000);
-        }
-        if(room){
-            for(var i=0;i<room.sockets.length;i++){
-                var tarso = room.sockets[i];
-                if(tarso != so)
-                    tarso.emit('respondStroke', JSON.stringify(d.data));
-            }
-        }
+        room.addStroke(stroke, so);
     }
 
     function vote(isUp, score) {
@@ -343,14 +255,11 @@ io.on('connection', function (so) {
         apprentice.clearSync();
     }
 
-    function onModeChanged(mode) {
+    function onSetMode(mode){
         var m = JSON.parse(mode);
-        if (m == 3)
-            isGrouping = true;
-        else if (m == 4)
-            isGrouping = false;
-        else
-            apprentice.setModeSync(m);
+        if(room){
+            room.onModeChanged(m);
+        }
     }
 
     function classifyObject(objectLabel) {
@@ -363,20 +272,19 @@ io.on('connection', function (so) {
         var d = JSON.parse(level);
         apprentice.setCreativityLevel(d);
     });
-    so.on('setAgentOn', function (ison) {
-        console.log("Setting the agent to: " + ison); 
-        var isOnBool = JSON.parse(ison);
-        apprentice.setAgentOn(isOnBool);
+    so.on('setRoomType', function (type) {
+        var t = JSON.parse(type);
+        if(room){
+            room.setRoomType(t);
+        }
     });
     so.on('getData', getData);
     so.on('touchdown', function () {
-        if (timeout != "" || timeout != null) {
-            clearTimeout(timeout);
-        }
+       room.resetTimeout();
     });
     so.on('disconnect', utilDatabase.onSaveDataOnDb);
     so.on('touchup', onNewStrokeReceived);
-    so.on('setMode', onModeChanged);
+    so.on('setMode', onSetMode);
     so.on('clear', onClear);
     so.on('submit', submitResult);
     so.on('vote', vote);
@@ -389,19 +297,6 @@ function submitResult(d) {
     submit(d, function (error, result) {
         console.log(result);
     });
-}
-
-function CreatePacketPoint(newpt) {
-    // construct a new packet point
-    var pkpt = {
-        id: newpt.id,
-        x: newpt.x,
-        y: newpt.y,
-        timestamp: newpt.timestamp,
-        pressure: 0          // to be implemented when the pressure is available
-    };
-
-    return pkpt;
 }
 
 console.log("SocketIO Server Initialized!");
