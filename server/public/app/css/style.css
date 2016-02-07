@@ -721,14 +721,28 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#5a5a5a', end
 	}
 
 .col-lg-6 .slider{
-		position:relative;
+		position:center;
 		top:inherit;
-		width:30em;
-		margin-left:2em;
+        width:80%;
 		margin-top:2em;
 }
 .col-lg-6{
-    width:33%;
+    width : 25%; 
+    margin-left: auto; 
+    margin-right:auto; 
+    text-align: center;
+}
+
+h4{
+    text-align: center;
+}
+
+.col-md-4{
+    width:100px; 
+    position:relative;
+    top:inherit;
+    margin-left:2em;
+	margin-top:2em;
 }
 
 #label{
