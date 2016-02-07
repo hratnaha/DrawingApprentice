@@ -60,7 +60,8 @@ module.exports = {
             });
         }
     },
-    DrawLine : function(ctx, line){
+    DrawLine : function(ctx, line, translate){
+        translate = translate ? translate: {x : 0, y : 0};
         if(line.allPoints && line.allPoints.length > 0){
             var lineColor;
             if(line.color){
@@ -72,7 +73,7 @@ module.exports = {
             var pts = [];
             for(var ptID in line.allPoints){
                 var pt = line.allPoints[ptID];
-                pts.push(pt.x, pt.y);
+                pts.push(pt.x - translate.x, pt.y - translate.y);
             }
             //console.log("num of points: " + pts.length);
             //if(pts.length < 500)
