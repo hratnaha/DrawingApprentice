@@ -303,7 +303,7 @@ put js files before css files
         </div>
     
     
-    <div class="ui-widget-content" id="logo" style="width:9em;height:auto;z-index:9999;top:-1em;left: 90%;">
+    <div class="ui-widget-content" id="logo_button" style="width:9em;height:auto;z-index:9999;top:-1em;left: 90%;">
             <script type="text/javascript">
         var userData = "";
         var sessionId = "";       
@@ -311,8 +311,11 @@ put js files before css files
 
         $(function() {
         $( "#logo" ).draggable();
+		$( "#logo_button" ).draggable();
         });
         
+		
+		
         function onMouseMove(evt) {
         var Line1 = document.getElementById("L1");
         var Line2 = document.getElementById("L2");

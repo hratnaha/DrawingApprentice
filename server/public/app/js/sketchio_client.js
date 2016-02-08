@@ -15,7 +15,8 @@ function initWebSocket() {
     
     botCanvas = document.getElementById('botpad');
 	sketchPadCanvas = document.getElementById('sketchpad');
-	moveLogo = document.getElementById("logo");
+	//moveLogo = document.getElementById("logo");
+	moveLogo = document.getElementById("logo_button");
 
     botCanvas.setAttribute('width', container.offsetWidth);
     botCanvas.setAttribute('height', container.offsetHeight);
@@ -30,8 +31,9 @@ function initWebSocket() {
     socket.on('updateScore', onUpdateScore);
     socket.on('classifyObject', onClassifyObject)
 
-	var logo = document.getElementById("logo");
-
+	//var logo = document.getElementById("logo");
+	var logo = document.getElementById("logo_button");
+	
     var i = 0;
     var botStroke = "";
     var botColor = "#000000";
@@ -100,12 +102,16 @@ function initWebSocket() {
 
 function MoveLogoBack () {
 	if(finishStroke==false){
-    $('#logo').animate({
+   // $('#logo').animate({
+    //        left: '90%',
+    //        top: '-1em'},
+    //    "swing");
+		
+	$('#logo_button').animate({
             left: '90%',
             top: '-1em'},
         "swing");
 
-	console.log('logo left is ' + moveLogo.style.left);
 	}
 }
 
