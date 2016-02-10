@@ -243,3 +243,7 @@ Parse/obj/Debug/JsonParse.njsprojResolveAssemblyReference.cache
 Parse/test1.txt
 server/session_pic/LHy9fI4RsOWPherzFhvmtOXfv9Nt6dmN.png
 server/session_pic/
+*.
+*.
+**/Iconr
+**/Iconr

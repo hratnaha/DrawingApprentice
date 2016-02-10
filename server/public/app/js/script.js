@@ -294,3 +294,23 @@ $("#grouping").click(function(){
 	}
 });
 
+var bottomToggleBoolean = false;
+
+var toggleBottomUi = function() {
+	var bottomUiDiv = $('#bottomUiDiv');
+	var colorsUi = $('<div onclick="" class="colorUi"><ul><li><button onclick="" class="btn btn-lg btn-default clickable">Color 1</button></li><li><button onclick="" class="btn btn-lg btn-default">Color 2</button></li><li><button class="btn btn-lg btn-default">Color 3</button></li><li><button class="btn btn-lg btn-default">Color 4</button></li><li><button class="btn btn-lg btn-default">Color 5</button></li></ul></div>');
+	console.log(colorsUi);
+	
+	if (bottomToggleBoolean) {
+		bottomToggleBoolean = false;
+		bottomUiDiv.empty();
+		colorsUi.click(function(){});
+
+	} else {
+		bottomToggleBoolean = true;
+		bottomUiDiv.append(colorsUi);
+		colorsUi.click(function(e) {
+		e.stopPropagation();
+		});
+	}
+}

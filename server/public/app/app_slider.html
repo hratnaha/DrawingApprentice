@@ -6,12 +6,14 @@
 put js files before css files
 
 --> 
-    <script src="/js/vendor/jquery-1.11.2.min.js"></script>
-    <script src="/js/vendor/jquery-ui-1.10.1.custom.min.js"></script>
-    <script src="https://cdn.socket.io/socket.io-1.0.6.js"></script>
+  <script src="../bower_components/jquery/dist/jquery.js"></script>
+  <script src="../bower_components/jquery-ui/jquery-ui.js"></script>
+  <script src="https://cdn.socket.io/socket.io-1.0.6.js"></script>
 	<script type="text/javascript" src="js/sketchPad.js"></script>
 	<script type="text/javascript" src="js/sketchio_client.js"></script>
-	<script type="text/javascript" src="/js/vendor/bootstrap-slider.js"></script>
+  
+  
+	  <script type="text/javascript" src="/js/vendor/bootstrap-slider.js"></script>
     <script type="text/javascript" src="/js/vendor/FileSaver.min.js"></script>
     <link rel="stylesheet" type="text/css" href="/css/bootstrap.min.css" />
     <link rel="stylesheet" type="text/css" href="/css/bootstrap-slider.css" />
@@ -417,7 +419,10 @@ put js files before css files
    		var myCanvasContext3 = myCanvas3.getContext('2d');
 		</script>
         </canvas>
-    </div>
+     
+
+
+    </div><!--container-->
 
 
 
@@ -442,5 +447,22 @@ put js files before css files
 </script>
 <div id="output"></div>
 
+
+
 </body>
+
+<footer class="bottom_footer">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-lg-2"></div>
+      <div class="col-lg-8" onclick="">
+        <div onclick="toggleBottomUi()" id="bottomUiDiv" class="bottom_footer_ui">
+        </div>
+      </div>
+      <div class="col-lg-2"></div>
+    </div>
+  </div>
+</footer>
+
+
 </html>
