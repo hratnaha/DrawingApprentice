@@ -39,17 +39,6 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#e2e2e2', end
 
 
 	}
-#panel_user{
-	width:50%;
-	height:25%;
-	position:absolute;
-	border:1px solid black;
-	bottom:-5px;
-	left:20%;
-	z-index:1000;
-	background-color:#000000;
-	border-radius:20px;
-	}
 .btn-customize{
 	
 	color: #052AA83;
@@ -66,7 +55,6 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#e2e2e2', end
 .navbar-customize{
 	position:absolute;
 	width:100%;
-	height:15%;
 	background-color:#9A9A9A;
 	padding:.5em 1em 1em .5em;
 	}
@@ -136,10 +124,10 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#e2e2e2', end
 
 .btn-color{
 	/* line-height:1em; */
-	border-radius:0px;
+	border-radius:6px;
 	border:none;
 	display:inline-block;
-	padding: 2em .5em;
+	padding: .2em .2em;
 	vertical-align:middle;
 	cursor:pointer;
 	background-image:none;
@@ -147,8 +135,8 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#e2e2e2', end
 	/* -webkit-appearance:button; */
 	}
 .btn-setting{
-	height:5em;
-	width:5em;
+	height:4em;
+	width:4em;
 	margin:.5em .5em;
 	padding:.2em .2em;
 	float:left;
@@ -316,9 +304,9 @@ p{
 	font-size:12px;
 	}
 .saveForm{
-	width: 6em;
-	height:6em;
-	border-radius: 20%;
+	width: 3em;
+	height:3em;
+	border-radius: 100%;
 	border:0;
 	padding:0;
 	margin:0 auto;
@@ -716,30 +704,13 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#5a5a5a', end
 	z-index:9999;
 	color:black;
 	}
-
 #slider{
 	z-index:9999;
 	position:absolute;
-	border:1px solid #575757;
-	top:3em;
-	left:20%;
+	top:5em;
+	left:3em;
 	float:left;
-	width:400px;
 }
-
-
-#slider2{
-	z-index:9999;
-	position:absolute;
-	border:1px solid #575757;
-	top:3em;
-	left:50%;
-	float:left;
-	width:400px;
-}
-
-	
-	
 #ex1Slider .slider-selection {
 	background: #56DDF0;
 }

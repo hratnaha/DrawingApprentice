@@ -35,7 +35,10 @@ put js files before css files
 
     <!-- Collect the nav links, forms, and other content for toggling -->
     <div class="collapse navbar-collapse" id="nav_toggle_content">
-      <ul class="nav navbar-nav color">
+    	<div class="row">
+        	 <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+            	<div class="row">
+                	<ul class="nav navbar-nav color">
       	<li>
             <div class="btn btn-md btn-color navbar-btn">
                 <input type="button" name="saveForm" class="btTxt submit saveForm" id="color1" />
@@ -87,7 +90,9 @@ put js files before css files
             </div>
         </li-->
       </ul><!--color-->
-      <ul class="nav navbar-nav setting_buton">  	  
+      			</div>
+                <div class="row">
+                	 <ul class="nav navbar-nav setting_buton">  	  
         <li>
             <button class="btn btn-default btn-lg" onClick ="location.href = '/admin_room'" style="float:left;margin-left:1em;">
            Exit
@@ -119,6 +124,16 @@ put js files before css files
           </li>  
 
       </ul><!--setting_button-->
+                </div>
+            </div>
+             <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+             
+             </div>
+      
+        </div><!--row-->
+        
+       
+     
             <label><input type="checkbox" id="Checkbox" onClick="TurnOnOffAgent();" value="" style="margin:1em 1em;"></label>
        
     </div><!-- /#nav_toggle_content -->
@@ -136,40 +151,48 @@ put js files before css files
                 </div>
                 
                 <div class="row">
-            <input id="ex15" data-slider-id='ex1Slider' type="text" data-slider-min="1" data-slider-max="100" data-slider-step="1" data-slider-value="50" style="z-index:9999;margin-top:-1em;"/>
+            <input id="line-thickness-slider" data-slider-id='ex1Slider' type="text" data-slider-min="1" data-slider-max="100" data-slider-step="1" data-slider-value="50" style="z-index:9999;margin-top:-1em;"/>
                 </div>
              
            
            </div><!--slide_row_1-->
 
-           <div class="col-lg-6">      
+       
                        		 <!--========S L I D E R : http://seiyria.com/bootstrap-slider/==========-->
+         
+ 
             
-            <div class="row">
-                <h4 style="margin-left:10em;margin-top:0;margin-bottom:-1em;color:black;">Agent Creativity Level</h4>
-            </div>
-            <div class="row">
-                <input id="ex8" data-slider-id='ex1Slider' type="text" data-slider-min="0" data-slider-max="100" data-slider-step="1" data-slider-value="50" style="z-index:9999;margin-top:-1em;"/>
-            </div>
-            <script>
-            $("#ex8").slider({
+             <!--div class="col-lg-6">      
+                <div class="row">
+                	 <h4 style="margin-left:10em;margin-top:0;margin-bottom:-1em;color:black;">Agent Creativity Level</h4>
+                    <input id="agent-creativity-slider" data-slider-id='ex1Slider' type="text" data-slider-min="0" data-slider-max="100" data-slider-step="1" data-slider-value="50" style="z-index:9999;margin-top:-1em;"/>
+                </div>
+            </div-->
+           
+          
+            
+             <script>
+            $("#agent-creativity-slider").slider({
 					tooltip: 'always'
-				});
+			});
+			
+			$("#line-thickness-slider").slider({
+					tooltip: 'always'
+			});
 	
-				// Without JQuery
-				var slider = new Slider("#ex8", {
+			// Without JQuery
+			var slider = new Slider("#agent-creativity-slider", {
 					tooltip: 'always'
-				});
+			});
 				
-				var slider = new Slider("#ex15", {
+			var slider = new Slider("#line-thickness-slider", {
 					tooltip: 'always'
-				});
+			});
 	
 			
             </script>
-            </div>
 
-      <div class="col-lg-6">
+      <!--div class="col-lg-6">
           <div class="row">
               <h4 style="margin-left:2em;margin-top:0;margin-bottom:-1em;color:black;">You Are Drawing:</h4>
           </div>
@@ -182,7 +205,7 @@ put js files before css files
                   }
               </style>
           </input>
-      </div>
+      </div-->
             
               
             </div><!--slider_row_2-->
@@ -280,7 +303,7 @@ put js files before css files
         </div>
     
     
-    <div class="ui-widget-content" id="logo_button" style="width:9em;height:auto;z-index:9999;top:-1em;left: 90%;">
+    <div class="ui-widget-content" id="logo" style="width:9em;height:auto;z-index:9999;top:-1em;left: 90%;">
             <script type="text/javascript">
         var userData = "";
         var sessionId = "";       
@@ -288,11 +311,8 @@ put js files before css files
 
         $(function() {
         $( "#logo" ).draggable();
-		$( "#logo_button" ).draggable();
         });
         
-		
-		
         function onMouseMove(evt) {
         var Line1 = document.getElementById("L1");
         var Line2 = document.getElementById("L2");
