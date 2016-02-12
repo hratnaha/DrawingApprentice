@@ -10,7 +10,7 @@ var java = require("java"),
     uuid = require('node-uuid'),
     fs = require("fs");
 
-var waitForTurn = 4000;
+var waitForTurn = 2000;
 function insertLineSegments(quadtree, stroke){
     if(quadtree && stroke.allPoints){
         for(var ptID = 0 ; ptID < stroke.allPoints.length-1; ptID++){
@@ -42,36 +42,6 @@ function onReaching4thLevel(strokes){
     
     
 }
-function pushTurnStroke(stroke){
-    if(stroke && stroke.allPoints && stroke.allPoints.length > 0){
-        if(!this.bound){
-            this.bound = {
-                left:   stroke.allPoints[0].x,
-                right:  stroke.allPoints[0].x,
-                top:    stroke.allPoints[0].y,
-                bottom: stroke.allPoints[0].y
-            };
-        }
-        for(var i=0;i<stroke.allPoints.length;i++){
-            if(stroke.allPoints[i].x < this.bound.left)
-                this.bound.left = stroke.allPoints[i].x;
-            if(stroke.allPoints[i].x > this.bound.right)
-                this.bound.right = stroke.allPoints[i].x;
-            if(stroke.allPoints[i].y > this.bound.bottom)
-                this.bound.bottom = stroke.allPoints[i].y;
-            if(stroke.allPoints[i].y < this.bound.top)
-                this.bound.top = stroke.allPoints[i].y;
-        }
-        //console.log(this.bound);
-    }
-    this.push(stroke);
-}
-function clear(){
-    while (this.length) {
-        this.pop();
-    }
-    this.bound = null;
-}
 var enum_RoomType = {
     solo        : 1,
     human       : 2,
@@ -85,9 +55,6 @@ class gameroom {
         this.compStrokes = [];
         this.userStrokes = [];
         this.userTurnStrokes = [];
-        // overide the push function so that we can update the bounding box of the turn strokes
-        this.userTurnStrokes.pushTurnStroke = pushTurnStroke;
-        this.userTurnStrokes.clear = clear;
         this.roomInfo = roomInfo ? roomInfo : this.createRoomInfo();
         this.apprentice = apprentice;
         this.canvasSize = { width: 0, height: 0 };
@@ -151,7 +118,8 @@ class gameroom {
         var thisobj = this;
         this.numTurnStrokes++;
         
-        this.userTurnStrokes.pushTurnStroke(userStroke);
+        this.userTurnStrokes.push(userStroke);
+        var tmpUserTurnStrokes = this.userTurnStrokes; // for closure variable as well
         this.userStrokes.push(userStroke);
         insertLineSegments(this.quadtree, userStroke);
         
@@ -208,14 +176,9 @@ class gameroom {
             this.timeout = setTimeout(function () {
                 // For testing the results from the sketch classfier!!
                 // create the pic for recognizing using canvas2D
-                var tmpWidth = thisobj.userTurnStrokes.bound.right - thisobj.userTurnStrokes.bound.left + 200;
-                var tmpHeight = thisobj.userTurnStrokes.bound.bottom - thisobj.userTurnStrokes.bound.top + 200; 
-                var turnContext = canvas2D.Initialize(tmpWidth, tmpHeight);
-                for(var i = 0; i < thisobj.userTurnStrokes.length; i++){
-                    canvas2D.DrawLine(turnContext, thisobj.userTurnStrokes[i], {
-                        x: thisobj.userTurnStrokes.bound.left - 100,
-                        y: thisobj.userTurnStrokes.bound.top - 100
-                    });
+                var turnContext = canvas2D.Initialize(thisobj.canvasSize.width, thisobj.canvasSize.height);
+                for(var i = 0; i < tmpUserTurnStrokes.length; i++){
+                    canvas2D.DrawLine(turnContext, tmpUserTurnStrokes[i]);
                 }
                 canvas2D.SaveToFile(turnContext, "tmpname", false, function(filename, err){
                     if(!err){
@@ -228,7 +191,7 @@ class gameroom {
                     }
                 });
                 // reset the user turn strokes
-                thisobj.userTurnStrokes.clear();
+                this.userTurnStrokes = [];
                 
                 switch(thisobj.roomtype){
                     case enum_RoomType.recorded:
