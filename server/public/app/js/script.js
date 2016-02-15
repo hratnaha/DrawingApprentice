@@ -10,11 +10,11 @@ $( document ).ready(function() {
 console.log( "ready!" );
 
 
-$(".saveForm").click(function AddWhiteBorder(){
+$(".colorBtn").click(function AddWhiteBorder(){
 	//$(this).css({
 	//	'border':'3px solid #4e4e4e',
 	//	'border-radius':'100%'});
-	$(".saveForm").not(this).css({
+	$(".colorBtn").not(this).css({
 		'border':'none'
 		});
 });
@@ -22,19 +22,83 @@ $(".saveForm").click(function AddWhiteBorder(){
 	
 $("#color1").click(function AddBorder(){
 			$(this).css({
-				'border':'3px solid #B40431',
-				'border-radius':'100%'});
+				'border':'3px solid #B40431'});
 			tipColor = "red";
 			console.log(tipColor);
 			//ctx.strokeStyle = tipColor;
-	});
+});
+
+
+$("#color2").click(function AddBorder(){
+			$(this).css({
+				'border':'3px solid #FF8000'});
+			tipColor = "orange";
+			console.log(tipColor);
+			//ctx.strokeStyle = tipColor;
+});
+
+
+$("#color3").click(function AddBorder(){
+			$(this).css({
+				'border':'3px solid #F7FE2E'});
+			tipColor = "yellow";
+			console.log(tipColor);
+			//ctx.strokeStyle = tipColor;
+});
+
+$("#color4").click(function AddBorder(){
+			$(this).css({
+				'border':'3px solid #81F781'});
+			tipColor = "green";
+			console.log(tipColor);
+			//ctx.strokeStyle = tipColor;
+});
+
+$("#color5").click(function AddBorder(){
+			$(this).css({
+				'border':'3px solid #FF00FF'});
+			tipColor = "purple";
+			console.log(tipColor);
+			//ctx.strokeStyle = tipColor;
+});
+
+
+$("#color6").click(function AddBorder(){
+			$(this).css({
+				'border':'3px solid #2E64FE'});
+	
+});
+
+$("#color7").click(function AddBorder(){
+			$(this).css({
+				'border':'3px solid #FFFFFF'});
+	
+});
+	
+	
+$("#color8").click(function AddBorder(){
+			$(this).css({
+				'border':'3px solid #A4A4A4'});
+	
+});
+
+
+$("#color9").click(function AddBorder(){
+			$(this).css({
+				'border':'3px solid #000000'});
+	
+});
+	
+	
+	
+	
+	
 	
 	
 	
 $("#color2").click(function AddBorder(){
 		$(this).css({
-				'border':'3px solid #FA8258',
-				'border-radius':'100%'});
+				'border':'3px solid #FA8258'});
 			tipColor = "#ff6666";
 			console.log(tipColor);
 			//ctx.strokeStyle = tipColor;
@@ -313,4 +377,49 @@ var toggleBottomUi = function() {
 		e.stopPropagation();
 		});
 	}
+}
+
+
+//Toggle
+var theToggle = document.getElementById('toggle');
+
+// based on Todd Motto functions
+// http://toddmotto.com/labs/reusable-js/
+
+// hasClass
+function hasClass(elem, className) {
+	return new RegExp(' ' + className + ' ').test(' ' + elem.className + ' ');
+}
+// addClass
+function addClass(elem, className) {
+    if (!hasClass(elem, className)) {
+    	elem.className += ' ' + className;
+    }
+}
+// removeClass
+function removeClass(elem, className) {
+	var newClass = ' ' + elem.className.replace( /[\t\r\n]/g, ' ') + ' ';
+	if (hasClass(elem, className)) {
+        while (newClass.indexOf(' ' + className + ' ') >= 0 ) {
+            newClass = newClass.replace(' ' + className + ' ', ' ');
+        }
+        elem.className = newClass.replace(/^\s+|\s+$/g, '');
+    }
+}
+// toggleClass
+function toggleClass(elem, className) {
+	var newClass = ' ' + elem.className.replace( /[\t\r\n]/g, " " ) + ' ';
+    if (hasClass(elem, className)) {
+        while (newClass.indexOf(" " + className + " ") >= 0 ) {
+            newClass = newClass.replace( " " + className + " " , " " );
+        }
+        elem.className = newClass.replace(/^\s+|\s+$/g, '');
+    } else {
+        elem.className += ' ' + className;
+    }
+}
+
+theToggle.onclick = function() {
+   toggleClass(this, 'on');
+   return false;
 }

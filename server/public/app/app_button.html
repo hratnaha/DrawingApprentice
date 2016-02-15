@@ -30,7 +30,7 @@ put js files before css files
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </button>
-      <a class="navbar-brand" href="#">The Drawing Apprentice</a>
+ 
     </div>
 
     <!-- Collect the nav links, forms, and other content for toggling -->
@@ -38,58 +38,7 @@ put js files before css files
     	<div class="row">
         	 <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
             	<div class="row">
-                	<ul class="nav navbar-nav color">
-      	<li>
-            <div class="btn btn-md btn-color navbar-btn">
-                <input type="button" name="saveForm" class="btTxt submit saveForm" id="color1" />
-            </div>
-        </li>
-        <li>
-            <div class="btn btn-md btn-color navbar-btn">
-                <input type="button" name="saveForm" class="btTxt submit saveForm" id="color2" />
-            </div>
-        </li>
-        <li>
-            <div class="btn btn-md btn-color navbar-btn">
-                <input type="button" name="saveForm" class="btTxt submit saveForm" id="color3" />
-            </div>
-        </li>
-        <li>
-            <div class="btn btn-md btn-color navbar-btn">
-                <input type="button" name="saveForm" class="btTxt submit saveForm" id="color4" />
-            </div>
-        </li>
-        <li>
-            <div class="btn btn-md btn-color navbar-btn">
-                <input type="button" name="saveForm" class="btTxt submit saveForm" id="color5" />
-            </div>
-        </li>
-        <li>
-            <div class="btn btn-md btn-color navbar-btn">
-                <input type="button" name="saveForm" class="btTxt submit saveForm" id="color6" />
-            </div>
-        </li>
-        <li>
-            <div class="btn btn-md btn-color navbar-btn">
-                <input type="button" name="saveForm" class="btTxt submit saveForm" id="color7" />
-            </div>
-        </li>
-        <li>
-            <div class="btn btn-md btn-color navbar-btn">
-                <input type="button" name="saveForm" class="btTxt submit saveForm" id="color8" />
-            </div>
-        </li>
-        <li>
-            <div class="btn btn-md btn-color navbar-btn">
-                <input type="button" name="saveForm" class="btTxt submit saveForm" id="color9" />
-            </div>
-        </li>
-        <!--li>
-            <div class="btn btn-md btn-color navbar-btn">
-                <input type="button" name="saveForm" class="btTxt submit saveForm" id="color10" />
-            </div>
-        </li-->
-      </ul><!--color-->
+                	
       			</div>
                 <div class="row">
                 	 <ul class="nav navbar-nav setting_buton">  	  
@@ -134,7 +83,7 @@ put js files before css files
         
        
      
-            <label><input type="checkbox" id="Checkbox" onClick="TurnOnOffAgent();" value="" style="margin:1em 1em;"></label>
+            <!--label><input type="checkbox" id="Checkbox" onClick="TurnOnOffAgent();" value="" style="margin:1em 1em;"></label-->
        
     </div><!-- /#nav_toggle_content -->
 
@@ -440,6 +389,74 @@ put js files before css files
    		var myCanvasContext3 = myCanvas3.getContext('2d');
 		</script>
         </canvas>
+    </div>
+    
+    
+    <a href="#user-panel" id="toggle"><span></span></a>
+    <div id="user-panel">
+    	<div id="user-panel-content">
+        	<div class="user-panel-color">
+            	<ul class="nav navbar-nav color">
+                    <li>
+                        <div class="btn btn-md btn-color navbar-btn">
+                            <input type="button" name="colorBtn" class="btTxt submit colorBtn" id="color1" />
+                        </div>
+                    </li>
+                    <li>
+                        <div class="btn btn-md btn-color navbar-btn">
+                            <input type="button" name="colorBtn" class="btTxt submit colorBtn" id="color2" />
+                        </div>
+                    </li>
+                    <li>
+                        <div class="btn btn-md btn-color navbar-btn">
+                            <input type="button" name="colorBtn" class="btTxt submit colorBtn" id="color3" />
+                        </div>
+                    </li>
+                    <li>
+                        <div class="btn btn-md btn-color navbar-btn">
+                            <input type="button" name="colorBtn" class="btTxt submit colorBtn" id="color4" />
+                        </div>
+                    </li>
+                    <li>
+                        <div class="btn btn-md btn-color navbar-btn">
+                            <input type="button" name="colorBtn" class="btTxt submit colorBtn" id="color5" />
+                        </div>
+                    </li>
+                    <li>
+                        <div class="btn btn-md btn-color navbar-btn">
+                            <input type="button" name="colorBtn" class="btTxt submit colorBtn" id="color6" />
+                        </div>
+                    </li>
+                    <li>
+                        <div class="btn btn-md btn-color navbar-btn">
+                            <input type="button" name="colorBtn" class="btTxt submit colorBtn" id="color7" />
+                        </div>
+                    </li>
+                    <li>
+                        <div class="btn btn-md btn-color navbar-btn">
+                            <input type="button" name="colorBtn" class="btTxt submit colorBtn" id="color8" />
+                        </div>
+                    </li>
+                    <li>
+                        <div class="btn btn-md btn-color navbar-btn">
+                            <input type="button" name="colorBtn" class="btTxt submit colorBtn" id="color9" />
+                        </div>
+                    </li>
+                    <!--li>
+                        <div class="btn btn-md btn-color navbar-btn">
+                            <input type="button" name="saveForm" class="btTxt submit saveForm" id="color10" />
+                        </div>
+                    </li-->
+                  </ul><!--color-->
+            </div>
+        </div>
+        <div class="setting-button">
+        	<ul class="setting-button-content">
+            	<li><button class="btn" href="#"><i class="fa fa-trash fa-3x"></i></button></li>
+                <li><button class="btn" href="#"><i class="fa fa-share-square-o fa-3x"></i></button></li>
+                <li><button class="btn" href="#"><i class="fa fa-plus-square-o fa-3x"></i></button></li>
+            </ul>
+        </div>
     </div>
 
 

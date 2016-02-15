@@ -122,18 +122,6 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#e2e2e2', end
 	
 	}
 
-.btn-color{
-	/* line-height:1em; */
-	border-radius:6px;
-	border:none;
-	display:inline-block;
-	padding: .2em .2em;
-	vertical-align:middle;
-	cursor:pointer;
-	background-image:none;
-	float:left;
-	/* -webkit-appearance:button; */
-	}
 .btn-setting{
 	height:4em;
 	width:4em;
@@ -303,15 +291,28 @@ p{
 #opacity_title{
 	font-size:12px;
 	}
-.saveForm{
-	width: 3em;
-	height:3em;
-	border-radius: 100%;
+	
+.btn-color{
+	padding:1em 1em 0 .5em;
+	}
+.colorBtn{
+	width:6em;
+	height:6em;
+	border-radius: 10px;
 	border:0;
-	padding:0;
-	margin:0 auto;
 	padding:0 auto;
-	background-color:transparent;}
+	background-color:transparent;
+	border:none;
+	display:inline-block;
+	padding: 1.5em 1.5em;
+	vertical-align:middle;
+	cursor:pointer;
+	background-image:none;
+	float:left;
+	margin-right:1 em;
+
+	
+	}
 	
 #color1{
 	background: #c11e2c; /* Old browsers */
@@ -331,6 +332,7 @@ p{
 
 	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#c11e2c', endColorstr='#ed1c24',GradientType=1 ); 
 	/* IE6-9 fallback on horizontal gradient */
+	margin-left:1em;
 	}
 
 #color2{
@@ -755,6 +757,97 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#5a5a5a', end
 	height: 100%;
 }
 
+
+/*User Panel Style*/
+#user-panel{
+	width:80%;
+	border-top-left-radius:2em;
+	border-top-right-radius:2em;
+	height:15%;
+	border:1px solid black;
+	position:absolute;
+	z-index:1000;
+	bottom:-5px;
+	left:10%;
+	background: rgb(0,0,0); /* Old browsers */
+	background: -moz-linear-gradient(top, rgba(0,0,0,1) 0%, rgba(69,72,77,1) 100%); /* FF3.6-15 */
+	background: -webkit-linear-gradient(top, rgba(0,0,0,1) 0%,rgba(69,72,77,1) 100%); /* Chrome10-25,Safari5.1-6 */
+	background: linear-gradient(to bottom, rgba(0,0,0,1) 0%,rgba(69,72,77,1) 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, 		Safari7+ */
+	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#000000', endColorstr='#45484d',GradientType=0 ); /* IE6-9 */
+}
+	
+	
+/*Toggle Style*/
+
+/* Important styles */
+#toggle {
+  display: block;
+  width: 28px;
+  height: 30px;
+  margin: 30px auto 10px;
+  position:absolute;
+  z-index:9999;
+  left:85%;
+  bottom:8%;
+}
+
+
+#toggle span:after,
+#toggle span:before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: -9px;
+}
+#toggle span:after{
+  top: 9px;
+}
+#toggle span {
+  position: relative;
+  display: block;
+}
+
+#toggle span,
+#toggle span:after,
+#toggle span:before {
+  width: 100%;
+  height: 5px;
+  background-color: #888;
+  transition: all 0.3s;
+  backface-visibility: hidden;
+  border-radius: 2px;
+}
+
+/* on activation */
+#toggle.on span {
+  background-color: transparent;
+}
+#toggle.on span:before {
+  transform: rotate(45deg) translate(5px, 5px);
+}
+#toggle.on span:after {
+  transform: rotate(-45deg) translate(7px, -8px);
+}
+#toggle.on + #menu {
+  opacity: 1;
+  visibility: visible;
+}
+
+.setting-button-content .btn{
+	width:5em;
+	height:5em;
+	border-radius:100%;
+	background-color:white;
+	float:left;
+	margin-left:2em;
+	margin-top:1em;
+
+	}
+
+.setting-button-content i{
+	color:black;
+	
+	}	
 	
 @media screen (max-width:400px){
 #line-
