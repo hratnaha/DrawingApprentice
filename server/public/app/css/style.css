@@ -849,6 +849,23 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#5a5a5a', end
 	
 	}	
 	
+.drawing-mode-button{
+	margin-left:35%;
+	}
+	
+.btn-mode{
+	background-color:white;
+	width:10em;
+	height:10em;
+	border-radius:1em;
+	border:3px solid #838383;
+	margin-left:2em;
+	}
+.btn-mode img{
+	height:inherit;
+	width:inherit;
+	padding:1em 1em;
+	}
 @media screen (max-width:400px){
 #line-
 -title{display:none;}

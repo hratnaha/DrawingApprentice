@@ -36,25 +36,28 @@ put js files before css files
     <!-- Collect the nav links, forms, and other content for toggling -->
     <div class="collapse navbar-collapse" id="nav_toggle_content">
     	<div class="row">
-        	 <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
-            	<div class="row">
-                	
-      			</div>
+        	 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                 <div class="row">
-                	 <ul class="nav navbar-nav setting_buton">  	  
+                	<div class="drawing-mode-button">
+                    	<button class="btn-mode"><img src="../img/tracing.gif" /></button>
+                        <button class="btn-mode"><img src="../img/mimicking.gif" /></button>
+                        <button class="btn-mode"><img src="../img/transforming.gif" /></button>
+                    </div>
+              
+                	 <!--ul class="nav navbar-nav setting_buton">  	  
         <li>
             <button class="btn btn-default btn-lg" onClick ="location.href = '/admin_room'" style="float:left;margin-left:1em;">
            Exit
             </button>
         </li>
         <!--What is the link to get to the room selection? -->
-         <li>
+         <!--li>
             <button class="btn btn-default btn-lg" onClick="downloadCanvas(this);" style="float:left;margin-left:1em; display:none">
            Download
             </button>
         </li>
           <!--Instead of downloading the line data, this button should download a PNG image -->
-        <li>
+        <!--li>
             <button class="btn btn-default btn-lg" onClick ="testFunction()"style="float:left;margin-left:1em;">
            Settings
             </button>
@@ -73,11 +76,24 @@ put js files before css files
           </li>  
 
       </ul><!--setting_button-->
-                </div>
-            </div>
-             <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
-             
+                </div><!--row-->
+                
+                    
+             <!--========V O T E==========-->
+             <div class="voting_btn"  style="position:absolute;z-index:9999;right:3em;top:1em;">
+                 <div class="row">
+                    <button class="btn btn-vote" onClick="UpVote();" id="up"><i class="fa fa-arrow-circle-up fa-5x"></i></button>
+                 </div>
+                 
+                 <div class="row">
+                    <button class="btn btn-vote" onClick="DownVote();" id="down"><i class="fa fa-arrow-circle-down fa-5x"></i></button>
+                 </div>
              </div>
+
+        
+        
+            </div>
+        
       
         </div><!--row-->
         
@@ -96,7 +112,7 @@ put js files before css files
   <div class="navbar-inner row">
          	<div class="col-lg-6">
             	  <div class="row">
-                   <h4 style="margin-left:10em;margin-top:0;margin-bottom:-1em;color:black;">Line Thickness</h4>
+                   <h4 style="margin-left:10em;margin-top:0;margin-bottom:-1em;color:black;"></h4>
                 </div>
                 
                 <div class="row">
@@ -222,36 +238,8 @@ put js files before css files
     <div id="container">
     <div id="logo_placeholder"></div>
 			 
-             
-             <!--========V O T E==========-->
-             <div class="voting_btn"  style="position:absolute;z-index:9999;top:35%;right:3em;">
-                 <div class="row">
-                    <button class="btn btn-vote" onClick="UpVote();" id="up"><i class="fa fa-arrow-circle-up fa-5x"></i></button>
-                 </div>
-                 
-                 <div id="score">
-                 	<p>testing</p>
-                 	<style>
-                    	#score{
-							width:6em;
-							height:4em;
-							border:1px solid black;
-							font-size:14px;
-							}
-                    </style>
-                 </div>
-                 <div class="row">
-                    <button class="btn btn-vote" onClick="DownVote();" id="down"><i class="fa fa-arrow-circle-down fa-5x"></i></button>
-                 </div>
-             </div>
-
-        
-        
-            <div class="control-group">
-
-        </div>
-    
-    
+         
+      
     <div class="ui-widget-content" id="logo" style="width:9em;height:auto;z-index:9999;top:-1em;left: 90%;">
             <script type="text/javascript">
         var userData = "";
@@ -453,8 +441,10 @@ put js files before css files
         <div class="setting-button">
         	<ul class="setting-button-content">
             	<li><button class="btn" href="#"><i class="fa fa-trash fa-3x"></i></button></li>
-                <li><button class="btn" href="#"><i class="fa fa-share-square-o fa-3x"></i></button></li>
+                <li><button class="btn" href="#"><i class="fa fa-download fa-3x"></i></button></li>
                 <li><button class="btn" href="#"><i class="fa fa-plus-square-o fa-3x"></i></button></li>
+                 <li><button class="btn" href="#"><i class="fa fa-cogs fa-3x"></i></button></li>
+               
             </ul>
         </div>
     </div>

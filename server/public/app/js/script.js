@@ -22,7 +22,7 @@ $(".colorBtn").click(function AddWhiteBorder(){
 	
 $("#color1").click(function AddBorder(){
 			$(this).css({
-				'border':'3px solid #B40431'});
+				'border':'4px solid #B40431'});
 			tipColor = "red";
 			console.log(tipColor);
 			//ctx.strokeStyle = tipColor;
@@ -31,7 +31,7 @@ $("#color1").click(function AddBorder(){
 
 $("#color2").click(function AddBorder(){
 			$(this).css({
-				'border':'3px solid #FF8000'});
+				'border':'4px solid #FF8000'});
 			tipColor = "orange";
 			console.log(tipColor);
 			//ctx.strokeStyle = tipColor;
@@ -40,7 +40,7 @@ $("#color2").click(function AddBorder(){
 
 $("#color3").click(function AddBorder(){
 			$(this).css({
-				'border':'3px solid #F7FE2E'});
+				'border':'4px solid #F7FE2E'});
 			tipColor = "yellow";
 			console.log(tipColor);
 			//ctx.strokeStyle = tipColor;
@@ -48,7 +48,7 @@ $("#color3").click(function AddBorder(){
 
 $("#color4").click(function AddBorder(){
 			$(this).css({
-				'border':'3px solid #81F781'});
+				'border':'4px solid #81F781'});
 			tipColor = "green";
 			console.log(tipColor);
 			//ctx.strokeStyle = tipColor;
@@ -56,7 +56,7 @@ $("#color4").click(function AddBorder(){
 
 $("#color5").click(function AddBorder(){
 			$(this).css({
-				'border':'3px solid #FF00FF'});
+				'border':'4px solid #A901DB'});
 			tipColor = "purple";
 			console.log(tipColor);
 			//ctx.strokeStyle = tipColor;
@@ -65,20 +65,20 @@ $("#color5").click(function AddBorder(){
 
 $("#color6").click(function AddBorder(){
 			$(this).css({
-				'border':'3px solid #2E64FE'});
+				'border':'4px solid #2E64FE'});
 	
 });
 
 $("#color7").click(function AddBorder(){
 			$(this).css({
-				'border':'3px solid #FFFFFF'});
+				'border':'4px solid #FFFFFF'});
 	
 });
 	
 	
 $("#color8").click(function AddBorder(){
 			$(this).css({
-				'border':'3px solid #A4A4A4'});
+				'border':'4px solid #A4A4A4'});
 	
 });
 
@@ -90,19 +90,10 @@ $("#color9").click(function AddBorder(){
 });
 	
 	
+
 	
 	
-	
-	
-	
-	
-$("#color2").click(function AddBorder(){
-		$(this).css({
-				'border':'3px solid #FA8258'});
-			tipColor = "#ff6666";
-			console.log(tipColor);
-			//ctx.strokeStyle = tipColor;
-	});
+
 	
 $("#color3").click(function Yellow(){
 		tipColor = "#FFFF33";
