@@ -279,7 +279,9 @@ $("#download").click(function(){
 
 
 
-
+$("#toggle").click(function(){
+        $("#user-panel").toggle();
+    });
 
 function FullScreenCanvas() {
         		var canvas = document.getElementById('can'),
@@ -414,3 +416,66 @@ theToggle.onclick = function() {
    toggleClass(this, 'on');
    return false;
 }
+
+
+//Slider 
+$(function() {
+ 
+    var slider = $('#slider'),
+        tooltip = $('.tooltip');
+ 
+    tooltip.hide();
+ 
+    slider.slider({
+        range: "min",
+        min: 1,
+        value: 35,
+ 
+        start: function(event,ui) {
+          tooltip.fadeIn('fast');
+        },
+ 
+        slide: function(event, ui) {
+ 
+            var value = slider.slider('value'),
+                volume = $('.volume');
+ 
+            tooltip.css('left', value).text(ui.value);
+ 
+            if(value <= 5) { 
+                volume.css('background-position', '0 0');
+            } 
+            else if (value <= 25) {
+                volume.css('background-position', '0 -25px');
+            } 
+            else if (value <= 75) {
+                volume.css('background-position', '0 -50px');
+            } 
+            else {
+                volume.css('background-position', '0 -75px');
+            };
+ 
+        },
+ 
+        stop: function(event,ui) {
+          tooltip.fadeOut('fast');
+        },
+    });
+ 
+});
+
+
+$('img.img-toggle').click(function() {
+    var ending = this.src.slice( -3 );
+    switch( ending ) {
+       case 'jpg': 
+           this.src = this.src.replace( /jpg$/, 'gif' );
+           break;
+       case 'gif': 
+           this.src = this.src.replace( /gif$/, 'jpg' );
+           break;
+    }
+});
+
+
+

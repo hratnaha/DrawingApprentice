@@ -6,14 +6,12 @@
 put js files before css files
 
 --> 
-  <script src="../bower_components/jquery/dist/jquery.js"></script>
-  <script src="../bower_components/jquery-ui/jquery-ui.js"></script>
-  <script src="https://cdn.socket.io/socket.io-1.0.6.js"></script>
+    <script src="/js/vendor/jquery-1.11.2.min.js"></script>
+    <script src="/js/vendor/jquery-ui-1.10.1.custom.min.js"></script>
+    <script src="https://cdn.socket.io/socket.io-1.0.6.js"></script>
 	<script type="text/javascript" src="js/sketchPad.js"></script>
 	<script type="text/javascript" src="js/sketchio_client.js"></script>
-  
-  
-	  <script type="text/javascript" src="/js/vendor/bootstrap-slider.js"></script>
+	<script type="text/javascript" src="/js/vendor/bootstrap-slider.js"></script>
     <script type="text/javascript" src="/js/vendor/FileSaver.min.js"></script>
     <link rel="stylesheet" type="text/css" href="/css/bootstrap.min.css" />
     <link rel="stylesheet" type="text/css" href="/css/bootstrap-slider.css" />
@@ -32,77 +30,39 @@ put js files before css files
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </button>
-      <a class="navbar-brand" href="#">The Drawing Apprentice</a>
+ 
     </div>
 
     <!-- Collect the nav links, forms, and other content for toggling -->
     <div class="collapse navbar-collapse" id="nav_toggle_content">
-      <ul class="nav navbar-nav color">
-      	<li>
-            <div class="btn btn-md btn-color navbar-btn">
-                <input type="button" name="saveForm" class="btTxt submit saveForm" id="color1" />
-            </div>
-        </li>
-        <li>
-            <div class="btn btn-md btn-color navbar-btn">
-                <input type="button" name="saveForm" class="btTxt submit saveForm" id="color2" />
-            </div>
-        </li>
-        <li>
-            <div class="btn btn-md btn-color navbar-btn">
-                <input type="button" name="saveForm" class="btTxt submit saveForm" id="color3" />
-            </div>
-        </li>
-        <li>
-            <div class="btn btn-md btn-color navbar-btn">
-                <input type="button" name="saveForm" class="btTxt submit saveForm" id="color4" />
-            </div>
-        </li>
-        <li>
-            <div class="btn btn-md btn-color navbar-btn">
-                <input type="button" name="saveForm" class="btTxt submit saveForm" id="color5" />
-            </div>
-        </li>
-        <li>
-            <div class="btn btn-md btn-color navbar-btn">
-                <input type="button" name="saveForm" class="btTxt submit saveForm" id="color6" />
-            </div>
-        </li>
-        <li>
-            <div class="btn btn-md btn-color navbar-btn">
-                <input type="button" name="saveForm" class="btTxt submit saveForm" id="color7" />
-            </div>
-        </li>
-        <li>
-            <div class="btn btn-md btn-color navbar-btn">
-                <input type="button" name="saveForm" class="btTxt submit saveForm" id="color8" />
-            </div>
-        </li>
-        <li>
-            <div class="btn btn-md btn-color navbar-btn">
-                <input type="button" name="saveForm" class="btTxt submit saveForm" id="color9" />
-            </div>
-        </li>
-        <!--li>
-            <div class="btn btn-md btn-color navbar-btn">
-                <input type="button" name="saveForm" class="btTxt submit saveForm" id="color10" />
-            </div>
-        </li-->
-      </ul><!--color-->
-      <ul class="nav navbar-nav setting_buton">  	  
+    	<div class="row agent-panel">
+        	 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                <div class="row">
+                	   
+                    <section>	
+                        <span class="tooltip"></span> <!-- Tooltip -->
+                        <div id="slider"></div> <!-- the Slider -->
+                        <span class="volume"></span> <!-- Volume -->
+                    </section>                	<!--div class="drawing-mode-button">
+                    	<button class="btn-mode"><img src="../img/tracing.gif" /></button>
+                        <button class="btn-mode"><img src="../img/mimicking.gif" /></button>
+                        <button class="btn-mode"><img src="../img/transforming.gif" /></button>
+                    </div-->
+              
+                	 <!--ul class="nav navbar-nav setting_buton">  	  
         <li>
             <button class="btn btn-default btn-lg" onClick ="location.href = '/admin_room'" style="float:left;margin-left:1em;">
            Exit
             </button>
         </li>
         <!--What is the link to get to the room selection? -->
-         <li>
+         <!--li>
             <button class="btn btn-default btn-lg" onClick="downloadCanvas(this);" style="float:left;margin-left:1em; display:none">
            Download
             </button>
         </li>
           <!--Instead of downloading the line data, this button should download a PNG image -->
-        <li>
+        <!--li>
             <button class="btn btn-default btn-lg" onClick ="testFunction()"style="float:left;margin-left:1em;">
            Settings
             </button>
@@ -121,9 +81,25 @@ put js files before css files
           </li>  
 
       </ul><!--setting_button-->
-            <label><input type="checkbox" id="Checkbox" onClick="TurnOnOffAgent();" value="" style="margin:1em 1em;"></label>
+                </div><!--row-->
+
+             <div class="voting_btn"  style="position:absolute;z-index:9999;right:20%;top:1em;">
+                    <button class="btn btn-vote" onClick="UpVote();" id="up"><i class="fa fa-thumbs-up fa-5x"></i></i></button>
+                    <button class="btn btn-vote" onClick="DownVote();" id="down"><i class="fa fa-thumbs-down fa-5x"></i></i></i></button>
+
+             </div>
+
+        
+        
+            </div><!--col-lg-12-->
+        </div><!--agent-panel-->
+        
+       
+     
+            <!--label><input type="checkbox" id="Checkbox" onClick="TurnOnOffAgent();" value="" style="margin:1em 1em;"></label-->
        
     </div><!-- /#nav_toggle_content -->
+   
 
       <script>
           function testFunction(){
@@ -134,44 +110,52 @@ put js files before css files
   <div class="navbar-inner row">
          	<div class="col-lg-6">
             	  <div class="row">
-                   <h4 style="margin-left:10em;margin-top:0;margin-bottom:-1em;color:black;">Line Thickness</h4>
+                   <h4 style="margin-left:10em;margin-top:0;margin-bottom:-1em;color:black;"></h4>
                 </div>
                 
                 <div class="row">
-            <input id="ex15" data-slider-id='ex1Slider' type="text" data-slider-min="1" data-slider-max="100" data-slider-step="1" data-slider-value="50" style="z-index:9999;margin-top:-1em;"/>
+            <input id="line-thickness-slider" data-slider-id='ex1Slider' type="text" data-slider-min="1" data-slider-max="100" data-slider-step="1" data-slider-value="50" style="z-index:9999;margin-top:-1em;"/>
                 </div>
              
            
            </div><!--slide_row_1-->
 
-           <div class="col-lg-6">      
+       
                        		 <!--========S L I D E R : http://seiyria.com/bootstrap-slider/==========-->
+         
+ 
             
-            <div class="row">
-                <h4 style="margin-left:10em;margin-top:0;margin-bottom:-1em;color:black;">Agent Creativity Level</h4>
-            </div>
-            <div class="row">
-                <input id="ex8" data-slider-id='ex1Slider' type="text" data-slider-min="0" data-slider-max="100" data-slider-step="1" data-slider-value="50" style="z-index:9999;margin-top:-1em;"/>
-            </div>
-            <script>
-            $("#ex8").slider({
+             <!--div class="col-lg-6">      
+                <div class="row">
+                	 <h4 style="margin-left:10em;margin-top:0;margin-bottom:-1em;color:black;">Agent Creativity Level</h4>
+                    <input id="agent-creativity-slider" data-slider-id='ex1Slider' type="text" data-slider-min="0" data-slider-max="100" data-slider-step="1" data-slider-value="50" style="z-index:9999;margin-top:-1em;"/>
+                </div>
+            </div-->
+           
+          
+            
+             <script>
+            $("#agent-creativity-slider").slider({
 					tooltip: 'always'
-				});
+			});
+			
+			$("#line-thickness-slider").slider({
+					tooltip: 'always'
+			});
 	
-				// Without JQuery
-				var slider = new Slider("#ex8", {
+			// Without JQuery
+			var slider = new Slider("#agent-creativity-slider", {
 					tooltip: 'always'
-				});
+			});
 				
-				var slider = new Slider("#ex15", {
+			var slider = new Slider("#line-thickness-slider", {
 					tooltip: 'always'
-				});
+			});
 	
 			
             </script>
-            </div>
 
-      <div class="col-lg-6">
+      <!--div class="col-lg-6">
           <div class="row">
               <h4 style="margin-left:2em;margin-top:0;margin-bottom:-1em;color:black;">You Are Drawing:</h4>
           </div>
@@ -184,7 +168,7 @@ put js files before css files
                   }
               </style>
           </input>
-      </div>
+      </div-->
             
               
             </div><!--slider_row_2-->
@@ -192,6 +176,13 @@ put js files before css files
          </div>
    
   </div><!-- /.container-fluid -->
+   <div class="alert alert-success" role="alert" id="upvote-confirmation"  style="position:fixed;z-index:9999;top:16%;width:100%;">
+    	<h2 style="text-align:center"><strong>I got you!</strong> You have upvoted!</h2>
+    </div>
+    
+     <div class="alert alert-warning" role="alert" id="downvote-confirmation"  style="position:fixed;z-index:9999;top:16%;width:100%;">
+    	<h2 style="text-align:center"><strong>I got you!</strong> You have down voted!</h2>
+    </div>
   
 </div>
 
@@ -252,36 +243,8 @@ put js files before css files
     <div id="container">
     <div id="logo_placeholder"></div>
 			 
-             
-             <!--========V O T E==========-->
-             <div class="voting_btn"  style="position:absolute;z-index:9999;top:35%;right:3em;">
-                 <div class="row">
-                    <button class="btn btn-vote" onClick="UpVote();" id="up"><i class="fa fa-arrow-circle-up fa-5x"></i></button>
-                 </div>
-                 
-                 <div id="score">
-                 	<p>testing</p>
-                 	<style>
-                    	#score{
-							width:6em;
-							height:4em;
-							border:1px solid black;
-							font-size:14px;
-							}
-                    </style>
-                 </div>
-                 <div class="row">
-                    <button class="btn btn-vote" onClick="DownVote();" id="down"><i class="fa fa-arrow-circle-down fa-5x"></i></button>
-                 </div>
-             </div>
-
-        
-        
-            <div class="control-group">
-
-        </div>
-    
-    
+         
+      
     <div class="ui-widget-content" id="logo" style="width:9em;height:auto;z-index:9999;top:-1em;left: 90%;">
             <script type="text/javascript">
         var userData = "";
@@ -419,10 +382,80 @@ put js files before css files
    		var myCanvasContext3 = myCanvas3.getContext('2d');
 		</script>
         </canvas>
-     
-
-
-    </div><!--container-->
+    </div>
+    
+    
+    <a href="#user-panel" id="toggle">
+    	<span></span>
+        
+    </a>
+    <div id="user-panel">
+    	<div id="user-panel-content">
+        	<div class="user-panel-color">
+            	<ul class="nav navbar-nav color">
+                    <li>
+                        <div class="btn btn-md btn-color navbar-btn">
+                            <input type="button" name="colorBtn" class="btTxt submit colorBtn" id="color1" />
+                        </div>
+                    </li>
+                    <li>
+                        <div class="btn btn-md btn-color navbar-btn">
+                            <input type="button" name="colorBtn" class="btTxt submit colorBtn" id="color2" />
+                        </div>
+                    </li>
+                    <li>
+                        <div class="btn btn-md btn-color navbar-btn">
+                            <input type="button" name="colorBtn" class="btTxt submit colorBtn" id="color3" />
+                        </div>
+                    </li>
+                    <li>
+                        <div class="btn btn-md btn-color navbar-btn">
+                            <input type="button" name="colorBtn" class="btTxt submit colorBtn" id="color4" />
+                        </div>
+                    </li>
+                    <li>
+                        <div class="btn btn-md btn-color navbar-btn">
+                            <input type="button" name="colorBtn" class="btTxt submit colorBtn" id="color5" />
+                        </div>
+                    </li>
+                    <li>
+                        <div class="btn btn-md btn-color navbar-btn">
+                            <input type="button" name="colorBtn" class="btTxt submit colorBtn" id="color6" />
+                        </div>
+                    </li>
+                    <li>
+                        <div class="btn btn-md btn-color navbar-btn">
+                            <input type="button" name="colorBtn" class="btTxt submit colorBtn" id="color7" />
+                        </div>
+                    </li>
+                    <li>
+                        <div class="btn btn-md btn-color navbar-btn">
+                            <input type="button" name="colorBtn" class="btTxt submit colorBtn" id="color8" />
+                        </div>
+                    </li>
+                    <li>
+                        <div class="btn btn-md btn-color navbar-btn">
+                            <input type="button" name="colorBtn" class="btTxt submit colorBtn" id="color9" />
+                        </div>
+                    </li>
+                    <!--li>
+                        <div class="btn btn-md btn-color navbar-btn">
+                            <input type="button" name="saveForm" class="btTxt submit saveForm" id="color10" />
+                        </div>
+                    </li-->
+                  </ul><!--color-->
+            </div>
+        </div>
+        <div class="setting-button">
+        	<ul class="setting-button-content">
+            	<li><button class="btn" href="#"><i class="fa fa-trash fa-3x"></i></button></li>
+                <li><button class="btn" href="#"><i class="fa fa-download fa-3x"></i></button></li>
+                <li><button class="btn" href="#"><i class="fa fa-plus-square-o fa-3x"></i></button></li>
+                 <li><button class="btn" href="#"><i class="fa fa-cogs fa-3x"></i></button></li>
+               
+            </ul>
+        </div>
+    </div>
 
 
 
@@ -447,22 +480,5 @@ put js files before css files
 </script>
 <div id="output"></div>
 
-
-
 </body>
-
-<footer class="bottom_footer">
-  <div class="container-fluid">
-    <div class="row">
-      <div class="col-lg-2"></div>
-      <div class="col-lg-8" onclick="">
-        <div onclick="toggleBottomUi()" id="bottomUiDiv" class="bottom_footer_ui">
-        </div>
-      </div>
-      <div class="col-lg-2"></div>
-    </div>
-  </div>
-</footer>
-
-
 </html>

@@ -10,6 +10,9 @@ var lineThickness;
 var totalScore = 0;
 var scoreGiven = 0;
 var tipColor = "#000000";
+var downvoteConfirm = document.getElementById("downvote-confirmation");
+var upvoteConfirm = document.getElementById("upvote-confirmation");
+
 
 function initWebSocket() {
     
@@ -242,18 +245,24 @@ function groupingMode(chk) {
     }
 }
 
+
 function DownVote() {
     socket.emit('vote', 0, totalScore);
+	downvoteConfirm.style.display = "block";
+	upvoteConfirm.style.display = "none";
 }
 
 function UpVote() {
     console.log("upvoted"); 
 	socket.emit('vote', 1, totalScore);
+	downvoteConfirm.style.display = "none";
+	upvoteConfirm.style.display = "block";
 }
 
 function downloadData() {
     console.log('getting data...');
     socket.emit('getData');
+	
 }
 
 
