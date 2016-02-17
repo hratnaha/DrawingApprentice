@@ -10,8 +10,7 @@ var lineThickness;
 var totalScore = 0;
 var scoreGiven = 0;
 var tipColor = "#000000";
-var downvoteConfirm = document.getElementById("downvote-confirmation");
-var upvoteConfirm = document.getElementById("upvote-confirmation");
+
 
 
 function initWebSocket() {
@@ -245,18 +244,43 @@ function groupingMode(chk) {
     }
 }
 
-
-function DownVote() {
-    socket.emit('vote', 0, totalScore);
-	downvoteConfirm.style.display = "block";
-	upvoteConfirm.style.display = "none";
+function sleep(milliseconds) {
+  var start = new Date().getTime();
+  for (var i = 0; i < 1e7; i++) {
+    if ((new Date().getTime() - start) > milliseconds){
+      break;
+    }
+  }
 }
 
+
+upvoteConfirm = $("#upvoteconfirmation");
+downvoteConfirm = $("#downvoteconfirmation");
+
+
+function DownVote() {
+	
+    socket.emit('vote', 0, totalScore);
+	downvoteConfirm.show("fast").delay( 2000 );
+	
+	//downvoteConfirm.style.display = "block";
+	//upvoteConfirm.style.display = "none";
+	downvoteConfirm.hide("fast");
+}
+
+
 function UpVote() {
-    console.log("upvoted"); 
+    console.log("upvoted2"); 
+	
+	upvoteConfirm.show("fast").delay( 2000 );
+	//upvoteConfirm.css("display","block");
 	socket.emit('vote', 1, totalScore);
-	downvoteConfirm.style.display = "none";
-	upvoteConfirm.style.display = "block";
+	//downvoteConfirm.style.display = "none";
+	
+	//upvoteConfirm.css("display","none");
+	upvoteConfirm.hide("fast");
+	console.log(upvoteConfirm);
+	
 }
 
 function downloadData() {

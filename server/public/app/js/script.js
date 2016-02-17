@@ -10,6 +10,7 @@ $( document ).ready(function() {
 console.log( "ready!" );
 
 
+
 $(".colorBtn").click(function AddWhiteBorder(){
 	//$(this).css({
 	//	'border':'3px solid #4e4e4e',
@@ -447,7 +448,7 @@ $(function() {
             var value = slider.slider('value'),
                 volume = $('.volume');
  
-            tooltip.css('left', value).text(ui.value);
+            tooltip.css('left', value*5).text(ui.value); //have to scale value * n
  
             if(value <= 5) { 
                 volume.css('background-position', '0 0');
@@ -472,7 +473,67 @@ $(function() {
 });
 
 
-$('img.img-toggle').click(function() {
+
+
+btnTracing = $("#btnTracing img");
+btnMimicking = $("#btnMimicking img");
+btnTransforming = $("#btnTransforming img");
+
+
+btnTracing.click(function(){
+	  var ending = btnTracing.attr('src').slice(-3); //, src.slice( -3 );
+    switch( ending ) {
+       case 'jpg': 
+           btnTracing.attr('src',"images/Tracing.gif"); //= this.attr('src').replace( /jpg$/, 'gif' );
+		   btnMimicking.attr('src',"images/Mimicking.jpg");
+		   btnTransforming.attr('src',"images/Transforming.jpg");
+           break;
+       case 'gif': 
+           btnTracing.attr('src',"images/Tracing.jpg");
+		   btnMimicking.attr('src',"images/Mimicking.jpg");
+		   btnTransforming.attr('src',"images/Transforming.jpg");
+           break;
+    }
+});
+
+
+btnMimicking.click(function(){
+	  var ending = btnMimicking.attr('src').slice(-3); //, src.slice( -3 );
+    switch( ending ) {
+       case 'jpg': 
+           btnTracing.attr('src',"images/Tracing.jpg"); 
+		   btnMimicking.attr('src',"images/Mimicking.gif");
+		   btnTransforming.attr('src',"images/Transforming.jpg");
+           break;
+       case 'gif': 
+           btnTracing.attr('src',"images/Tracing.jpg");
+		   btnMimicking.attr('src',"images/Mimicking.jpg");
+		   btnTransforming.attr('src',"images/Transforming.jpg");
+           break;
+    }
+});
+
+btnTransforming.click(function(){
+	  var ending = btnMimicking.attr('src').slice(-3); //, src.slice( -3 );
+    switch( ending ) {
+       case 'jpg': 
+           btnTracing.attr('src',"images/Tracing.jpg"); 
+		   btnMimicking.attr('src',"images/Mimicking.jpg");
+		   btnTransforming.attr('src',"images/Transforming.gif");
+           break;
+       case 'gif': 
+           btnTracing.attr('src',"images/Tracing.jpg");
+		   btnMimicking.attr('src',"images/Mimicking.jpg");
+		   btnTransforming.attr('src',"images/Transforming.jpg");
+           break;
+    }
+});
+
+
+
+
+
+/*$('img.img-toggle').click(function() {
     var ending = this.src.slice( -3 );
     switch( ending ) {
        case 'jpg': 
@@ -482,7 +543,7 @@ $('img.img-toggle').click(function() {
            this.src = this.src.replace( /gif$/, 'jpg' );
            break;
     }
-});
+});*/
 
 
 
@@ -500,3 +561,14 @@ var slider = new Slider("#ex15", {
 	tooltip: 'always'
 });
 	
+
+function AppendSuccessMsg(){
+	$(".alert").addClass("alert-success");
+		
+}
+
+function AppendSuccessMsg(){
+	$(".alert").addClass("alert-success");
+		
+}
+

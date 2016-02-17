@@ -74,12 +74,6 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#898c90', end
 	}
 	
 	
-	
-	
-	
-	
-	
-	
 
 
 .btn-setting{
@@ -638,13 +632,7 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#5a5a5a', end
 	z-index:9999;
 	color:black;
 	}
-#slider{
-	z-index:9999;
-	position:absolute;
-	top:5em;
-	left:3em;
-	float:left;
-}
+
 #ex1Slider .slider-selection {
 	background: #56DDF0;
 }
@@ -786,7 +774,7 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#5a5a5a', end
 
 }
 #toggle.on span:before {
-
+  
   transform: rotate(0deg) translate(5px, 5px);
 }
 #toggle.on span:after {
@@ -837,9 +825,9 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#5a5a5a', end
 	}
 	
 section {
-	width: 150px;
+	width: 400px;
 	height: auto;
-	margin: 100px auto 0;
+	margin: 3em 5em 3em 5em;
 	position: relative;
 }
 #slider{
@@ -847,9 +835,9 @@ section {
 	border-style: solid;
 	border-color: #333 #333 #777 #333;
 	border-radius: 25px;
-	width: 100px;
+	width: 500px;
 	position: absolute;
-	height: 13px;
+	height: 20px;
 	background-color: #8e8d8d;
 	background: url('../images/bg-track.png') repeat top left;
     box-shadow: inset 0 1px 5px 0px rgba(0, 0, 0, .5), 
@@ -860,8 +848,8 @@ section {
 	position: absolute;
 	display: block;
 	top: -25px;
-	width: 35px;
-	height: 20px;
+	width: 40px;
+	height: 30px;
 	color: #fff;
 	text-align: center;
 	font: 10pt Tahoma, Arial, sans-serif ;
@@ -936,3 +924,21 @@ section {
 	background-size: contain;
 	}
 
+#downvoteconfirmation{
+	position:fixed;
+	z-index:9999;
+	top:16%;
+	width:100%;
+	display:none;
+	}
+
+#upvoteconfirmation{
+	position:fixed;
+	z-index:9999;
+	top:16%;
+	width:100%;
+	display:none;
+	}
+.collapse{
+	width:100%;
+	}
