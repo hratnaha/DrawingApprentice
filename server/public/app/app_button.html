@@ -389,7 +389,8 @@ put js files before css files
     </a>
     <div id="user-panel">
     	<div id="user-panel-content">
-        	<div class="user-panel-color">
+        	<div class="row">
+        	<div class="user-panel-color col-lg-7">
             	<ul class="nav navbar-nav color">
                     <li>
                         <div class="btn btn-md btn-color navbar-btn">
@@ -442,22 +443,10 @@ put js files before css files
                         </div>
                     </li-->
                   </ul><!--color-->
-            </div>
-            <div class="thickness">
-        		<label for="fader">Thickness</label>
-                <input type="range" min="1" max="5" value="50" id="fader" step="1" list="volsettings">
-                <datalist id="volsettings">
-                    <option>1</option>
-                    <option>2</option>
-                    <option>3</option>
-                    <option>4</option>
-                    <option>5</option>
-                </datalist>
-       		 </div>
-        </div>
+            </div><!--user-panel-color col-lg-8-->
         
       
-        <div class="setting-button">
+        <div class="setting-button col-lg-5">
         	<ul class="setting-button-content">
             	<li><button class="btn" href="#"><i class="fa fa-trash fa-3x"></i></button></li>
                 <li><button class="btn" href="#"><i class="fa fa-download fa-3x"></i></button></li>
@@ -465,9 +454,20 @@ put js files before css files
                  <li><button class="btn" href="#"><i class="fa fa-cogs fa-3x"></i></button></li>
                
             </ul>
-        </div>
-    </div>
+        </div><!--setting-button col-lg-5-->
+    </div><!--row-->
 
+	
+            <div class="row thickness">
+                      	<h3>Thickness</h3>
+                 	 <section class="thickness-section">	
+
+                        <div id="slider-thickness"></div> <!-- the Slider -->
+                        <span class="thickness"></span> <!-- Volume -->
+                    </section>
+           </div>
+        </div><!--.user-panel-content-->
+    </div><!--user-panel-->
 
 
 

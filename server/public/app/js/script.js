@@ -486,7 +486,8 @@ $(function() {
     sliderThickness.slider({
         range: "min",
         min: 1,
-        value: 10,
+		max: 10,
+        value: 5,
  
         start: function(event,ui) {
           tooltip.fadeIn('fast');
@@ -494,10 +495,12 @@ $(function() {
  
         slide: function(event, ui) {
  
-            var value = sliderThickness.slider('value'),
+            lineThickness = sliderThickness.slider('value'),
                 thickness = $('.thickness');
+			console.log("Thickness is: " +  lineThickness);
+			y = lineThickness;
  
-            tooltip.css('left', value).text(ui.value); //have to scale value * n
+            tooltip.css('left', lineThickness).text(ui.value); //have to scale value * n
  
            /* if(value <= 33) { 
                 thickness.css('background-position', '0 -15px');
