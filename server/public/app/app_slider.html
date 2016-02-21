@@ -39,7 +39,7 @@ put js files before css files
                 <div class="row">
                 	   
                  
-                     <section>	
+                     <section  class="creativity-section">	
                         <span class="tooltip"></span> <!-- Tooltip -->
                         <div id="slider"></div> <!-- the Slider -->
                         <span class="volume"></span> <!-- Volume -->
@@ -94,7 +94,7 @@ put js files before css files
       </ul><!--setting_button-->
                 </div><!--row-->
 
-             <div class="voting_btn"  style="position:absolute;z-index:9999;right:20%;top:1em;">
+             <div class="voting_btn">
                     <button class="btn btn-vote" onClick="UpVote();" id="up"><i class="fa fa-thumbs-up fa-5x"></i></i></button>
                     <button class="btn btn-vote" onClick="DownVote();" id="down"><i class="fa fa-thumbs-down fa-5x"></i></i></i></button>
 
@@ -402,7 +402,8 @@ put js files before css files
     </a>
     <div id="user-panel">
     	<div id="user-panel-content">
-        	<div class="user-panel-color">
+        	<div class="row">
+        	<div class="user-panel-color col-lg-7">
             	<ul class="nav navbar-nav color">
                     <li>
                         <div class="btn btn-md btn-color navbar-btn">
@@ -455,10 +456,10 @@ put js files before css files
                         </div>
                     </li-->
                   </ul><!--color-->
-            </div>
-        </div>
-
-        <div class="setting-button">
+            </div><!--user-panel-color col-lg-8-->
+            
+            
+        <div class="setting-button col-lg-5">
         	<ul class="setting-button-content">
             	<li><button class="btn" href="#"><i class="fa fa-trash fa-3x"></i></button></li>
                 <li><button class="btn" href="#"><i class="fa fa-download fa-3x"></i></button></li>
@@ -466,8 +467,21 @@ put js files before css files
                  <li><button class="btn" href="#"><i class="fa fa-cogs fa-3x"></i></button></li>
                
             </ul>
-        </div>
-    </div>
+        </div><!--setting-button col-lg-5-->
+            
+            </div><!--row-->
+
+       
+            <div class="row thickness">
+                      	<h3>Thickness</h3>
+                 	 <section class="thickness-section">	
+
+                        <div id="slider-thickness"></div> <!-- the Slider -->
+                        <span class="thickness"></span> <!-- Volume -->
+                    </section>
+           </div>
+        </div><!--.user-panel-content-->
+    </div><!--user-panel-->
 
 
 

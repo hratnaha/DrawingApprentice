@@ -437,7 +437,7 @@ $(function() {
     slider.slider({
         range: "min",
         min: 1,
-        value: 35,
+        value: 20,
  
         start: function(event,ui) {
           tooltip.fadeIn('fast');
@@ -450,18 +450,67 @@ $(function() {
  
             tooltip.css('left', value*5).text(ui.value); //have to scale value * n
  
-            if(value <= 5) { 
-                volume.css('background-position', '0 0');
+            if(value <= 33) { 
+                volume.css('background-position', '0 -15px');
             } 
-            else if (value <= 25) {
-                volume.css('background-position', '0 -25px');
+            else if (value <= 66 && value > 33) {
+                volume.css('background-position', '0 -110px');
             } 
-            else if (value <= 75) {
-                volume.css('background-position', '0 -50px');
-            } 
-            else {
-                volume.css('background-position', '0 -75px');
+            else if (value > 66 && value <= 100) {
+                volume.css('background-position', '0 -220px');
             };
+           // else {
+           //     volume.css('background-position', '0 -75px');
+           // }
+ 
+        },
+ 
+        stop: function(event,ui) {
+          tooltip.fadeOut('fast');
+        },
+    });
+ 
+});
+
+
+
+
+//Slider -thickness
+$(function() {
+ 
+    var sliderThickness = $('#slider-thickness'),
+        tooltip = $('.tooltip-thickness');
+ 
+    tooltip.hide();
+ 
+    sliderThickness.slider({
+        range: "min",
+        min: 1,
+        value: 10,
+ 
+        start: function(event,ui) {
+          tooltip.fadeIn('fast');
+        },
+ 
+        slide: function(event, ui) {
+ 
+            var value = sliderThickness.slider('value'),
+                thickness = $('.thickness');
+ 
+            tooltip.css('left', value).text(ui.value); //have to scale value * n
+ 
+           /* if(value <= 33) { 
+                thickness.css('background-position', '0 -15px');
+            } 
+            else if (value <= 66 && value > 33) {
+                thickness.css('background-position', '0 -110px');
+            } 
+            else if (value > 66 && value <= 100) {
+                thickness.css('background-position', '0 -220px');
+            };*/
+           // else {
+           //     volume.css('background-position', '0 -75px');
+           // }
  
         },
  
