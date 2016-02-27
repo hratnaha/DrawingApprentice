@@ -25,7 +25,7 @@ import lasagne
 # This is just some way of getting the MNIST dataset from an online location
 # and loading it into numpy arrays. It doesn't involve Lasagne at all.
 
-num_categories = 10
+num_categories = 50
 
 batch_size = 50
 
@@ -644,8 +644,8 @@ class SketchNet:
         model = 'cnn'
         # Load the dataset
         self.load = False
-        print("Loading data...")
-        X_train, y_train, X_val, y_val, X_test, y_test = load_dataset()
+        # print("Loading data...")
+        # X_train, y_train, X_val, y_val, X_test, y_test = load_dataset()
 
         # Prepare Theano variables for inputs and targets
         input_var = T.tensor4('inputs')
@@ -656,7 +656,7 @@ class SketchNet:
         #network = build_cnn(input_var)
         network = build_model_vgg16(input_var)
         #load weights from file
-        param = np.load('model_VGG.npz')
+        param = np.load('model_VGG_all.npz')
         lasagne.layers.set_all_param_values(network, param['arr_0'])
         print("loaded paramters from saved model")
         self.load = True
@@ -700,26 +700,33 @@ s = zerorpc.Server(SketchNet())
 s.bind("tcp://0.0.0.0:4242")
 s.run()
 
-# testStart = SketchNet()
 
+# Debug Code to Test the accurcay of the model
+# from os import walk
+# from random import randint
+
+
+
+# testStart = SketchNet()
 # if testStart.load:
-    # testStart.recognize_Image('data/png/airplane/70.png')
-    # testStart.recognize_Image('data/png/airplane/79.png')
-    # testStart.recognize_Image('data/png/alarm clock/100.png')
-    # testStart.recognize_Image('data/png/alarm clock/120.png')
-    # testStart.recognize_Image('data/png/angel/170.png')
-    # testStart.recognize_Image('data/png/angel/190.png')
-    # testStart.recognize_Image('data/png/ant/277.png')
-    # testStart.recognize_Image('data/png/ant/299.png')
-    # testStart.recognize_Image('data/png/apple/335.png')
-    # testStart.recognize_Image('data/png/apple/381.png')
-    # testStart.recognize_Image('data/png/arm/440.png')
-    # testStart.recognize_Image('data/png/arm/480.png')
-    # testStart.recognize_Image('data/png/armchair/520.png')
-    # testStart.recognize_Image('data/png/armchair/559.png')
-    # testStart.recognize_Image('data/png/ashtray/611.png')
-    # testStart.recognize_Image('data/png/ashtray/635.png')
-    # testStart.recognize_Image('data/png/axe/685.png')
-    # testStart.recognize_Image('data/png/axe/714.png')
-    # testStart.recognize_Image('data/png/backpack/733.png')
-    # testStart.recognize_Image('data/png/backpack/777.png')
+#     count = 0.0
+#     corr = 0.0
+#     filepath = 'data/png/'
+#     diretories = []
+#     for (dirpath, dirnames, filenames) in walk(filepath):
+#         for dirname in dirnames:
+#             for (dirpath2, dirnames2, filenames2) in walk(filepath + dirname):
+#                 if count > 100:
+#                     break
+#                 rand1 = randint(0, 40)
+#                 rand2 = randint(0, 40)
+#                 result1 = testStart.recognize_Image(filepath + dirname + '/' + filenames2[rand1])
+#                 result2 = testStart.recognize_Image(filepath + dirname + '/' + filenames2[rand2])
+#                 count = count + 2
+#                 if result1 == dirname:
+#                     corr = corr + 1
+#                 if result2 == dirname:
+#                     corr = corr + 1
+#                 accuracy = corr / count
+#                 print(accuracy)
+#         break

@@ -1,0 +1,455 @@
+recognize....
+path:			data/png/airplane/39.png
+result:			airplane
+duration:		8.91561293602
+accuracy:		1.0
+recognize....
+path:			data/png/alarm clock/132.png
+result:			alarm clock
+duration:		8.68851208687
+recognize....
+path:			data/png/alarm clock/120.png
+result:			bush
+duration:		8.45789003372
+accuracy:		0.75
+recognize....
+path:			data/png/angel/194.png
+result:			angel
+duration:		8.83702588081
+recognize....
+path:			data/png/angel/173.png
+result:			angel
+duration:		7.92629694939
+accuracy:		0.833333333333
+recognize....
+path:			data/png/ant/276.png
+result:			ant
+duration:		7.96730208397
+recognize....
+path:			data/png/ant/268.png
+result:			ant
+duration:		8.46209216118
+accuracy:		0.875
+recognize....
+path:			data/png/apple/356.png
+result:			apple
+duration:		8.88559794426
+recognize....
+path:			data/png/apple/334.png
+result:			apple
+duration:		9.0787191391
+accuracy:		0.9
+recognize....
+path:			data/png/arm/436.png
+result:			baseball bat
+duration:		9.15260887146
+recognize....
+path:			data/png/arm/415.png
+result:			arm
+duration:		8.80718803406
+accuracy:		0.833333333333
+recognize....
+path:			data/png/armchair/513.png
+result:			armchair
+duration:		8.75832104683
+recognize....
+path:			data/png/armchair/481.png
+result:			armchair
+duration:		9.47360920906
+accuracy:		0.857142857143
+recognize....
+path:			data/png/ashtray/577.png
+result:			backpack
+duration:		8.49905014038
+recognize....
+path:			data/png/ashtray/600.png
+result:			ashtray
+duration:		9.35945391655
+accuracy:		0.8125
+recognize....
+path:			data/png/axe/650.png
+result:			axe
+duration:		9.26004314423
+recognize....
+path:			data/png/axe/665.png
+result:			axe
+duration:		8.65245985985
+accuracy:		0.833333333333
+recognize....
+path:			data/png/backpack/758.png
+result:			backpack
+duration:		9.02334594727
+recognize....
+path:			data/png/backpack/738.png
+result:			backpack
+duration:		8.91558599472
+accuracy:		0.85
+recognize....
+path:			data/png/banana/810.png
+result:			airplane
+duration:		8.72541880608
+recognize....
+path:			data/png/banana/833.png
+result:			banana
+duration:		8.75504803658
+accuracy:		0.818181818182
+recognize....
+path:			data/png/barn/901.png
+result:			barn
+duration:		8.80553293228
+recognize....
+path:			data/png/barn/892.png
+result:			bread
+duration:		8.72274208069
+accuracy:		0.791666666667
+recognize....
+path:			data/png/baseball bat/1007.png
+result:			baseball bat
+duration:		8.98406291008
+recognize....
+path:			data/png/baseball bat/1006.png
+result:			baseball bat
+duration:		8.73023104668
+accuracy:		0.807692307692
+recognize....
+path:			data/png/basket/1069.png
+result:			basket
+duration:		8.80649900436
+recognize....
+path:			data/png/basket/1041.png
+result:			basket
+duration:		8.87471985817
+accuracy:		0.821428571429
+recognize....
+path:			data/png/bathtub/1150.png
+result:			bathtub
+duration:		8.88240003586
+recognize....
+path:			data/png/bathtub/1136.png
+result:			ant
+duration:		8.93955492973
+accuracy:		0.8
+recognize....
+path:			data/png/bear (animal)/1215.png
+result:			bear (animal)
+duration:		8.94863796234
+recognize....
+path:			data/png/bear (animal)/1235.png
+result:			cannon
+duration:		8.76163101196
+accuracy:		0.78125
+recognize....
+path:			data/png/bed/1312.png
+result:			bed
+duration:		8.80876612663
+recognize....
+path:			data/png/bed/1283.png
+result:			bed
+duration:		8.95876693726
+accuracy:		0.794117647059
+recognize....
+path:			data/png/bee/1372.png
+result:			bee
+duration:		8.79265594482
+recognize....
+path:			data/png/bee/1376.png
+result:			bench
+duration:		8.84267306328
+accuracy:		0.777777777778
+recognize....
+path:			data/png/beer-mug/1447.png
+result:			beer-mug
+duration:		8.76781487465
+recognize....
+path:			data/png/beer-mug/1476.png
+result:			beer-mug
+duration:		9.5684170723
+accuracy:		0.789473684211
+recognize....
+path:			data/png/bell/1546.png
+result:			bell
+duration:		10.4735980034
+recognize....
+path:			data/png/bell/1556.png
+result:			bell
+duration:		10.9773418903
+accuracy:		0.8
+recognize....
+path:			data/png/bench/1619.png
+result:			bench
+duration:		11.4751038551
+recognize....
+path:			data/png/bench/1611.png
+result:			bench
+duration:		11.083258152
+accuracy:		0.809523809524
+recognize....
+path:			data/png/bicycle/1683.png
+result:			bicycle
+duration:		11.7550578117
+recognize....
+path:			data/png/bicycle/1699.png
+result:			bicycle
+duration:		12.8120031357
+accuracy:		0.818181818182
+recognize....
+path:			data/png/binoculars/1798.png
+result:			bulldozer
+duration:		10.3072748184
+recognize....
+path:			data/png/binoculars/1781.png
+result:			cactus
+duration:		9.93287110329
+accuracy:		0.782608695652
+recognize....
+path:			data/png/blimp/1873.png
+result:			blimp
+duration:		12.7398629189
+recognize....
+path:			data/png/blimp/1844.png
+result:			blimp
+duration:		10.4843900204
+accuracy:		0.791666666667
+recognize....
+path:			data/png/book/1921.png
+result:			book
+duration:		10.0757699013
+recognize....
+path:			data/png/book/1955.png
+result:			book
+duration:		11.7471311092
+accuracy:		0.8
+recognize....
+path:			data/png/bookshelf/2029.png
+result:			bookshelf
+duration:		9.05399894714
+recognize....
+path:			data/png/bookshelf/2022.png
+result:			bookshelf
+duration:		8.81751799583
+accuracy:		0.807692307692
+recognize....
+path:			data/png/boomerang/2121.png
+result:			boomerang
+duration:		8.82270979881
+recognize....
+path:			data/png/boomerang/2113.png
+result:			boomerang
+duration:		8.84912610054
+accuracy:		0.814814814815
+recognize....
+path:			data/png/bottle opener/2168.png
+result:			bottle opener
+duration:		8.69711899757
+recognize....
+path:			data/png/bottle opener/2172.png
+result:			bottle opener
+duration:		8.74887800217
+accuracy:		0.821428571429
+recognize....
+path:			data/png/bowl/2261.png
+result:			bowl
+duration:		8.70078110695
+recognize....
+path:			data/png/bowl/2260.png
+result:			bowl
+duration:		9.2706720829
+accuracy:		0.827586206897
+recognize....
+path:			data/png/brain/2359.png
+result:			brain
+duration:		8.78006505966
+recognize....
+path:			data/png/brain/2329.png
+result:			brain
+duration:		8.68279695511
+accuracy:		0.833333333333
+recognize....
+path:			data/png/bread/2420.png
+result:			bread
+duration:		8.84091997147
+recognize....
+path:			data/png/bread/2401.png
+result:			bread
+duration:		9.97671890259
+accuracy:		0.838709677419
+recognize....
+path:			data/png/bridge/2484.png
+result:			bridge
+duration:		9.44166302681
+recognize....
+path:			data/png/bridge/2486.png
+result:			bridge
+duration:		8.83612108231
+accuracy:		0.84375
+recognize....
+path:			data/png/bulldozer/2576.png
+result:			bulldozer
+duration:		9.19648313522
+recognize....
+path:			data/png/bulldozer/2577.png
+result:			bulldozer
+duration:		9.69858980179
+accuracy:		0.848484848485
+recognize....
+path:			data/png/bus/2642.png
+result:			bus
+duration:		9.63474798203
+recognize....
+path:			data/png/bus/2677.png
+result:			bus
+duration:		11.4361429214
+accuracy:		0.852941176471
+recognize....
+path:			data/png/bush/2755.png
+result:			bush
+duration:		9.46018385887
+recognize....
+path:			data/png/bush/2757.png
+result:			ant
+duration:		9.9337220192
+accuracy:		0.842857142857
+recognize....
+path:			data/png/butterfly/2810.png
+result:			brain
+duration:		10.5994188786
+recognize....
+path:			data/png/butterfly/2827.png
+result:			butterfly
+duration:		11.2526211739
+accuracy:		0.833333333333
+recognize....
+path:			data/png/cabinet/2900.png
+result:			cabinet
+duration:		9.0361790657
+recognize....
+path:			data/png/cabinet/2908.png
+result:			castle
+duration:		8.57174491882
+accuracy:		0.824324324324
+recognize....
+path:			data/png/cactus/2961.png
+result:			cactus
+duration:		8.67744994164
+recognize....
+path:			data/png/cactus/2980.png
+result:			cactus
+duration:		8.90127301216
+accuracy:		0.828947368421
+recognize....
+path:			data/png/cake/3077.png
+result:			cake
+duration:		8.51096320152
+recognize....
+path:			data/png/cake/3075.png
+result:			cake
+duration:		8.49745297432
+accuracy:		0.833333333333
+recognize....
+path:			data/png/calculator/3143.png
+result:			calculator
+duration:		8.6123509407
+recognize....
+path:			data/png/calculator/3150.png
+result:			calculator
+duration:		8.46723198891
+accuracy:		0.8375
+recognize....
+path:			data/png/camel/3237.png
+result:			camel
+duration:		8.65787291527
+recognize....
+path:			data/png/camel/3204.png
+result:			camel
+duration:		9.54294013977
+accuracy:		0.841463414634
+recognize....
+path:			data/png/camera/3302.png
+result:			camera
+duration:		7.84793806076
+recognize....
+path:			data/png/camera/3296.png
+result:			camera
+duration:		9.44828295708
+accuracy:		0.845238095238
+recognize....
+path:			data/png/candle/3368.png
+result:			candle
+duration:		8.78132510185
+recognize....
+path:			data/png/candle/3374.png
+result:			baseball bat
+duration:		9.84246397018
+accuracy:		0.837209302326
+recognize....
+path:			data/png/cannon/3479.png
+result:			cannon
+duration:		8.71879196167
+recognize....
+path:			data/png/cannon/3449.png
+result:			cannon
+duration:		8.62553095818
+accuracy:		0.840909090909
+recognize....
+path:			data/png/canoe/3558.png
+result:			canoe
+duration:		8.50506305695
+recognize....
+path:			data/png/canoe/3528.png
+result:			canoe
+duration:		8.56735610962
+accuracy:		0.844444444444
+recognize....
+path:			data/png/car (sedan)/3635.png
+result:			bulldozer
+duration:		8.41593790054
+recognize....
+path:			data/png/car (sedan)/3616.png
+result:			car (sedan)
+duration:		8.24317097664
+accuracy:		0.836956521739
+recognize....
+path:			data/png/carrot/3687.png
+result:			carrot
+duration:		8.63209199905
+recognize....
+path:			data/png/carrot/3714.png
+result:			carrot
+duration:		8.29113101959
+accuracy:		0.840425531915
+recognize....
+path:			data/png/castle/3801.png
+result:			castle
+duration:		8.05799508095
+recognize....
+path:			data/png/castle/3784.png
+result:			castle
+duration:		8.51571297646
+accuracy:		0.84375
+recognize....
+path:			data/png/cat/3848.png
+result:			cat
+duration:		11.9686009884
+recognize....
+path:			data/png/cat/3845.png
+result:			cat
+duration:		9.6415169239
+accuracy:		0.84693877551
+recognize....
+path:			data/png/cell phone/3948.png
+result:			cell phone
+duration:		8.83631396294
+recognize....
+path:			data/png/cell phone/3939.png
+result:			cell phone
+duration:		8.54537296295
+accuracy:		0.85
+recognize....
+path:			data/png/chair/4018.png
+result:			armchair
+duration:		9.16487193108
+recognize....
+path:			data/png/chair/4007.png
+result:			armchair
+duration:		8.04281783104
+accuracy:		0.833333333333

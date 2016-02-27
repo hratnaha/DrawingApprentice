@@ -79,7 +79,7 @@ var enum_RoomType = {
     recorded    : 4
 };
 class gameroom {
-    constructor(roomInfo, apprentice, sketchClassfier, roomType){
+    constructor(roomInfo, apprentice, sketchClassfier, lineGenerator){
         this.players = [];
         this.sockets = [];
         this.compStrokes = [];
@@ -97,8 +97,9 @@ class gameroom {
         this.indexPLines = 0;   // for counting the number strokes processed by apprentice
         this.isGrouping = false;
         this.sketchClassfier = sketchClassfier;
+        this.lineGenerator = lineGenerator;
         this.numTurnStrokes = 0;
-        this.setRoomType(roomType ? roomType : enum_RoomType.apprentice);
+        this.setRoomType(enum_RoomType.apprentice);
     }
     createRoomInfo(){
         var roomInfo = {};
@@ -210,25 +211,37 @@ class gameroom {
                 // create the pic for recognizing using canvas2D
                 var tmpWidth = thisobj.userTurnStrokes.bound.right - thisobj.userTurnStrokes.bound.left;
                 var tmpHeight = thisobj.userTurnStrokes.bound.bottom - thisobj.userTurnStrokes.bound.top;
-                var selectWidth = tmpWidth > tmpHeight ? true : false;
-                var boundSize = selectWidth ? tmpWidth : tmpHeight;
+                var boundSize = tmpWidth > tmpHeight ? tmpWidth + 200 : tmpHeight + 200;
                 var deltaWidth = boundSize - tmpWidth;
                 var deltaHeight = boundSize - tmpHeight;
                 var turnContext = canvas2D.Initialize(boundSize, boundSize);
                 for(var i = 0; i < thisobj.userTurnStrokes.length; i++){
                     canvas2D.DrawLine(turnContext, thisobj.userTurnStrokes[i], {
-                        x: thisobj.userTurnStrokes.bound.left - 100 - deltaWidth / 2,
-                        y: thisobj.userTurnStrokes.bound.top - 100 - deltaHeight / 2
+                        x: thisobj.userTurnStrokes.bound.left - deltaWidth / 2,
+                        y: thisobj.userTurnStrokes.bound.top - deltaHeight / 2
                     });
                 }
                 canvas2D.SaveToFile(turnContext, "tmpname", false, function(filename, err){
                     if(!err){
                         // recognize the image using sketchClass
-                        thisobj.sketchClassfier.invoke("recognize_Image", filename, function(error, result) {
-                            // report back to the client
-                            console.log(result);
-                            so.emit('classifyObject', result);
-                        });
+                        if(thisobj.sketchClassfier){
+                            thisobj.sketchClassfier.invoke("recognize_Image", filename, function(error, result) {
+                                // report back to the client
+                                if(!error){
+                                    console.log(result);
+                                    if(thisobj.lineGenerator){
+                                        thisobj.lineGenerator.invoke("completeSketch", result, filename, function(error2, result2){
+                                            if(!error2){
+                                                var strGenLines = JSON.stringify(result2);
+                                                var genLines = JSON.parse(strGenLines);
+                                                console.log(genLines);
+                                            } 
+                                        });
+                                    }
+                                    so.emit('classifyObject', result);
+                                }
+                            });
+                        }
                     }
                 });
                 // reset the user turn strokes

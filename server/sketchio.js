@@ -35,11 +35,16 @@ var express = require('express'),
     curRooms = {},
     roomsInfo = [],
     onlineUsers = {},
-    Room = Room = require('./lib_GameHall/gameroom');;
+    Room = require('./lib_GameHall/gameroom');;
+
+var options = {timeout:60};
 
 // setting up the local 
-var sketchClassfier = new zerorpc.Client();
+var sketchClassfier = new zerorpc.Client(options);
 sketchClassfier.connect("tcp://127.0.0.1:4242");
+
+var lineGenerator = new zerorpc.Client(options);
+lineGenerator.connect("tcp://127.0.0.1:4243");
 
 // Passport session setup.
 passport.serializeUser(function (user, done) {
@@ -90,7 +95,7 @@ app.post('/room/create', function (req, res) {
     var apprentice = new Apprentice();
     apprentice.setCurrentTime((new Date()).getTime());
     // create a room
-    var room = new Room(newRoomInfo, apprentice, sketchClassfier);
+    var room = new Room(newRoomInfo, apprentice, sketchClassfier, lineGenerator);
     
     curRooms[newRoomInfo.id] = room;
 });
