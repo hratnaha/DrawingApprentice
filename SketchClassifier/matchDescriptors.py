@@ -133,15 +133,20 @@ class LineGenerator:
         for each in keypoints1:
             if each not in keypoints2:
                 prepoint = True
-                pt = Point(each[0], each[1])
-                lines.append(pt)
+                lines.append(each)
             else:
                 if prepoint:
-                    pt = Point(0, 0)
-                    lines.append(pt)
+                    lines.append([0, 0])
                 prepoint = False
 
-        return lines
+        lineresults = []
+        for each in lines:
+            pt = {}
+            pt['x'] = each[0]
+            pt['y'] = each[1]
+            lineresults.append(pt)
+
+        return lineresults
 
 
 s = zerorpc.Server(LineGenerator())

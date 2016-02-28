@@ -221,20 +221,46 @@ class gameroom {
                         y: thisobj.userTurnStrokes.bound.top - deltaHeight / 2
                     });
                 }
-                canvas2D.SaveToFile(turnContext, "tmpname", false, function(filename, err){
-                    if(!err){
+                canvas2D.SaveToFile(turnContext, "tmpname", false, function(filename, err1){
+                    if(!err1){
                         // recognize the image using sketchClass
-                        if(thisobj.sketchClassfier){
-                            thisobj.sketchClassfier.invoke("recognize_Image", filename, function(error, result) {
+                         if(thisobj.sketchClassfier){
+                            thisobj.sketchClassfier.invoke("recognize_Image", filename, function(error2, result) {
                                 // report back to the client
-                                if(!error){
+                                if(!error2){
                                     console.log(result);
                                     if(thisobj.lineGenerator){
-                                        thisobj.lineGenerator.invoke("completeSketch", result, filename, function(error2, result2){
-                                            if(!error2){
-                                                var strGenLines = JSON.stringify(result2);
-                                                var genLines = JSON.parse(strGenLines);
-                                                console.log(genLines);
+                                        thisobj.lineGenerator.invoke("completeSketch", result, filename, function(error3, result2){
+                                            if(!error3){
+                                                var newstroke = {};
+                                                newstroke['allPoints'] = [];
+                                                newstroke['lineWidth'] = 2;
+                                                newstroke['color'] = {r: 0, g: 1, b: 0};
+
+                                                var i = 0;
+                                                while(i<result2.length){
+                                                    if(result2[i].x > 0 && result2[i].y > 0){
+                                                        newstroke['allPoints'].push(result2[i]);
+                                                    }else{
+                                                        if(newstroke['allPoints'].length > 2){
+                                                            var resultmsg = JSON.stringify(newstroke);
+                                                            // and send it to all the players
+                                                            if(thisobj.sockets.length > 0){
+                                                                for(var j=0;j<thisobj.sockets.length;j++){
+                                                                    var tarso = thisobj.sockets[j];
+                                                                    tarso.emit('respondStroke', resultmsg);
+                                                                }
+                                                            }else
+                                                                so.emit('respondStroke', resultmsg);                        
+                                                        }
+                                                        newstroke = {};
+                                                        newstroke['allPoints'] = [];
+                                                        newstroke['lineWidth'] = 2;
+                                                        newstroke['color'] = {r: 0, g: 1, b: 0};
+                                                    }
+                                                    i++;
+                                                }
+                                               
                                             } 
                                         });
                                     }
