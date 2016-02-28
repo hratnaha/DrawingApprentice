@@ -443,12 +443,14 @@ $(function() {
           tooltip.fadeIn('fast');
         },
  
-        slide: function(event, ui) {
+        change: function(event, ui) {
  
             var value = slider.slider('value'),
                 volume = $('.volume');
+			
+			console.log("ui.value is "+ ui.value);
  
-            tooltip.css('left', value*5).text(ui.value); //have to scale value * n
+            tooltip.css('left', value*4.5).text(ui.value); //have to scale value * n
  
             if(value <= 33) { 
                 volume.css('background-position', '0 -15px');
@@ -486,7 +488,7 @@ $(function() {
     sliderThickness.slider({
         range: "min",
         min: 1,
-		max: 10,
+		max: 20,
         value: 5,
  
         start: function(event,ui) {
@@ -498,7 +500,7 @@ $(function() {
             lineThickness = sliderThickness.slider('value'),
                 thickness = $('.thickness');
 			console.log("Thickness is: " +  lineThickness);
-			y = lineThickness;
+			y = lineThickness;  
  
             tooltip.css('left', lineThickness).text(ui.value); //have to scale value * n
  
@@ -533,6 +535,7 @@ btnTransforming = $("#btnTransforming img");
 
 
 btnTracing.click(function(){
+	  ChooseCreativity(1);
 	  var ending = btnTracing.attr('src').slice(-3); //, src.slice( -3 );
     switch( ending ) {
        case 'jpg': 
@@ -550,6 +553,7 @@ btnTracing.click(function(){
 
 
 btnMimicking.click(function(){
+	ChooseCreativity(2);
 	  var ending = btnMimicking.attr('src').slice(-3); //, src.slice( -3 );
     switch( ending ) {
        case 'jpg': 
@@ -566,6 +570,7 @@ btnMimicking.click(function(){
 });
 
 btnTransforming.click(function(){
+	ChooseCreativity(3);
 	  var ending = btnMimicking.attr('src').slice(-3); //, src.slice( -3 );
     switch( ending ) {
        case 'jpg': 
@@ -624,3 +629,11 @@ function AppendSuccessMsg(){
 		
 }
 
+
+function upVoteBounce(){
+	$('#logo img').attr("src","images/buddy_confirmation.gif");
+	}
+function downVotePouty(){
+	$('#logo img').attr("src","images/buddy_pouty.gif");
+	
+	}

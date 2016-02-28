@@ -41,10 +41,28 @@ function initWebSocket() {
 	var ctx2 = sketchPadCanvas.getContext('2d');
     ctx.lineWidth = 0.1;
 
-    $('#ex8').slider().on('slideStop', function (ev) {
+	
+	/*$('#slider').slider().on('slideStop', function (ev) {
         console.log('Current Creativity Value:' + ' ' + ev.value / 100);
         socket.emit("SetCreativty", ev.value);
-    });
+		
+    });*/
+	
+
+		
+		$('#slider').slider({
+			stop: function(event, ui) {
+				 console.log('Current Creativity Value:' + ' ' + ui.value/ 100);
+       		     socket.emit("SetCreativty", ui.value);
+			}
+		});
+	
+
+
+   /* $('#ex8').slider().on('slideStop', function (ev) {
+        console.log('Current Creativity Value:' + ' ' + ev.value / 100);
+        socket.emit("SetCreativty", ev.value);
+    });*/
 
     var timer = setInterval(function () {
 
@@ -358,3 +376,20 @@ function onClassifyObject(label){
     document.getElementById('label').value = newLabel;
 }
 
+
+function ChooseCreativity(value){
+		 	console.log(value);
+		    switch( value ) {
+				   case 1: 
+						socket.emit("SetCreativty", 1);
+					    break;
+				   case 2: 
+					    socket.emit("SetCreativty", 50);
+					    break;
+				   case 3:
+				   		socket.emit("SetCreativty", 90);
+				   		break;
+				   		
+				}
+}
+	    
