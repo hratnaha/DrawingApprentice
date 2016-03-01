@@ -1,0 +1,2 @@
+C:\Users\nickdavis\Documents\DrawingApprentice\Parse\obj\Debug\JsonParse.njsprojResolveAssemblyReference.cache
+C:\Users\nickdavis\Documents\DrawingApprentice\Parse\bin\Microsoft.NodejsTools.WebRole.dll
