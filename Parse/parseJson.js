@@ -1,5 +1,5 @@
 var fs = require('fs');
-var files = ["P5_T2_userLines.txt", "P5_T2_computerLines.txt"];
+var files = ["UserData/p7_T2_comp.txt", "UserData/p7_T2_user.txt"];
 var objs = [];
 
 //1443715920243userLines.json
@@ -14,7 +14,7 @@ function readJsonAndWriteCSV(filename) {
         objs.push(JSON.parse(str));
 
         if (objs.length === files.length) {
-            var stream = fs.createWriteStream("P5_T2_combined_4.csv");
+            var stream = fs.createWriteStream("UserData/p7_T2_combined.csv");
             stream.once('open', function (fd) {
                 
                 stream.write("strokeID, isCompGenerated, lineID, time, timeStamp, x, y, groupID\n");
