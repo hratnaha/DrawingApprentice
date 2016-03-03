@@ -44,8 +44,12 @@ public class QuadTree {
     public void set(double x, double y, Object value) {
 
         Node root = this.root_;
+        double xmin = root.getX();
+        double ymin = root.getY();
+        double xmax = root.getX() + root.getW();
+        double ymax = root.getY() + root.getH();
         if (x < root.getX() || y < root.getY() || x > root.getX() + root.getW() || y > root.getY() + root.getH()) {
-            throw new QuadTreeException("Out of bounds : (" + x + ", " + y + ")");
+            throw new QuadTreeException("Out of bounds : (" + x + ", " + y + "), (" + xmin + ", " + ymin + "), (" + xmax + ", " + ymax + ")");
         }
         if (this.insert(root, new Point((float)x, (float)y, value))) {
             this.count_++;

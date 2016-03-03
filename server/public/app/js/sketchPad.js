@@ -13,7 +13,14 @@ function sketchUtil() {
     var context = canvas.getContext('2d');
     context.lineWidth = 1;
 	
-	
+	if(roomId != ""){
+        var img = new Image();
+        img.onload = function(){
+            bothInputContext.drawImage(img,0,0);
+        };
+        img.src = "/session_pic/" + roomId + ".png";
+    }
+    
     var curstroke;
     var strCounter = 0, pkptCounter = 0;
     var colorline;
@@ -21,6 +28,10 @@ function sketchUtil() {
     function createNewStroke() {
         strCounter++;
         pkptCounter = 0;
+        var color =  hexToRgb(context.strokeStyle);
+        var colorR = color.r / 255;
+        var colorG = color.g / 255;
+        var colorB = color.b / 255;
         
         var now = (new Date()).getTime();
         var newstroke = {
@@ -30,12 +41,13 @@ function sketchUtil() {
                 timestamp : now,
                 id : "stroke_" + strCounter,
                 color : {
-                    r: 1,
-                    g: 0,
-                    b: 0,
-                    a: 1
+                    r: colorR,
+                    g: colorG,
+                    b: colorB,
+                    a: opacity2
                 },
-                packetPoints : []
+                lineWidth : y,
+                allPoints : []
             }
         };
         return newstroke;
@@ -50,10 +62,10 @@ function sketchUtil() {
             y : coors.y,
             timestamp : now,
             pressure : pressurevalue,
-            color: colorline          //passing color in hex form
+            color: tipColor          //passing color in hex form
         };
         
-        curstroke.data.packetPoints.push(pkpt);
+        curstroke.data.allPoints.push(pkpt);
     }
     
 	
@@ -61,29 +73,30 @@ function sketchUtil() {
     var drawer = {
         isDrawing: false,
         touchstart: function (coors) {
+            colorline = document.getElementById('background').value;
             curstroke = createNewStroke();
-			if ($('#grouping').hasClass("isGrouping")){
+			if ($('#group').hasClass("active")){
             //if ($("#cboxGrouping").attr('checked') == "checked") {
-				
-				//alert("grouping checked");
+                //alert("grouping checked");
+                console.log("Grouping checked"); 
                 context.setLineDash([5]);
-                context.strokeStyle = x;
-				console.log(x);
+                context.strokeStyle = tipColor;
+				//console.log(tipColor);
 				context.globalAlpha = opacity2;
+				
 	
             } else {
                 colorline = document.getElementById('background').value;
-                context.strokeStyle = x;
-                //context.setLineDash([0]);
+                context.strokeStyle = tipColor;
+                context.setLineDash([0]);
 				context.lineWidth = y;
 				context.globalAlpha = opacity2;
-	
+			
             }
-            
+            curstroke = createNewStroke();
             context.beginPath();
             context.moveTo(coors.x, coors.y);
             this.isDrawing = true;
-            onTouchDown();
         },
         touchmove: function (coors) {
             if (this.isDrawing) {
@@ -91,7 +104,6 @@ function sketchUtil() {
                 context.stroke();
 				context.lineWidth = y;
 				context.globalAlpha = opacity2;
-	
                 var json_coor = JSON.stringify(coors); //converting to json
                 pushNewPacketPoint(coors);
             }
@@ -101,15 +113,18 @@ function sketchUtil() {
                 this.touchmove(coors);
                 var stringStroke = JSON.stringify(curstroke);
                 onTouchUp(stringStroke);
-                
                 var height = canvas.height;
 
                 this.isDrawing = false;
 				//if (document.getElementById('grouping').clicked == true) {
-                if (!$('#grouping').hasClass("isGrouping"))
+                if (!$('#group').hasClass("active")) {
                     bothInputContext.drawImage(canvas, 0, 0);
-
-                context.clearRect(0, 0, canvas.width, canvas.height);
+                }
+                else {
+                    var label = prompt("Please enter the type of object you drew:", "Object");
+                    changeGrouping();
+                    context.clearRect(0, 0, canvas.width, canvas.height);
+                }
             }
         }
     };
@@ -216,3 +231,4 @@ function pressure1() {
     });
 }
 pressure1();
+

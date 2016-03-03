@@ -1,4 +1,8 @@
-﻿"use strict";
+﻿/**
+ * @author Chih-Pin Hsiao
+ * @email: chipin01@gmail.com
+ */
+"use strict";
 var http = require('http'),
     FacebookStrategy = require('passport-facebook').Strategy,
     facebookConfig = require('./configuration/facebookConfig'),

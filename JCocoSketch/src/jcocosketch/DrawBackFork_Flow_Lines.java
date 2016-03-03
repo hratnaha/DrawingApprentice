@@ -158,7 +158,7 @@ public class DrawBackFork_Flow_Lines extends PApplet {
 			if(mouseButton == LEFT){
 				curLine = new Line();
 				//curLine.setStart(new PVector(mouseX, mouseY));
-				curLine.setColor(humanColor);
+				//curLine.setColor(humanColor);
 				allLines.add(curLine);
 			}
 			if(mouseButton == RIGHT){
@@ -261,7 +261,7 @@ public class DrawBackFork_Flow_Lines extends PApplet {
 			buffer.allLines.add(curLine); //add human line to buffer storage
 			
 			if(engine != null){
-				Line l = engine.decision();
+				Line l = engine.decision(-1);
 				l.compGenerated = true; 
 				stack.push(l);
 				for (int j= 0; j < l.allPoints.size() - 1; j++) {
@@ -346,7 +346,7 @@ public class DrawBackFork_Flow_Lines extends PApplet {
 			}
 			else{
 				engine = new Regional(enclosingGroup.lines.get(randomLineIndex), line2, (float)diag);
-				Line aiLine = engine.decision();
+				Line aiLine = engine.decision(-1);
 				aiLine.compGenerated = true; 
 				stack.push(aiLine);
 				compLines.add(aiLine);
@@ -385,7 +385,7 @@ public class DrawBackFork_Flow_Lines extends PApplet {
 					else{
 						engine = new Decision_Engine(l1, line2, (float)Math.sqrt(Math.pow(width, 2) + Math.pow(height, 2)));
 						curLine = null;
-						Line l = engine.decision();
+						Line l = engine.decision(-1);
 						l.compGenerated = true; 
 						stack.push(l);
 						//buffer.allLines.add(l); //add comp line to buffer storage
@@ -447,7 +447,7 @@ public class DrawBackFork_Flow_Lines extends PApplet {
 			for(int i = 0; i < shiftedGroup.lines.size(); i++){
 				engine = new Decision_Engine(shiftedGroup.lines.get(i), line2, (float)Math.sqrt(Math.pow(width, 2) + Math.pow(height, 2)));
 				engine = new Local(curLine, line2, (float)Math.sqrt(Math.pow(width, 2) + Math.pow(height, 2)));
-				Line aiLine = engine.decision();
+				Line aiLine = engine.decision(-1);
 				aiLine.compGenerated = true; 
 				stack.push(aiLine);
 				compLines.add(aiLine);
@@ -895,7 +895,7 @@ public class DrawBackFork_Flow_Lines extends PApplet {
 							}
 							else{
 								engine = new Decision_Engine(shiftedGroup.lines.get(i), line2, (float)Math.sqrt(Math.pow(width, 2) + Math.pow(height, 2)));
-								Line aiLine = engine.decision();
+								Line aiLine = engine.decision(-1);
 								perceptualTimer.stop();
 								aiLine.compGenerated = true; 
 								stack.push(aiLine);
@@ -921,7 +921,7 @@ public class DrawBackFork_Flow_Lines extends PApplet {
 						}
 						else{
 							engine = new Decision_Engine(shiftedGroup.lines.get(0), line2, (float)Math.sqrt(Math.pow(width, 2) + Math.pow(height, 2)));
-							Line aiLine = engine.decision();
+							Line aiLine = engine.decision(-1);
 							aiLine.compGenerated = true; 
 							stack.push(aiLine);
 							compLines.add(aiLine);
@@ -948,7 +948,7 @@ public class DrawBackFork_Flow_Lines extends PApplet {
 						}
 						else{
 							engine = new Decision_Engine(shiftedLine, line2, (float)Math.sqrt(Math.pow(width, 2) + Math.pow(height, 2)));
-							Line aiLine = engine.decision();
+							Line aiLine = engine.decision(-1);
 							aiLine.compGenerated = true; 
 							stack.push(aiLine);
 							compLines.add(aiLine);
@@ -969,7 +969,7 @@ public class DrawBackFork_Flow_Lines extends PApplet {
 							}
 							else{
 								engine = new Decision_Engine(shiftedLine, line2, (float)Math.sqrt(Math.pow(width, 2) + Math.pow(height, 2)));
-								Line aiLine = engine.decision();
+								Line aiLine = engine.decision(-1);
 								aiLine.compGenerated = true; 
 								stack.push(aiLine);
 								compLines.add(aiLine);
@@ -994,7 +994,7 @@ public class DrawBackFork_Flow_Lines extends PApplet {
 						}
 						else{
 							engine = new Decision_Engine(randomGroup.lines.get(i), line2, (float)Math.sqrt(Math.pow(width, 2) + Math.pow(height, 2)));
-							Line aiLine = engine.decision();
+							Line aiLine = engine.decision(-1);
 							aiLine.compGenerated = true; 
 							stack.push(aiLine);
 							compLines.add(aiLine);

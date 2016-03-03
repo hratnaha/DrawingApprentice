@@ -18,10 +18,14 @@ public class Line {
 	public float ymin = -1;
 	public float xmax = -1;
 	public float ymax = -1;
-	public int color = 0;
+	public float colorR;
+	public float colorG;
+	public float colorB;
+	public float colorA;
 	public boolean compGenerated = false; 
 	boolean isSelected = false;
 	Random rand = new Random();
+	public float lineWidth;
 
 
 	// convert all reference of ponts to pvec
@@ -394,12 +398,23 @@ public class Line {
 		System.out.println(lineID);
 	}
 	
-	public void setColor(int color) {
-		this.color = color;
+	public void setColor(float r, float g, float b, float a) {		
+		try{
+			this.colorA = a;
+			this.colorG = g;
+			this.colorB = b;
+			this.colorR = r;
+		}catch(Exception e){
+			System.out.println(e.toString());
+		}
 	}
 	
-	public int getColor() {
-		return this.color;
+	public void setThickness(float thickness){
+		this.lineWidth = thickness;
+	}
+
+	public float getThickness(){
+		return this.lineWidth;
 	}
 	
 	public int segmentsTotal() {

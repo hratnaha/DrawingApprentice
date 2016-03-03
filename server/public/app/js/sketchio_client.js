@@ -8,8 +8,12 @@ var ison = true;
 var curStroke = [];
 var finishStroke = false;
 var lineThickness;
+var totalScore = 0;
+var scoreGiven = 0;
+var tipColor = "#000000";
 
 function initWebSocket() {
+    
     botCanvas = document.getElementById('botpad');
 	sketchPadCanvas = document.getElementById('sketchpad');
 	moveLogo = document.getElementById("logo");
@@ -26,11 +30,14 @@ function initWebSocket() {
     socket.on('respondStroke', onNewStroke);
     socket.on('allData', onDataReceived);
     socket.on('disconnected', saveDataOnDb);
+    socket.on('updateScore', onUpdateScore);
+    socket.on('classifyObject', onClassifyObject)
 
 	var logo = document.getElementById("logo");
 
     var i = 0;
     var botStroke = "";
+    var botColor = "#000000";
     var ctx = botCanvas.getContext('2d');
 	var ctx2 = sketchPadCanvas.getContext('2d');
     ctx.lineWidth = 0.1;
@@ -42,31 +49,37 @@ function initWebSocket() {
 
     var timer = setInterval(function () {
 
-        if (botStroke != "" && i < botStroke.packetPoints.length ) {
-            ctx.lineTo(botStroke.packetPoints[i].x, botStroke.packetPoints[i].y);
-			//console.log(botStroke.packetPoints[i].x);
+        if (botStroke != "" && i < botStroke.allPoints.length ) {
+            ctx.lineTo(botStroke.allPoints[i].x, botStroke.allPoints[i].y);
 
             ctx.stroke();
-			ctx.strokeStyle = x;
-			ctx.globalAlpha = opacity2;
-			ctx.lineWidth = y;
-
-            //console.log(botStroke.packetPoints[i].x);
-			moveLogo.style.left = botStroke.packetPoints[i].x - 70;
-			moveLogo.style.top = botStroke.packetPoints[i].y - 130;
+			//ctx.strokeStyle = botColor;
+            ctx.globalAlpha = opacity2;
+            ctx.lineWidth = botStroke.lineWidth; 
+			$("#tip").css({fill: botColor});
+			$("#tip-highlight").css({
+				fill: '#F0F0F0',
+				opacity: .5,
+				});
+			moveLogo.style.left = botStroke.allPoints[i].x - 70;
+			moveLogo.style.top = botStroke.allPoints[i].y - 130;
 			//moveLogo.style.backgroundColor = "blue";
 
             i++;
         } else if (curStroke.length > 0) {
             botStroke = curStroke.shift();
+            botColor = rgbDoubleToHex(botStroke.color.r, botStroke.color.g, botStroke.color.b);
             ctx.beginPath();
-            ctx.moveTo(botStroke.packetPoints[0].x, botStroke.packetPoints[0].y);
-			ctx.strokeStyle = x;
-			ctx.globalAlpha = opacity2;
-			ctx.lineWidth = y;
+            ctx.moveTo(botStroke.allPoints[0].x, botStroke.allPoints[0].y);
+			ctx.strokeStyle = botColor;
+            ctx.globalAlpha = opacity2;
+            ctx.lineWidth = botStroke.lineWidth;
+			$("#tip").css({fill: botColor});
+			$("#tip-highlight").css({
+				fill: '#F0F0F0',
+				opacity: .5,
+				});
             i = 0;
-			//moveLogo.style.left = botStroke.packetPoints[i].x - 70;
-			//moveLogo.style.top = botStroke.packetPoints[i].y - 130;
 			//moveLogo.style.backgroundColor = "red";
 
 
@@ -74,6 +87,11 @@ function initWebSocket() {
             bothInputContext.drawImage(botCanvas, 0, 0);
             ctx.clearRect(0, 0, botCanvas.width, botCanvas.height);
             botStroke = "";
+			$("#tip").css({fill: botColor});
+			$("#tip-highlight").css({
+				fill: '#F0F0F0',
+				opacity: .5,
+				});
             i = 0;
 			//moveLogo.style.backgroundColor = "yellow";
 			MoveLogoBack();
@@ -85,13 +103,10 @@ function initWebSocket() {
 
 function MoveLogoBack () {
 	if(finishStroke==false){
-	//console.log("move");
-	//moveLogo.style.left = '4em';
-	//moveLogo.style.top = '5em';
-			$('#logo').animate({
-					left: '90%',
-					top: '-1em'},
-				"swing");
+    $('#logo').animate({
+            left: '90%',
+            top: '-1em'},
+        "swing");
 
 	console.log('logo left is ' + moveLogo.style.left);
 	}
@@ -100,7 +115,7 @@ function MoveLogoBack () {
 
 function onNewStroke(data) {
 	moveLogo.style.left = "90%";
-			moveLogo.style.top = "3%";
+	moveLogo.style.top = "3%";
     console.log(data);
     // decode the data into the new stroke
     var botStroke = JSON.parse(data);
@@ -108,16 +123,6 @@ function onNewStroke(data) {
 	logo.style.position = "absolute";
 	logo.style.left = data.x;
 	logo.style.top = data.y;
-
-	//var botPts = botStroke.packetPoints;
-
- //   if (botPts.length > 1) {
-
- //       ctx.beginPath();
- //       ctx.moveTo(botPts[0].x, botPts[0].y);
-	//	var i = 0;
-
-	//}
 }
 
 function onOpen(data) {
@@ -179,6 +184,26 @@ function clearCanvas() {
 }
 // change the mode base on the UI changes
 
+var isGrouping = false;
+function changeGrouping(){
+    if (isGrouping) {
+        isGrouping = false;
+        $('#group').removeClass('active')
+        socket.emit('setMode', 4);
+    }
+    else {
+        isGrouping = true;
+        $('#group').addClass('active')
+        socket.emit('setMode', 3);
+    }
+}
+
+function setGroupLabel(label){
+    var groupLabel = label;
+    //stringify and emit the label to server
+
+}
+
 function setMode(mode) {
 
     switch ($(this).val()) {
@@ -198,7 +223,6 @@ function setMode(mode) {
 function ChangeMode1(){
 	alert("Global");
 	socket.emit('setMode',2);
-
 }
 
 function ChangeMode2(){
@@ -212,24 +236,51 @@ function ChangeMode3(){
 }
 
 function groupingMode(chk) {
-	if(chk)
-	   	socket.emit('setMode', 3);
-	else
-		socket.emit('setMode', 4);
+    console.log("Grouping mode chk=" + chk); 
+    if (chk) {
+        socket.emit('setMode', 3);
+    }
+    else {
+        socket.emit('setMode', 4);
+    }
 }
 
 function DownVote() {
-    socket.emit('vote', 0);
+    socket.emit('vote', 0, totalScore);
 }
 
 function UpVote() {
-    socket.emit('vote', 1);
+    console.log("upvoted"); 
+	socket.emit('vote', 1, totalScore);
 }
 
 function downloadData() {
     console.log('getting data...');
     socket.emit('getData');
 }
+
+
+function downloadCanvas(link) {
+    var canvas = document.getElementById('both');
+    var context = canvas.getContext('2d'); 
+    var w = canvas.width;
+    var h = canvas.height;
+
+    var data = context.getImageData(0, 0, w, h);
+    var compositeOperation = canvas.globalCompositeOperation;
+    context.globalCompositeOperation = "destination-over";
+    context.fillStyle = "#FFFFFF";
+    context.fillRect(0, 0, w, h);
+    var imageData = canvas.toDataURL("image/PNG");
+    
+    context.clearRect(0, 0, w, h);
+    context.putImageData(data, 0, 0);
+    context.globalCompositeOperation = compositeOperation; 
+    
+    link.href = imageData; 
+    link.download = 'test.png';
+}
+
 
 //$.unload(saveDataOnDb);
 
@@ -263,3 +314,17 @@ function TurnOnOffAgent() {
 		console.log(ison);
     }
 }
+
+function onUpdateScore(newScore){
+    var score = JSON.parse(newScore);
+    totalScore = score; 
+    console.log("Inside update score:" + " " + totalScore);
+     document.getElementById("score").innerHTML = "total score = " + totalScore;
+	console.log("totalScore is:" + " " + totalScore);
+}
+
+function onClassifyObject(label){
+    var newLabel = JSON.parse(label)
+    document.getElementById('label').value = newLabel;
+}
+
