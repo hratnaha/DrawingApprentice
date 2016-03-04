@@ -219,11 +219,11 @@ p{
 	}
 	
 .btn-color{
-	padding:1em 1em 0 .5em;
+	padding:.5em .2em 0 .2em;
 	}
 .colorBtn{
-	width:4em;
-	height:4em;
+	width:3em;
+	height:3em;
 	border-radius: 10px;
 	border:0;
 	padding:0 auto;
@@ -817,13 +817,13 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#5a5a5a', end
 	}	
 	
 .drawing-mode-button{
-	margin-left:30%;
+	margin-left:15%;
 	}
 	
 .btn-mode{
 	background-color:white;
-	width:10em;
-	height:10em;
+	width:7em;
+	height:7em;
 	border-radius:1em;
 	border:3px solid #838383;
 	margin-left:2em;
@@ -846,7 +846,7 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#5a5a5a', end
 	margin-top:3em;*/
 	margin-bottom:3em;
 	position: absolute;
-	left:30%;
+	left:10%;
 	top:3em;
 }
 
