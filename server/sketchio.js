@@ -112,11 +112,12 @@ app.post('/room/join', function (req, res) {
 // ensure authentication
 function ensureAuthenticated(req, res, next) {
     if (req.isAuthenticated()) { return next(); }
-    res.redirect('/');
+    res.redirect('/DrawingApprentice/');
 }
 function authenticationSucceed(req, res){
+    console.log("user " + req.user.id + " logged in");
     onlineUsers[req.user.id] = req.user;
-    res.redirect('/admin_room');//res.redirect('/app');
+    res.redirect('/DrawingApprentice/admin_room');//res.redirect('/app');
 }
 // if the user pass thorugh authentication, render the app
 app.get('/app', ensureAuthenticated, function (req, res) {
@@ -141,13 +142,13 @@ app.get('/auth/facebook/callback',
 // google authentication
 app.get('/auth/google', passport.authenticate('google', { scope: 'https://www.googleapis.com/auth/plus.login' }));
 app.get('/auth/google/callback',
-    passport.authenticate('google', { failureRedirect: '/login' }),
+    passport.authenticate('google', { failureRedirect: '/' }),
     authenticationSucceed
 );
 // when log-out
 app.get('/logout', function (req, res) {
     req.logout();
-    res.redirect('/');
+    res.redirect('/DrawingApprentice/');
 });
 // Start to listen the app
 app.listen(3000);

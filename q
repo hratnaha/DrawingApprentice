@@ -1,0 +1,2062 @@
+commit e52652640e15db889cdcdc06c13952d547b0aec6
+Merge: 3868206 324dbec
+Author: Raphael Gontijo Lopes <raphaelgontijolopes@gmail.com>
+Date:   Tue Nov 17 10:04:49 2015 -0500
+
+    merge http auth and fix conflicts
+
+commit 324dbec3642fe3ff9d4cd3f1c85dfec72acea507
+Author: Raphael Gontijo Lopes <raphaelgontijolopes@gmail.com>
+Date:   Tue Nov 17 09:56:31 2015 -0500
+
+    add mongo auth
+
+commit 327da2e59aea4ec19dc6d4cf658630d6877fe451
+Author: Chih-Pin Hsiao <chipin01@gmail.com>
+Date:   Sat Nov 14 11:46:36 2015 -0500
+
+    Google log-in implemented
+
+commit 84228b16b92f9ee28af07f07dd39d45a0c1eb244
+Author: Chih-Pin Hsiao <chipin01@gmail.com>
+Date:   Fri Nov 13 12:55:05 2015 -0500
+
+    merge the new app.html to app.ejs
+
+commit 9ab85e6c78e1e271af09e186a8fb6f989c4a3477
+Merge: d517e43 6d22adb
+Author: Chih-Pin Hsiao <chipin01@gmail.com>
+Date:   Fri Nov 13 12:49:11 2015 -0500
+
+    Merge branch 'master' of https://github.gatech.edu/chsiao9/DrawingApprentice
+
+commit d517e43596876280800f929767b1cdfb1064162e
+Author: Chih-Pin Hsiao <chipin01@gmail.com>
+Date:   Fri Nov 13 12:48:51 2015 -0500
+
+    refactoring the strategy part of the code
+
+commit 6d22adb31d89a4d3471c038b534a6527396104fa
+Author: Lisa Li <liza90319@hotmail.com>
+Date:   Fri Nov 13 00:06:48 2015 -0500
+
+    Change the logo
+
+commit 2458f2a09554cd511230a91d91c443380ac751b4
+Merge: 20a36f0 b92d07b
+Author: Lisa Li <liza90319@hotmail.com>
+Date:   Thu Nov 12 23:59:29 2015 -0500
+
+    Merge branch 'master' of https://github.gatech.edu/chsiao9/DrawingApprentice
+
+commit b92d07bb723449ec01dcbbf9e448fa11d252940c
+Author: Chih-Pin Hsiao <chipin01@gmail.com>
+Date:   Thu Nov 12 15:03:47 2015 -0500
+
+    incorporate Rapha's save method after the client is disconnected
+
+commit cd57a7b374085291ccc3ae089dbc1995bfeb029b
+Author: Chih-Pin Hsiao <chipin01@gmail.com>
+Date:   Thu Nov 12 13:46:07 2015 -0500
+
+    send the user data to the server
+
+commit cffec3c11a8b4496151c3c710377350847545d7f
+Author: Chih-Pin Hsiao <chipin01@gmail.com>
+Date:   Thu Nov 12 13:35:06 2015 -0500
+
+    use ejs to render the userData in the app page
+
+commit 0294091dd95e521b18d1a5fc8e1dff8f34a4636c
+Merge: 650da83 b7e6a70
+Author: Chih-Pin Hsiao <chipin01@gmail.com>
+Date:   Thu Nov 12 11:43:43 2015 -0500
+
+    Merge branch 'master' of https://github.gatech.edu/chsiao9/DrawingApprentice
+    
+    Conflicts:
+    	server/sketchio.js
+
+commit 650da838af35b118bed22eb6528724b97ea07a52
+Author: Chih-Pin Hsiao <chipin01@gmail.com>
+Date:   Thu Nov 12 11:34:07 2015 -0500
+
+    clean up the codes, add facebook information, use .ejs to redner the app page
+
+commit 38682061e5d5f3dbb5dc630e27e9712d0d12d6ac
+Merge: 684d9a2 b7e6a70
+Author: Raphael Gontijo Lopes <raphaelgontijolopes@gmail.com>
+Date:   Thu Nov 12 10:44:23 2015 -0500
+
+    merge master into ADAM_Server and fix conflicts.
+
+commit b7e6a70e5923ef480cbbb5a098b7ba869ae9531c
+Author: Raphael Gontijo Lopes <raphaelgontijolopes@gmail.com>
+Date:   Thu Nov 12 10:34:29 2015 -0500
+
+    get facebook profile info and save it on db
+
+commit ddb6547ce6a86ac71970df94987e4303385dfc0b
+Author: Chih-Pin Hsiao <chipin01@gmail.com>
+Date:   Sun Nov 8 22:38:10 2015 -0500
+
+    fixed problem of paths and connect to the database server
+
+commit 684d9a25af146d3b3448441fa13ea6c7e7882c27
+Author: chsiao9 <chsiao9@gatech.edu>
+Date:   Sun Nov 8 22:31:58 2015 -0500
+
+    fix the error casued by index.ejs
+
+commit 82b5aad4465fc438e06b46e62ab89b53e7558e24
+Merge: 0646ab7 1f5c849
+Author: chsiao9 <chsiao9@gatech.edu>
+Date:   Sun Nov 8 22:28:36 2015 -0500
+
+    Merge branch 'ADAM_Server' of https://github.gatech.edu/chsiao9/DrawingApprentice into ADAM_Server
+
+commit 0646ab7dbab1f20eab6ebecfe9089528df92247e
+Author: chsiao9 <chsiao9@gatech.edu>
+Date:   Sun Nov 8 22:22:37 2015 -0500
+
+    correct the path
+
+commit 1f5c84925ac0f2bbda0b17f7fe598977c6ea5597
+Author: Chih-Pin Hsiao <chipin01@gmail.com>
+Date:   Sat Nov 7 23:54:21 2015 -0500
+
+    change the redirect path to absolute path
+
+commit a06febc7030474c2b62ca321587a0ba8811bd41d
+Author: Chih-Pin Hsiao <chipin01@gmail.com>
+Date:   Sat Nov 7 15:13:00 2015 -0500
+
+    try to change the host of the database server
+
+commit 8138e04b5093352a01b3ccfc2db1044b3cd286be
+Author: chsiao9 <chsiao9@gatech.edu>
+Date:   Sat Nov 7 15:01:56 2015 -0500
+
+    change the facebook auth callback address
+
+commit 576f5ed030bd041643190118a6895cfd3094f3b7
+Author: Chih-Pin Hsiao <chipin01@gmail.com>
+Date:   Sat Nov 7 14:49:12 2015 -0500
+
+    tweak the link
+
+commit 5ca79cf1d3256bdd2aab74f56287dcd349674ebf
+Author: Chih-Pin Hsiao <chipin01@gmail.com>
+Date:   Sat Nov 7 14:45:59 2015 -0500
+
+    change the auth link
+
+commit 572d300f6b8da80e3686e0daa0ace984a136bcda
+Author: Chih-Pin Hsiao <chipin01@gmail.com>
+Date:   Sat Nov 7 14:28:04 2015 -0500
+
+    create new facebook app that grant the access from Adamlab server
+
+commit c9c9ba17656982797cbd62d9006e6cfd7138c9ea
+Merge: 6deb85c 260c77f
+Author: Chih-Pin Hsiao <chipin01@gmail.com>
+Date:   Sat Nov 7 14:05:17 2015 -0500
+
+    Merge branch 'master' into ADAM_Server
+    
+    Conflicts:
+    	server/public/js/sketchio_client.js
+
+commit 260c77fe57599f2b3edd965f63709882eb0bded8
+Author: Chih-Pin Hsiao <chipin01@gmail.com>
+Date:   Sat Nov 7 13:58:06 2015 -0500
+
+    reformatting some codes
+
+commit 78c79fbe2d648211006f373e05c8f1d52fb3b0c3
+Author: Raphael Gontijo Lopes <raphaelgontijolopes@gmail.com>
+Date:   Tue Nov 3 10:44:12 2015 -0500
+
+    integrate facebook with database server
+
+commit 20a36f042e2f76a78266eb701887ac0b915b3fc0
+Merge: 4f56a6e 6345459
+Author: Lisa Li <liza90319@hotmail.com>
+Date:   Tue Oct 27 14:56:46 2015 -0400
+
+    Merge branch 'master' of https://github.gatech.edu/chsiao9/DrawingApprentice
+
+commit 6345459f68d0a7839811c86bc7b9d76d917ccf6c
+Author: Chih-Pin Hsiao <chipin01@gmail.com>
+Date:   Tue Oct 27 14:25:16 2015 -0400
+
+    add facebook login
+
+commit f360be4a2e83254f00dce1a4811548608f63c585
+Author: Chih-Pin Hsiao <chipin01@gmail.com>
+Date:   Fri Oct 2 09:19:22 2015 -0400
+
+    change the ip address back to localhost
+
+commit 6deb85c43f66823805c21d7b41c0c3e366b20440
+Author: Chih-Pin Hsiao <chipin01@gmail.com>
+Date:   Wed Sep 30 17:54:19 2015 -0400
+
+    add back the touch down call
+
+commit 78c6d70abea88d3570d592239c99eadc89e132d2
+Author: Chih-Pin Hsiao <chipin01@gmail.com>
+Date:   Wed Sep 30 17:46:11 2015 -0400
+
+    change initialize creativity level back
+
+commit 18969bab3fd9194b867f4cce18d464dbd7ce15fe
+Merge: b7b0538 18ed9ed
+Author: Chih-Pin Hsiao <chipin01@gmail.com>
+Date:   Wed Sep 30 17:41:02 2015 -0400
+
+    Merge branch 'master' into ADAM_Server
+
+commit 18ed9eda6809f3ee58a982e5ec52103c550fbf8f
+Author: Chih-Pin Hsiao <chipin01@gmail.com>
+Date:   Wed Sep 30 17:39:44 2015 -0400
+
+    set creativity level at the startup
+
+commit b7b0538fa3a719a7a42cd8ab00b0fd464f851a48
+Merge: 83b521c 1bc8fe0
+Author: Chih-Pin Hsiao <chipin01@gmail.com>
+Date:   Wed Sep 30 16:54:03 2015 -0400
+
+    Merge branch 'master' into ADAM_Server
+    
+    Conflicts:
+    	server/public/js/sketchio_client.js
+
+commit 1bc8fe0419ee592407aaa22ac3e9c47f42039380
+Author: Chih-Pin Hsiao <chipin01@gmail.com>
+Date:   Wed Sep 30 16:51:04 2015 -0400
+
+    comment out the console log to improve some speed
+
+commit 83b521c019bdd5d03b5fbaf70a788c299d44b06f
+Author: Chih-Pin Hsiao <chipin01@gmail.com>
+Date:   Wed Sep 30 16:03:47 2015 -0400
+
+    get back the adam server codes
+
+commit 1c67eba57522baa35291aaa008b642cebb7b1a28
+Merge: e2fe125 fa5fcb3
+Author: Chih-Pin Hsiao <chipin01@gmail.com>
+Date:   Wed Sep 30 16:02:48 2015 -0400
+
+    Merge branch 'master' into ADAM_Server
+
+commit e2fe125c70afe7e762084d0b438f3d84012c97a3
+Author: Chih-Pin Hsiao <chipin01@gmail.com>
+Date:   Wed Sep 30 16:02:37 2015 -0400
+
+    need to commit the jar
+
+commit fa5fcb379c0f82e4c2696c4460f45f73f64ef82b
+Author: Chih-Pin Hsiao <chipin01@gmail.com>
+Date:   Wed Sep 30 15:57:11 2015 -0400
+
+    fixed the miss merging problem
+
+commit 0011f09c813721ebf4161fdcba8507c6d1c6237f
+Author: Chih-Pin Hsiao <chipin01@gmail.com>
+Date:   Wed Sep 30 15:54:05 2015 -0400
+
+    Revert "fix the creativity level = 0 problem again"
+    
+    This reverts commit 526cde4ecce2e2e5673f021774b15d5eecf60b62.
+
+commit b8e7968643c93b5fa7975e4da0e14e2cf15e213a
+Merge: 526cde4 9d59211
+Author: Chih-Pin Hsiao <chipin01@gmail.com>
+Date:   Wed Sep 30 15:52:42 2015 -0400
+
+    Merge branch 'ADAM_Server'
+
+commit 526cde4ecce2e2e5673f021774b15d5eecf60b62
+Author: Chih-Pin Hsiao <chipin01@gmail.com>
+Date:   Wed Sep 30 15:52:10 2015 -0400
+
+    fix the creativity level = 0 problem again
+
+commit 9d59211597509d0b01001c51f639a2573ec423c2
+Merge: aafc304 a5761cd
+Author: Chih-Pin Hsiao <chipin01@gmail.com>
+Date:   Wed Sep 30 15:44:41 2015 -0400
+
+    Merge branch 'master' into ADAM_Server
+
+commit a5761cd00fa5476ead330847d571c5c7abe0a8ff
+Author: Chih-Pin Hsiao <chipin01@gmail.com>
+Date:   Wed Sep 30 15:44:17 2015 -0400
+
+    fix creativity level problem
+
+commit aafc304be1308b6900ea08e6185f9f0bb8fef36f
+Merge: 316e91c 962285e
+Author: Chih-Pin Hsiao <chipin01@gmail.com>
+Date:   Wed Sep 30 15:29:56 2015 -0400
+
+    Merge branch 'master' into ADAM_Server
+    
+    Conflicts:
+    	server/public/js/sketchio_client.js
+
+commit 962285e75636e6200bb5e8085fbb8527b0958460
+Author: Chih-Pin Hsiao <chipin01@gmail.com>
+Date:   Wed Sep 30 15:19:43 2015 -0400
+
+    build a new jar
+
+commit 29a19f7ff5ec36ac603c361a699a4fd08fe180ca
+Author: Kunwar Yashraj Singh <ksingh64@mail.gatech.edu>
+Date:   Tue Sep 29 20:35:04 2015 -0400
+
+    Fixed DQN path to original
+
+commit 520ce0ed0c6ed36de58fb141637882d7b2583d41
+Author: Kunwar Yashraj Singh <ksingh64@mail.gatech.edu>
+Date:   Tue Sep 29 17:31:43 2015 -0400
+
+    Fixed translating of lines for high creativity and low creativity
+
+commit 4f56a6ebad0c9003f4e7eb08fa813eb3085d3fd1
+Author: Lisa Li <liza90319@hotmail.com>
+Date:   Tue Sep 29 16:37:43 2015 -0400
+
+    Cleanup
+
+commit e7a8215c8568d26ea5c72ff5fb3ff770f2754195
+Author: Lisa Li <liza90319@hotmail.com>
+Date:   Tue Sep 29 14:23:09 2015 -0400
+
+    Deleted functions not in use
+
+commit 0277f10454fccda4b86ca78523c179e9f6f7b253
+Merge: dde3b69 7332a3b
+Author: Raphael Gontijo Lopes <raphaelgontijolopes@gmail.com>
+Date:   Tue Sep 29 11:32:16 2015 -0400
+
+    fix conflicts
+
+commit 316e91c7c6754f223610448900a76fa74ba31169
+Merge: dfc363f 7332a3b
+Author: Chih-Pin Hsiao <chipin01@gmail.com>
+Date:   Fri Sep 25 23:21:42 2015 -0400
+
+    Merge branch 'master' into ADAM_Server
+    
+    Conflicts:
+    	server/apprentice.jar
+
+commit 7332a3b4f1cc977a0d2bb6684b62b2b4bd0f6f54
+Author: Chih-Pin Hsiao <chipin01@gmail.com>
+Date:   Fri Sep 25 23:19:32 2015 -0400
+
+    fix a bug of sending creativity level and build the apprentice.jar file
+
+commit da448774cf05adf3bf119ebf3f7066ad5de5f06f
+Author: Kunwar Yashraj Singh <ksingh64@mail.gatech.edu>
+Date:   Fri Sep 25 18:26:07 2015 -0400
+
+    Fixed Segmentation to force it to be drawn near input line.
+
+commit 67ddb14be0c19c13dccefc9c29791e26d4e8920f
+Author: Lisa Li <liza90319@hotmail.com>
+Date:   Fri Sep 25 18:02:23 2015 -0400
+
+    Fixed slider tooltip bug
+
+commit 0b0fea6255d0428c469877756e1533fcff898f66
+Author: Kunwar Yashraj Singh <ksingh64@mail.gatech.edu>
+Date:   Fri Sep 25 17:12:14 2015 -0400
+
+    Fixed height based offset thresholding.
+
+commit 0fe6c3d81422c9980792e7f714bfd9476f26e9c6
+Author: Kunwar Yashraj Singh <ksingh64@mail.gatech.edu>
+Date:   Fri Sep 25 16:59:01 2015 -0400
+
+    Forced all lines to draw near user line
+
+commit 7ef3f080597ee34575ef88824115ddad22612ce2
+Author: Kunwar Yashraj Singh <ksingh64@mail.gatech.edu>
+Date:   Thu Sep 24 16:33:09 2015 -0400
+
+    Added an extra function to translate line(s).
+    Forced the local algorithms to draw near the input line.
+
+commit dfc363f0dd8cd917e5f49396e91e630711aa6905
+Merge: ddb296c c359b22
+Author: Chih-Pin Hsiao <chipin01@gmail.com>
+Date:   Tue Sep 22 20:12:43 2015 -0400
+
+    Merge branch 'master' into ADAM_Server
+
+commit c359b2210935151de3ffeab3d39ba9d15b32a4c1
+Author: Chih-Pin Hsiao <chipin01@gmail.com>
+Date:   Tue Sep 22 20:11:48 2015 -0400
+
+    fix the problem of adding too many the slider events inside the timer
+
+commit ddb296c32804efa4cc3fa0f8421c902577210a41
+Author: Chih-Pin Hsiao <chipin01@gmail.com>
+Date:   Tue Sep 22 19:53:13 2015 -0400
+
+    build the jar again
+
+commit 1714fe3e5887f401ef10bc510303ae3b988e550a
+Merge: 0dd0ab7 47a92c5
+Author: Chih-Pin Hsiao <chipin01@gmail.com>
+Date:   Tue Sep 22 19:50:26 2015 -0400
+
+    Merge branch 'master' into ADAM_Server
+
+commit 0dd0ab7c9e14770cb4cc44da421a4f2002aa430a
+Author: Chih-Pin Hsiao <chipin01@gmail.com>
+Date:   Tue Sep 22 19:49:55 2015 -0400
+
+    new jar from the most recent built
+
+commit 47a92c5642b814f89f743a025a1a2dab97bfa960
+Author: Chih-Pin Hsiao <chipin01@gmail.com>
+Date:   Tue Sep 22 19:48:52 2015 -0400
+
+    compile the new jar for DApp server
+
+commit 140836e9d6529906eb0de0ac4c84cd7d54b124bf
+Author: Lisa Li <liza90319@hotmail.com>
+Date:   Tue Sep 22 17:18:51 2015 -0400
+
+    Fixed the margin
+
+commit 26e486b0c1a2a97d84e36416898cc5ce6c1d2330
+Author: Kunwar Yashraj Singh <ksingh64@mail.gatech.edu>
+Date:   Tue Sep 22 17:12:57 2015 -0400
+
+    fixed point timestamping, using long data type and maintaining time
+    difference.
+
+commit b7a08cb4429491d78b0482d5d74073e44a95d767
+Author: Kunwar Yashraj Singh <ksingh64@mail.gatech.edu>
+Date:   Tue Sep 22 17:07:19 2015 -0400
+
+    Changed timestamping to account for time difference.
+
+commit ab1b592a7e57e380ad100f20372ba9ccf7ad3149
+Author: Kunwar Yashraj Singh <ksingh64@mail.gatech.edu>
+Date:   Tue Sep 22 17:02:51 2015 -0400
+
+    Added static variable to account for time incrementing it at each point
+    drawn.
+
+commit 9675495c5e43a80ad3178d3ebdd2b9a2fb7680ad
+Author: Kunwar Yashraj Singh <ksingh64@mail.gatech.edu>
+Date:   Tue Sep 22 16:48:28 2015 -0400
+
+    Added timestamping to points class
+
+commit 9387bd533dc4f619f1a21e55a574f93dde171663
+Author: Lisa Li <liza90319@hotmail.com>
+Date:   Tue Sep 22 13:26:16 2015 -0400
+
+    Change the width a little bit
+
+commit dde3b69aee1b6d7ac94b8dee52269f42702bb5a2
+Merge: e57a8c1 ba47ff9
+Author: Raphael Gontijo Lopes <raphaelgontijolopes@gmail.com>
+Date:   Tue Sep 22 10:24:45 2015 -0400
+
+    merge master, fix conflicts
+
+commit ba47ff984abf269061007190862d71aad987ab86
+Author: Kunwar Yashraj Singh <ksingh64@mail.gatech.edu>
+Date:   Mon Sep 21 19:52:42 2015 -0400
+
+    Removed the wierd shading algorithm.
+
+commit a81d7767c7da92436c22b171352c29d8434b72cf
+Author: Chih-Pin Hsiao <chipin01@gmail.com>
+Date:   Thu Sep 17 16:11:54 2015 -0400
+
+    fix the bug about time stamp numbers being cut.
+
+commit 7bae632796578b6e9493b074c95f3495ac28f9ab
+Merge: dd96d98 daed4b9
+Author: Chih-Pin Hsiao <chipin01@gmail.com>
+Date:   Tue Sep 15 23:51:30 2015 -0400
+
+    Merge branch 'master' into ADAM_Server
+    
+    Conflicts:
+    	.gitignore
+
+commit daed4b9ca966779aa277cdabd33368d57b8c2643
+Author: Chih-Pin Hsiao <chsiao9@gatech.edu>
+Date:   Tue Sep 15 23:19:02 2015 -0400
+
+    merge the changes from Lisa's thickness slider and other stuffs into the master branch
+    and fixes bugs that caused by the merging
+
+commit 4934605e4f012f9f641198dc2e3dd93f1ebd4b29
+Author: Chih-Pin Hsiao <chsiao9@gatech.edu>
+Date:   Sun Sep 13 19:56:08 2015 -0400
+
+    add the refernce to abagail jar
+
+commit a28c8c94d447bd58899cfb11dc368c3b26a0e4bc
+Author: Kunwar Yashraj Singh <ksingh64@mail.gatech.edu>
+Date:   Fri Sep 11 18:02:32 2015 -0400
+
+    Fixed 12
+
+commit 9df1f067aef7d070a416073810bfe4a1f7626c9e
+Author: Kunwar Yashraj Singh <ksingh64@mail.gatech.edu>
+Date:   Fri Sep 11 17:56:12 2015 -0400
+
+    Fixed Local Regional Global Grouping
+    Removed Evolving Strategy for Novel Pattern Generation
+
+commit 0953eaa7f03de3fa9a36c89d4ce42da980192978
+Author: Li, Biqing <Lisa@lawn-128-61-127-157.lawn.gatech.edu>
+Date:   Fri Sep 11 17:05:53 2015 -0400
+
+    commit ignore file
+
+commit e57a8c1c037f89f5c60cfd2db81efc4b4c7f3d67
+Author: Raphael Gontijo Lopes <raphaelgontijolopes@gmail.com>
+Date:   Thu Sep 10 10:49:32 2015 -0400
+
+    Add modify userId and sessionId functinality
+
+commit 3f894f34be3d8c7e37f1041e0835b45a04531533
+Merge: a1deaf8 98ba235
+Author: Raphael Gontijo Lopes <raphaelgontijolopes@gmail.com>
+Date:   Thu Sep 10 10:33:49 2015 -0400
+
+    merge master and fi conflicts
+
+commit dd96d98942186505c5496421e9ef22bdbc476794
+Merge: fa1c0d4 98ba235
+Author: Chih-Pin Hsiao <chsiao9@gatech.edu>
+Date:   Wed Sep 9 22:45:16 2015 -0400
+
+    Merge branch 'master' into ADAM_Server
+
+commit 98ba235fae1706ab5862b2502f92422b6d6f87ee
+Author: Li, Biqing <Lisa@lawn-128-61-122-52.lawn.gatech.edu>
+Date:   Wed Sep 9 15:25:41 2015 -0400
+
+    Push component.css, font-awesome.min.css, normalize.css
+
+commit fa1c0d4b981be7f0a835c6385b8924fd7fa80f3d
+Merge: bbf1e8a 4cbd0fa
+Author: Chih-Pin Hsiao <chsiao9@gatech.edu>
+Date:   Tue Sep 8 23:38:54 2015 -0400
+
+    Merge branch 'master' into ADAM_Server
+
+commit bbf1e8ab27b180f8e2dddbf0f6645b414fd02904
+Author: Chih-Pin Hsiao <chsiao9@gatech.edu>
+Date:   Tue Sep 8 23:31:17 2015 -0400
+
+    commit the ignore file.....
+
+commit 4cbd0fa31af5615c0ae32f0a6e0de809675a913f
+Author: Chih-Pin Hsiao <chsiao9@gatech.edu>
+Date:   Tue Sep 8 23:27:13 2015 -0400
+
+    fixed the json file saving problems
+
+commit 621dba4ee579a10ceda60a60dd992b056973f73e
+Author: Chih-Pin Hsiao <chsiao9@gatech.edu>
+Date:   Tue Sep 8 22:50:45 2015 -0400
+
+    fixed bugs relating to agent on/off, set creativity, and multi-line turn
+
+commit 049ed099bf9b8715e3c6b98c5901be38202e9180
+Merge: 68a0f7c 3d6eb4a
+Author: Chih-Pin Hsiao <chsiao9@gatech.edu>
+Date:   Tue Sep 8 22:00:19 2015 -0400
+
+    Merge branch 'master' of https://github.gatech.edu/chsiao9/DrawingApprentice
+
+commit 68a0f7c6e7cbb569cce6906c1dfc85510e1f5891
+Author: Chih-Pin Hsiao <chsiao9@gatech.edu>
+Date:   Tue Sep 8 22:00:03 2015 -0400
+
+    added multiline turn, creativity levels, turn on and off the agents
+
+commit 3d6eb4ae99699650f17c8d3cb8f7479d742e11e3
+Author: Li, Biqing <Lisa@lawn-128-61-119-79.lawn.gatech.edu>
+Date:   Tue Sep 8 18:53:59 2015 -0400
+
+    Added slider value and voting buttons
+
+commit a1deaf8b981a3e60ed8a65c9a949fdba98c05ebe
+Author: Raphael Gontijo Lopes <raphaelgontijolopes@gmail.com>
+Date:   Tue Sep 8 11:51:57 2015 -0400
+
+    properly send post data to other server. database integrated.
+
+commit a3438c8a9eb0e33a496edbb2aba9c6e8c5fe8a14
+Author: Raphael Gontijo Lopes <raphaelgontijolopes@gmail.com>
+Date:   Tue Sep 8 11:32:35 2015 -0400
+
+    Connection to database server hello world
+
+commit ce90f821a9bb548f06ec98d78fe4c53ac5172ecb
+Author: Chih-Pin Hsiao <chsiao9@gatech.edu>
+Date:   Mon Sep 7 15:14:16 2015 -0400
+
+    commit files that are not in the current master
+
+commit 21c040824d711c82dfdb14c9e351450eea83c2ae
+Merge: a3b68af 6a51e4c
+Author: Chih-Pin Hsiao <chsiao9@gatech.edu>
+Date:   Mon Sep 7 15:07:09 2015 -0400
+
+    Merge branch 'master' into drawingApprenticeClean
+
+commit a3b68afd9e6a24835a96e38682d8f5206ad83b50
+Author: Chih-Pin Hsiao <chsiao9@gatech.edu>
+Date:   Mon Sep 7 15:01:37 2015 -0400
+
+    revert the changes for the server connection so that people can test it locally
+
+commit 8d77402984b8099f10866cdbda411865c9072ffa
+Author: Chih-Pin Hsiao <chsiao9@gatech.edu>
+Date:   Mon Sep 7 14:39:42 2015 -0400
+
+    for adam server
+
+commit 54981a343f903a17abc22937b011127b8a0edcdb
+Author: Chih-Pin Hsiao <chsiao9@gatech.edu>
+Date:   Mon Sep 7 14:25:01 2015 -0400
+
+    include new changes from Lisa and minor bug fixing
+
+commit 1aa53e46cba4bbcaa3b825dfa26e07807caf60bc
+Author: Chih-Pin Hsiao <chsiao9@gatech.edu>
+Date:   Mon Sep 7 14:08:44 2015 -0400
+
+    version for server to use
+
+commit c4967097c94358b828e2b1aedb9d11e3de5c9498
+Merge: a20929a 8eb6c1f
+Author: Chih-Pin Hsiao <chsiao9@gatech.edu>
+Date:   Mon Sep 7 13:01:44 2015 -0400
+
+    Merge remote-tracking branch 'origin/drawingApprenticeCleanWithDownload' into drawingApprenticeClean
+
+commit a20929ab1d6962d88669d4d3b27c82eef1127f4d
+Author: Chih-Pin Hsiao <chsiao9@gatech.edu>
+Date:   Mon Sep 7 13:01:32 2015 -0400
+
+    incorporate  changes for DQN.js
+
+commit 8eb6c1fbdcd836f3d1735be72f1298c089e6edae
+Author: Raphael Gontijo Lopes <raphaelgontijolopes@gmail.com>
+Date:   Mon Sep 7 11:55:35 2015 -0400
+
+    Resolve methods missing from Apprentice.java
+
+commit e5b4aa1e16ea9878efb66f7b67421285d9bb8a61
+Author: Chih-Pin Hsiao <chsiao9@gatech.edu>
+Date:   Mon Sep 7 10:40:56 2015 -0400
+
+    include changes in Java side (yash and Rafa's codes)
+
+commit c0790809a9fcfd3507143549571504a4403a242f
+Merge: 6274140 9b29263
+Author: Chih-Pin Hsiao <chsiao9@gatech.edu>
+Date:   Mon Sep 7 10:27:38 2015 -0400
+
+    Merge remote-tracking branch 'origin/drawingApprenticeCleanWithDownload' into drawingApprenticeClean
+
+commit 6274140c183d5acb0c1459aef0a1f39b5f5fcc94
+Author: Chih-Pin Hsiao <chsiao9@gatech.edu>
+Date:   Mon Sep 7 10:16:54 2015 -0400
+
+    stop tracking irrelevant files
+
+commit 9b292637103e5dd4cefe522a6de794b52172d2e9
+Merge: ccfd29b da8b726
+Author: Li, Biqing <Lisa@lawn-128-61-112-197.lawn.gatech.edu>
+Date:   Wed Sep 2 17:04:58 2015 -0400
+
+    Merge branch 'drawingApprenticeCleanWithDownload' of https://github.gatech.edu/chsiao9/DrawingApprentice into drawingApprenticeCleanWithDownload
+    
+    Conflicts:
+    	server/public/js/sketchio_client.js
+
+commit ccfd29b6708a0212335bf2526f0295f593c2017a
+Author: Li, Biqing <Lisa@lawn-128-61-112-197.lawn.gatech.edu>
+Date:   Wed Sep 2 16:57:24 2015 -0400
+
+    no message
+
+commit da8b726807b9d42d980c1feb857d683056d6adc9
+Author: Raphael Gontijo Lopes <raphaelgontijolopes@gmail.com>
+Date:   Tue Sep 1 17:45:57 2015 -0400
+
+    fix issue with using flexjson on Apprentice(). Fix download to properly save lines to different files
+
+commit d6bbfacc5eb625356699a7aa57d76f893773d010
+Author: Raphael Gontijo Lopes <raphaelgontijolopes@gmail.com>
+Date:   Tue Sep 1 16:34:36 2015 -0400
+
+    remove unused imports
+
+commit 0e03e438df60ff796e57c19f47b77e2877e86373
+Author: Raphael Gontijo Lopes <raphaelgontijolopes@gmail.com>
+Date:   Tue Sep 1 16:29:59 2015 -0400
+
+    error handling for data downloading
+
+commit b8ceb4e19ed9475f3b2ed366247aa7f3ae71d92d
+Author: Raphael Gontijo Lopes <raphaelgontijolopes@gmail.com>
+Date:   Tue Sep 1 16:05:35 2015 -0400
+
+    download funcitonality for user and computer lines
+
+commit 2218a4b94a38e901b50a0ff7a139fd4c58010cbc
+Author: Chih-Pin Hsiao <chsiao9@gatech.edu>
+Date:   Fri Aug 28 17:37:09 2015 -0400
+
+    add the voting up and down
+
+commit 742daaaffa19ea3c51284fce12bd0a6a156984ef
+Author: Chih-Pin Hsiao <chsiao9@gatech.edu>
+Date:   Wed Jul 29 15:26:59 2015 -0400
+
+    new algorithm from Yash
+
+commit 13d2ab645b8ad719a8a3d98212961267945d4f27
+Author: Kunwar Yashraj Singh <kys@youcanlearn.com>
+Date:   Wed Jul 29 14:10:59 2015 -0400
+
+    Fixed Initialization Error
+
+commit 704b09ff4e7095c95f7cd1742cd982e8cefb48db
+Author: Kunwar Yashraj Singh <kys@youcanlearn.com>
+Date:   Sat Jul 25 15:22:33 2015 -0400
+
+    Added Deep Learning with Reward Shaping
+
+commit 1f60c7a9eee8e7299de1e982fab8aacd77c43001
+Author: Chih-Pin Hsiao <chsiao9@gatech.edu>
+Date:   Fri Jul 24 16:40:33 2015 -0400
+
+    add the adam address and path
+    fix the chrome dash problem
+
+commit 77a822a87ec11ace4f07c309c00977eb81ab7f4b
+Author: Chih-Pin Hsiao <chipin01@gmail.com>
+Date:   Mon Apr 20 16:59:09 2015 -0400
+
+    new algorithms from Yash
+
+commit f8bb876fba13bcd2c6ed6f8682b6821e337a8ceb
+Author: Chih-Pin Hsiao <chipin01@gmail.com>
+Date:   Sun Mar 15 13:53:34 2015 -0400
+
+    incorporate yash's new algorithm
+    
+    and create a new jar that includes the new algorithm
+
+commit 8bc87a3b30ce51b81c880e14392f3999613ff70a
+Merge: 0b8d305 4b58c5b
+Author: Chih-Pin Hsiao <chipin01@gmail.com>
+Date:   Sun Mar 15 13:34:30 2015 -0400
+
+    Merge remote-tracking branch 'origin/KMeansAndSegmentation' into drawingApprenticeClean
+
+commit 4b58c5be99d6ae4a729c477874a8e26ec3a902a7
+Author: Chih-Pin Hsiao <chipin01@gmail.com>
+Date:   Sun Mar 15 13:27:39 2015 -0400
+
+    add encog libraries
+
+commit 0b8d30565b83f655e82b9a7ade87bdeba6eafc78
+Author: Chih-Pin Hsiao <chipin01@gmail.com>
+Date:   Sun Mar 15 12:53:34 2015 -0400
+
+    renew the server address
+
+commit fb03a94a62ba5858489bc50d0b626b4005c5c715
+Author: Kunwar Yashraj Singh <kys@youcanlearn.com>
+Date:   Mon Mar 9 18:10:21 2015 -0400
+
+    Added Segmentation Alg
+
+commit ae41106d7987fe76670fc3dce290a68d40e71989
+Author: Li, Biqing <Lisa@Biqings-MacBook-Pro.local>
+Date:   Wed Feb 25 15:32:59 2015 -0500
+
+    Map line thickness to DApp
+
+commit c632f894f0307db28cf0234747ace3efdfe87bf5
+Author: Chih-Pin Hsiao <chipin01@gmail.com>
+Date:   Wed Feb 25 13:57:42 2015 -0500
+
+    before Brian's demo
+    
+    fixed some grouping issue on server and client
+
+commit 8200121735770ff5511bdc63973e89a4ee3b67b3
+Author: Li, Biqing <Lisa@Biqings-MacBook-Pro.local>
+Date:   Wed Feb 25 11:35:32 2015 -0500
+
+    DApp Opacity and Color Change According to User Selection
+
+commit 13af867ef1bdb2ab44efdad8b8d3431defb4e517
+Author: Li, Biqing <Lisa@lawn-128-61-48-146.lawn.gatech.edu>
+Date:   Mon Feb 23 18:08:49 2015 -0500
+
+    Fixed offset and clear
+
+commit 987dd74553e68e193718b8ccdcb92a36cc56545a
+Author: Li, Biqing <Lisa@lawn-128-61-48-146.lawn.gatech.edu>
+Date:   Mon Feb 23 16:49:54 2015 -0500
+
+    Grouping Problem
+
+commit 795510d88cc7bbc65d822e156d0e639b4fb2fd90
+Author: Li, Biqing <Lisa@lawn-128-61-48-146.lawn.gatech.edu>
+Date:   Mon Feb 23 16:27:22 2015 -0500
+
+    New Commit
+
+commit bd98bb40c47948d799617847a1c81d3bbe474e1d
+Author: Kunwar Yashraj Singh <kys@youcanlearn.com>
+Date:   Mon Feb 9 08:18:54 2015 -0500
+
+    K means and SegmentationAlgorithm
+
+commit 50bb716cdcf854fdc2998fcedadc0c09ff17c815
+Author: Li, Biqing <Lisa@lawn-128-61-62-147.lawn.gatech.edu>
+Date:   Thu Feb 5 15:13:27 2015 -0500
+
+    Linked button
+    
+    1. Linked “global”, “regional”, and “local” buttons;
+    2. Fixed z-index conflict between toggle_button and modal
+    3. Added “grouping” button
+
+commit 60903282d75b28ea35a157c33d54614d526b099d
+Author: Li, Biqing <Lisa@Biqings-MacBook-Pro.local>
+Date:   Wed Feb 4 19:20:28 2015 -0500
+
+    Fixed Toggle, opacity, color, canvas layer
+
+commit e46046edf71913d7d919149a3914721d8ab9dbef
+Author: Li, Biqing <Lisa@lawn-128-61-61-254.lawn.gatech.edu>
+Date:   Mon Feb 2 16:39:17 2015 -0500
+
+    Fixed the color selector
+
+commit c3c023d90f0a8ab8e2984a72bb866d6233dff35d
+Author: smoningi <moningis@gmail.com>
+Date:   Wed Jan 21 00:11:51 2015 -0500
+
+    Global mode works with multiline turns
+
+commit d8a8c4535670919a2ec19d6107627d419f404baa
+Author: smoningi <moningis@gmail.com>
+Date:   Tue Jan 20 23:55:10 2015 -0500
+
+    AI draws lines based on a users turns and does it when the user stops
+    his/her turn. Works for Regional and Local, but not Global since global
+    is time based. Need to change of Global works to make it work as
+    intended
+
+commit df50581e0e0920da7fa334d69aecdff8474035d8
+Author: smoningi <moningis@gmail.com>
+Date:   Tue Jan 20 23:34:43 2015 -0500
+
+    Turn class created. Lines recorded per turn and stored in list of turns.
+    Timestamps are recorded for when a turn starts and ends. Need to set it
+    so AI drawing happens when user has stopped the turn.
+
+commit 967f26b5660c6f6b40e34e530e3146fb14dfa0e4
+Author: smoningi <moningis@gmail.com>
+Date:   Tue Jan 20 23:11:26 2015 -0500
+
+    Added turn button. User can now only draw when they start a turn.
+
+commit 6e47408c52745c2f961471774ad7aee41ee934fb
+Author: smoningi <moningis@gmail.com>
+Date:   Thu Jan 15 15:51:54 2015 -0500
+
+    Refactored Regional Drawing Mode
+
+commit 4d038f08e0d238924bf188821af01326e2af0409
+Author: smoningi <moningis@gmail.com>
+Date:   Mon Jan 12 16:12:09 2015 -0500
+
+    Test
+
+commit 0147aaa0c343a3bb745c48bc675249a73cc41fe1
+Author: smoningi <moningis@gmail.com>
+Date:   Thu Jan 8 17:48:34 2015 -0500
+
+    Testing Change
+
+commit 5684c66e241401a8a73077dd31aaf5a24c3da86f
+Author: Chih-Pin Hsiao <chipin01@gmail.com>
+Date:   Sun Dec 28 15:12:46 2014 -0500
+
+    add voteUpOrDown in the web version
+
+commit e48d54a03d72accc4d4b15a2c40592e44e0e720b
+Author: Chih-Pin Hsiao <chipin01@gmail.com>
+Date:   Thu Dec 25 12:04:19 2014 -0500
+
+    add front end designs from Lisa
+
+commit 85657664660594250f1102ea5725f47f34924c18
+Author: smoningi <moningis@gmail.com>
+Date:   Tue Dec 23 00:58:50 2014 -0500
+
+    Fixed "Animation Thread" Illegal Argument errors and fixed issues with
+    local and global stack
+
+commit 413b75d8f76669c3818f02d750b4d122b10e8cc5
+Author: Kunwar Yashraj Singh <kys@youcanlearn.com>
+Date:   Sun Dec 21 20:53:25 2014 -0500
+
+    Added SaveFileDialog
+
+commit 786f1b8e3113d51a9555548d748b53aa6f05c5f5
+Author: Chih-Pin Hsiao <chipin01@gmail.com>
+Date:   Sun Dec 21 11:49:36 2014 -0500
+
+    fixed the absolute lib path problem
+
+commit f69785b0c75220ada183905ab6f5c44ecb7a6418
+Author: Chih-Pin Hsiao <chipin01@gmail.com>
+Date:   Sun Dec 21 11:39:14 2014 -0500
+
+    fixed the json lib in classpath problem
+    also fixed the saving not successful problem because of the file path
+
+commit 5750a80ae89fd0823dad7194cc146b28f095fd53
+Author: Kunwar Yashraj Singh <kys@youcanlearn.com>
+Date:   Sun Dec 21 00:29:22 2014 -0500
+
+    Added JSON lib
+
+commit ee0e4f8fb5b157067d764fd49b21bd591ace35d7
+Author: Kunwar Yashraj Singh <kys@youcanlearn.com>
+Date:   Sun Dec 21 00:22:38 2014 -0500
+
+    Added data collection and serialization to JSON
+
+commit f0017c33ec82307e89c8be6796997c9c14d52bf8
+Merge: bf129d6 cea843a
+Author: Kunwar Yashraj Singh <kys@youcanlearn.com>
+Date:   Fri Dec 19 16:32:11 2014 -0500
+
+    Merge branch 'techArtsPerformance' of https://github.gatech.edu/chsiao9/DrawingApprentice.git into techArtsPerformance
+
+commit bf129d637005dd6444dcd3b9950523f4f17d4470
+Author: Kunwar Yashraj Singh <kys@youcanlearn.com>
+Date:   Fri Dec 19 16:24:26 2014 -0500
+
+    Fixed Upvote and Downvote
+
+commit cea843ad4e60741ddcec8057711fcd640db35e39
+Author: smoningi <moningis@gmail.com>
+Date:   Fri Dec 19 13:30:01 2014 -0500
+
+    Made sure AI lines are in allLines list in Buffer object.
+
+commit 638e04166228d4fb6f9e7f60ae3a04b3bb4f0007
+Author: smoningi <moningis@gmail.com>
+Date:   Fri Dec 19 00:16:47 2014 -0500
+
+    Implementing it so it works with a random offset of 0 to .25 times the
+    size of the bounding box of the group
+
+commit 87cbe1c9f539ef8fb4d65e7ad88e169b9a6be52c
+Author: smoningi <moningis@gmail.com>
+Date:   Fri Dec 19 00:14:31 2014 -0500
+
+    Changed diagonal size sent to AI for regional drawing mode. This helps
+    in drawing within the group, but doesn't do so all the time. Not sure
+    why.
+
+commit 858d6265801ab5e137f13adc48d23dec069a838f
+Author: smoningi <moningis@gmail.com>
+Date:   Thu Dec 18 23:55:00 2014 -0500
+
+    If the line is within a threshold (80%) for being contained in the
+    group, line is added to the group it's drawn in. Could not do for
+    computer since I'm not sure where in the code (I think it's lineMod) the
+    computer is actually drawing
+
+commit e76aa2328b50f54e59d77875a327f429c090acde
+Author: Kunwar Yashraj Singh <kys@youcanlearn.com>
+Date:   Mon Dec 15 02:04:47 2014 -0500
+
+    Merged all stuff. Verification Remaining
+
+commit 121a849ed14773914702762fa21c62998dc352a3
+Author: smoningi <moningis@gmail.com>
+Date:   Mon Dec 1 20:42:11 2014 -0500
+
+    Added function to start the timer again. To be called by Line_Mod when
+    it is finished DRAWING (not computing).
+
+commit fbbe0b90034b78df33b8a4de711e930ed80a4d19
+Author: smoningi <moningis@gmail.com>
+Date:   Mon Dec 1 16:19:47 2014 -0500
+
+    Local drawing mode is back to a reactive state
+
+commit ec79272da63823c9d6cf2e47381f6e1a4edc0cb0
+Author: smoningi <moningis@gmail.com>
+Date:   Mon Dec 1 16:00:23 2014 -0500
+
+    Just commented something out.
+
+commit 83ffdbad19bccc18404029e6a3d7ed1d8fac8f03
+Author: smoningi <moningis@gmail.com>
+Date:   Mon Dec 1 13:41:09 2014 -0500
+
+    Decoupled Regional Perceptual Drawing from mouseReleased()
+
+commit 1f97ee896a18b11e0fc61cf985a0e6fc0b6b7a7b
+Author: smoningi <moningis@gmail.com>
+Date:   Mon Dec 1 03:34:57 2014 -0500
+
+    Was able to fix timer so that timings between global behaviors is around
+    5-6 second and fixed a few small errors
+
+commit a9a15825cad6b2618be2712b4b0584bbb0cff172
+Author: smoningi <moningis@gmail.com>
+Date:   Mon Dec 1 03:12:17 2014 -0500
+
+    Local and Global perceptual drawing has been separated from user
+    reactions. They work off a timer system and some other factors.
+
+commit 857ecd8230dd7f1be849898ee8cfca30f2dcc3ea
+Author: smoningi <moningis@gmail.com>
+Date:   Tue Nov 25 01:27:22 2014 -0500
+
+    Randomly selects global behaviors to use
+
+commit 680b2b8c1a8a24803e9531e7090c0672a5c28d09
+Author: smoningi <moningis@gmail.com>
+Date:   Tue Nov 25 01:25:00 2014 -0500
+
+    Added two extra  global drawing mode behaviors.
+
+commit 7c2e04b68f988accef4af25031a0bbe55a88cca6
+Author: smoningi <moningis@gmail.com>
+Date:   Tue Nov 25 00:41:02 2014 -0500
+
+    Testing committing and pushing with comment
+
+commit 0efb44231b3a17a52157604426dc85626518a91a
+Author: smoningi <moningis@gmail.com>
+Date:   Mon Nov 24 16:12:51 2014 -0500
+
+    Disabled automatic drawing after lasso is drawn.
+
+commit 3f6631957365399672d8c6b49d55112cf1a9decd
+Author: smoningi <moningis@gmail.com>
+Date:   Mon Nov 24 15:40:25 2014 -0500
+
+    Regional Drawing mode after lasso is implemented
+
+commit 45e2ad24a1f93e17499b4802b3fcb4e3dbfa421f
+Merge: 809850b 63b9d8d
+Author: smoningi <moningis@gmail.com>
+Date:   Mon Nov 24 15:38:20 2014 -0500
+
+    Merge branch 'techArtsPerformance' of https://smoningi@bitbucket.org/dharmabumvida/coco_sketch.git into techArtsPerformance
+
+commit 809850b41e87e6a25e215936797825fea0ddcd2e
+Author: smoningi <moningis@gmail.com>
+Date:   Mon Nov 24 15:36:25 2014 -0500
+
+    Implemented a regional drawing mode that is activated when lasso tool is
+    used.
+
+commit 63b9d8de72f829aa89558f361db25fb891600e50
+Merge: fd9f18d 2b2b415
+Author: Chih-Pin Hsiao <chipin01@gmail.com>
+Date:   Mon Nov 24 15:27:21 2014 -0500
+
+    Merge branch 'techArtsPerformance' of https://bitbucket.org/dharmabumvida/coco_sketch into techArtsPerformance
+
+commit 2b2b415c8de5b6ade90e9efb6c574028d3351aa5
+Author: smoningi <moningis@gmail.com>
+Date:   Mon Nov 24 15:16:35 2014 -0500
+
+    Doesn't automatically go into Regional mode when group is made
+
+commit fd9f18df71d948a139349532b26517ccea0068e3
+Author: Chih-Pin Hsiao <chipin01@gmail.com>
+Date:   Mon Nov 24 14:09:48 2014 -0500
+
+    add grouping capability,
+    add one more canvas for drawing the finished lines from both human and apprentice
+
+commit e033f4037bb02491626eeacdda9d2ab93b5ac539
+Author: Chih-Pin Hsiao <chipin01@gmail.com>
+Date:   Sun Nov 23 22:12:27 2014 -0500
+
+    draw both the lines from sketch and bot to canvas
+
+commit 90886e0edee1a5d0cdc5d0aae15fd95d4f9b409d
+Author: Chih-Pin Hsiao <chipin01@gmail.com>
+Date:   Sun Nov 23 17:21:21 2014 -0500
+
+    add a missing file
+
+commit 446d791c8518ac73d16b1efd66e1fe4646571004
+Author: Chih-Pin Hsiao <chipin01@gmail.com>
+Date:   Sun Nov 23 17:20:08 2014 -0500
+
+    add methods for lasso and grouping
+
+commit 333fa57b390ca247553a3fd531c95cf0c8522083
+Merge: 1f3c38c 515bede
+Author: Chih-Pin Hsiao <chipin01@gmail.com>
+Date:   Mon Nov 17 13:24:39 2014 -0500
+
+    Merge branch 'techArtsPerformance' of https://bitbucket.org/dharmabumvida/coco_sketch into techArtsPerformance
+
+commit 1f3c38c6318a079eb65d68e7d5d363b67e6d0710
+Author: Chih-Pin Hsiao <chipin01@gmail.com>
+Date:   Mon Nov 17 13:24:21 2014 -0500
+
+    broadcast the user lines to each clients, change the line width
+
+commit 515beded1b9c993c8ebbbfafe4ecfaaab62a6a1e
+Author: dharmabumvida <dharmaubumvida@yahoo.com>
+Date:   Thu Nov 13 17:17:25 2014 -0500
+
+    Updated interface stuff.
+
+commit 026699e07ec59dfcbb38f166fd4740530beecc08
+Merge: 99b260a d874107
+Author: dharmabumvida <dharmaubumvida@yahoo.com>
+Date:   Thu Nov 13 15:05:16 2014 -0500
+
+    Merge branch 'techArtsPerformance' of https://bitbucket.org/dharmabumvida/coco_sketch into techArtsPerformance
+
+commit 99b260a17e43fb805e7807dfa66e49a3110c5af3
+Author: dharmabumvida <dharmaubumvida@yahoo.com>
+Date:   Thu Nov 13 15:04:55 2014 -0500
+
+    Removing smooth();
+
+commit d8741070c499dceb66e4e6ab7d93e18a35f610c6
+Author: smoningi <moningis@gmail.com>
+Date:   Tue Nov 11 23:21:23 2014 -0500
+
+    Implemented basic Drawing Modes functionality for AI (so really
+    perception modes).
+
+commit 9f113d0baf8b46e3cf1bc0fe1bbb29fbc365871c
+Merge: af93ba4 6339165
+Author: Chih-Pin Hsiao <chipin01@gmail.com>
+Date:   Mon Nov 10 18:20:28 2014 -0500
+
+    Merge branch 'techArtsPerformance' of https://bitbucket.org/dharmabumvida/coco_sketch into techArtsPerformance
+
+commit af93ba421ad7ce5dd46fe9c9ef942b94f97fc4fb
+Author: Chih-Pin Hsiao <chipin01@gmail.com>
+Date:   Mon Nov 10 18:20:11 2014 -0500
+
+    add windows enviroment variables for the future usages
+
+commit 3b50b2b4236f5c3148bf3035b17250a266b4d375
+Author: Chih-Pin Hsiao <chipin01@gmail.com>
+Date:   Mon Nov 10 18:18:04 2014 -0500
+
+    add the new apprentice jar back
+
+commit e600b4d04d30a9d596e1d50cb560f50bef9276aa
+Author: Chih-Pin Hsiao <chipin01@gmail.com>
+Date:   Mon Nov 10 18:14:19 2014 -0500
+
+    recover some changes overwritten after merging
+
+commit 63391659e3eaf98c93b59cb1b1d7eeaba7ef41e2
+Author: smoningi <moningis@gmail.com>
+Date:   Wed Nov 5 00:47:02 2014 -0500
+
+    When 'm' is pressed on the keyboard, a random group is selected, fed
+    into the decision engine, and then the results are drawn on the least
+    dense node/section in the quadrant (only top four layers for now).
+
+commit c20b14fd6ca31cf17bb4d1073e2e375a15f27fcb
+Author: smoningi <moningis@gmail.com>
+Date:   Wed Nov 5 00:35:00 2014 -0500
+
+    Added method where random group is drawn on least dense quadrant when
+    the button 'm' is pressed.
+
+commit 1c0373e006ed2b04e75c7363df0cb4d6635b169b
+Author: smoningi <moningis@gmail.com>
+Date:   Wed Nov 5 00:06:33 2014 -0500
+
+    Fixed bug with normalized group functions. Added leastDenseNode method
+    since it was for some reason removed.
+
+commit 4aa0d0ffc459fa172b8bba115a4572307e9e4926
+Author: smoningi <moningis@gmail.com>
+Date:   Mon Nov 3 21:36:23 2014 -0500
+
+    Made sure Point objects are used in Buffer.update() instead of PVectors
+
+commit e8f271a85d82233d7fd4afa67e69f98bb3115368
+Merge: bb41d3f 85425b3
+Author: dharmabumvida <dharmaubumvida@yahoo.com>
+Date:   Mon Nov 3 16:07:30 2014 -0500
+
+    change PVector to Point
+    
+    Merge remote-tracking branch 'origin/techArtsPerformance' into HEAD
+    
+    Conflicts:
+    	JCocoSketch/src/jcocosketch/Line_Mod.java
+
+commit 85425b37a5fb16a16bda03b3e55b5553e10083ad
+Merge: 14bd1b2 aff3f80
+Author: Chih-Pin Hsiao <chipin01@gmail.com>
+Date:   Mon Oct 27 20:48:39 2014 -0400
+
+    Merge branch 'techArtsPerformance' of https://bitbucket.org/dharmabumvida/coco_sketch into techArtsPerformance
+
+commit 14bd1b2f87183137153e9b225fc08bdb1362e4c2
+Author: Chih-Pin Hsiao <chipin01@gmail.com>
+Date:   Mon Oct 27 20:48:24 2014 -0400
+
+    add some new functions for HTML version, including change mode (local region and global), and grouping, clear and other commands
+
+commit aff3f80520de2f0431288883b6136596ef32ac78
+Author: Kunwar Yashraj Singh <kys@youcanlearn.com>
+Date:   Mon Oct 27 16:17:03 2014 -0400
+
+    Fixed grouping
+
+commit bb41d3f4d6d4b6e81493e12517150c3a63ebb497
+Author: dharmabumvida <dharmaubumvida@yahoo.com>
+Date:   Mon Oct 27 16:04:00 2014 -0400
+
+    Fixed out of bounds issue.
+
+commit a520f5a2c4774d8b7791554ae36fa2faba5091dd
+Merge: 0192cb5 8478b7c
+Author: dharmabumvida <dharmaubumvida@yahoo.com>
+Date:   Mon Oct 27 15:58:47 2014 -0400
+
+    Merge branch 'techArtsPerformance' of https://bitbucket.org/dharmabumvida/coco_sketch into HEAD
+
+commit 0192cb516a0064502b0dac25b01df6bc3a8f2063
+Author: dharmabumvida <dharmaubumvida@yahoo.com>
+Date:   Mon Oct 27 15:58:25 2014 -0400
+
+    no message
+
+commit 8478b7c8be605a9f9cd97c8c4331c67e70200bb4
+Author: Kunwar Yashraj Singh <kys@youcanlearn.com>
+Date:   Mon Oct 27 15:56:09 2014 -0400
+
+    Fixed QuadTree error and Cauchy Approximation.
+
+commit 7395faeb743e003588d6408d033a6abed6133a88
+Merge: 5c91d5d 00d801c
+Author: Kunwar Yashraj Singh <kys@youcanlearn.com>
+Date:   Thu Oct 23 16:36:02 2014 -0400
+
+    Merge branch 'techArtsPerformance' of https://bitbucket.org/dharmabumvida/coco_sketch into techArtsPerformance
+
+commit 5c91d5def41db2b27c3fbf403229930069084f1f
+Author: Kunwar Yashraj Singh <kys@youcanlearn.com>
+Date:   Thu Oct 23 16:34:25 2014 -0400
+
+    Fixed some buffer errors
+
+commit 00d801c8c876f25a80c551fe4331b000f0efc654
+Author: Chih-Pin Hsiao <chipin01@gmail.com>
+Date:   Thu Oct 23 16:24:22 2014 -0400
+
+    add the enactive model webpage
+
+commit dd5ed7a1b2212383c3b26434101ef3e6e4701f93
+Merge: ba7d9f6 1c7991b
+Author: Chih-Pin Hsiao <chipin01@gmail.com>
+Date:   Thu Oct 23 16:20:37 2014 -0400
+
+    Merge branch 'techArtsPerformance' of https://bitbucket.org/dharmabumvida/coco_sketch into techArtsPerformance
+
+commit ba7d9f6d926fba26ff5f19662a82b19a3fbddb82
+Author: Chih-Pin Hsiao <chipin01@gmail.com>
+Date:   Thu Oct 23 16:19:50 2014 -0400
+
+    nodejs working with the newer version of the decision engine
+
+commit 1c7991bd980919b6faf092581bd282e7678a50c3
+Merge: 592534c fcb5596
+Author: Kunwar Yashraj Singh <kys@youcanlearn.com>
+Date:   Thu Oct 23 16:11:58 2014 -0400
+
+    Merge branch 'techArtsPerformance' of https://bitbucket.org/dharmabumvida/coco_sketch into techArtsPerformance
+
+commit 592534cbeb170fdbf8a3741a7945c83621dbb5e4
+Author: Kunwar Yashraj Singh <kys@youcanlearn.com>
+Date:   Thu Oct 23 16:04:06 2014 -0400
+
+    After a lot of work, finally committing the changes.
+
+commit 663affa7d7c0765931c17c388dd9301a97d1de92
+Merge: 22cf4d7 33ebc6e
+Author: Kunwar Yashraj Singh <kys@youcanlearn.com>
+Date:   Thu Oct 23 15:56:40 2014 -0400
+
+    Implemented Regional Drawing after lasso is drawn.
+    
+    Merge branch 'techArtsPerformance' of https://ksingh64@bitbucket.org/dharmabumvida/coco_sketch.git into techArtsPerformance
+    
+    Conflicts:
+    	JCocoSketch/src/jcocosketch/Buffer.java
+    	JCocoSketch/src/jcocosketch/Decision_Engine.java
+    	JCocoSketch/src/jcocosketch/DrawBackFork_Flow_Lines.java
+    	JCocoSketch/src/jcocosketch/Node.java
+    	JCocoSketch/src/jcocosketch/Point.java
+    	JCocoSketch/src/jcocosketch/QuadTree.java
+
+commit fcb559621fbdfbbd5d9ea0debc306e462b3594e1
+Author: smoningi <moningis@gmail.com>
+Date:   Thu Oct 23 01:33:16 2014 -0400
+
+    Added Group Class with necessary methods. Normalize method and a
+    normalized groups list has been implemented but not tested. Will need
+    testing.
+
+commit 15fbcacbb8ce778ef8bf80a0fcaded751d3870d5
+Author: smoningi <moningis@gmail.com>
+Date:   Mon Oct 20 21:54:58 2014 -0400
+
+    Small changes. Prepping to add least density group drawing (translation)
+
+commit 43dfdba963fa87739324a9eb445e17ba698b26a4
+Author: smoningi <moningis@gmail.com>
+Date:   Mon Oct 20 00:10:48 2014 -0400
+
+    QuadTree Node density function implemented
+
+commit 33ebc6e9d337559e2168a0a9e3541e46407a393f
+Author: smoningi <moningis@gmail.com>
+Date:   Thu Oct 16 16:20:02 2014 -0400
+
+    LassoLine Class action method complete. Should be fairly seperated now.
+
+commit deb3d7490695ef2e6db5c9b25a99a7238326136d
+Author: smoningi <moningis@gmail.com>
+Date:   Thu Oct 16 16:04:41 2014 -0400
+
+    Added LassoLine Class. Just the file, not complete yet.
+
+commit a67361c083ceea518561a6db1a8f6ae24c97e777
+Author: dharmabumvida <dharmabumvida@yahoo.com>
+Date:   Thu Oct 9 16:39:51 2014 -0400
+
+    Fixed buffer bug slow down
+
+commit 22cf4d743f0a4a4b812ac2ae024582c6dbdd2fb8
+Author: Kunwar Yashraj Singh <kys@youcanlearn.com>
+Date:   Thu Oct 9 16:35:28 2014 -0400
+
+    removed sand drawing from buffer.java .. everything else same with new
+    local stuff
+
+commit dc7f20e2dd9e33e20b8ffa1bb520dc8c770c5a18
+Merge: b6d4de7 4888b49
+Author: dharmabumvida <dharmabumvida@yahoo.com>
+Date:   Thu Oct 9 16:31:29 2014 -0400
+
+    Merge branch 'techArtsPerformance' of https://dharmabumvida@bitbucket.org/dharmabumvida/coco_sketch.git into techArtsPerformance
+
+commit b6d4de7b58616af63e947bf2b4bb6314f5cdf980
+Author: dharmabumvida <dharmabumvida@yahoo.com>
+Date:   Thu Oct 9 16:31:19 2014 -0400
+
+    line trimming
+
+commit 44c640bc9ae6ee83e61fb4ded78d6aec4d7a5018
+Author: Kunwar Yashraj Singh <kys@youcanlearn.com>
+Date:   Thu Oct 9 15:27:07 2014 -0400
+
+    SandPainter + more locals
+
+commit d2d9ca66e09b4ca8e80262fe5f0a450151be529e
+Author: Kunwar Yashraj Singh <kys@youcanlearn.com>
+Date:   Thu Oct 9 15:23:38 2014 -0400
+
+    Sand Painter added for sketch + more local stuff
+
+commit 4888b49bce10965372b9cb85b1399d59a57d3287
+Author: smoningi <moningis@gmail.com>
+Date:   Wed Oct 8 00:19:45 2014 -0400
+
+    Updated the lasso tool/feature so the Point objects get updated with the
+    groupID the update after lasso has been called.
+
+commit cf149968c9028ae791f3926847ff56d198b4d9e6
+Author: smoningi <moningis@gmail.com>
+Date:   Tue Oct 7 00:50:48 2014 -0400
+
+    Created Point object that is placed in the QuadTree, but needs to be
+    implemented everywhere else instead of PVector. Created the lasso tool
+    from a line, that groups Lines by giving them a groupID if the line is a
+    100% contained in the lasso. The groupID is not assigned to the Point
+    objects yet, since the point object is only in the QuadTree and no where
+    else.
+
+commit 4ce485d2781d302517c3d808a543408e3d75c2e0
+Author: smoningi <moningis@gmail.com>
+Date:   Mon Oct 6 23:40:59 2014 -0400
+
+    Commit right before I add the basic lasso tool
+
+commit 4fecaed21d4ed32984ec0ea6ffa849e1f38d1d77
+Author: dharmabumvida <dharmaubumvida@yahoo.com>
+Date:   Thu Oct 2 15:22:43 2014 -0400
+
+    Fixed canvas bug.
+
+commit 19a1ba3f4869b8421bf18afc6df33a3c4968d882
+Author: dharmabumvida <dharmaubumvida@yahoo.com>
+Date:   Mon Sep 29 16:33:27 2014 -0400
+
+    Fixed screen size and drawing out of bounds bug.
+
+commit 2e38776e25a2c8f1c2f3f903f48879cd1778bc7a
+Merge: a277c16 9e2b068
+Author: dharmabumvida <dharmaubumvida@yahoo.com>
+Date:   Thu Sep 25 12:30:49 2014 -0700
+
+    Merge branch 'techArtsPerformance' of https://bitbucket.org/dharmabumvida/coco_sketch into techArtsPerformance
+    
+    Conflicts:
+    	JCocoSketch/src/jcocosketch/Buffer.java
+    	JCocoSketch/src/jcocosketch/Decision_Engine.java
+
+commit a277c16fca942612853647e6c81a2bb38dd2d514
+Author: dharmabumvida <dharmaubumvida@yahoo.com>
+Date:   Thu Sep 25 12:17:57 2014 -0700
+
+    Updating program on spro 3.
+
+commit 9e2b068d7d693984e8b44027c043e8e33609328d
+Merge: 67c6399 540147d
+Author: smoningi <moningis@gmail.com>
+Date:   Tue Sep 23 16:31:37 2014 -0400
+
+    Merge remote-tracking branch 'origin/techArtsPerformance' into techArtsPerformance
+
+commit 67c6399b0de504b6befebf0bf3004d8cc1023132
+Author: smoningi <moningis@gmail.com>
+Date:   Tue Sep 23 16:29:48 2014 -0400
+
+    QuadTree Merge
+
+commit a190e63ab7c32f0fee610c3fb843291869093a4f
+Author: smoningi <moningis@gmail.com>
+Date:   Tue Sep 23 16:12:45 2014 -0400
+
+    QuadTree
+
+commit 540147d95132d2584c8aa94d7fbcba935dfd0437
+Merge: 855a414 6a0a866
+Author: Kunwar Yashraj Singh <kys@youcanlearn.com>
+Date:   Thu Sep 18 15:57:52 2014 -0400
+
+    Merge branch 'techArtsPerformance' of https://ksingh64@bitbucket.org/dharmabumvida/coco_sketch.git into techArtsPerformance
+
+commit 855a41411704353ad5b46fa2aa81bc759f628658
+Author: Kunwar Yashraj Singh <kys@mail.gatech.edu>
+Date:   Tue Sep 16 16:12:19 2014 -0400
+
+    Added new utility functions
+    Added new Apache Commons MAth API
+
+commit ab1b53db2d1f1bfcbed9d295362044290af62a50
+Author: Kunwar Yashraj Singh <ksingh64@mail.gatech.edu>
+Date:   Tue Sep 16 15:56:01 2014 -0400
+
+    Added new drawing funcitons,
+    Added new Apache Commons Math Api
+
+commit 6a0a8666e19e078675c3c97f0b4595a13a9a2ccb
+Merge: 02d56fc cd44ff8
+Author: dharmabumvida <dharmabumvida@yahoo.com>
+Date:   Tue Sep 9 16:46:57 2014 -0400
+
+    Merge remote-tracking branch 'origin/techArtsPerformance' into techArtsPerformance
+
+commit 02d56fcfe4eaa5561b2eed0809b0178c42fb1351
+Author: dharmabumvida <dharmabumvida@yahoo.com>
+Date:   Tue Sep 9 16:45:34 2014 -0400
+
+    Rectangles and shapes
+
+commit cd44ff807a455799d86758d8741bd37458cc8447
+Author: Kunwar Yashraj Singh <kys@youcanlearn.com>
+Date:   Tue Sep 9 16:15:18 2014 -0400
+
+    Added mutations and an experimental mutation function in the decision
+    engine.
+
+commit 80d59f81c38d92070a224d52510cf25ebd596140
+Author: Chipin Hsiao <chipin01@gmail.com>
+Date:   Tue Sep 2 20:58:07 2014 -0400
+
+    add the sketch server to apprentice, include the jar file that compiled from apprentice codes
+
+commit de826e178143f6b304eb0b0c8504e03dae5ba956
+Author: Chipin Hsiao <chipin01@gmail.com>
+Date:   Sat Jul 12 09:17:28 2014 -0700
+
+    add the codes for nodejs bridge
+
+commit 7a144fec9dc64e6c34d4a61b0f6de05bd6f8c407
+Author: Chih-Pin Hsiao <chipin01@gmail.com>
+Date:   Sun Apr 20 00:20:09 2014 -0400
+
+    add jni test
+
+commit 00c8f6adc1404a20f9eca306f16193847dc853e7
+Author: Chih-Pin Hsiao <chipin01@gmail.com>
+Date:   Sun Apr 20 00:16:30 2014 -0400
+
+    cornucopia with JNI wrapper (working with Visual C++)
+
+commit 4c3e73e6898f8385bd76342cdd88e65e503839c9
+Author: dharmabumvida <dharmabumvida@yahoo.com>
+Date:   Tue Apr 15 11:30:24 2014 -0400
+
+    Added a clear function. Fixed the teachMe function.
+
+commit 6a51e4c629f8c198c40cd25cfc6f897c83d1e87d
+Author: Dingtian Zhang <alandtzhang@gmail.com>
+Date:   Sat Mar 1 11:43:18 2014 -0800
+
+    Added Cornucopia BasicPrimative method
+
+commit ad3d6527204777288fcdbe58b0ed7d26c70594ff
+Author: dharmabumvida <dharmabumvida@yahoo.com>
+Date:   Tue Feb 25 16:01:46 2014 -0500
+
+    Changing probabiility of stuff.
+
+commit f2a3009eb4922f56e910c4e27eb853520c085d09
+Author: dharmabumvida <dharmabumvida@yahoo.com>
+Date:   Tue Feb 25 15:42:52 2014 -0500
+
+    Fixed small line bug. Added ball for player.
+
+commit 78e722c2c926ade39533819b1c946ce5b83b6f90
+Author: dharmabumvida <dharmabumvida@yahoo.com>
+Date:   Tue Feb 25 15:27:42 2014 -0500
+
+    Remove unnecessary class path
+
+commit 95e49aefb4882c44cd07dde4530aef54ac123217
+Author: dharmabumvida <dharmabumvida@yahoo.com>
+Date:   Tue Feb 25 15:23:58 2014 -0500
+
+    2
+
+commit a0e74dd44e1bb9b3706571cc1bede5a05d77902f
+Author: dharmabumvida <dharmabumvida@yahoo.com>
+Date:   Tue Feb 25 15:23:11 2014 -0500
+
+    Added image
+
+commit ee96625563f497d49dcaec5be5a4301d8cdffe5f
+Author: dharmabumvida <dharmabumvida@yahoo.com>
+Date:   Tue Feb 25 15:14:36 2014 -0500
+
+    Icon & nice buff.
+
+commit 0075544a8f77920e1562b9e40dc53f2045944c91
+Author: dharmabumvida <dharmabumvida@yahoo.com>
+Date:   Tue Feb 25 13:44:20 2014 -0500
+
+    Fixed Ivan's speed bug.
+
+commit d6c9cc5b1222f8822010372990666c77d73a1161
+Author: dharmabumvida <dharmabumvida@yahoo.com>
+Date:   Tue Feb 25 12:39:10 2014 -0500
+
+    Optimize rendering process. Changed the addSegment function in buffer.
+    TODO: fix the bug with the stack drawing speed.
+
+commit 211f853fcda29bc0a1cc88ab4f935f325a046dae
+Author: dharmabumvida <dharmabumvida@yahoo.com>
+Date:   Mon Feb 24 17:45:55 2014 -0500
+
+    Adding in a yellow avatar. The cool robo image would not load :( booo
+
+commit 9cb0a65e9ca00543a55a6c5ccff915c2093f71be
+Author: dharmabumvida <dharmabumvida@yahoo.com>
+Date:   Mon Feb 24 16:15:59 2014 -0500
+
+    Trying out the new digs.
+
+commit fcddabbd364252e4c4d0ad20c439ddd123f667f6
+Author: jsysoev <jsysoev@yandex.ru>
+Date:   Mon Feb 24 11:48:51 2014 -0500
+
+    Adjusted decision probabilities. Fixed a bug with no response for a straight line.
+
+commit b9523b033ea49b7b4ea741cb2c4b143d29ace26a
+Author: jsysoev <jsysoev@yandex.ru>
+Date:   Mon Feb 24 11:23:26 2014 -0500
+
+    Adaptive redraw speed.
+
+commit b1be439e487dd46a4040fdbdcb14a9ee5a134cb3
+Author: jsysoev <jsysoev@yandex.ru>
+Date:   Mon Feb 24 09:44:21 2014 -0500
+
+    Not applying intersection-connection to lengthy lines.
+
+commit 993bf70953855ff6da5cb7e6c9ceb85c1e674a54
+Author: jsysoev <jsysoev@yandex.ru>
+Date:   Thu Feb 13 15:00:33 2014 -0500
+
+    Multiple-line intersection-connection
+
+commit 3195a0bcbb9b5ebcf96dd6fffa5b5b8fad9acb9f
+Merge: 345b27d 336bde3
+Author: jsysoev <jsysoev@yandex.ru>
+Date:   Sat Feb 1 18:27:21 2014 -0500
+
+    Merge branch 'master' of https://bitbucket.org/dharmabumvida/coco_sketch
+
+commit 345b27d152cb4728b30e4e0072d19ef04247f7cf
+Author: jsysoev <jsysoev@yandex.ru>
+Date:   Sat Feb 1 18:26:49 2014 -0500
+
+    Changes to solve long endings problem.
+
+commit 336bde3cd9195f6f67314f7599a1e23fc71432dc
+Merge: 166e3fa e42287e
+Author: dharmabumvida <dharmabumvida@yahoo.com>
+Date:   Sat Feb 1 14:57:39 2014 -0500
+
+    Merge commit 'e42287e3398632e8fe4642c4ff9c230548e1695d'
+
+commit 166e3fa4d0429f7bf80c46334efc6b88a6a7e656
+Author: dharmabumvida <dharmabumvida@yahoo.com>
+Date:   Sat Feb 1 14:57:20 2014 -0500
+
+    Different colored lines. Press z for comp blue lines. X to undo.
+
+commit e42287e3398632e8fe4642c4ff9c230548e1695d
+Author: jsysoev <jsysoev@yandex.ru>
+Date:   Sat Feb 1 00:44:50 2014 -0500
+
+    More beatiful (but perhaps too long) line endings.
+
+commit ec516e4ac4066de46d73e859647839c55b519d86
+Author: jsysoev <jsysoev@yandex.ru>
+Date:   Fri Jan 31 22:34:21 2014 -0500
+
+    Bezier intersector response.
+
+commit 9d2462366d7d30d00d9f886c0d54a43bd00bb958
+Author: jsysoev <jsysoev@yandex.ru>
+Date:   Fri Jan 31 19:51:34 2014 -0500
+
+    Simplifications and integrating Line version from Ivan's branch.
+
+commit a0b19f5747d015cd8749dc16b6b3c65f81dc3e99
+Author: jsysoev <jsysoev@yandex.ru>
+Date:   Wed Jan 29 18:41:00 2014 -0500
+
+    Eclipse version.
+
+commit 5e05527c431a8b5249c04860b1f0f737ec0e97a6
+Author: dharmabumvida <dharmabumvida@yahoo.com>
+Date:   Wed Jan 29 17:53:48 2014 -0500
+
+    buffer...
+
+commit 0296ad2bc34b9570fe7a8ef3133abcf07d09a9a1
+Author: dharmabumvida <dharmabumvida@yahoo.com>
+Date:   Tue Jan 28 20:59:01 2014 -0500
+
+    Checking.
+
+commit ab412cf182221d19112468943e78612d9f3f37dd
+Author: dharmabumvida <dharmabumvida@yahoo.com>
+Date:   Sat Jan 25 11:09:19 2014 -0500
+
+    Additional cleaning.
+
+commit 6b7e66923ee9ce5dda68379131614dfe314a3973
+Author: dharmabumvida <dharmabumvida@yahoo.com>
+Date:   Sat Jan 25 00:11:28 2014 -0500
+
+    A few changes..
+
+commit cc54f7bb870d1a68707f34b6105c294816bdf00e
+Author: dharmabumvida <dharmabumvida@yahoo.com>
+Date:   Fri Jan 24 23:17:23 2014 -0500
+
+    Fixed the drawing buffer. I ultimately had to bring the stack back in an streamlined way because threads don't really work concurrently in processing. We might be able to draw dynamically with threads in java, but it is a pain in processing. This is an efficient solution. Performance does not degrade as more lines are added to canvas. The teachMe/DrawMe features are working again too. Next, I want to add a frequency slide and the ability to change the color, but I might wait until it is ported to Java first.
+
+commit f3db87f180fe0e60e1fcc389c5f6421570ed2b7b
+Author: dharmabumvida <dharmabumvida@yahoo.com>
+Date:   Fri Jan 24 01:25:26 2014 -0500
+
+    Added the drawing buffer. There is one bug: teach me function only records one line. Something is wrong with shape creation, but I wanted to commit the drawing buffer because the program is a lot more stable.
+
+commit e8ba864e11e30787fd7a6c0d12efa7e350087df8
+Author: dharmabumvida <dharmabumvida@yahoo.com>
+Date:   Thu Jan 16 19:15:07 2014 -0500
+
+    Additional refinements.
+
+commit 3ee307f51d7c244d4e62b1eaa3f8a19fef771174
+Author: dharmabumvida <dharmabumvida@yahoo.com>
+Date:   Thu Jan 16 19:05:59 2014 -0500
+
+    Removed all unused files and functions and placed a commented version of them in the unused PDE folder. Any algorithm, such as swarm has to be packaged in a drawing algo and included in the line_mod class in order for it to make it into the program. I've pared it down the minimal files, which aren't that many. Next, I will make drawing occur on a buffered image, which should seriously improve performance. Then, we port to java, and try to see if we can get the cornucopia to work with it.
+
+commit 873dd618f480276292ae2ab5d1b9fd34afd72377
+Author: Dingtian Zhang <alandtzhang@gmail.com>
+Date:   Tue Jan 14 10:29:10 2014 -0500
+
+    Add Dog and Rat icons
+
+commit 730fac5dacddc7dddaf88b021b1a585bb07cf431
+Author: dharmabumvida <dharmabumvida@yahoo.com>
+Date:   Mon Jan 13 14:12:50 2014 -0500
+
+    TeachMe Mode: reposition and scaling done.
+    
+    Instructions: Click teach text box, type label, draw lines, hit done. Type label you want system to draw. Hit draw. Click and drag the size and location of the shape. Watch and be amazed.
+
+commit 6b9211e379ffd4dd394f8ca90915c2d0707b9f7b
+Author: dharmabumvida <dharmabumvida@yahoo.com>
+Date:   Sun Jan 12 14:09:48 2014 -0500
+
+    Updated instruction text and aligned GUI elements.
+
+commit d037e323daed3b9403fc0e05a4d17d8557358283
+Author: dharmabumvida <dharmabumvida@yahoo.com>
+Date:   Sun Jan 12 14:02:09 2014 -0500
+
+    Add the ability to position the object that you want apprentice to draw. Next up is scaling the object apprentice draws for you. The procedure for Teach Me is This:
+    
+    Type in Name of Object
+    Draw Object
+    Click done
+    type name of object you want system to draw
+    Click draw me a button
+    Click where you want the object drawn
+
+commit dca98b9d41e29ce7bcfc0d1952da754be013c6f5
+Author: dharmabumvida <dharmabumvida@yahoo.com>
+Date:   Sun Jan 12 01:03:28 2014 -0500
+
+    Added some instructions because it is a little confusing.
+
+commit 09b454369f4729b7d3afbd8fb0437a9496e86ca5
+Author: dharmabumvida <dharmabumvida@yahoo.com>
+Date:   Sun Jan 12 00:53:30 2014 -0500
+
+    Really critical cat character update...
+
+commit 417c5570f98da6084739de3058c1b11cf777a791
+Author: dharmabumvida <dharmabumvida@yahoo.com>
+Date:   Sun Jan 12 00:19:13 2014 -0500
+
+    Added a new feature: Teach me mode. The program records strokes and attaches a label to the strokes. It now knows how to draw that thing.
+
+commit 7667e0d920ddcd770afe4f15f2b37f9dd1edcfe8
+Author: Dingtian Zhang <alandtzhang@gmail.com>
+Date:   Fri Dec 13 17:14:50 2013 -0500
+
+    Finally….
+
+commit 9a4afc3d75a4cbe06c975b1f224d21755e5477ef
+Author: Dingtian Zhang <alandtzhang@gmail.com>
+Date:   Fri Dec 13 16:59:33 2013 -0500
+
+    Merged! I am so smart.
+
+commit 4f33d2f3bdfdce1681052ddb2580532ccb609435
+Merge: 1d99fcb f505b30
+Author: Dingtian Zhang <alandtzhang@gmail.com>
+Date:   Fri Dec 13 16:53:33 2013 -0500
+
+    Merged in alanzhang/coco_sketch_alanz (pull request #3)
+    
+    Conflicts:
+    	DrawBackFork_Flow_Lines/DrawBackFork_Flow_Lines.pde
+
+commit 1d99fcb9a93eb13ea15fe64008f52b2343e166e2
+Author: Dingtian Zhang <alandtzhang@gmail.com>
+Date:   Fri Dec 13 16:35:03 2013 -0500
+
+    i hate git
+
+commit f9c9008e8b363c52c19a90b0fe60dbdf572df5a2
+Author: Dingtian Zhang <alandtzhang@gmail.com>
+Date:   Fri Dec 13 16:32:34 2013 -0500
+
+    just merge, will ya
+
+commit b6f796328361d4e63009cdaf34ac85e2af2dd53c
+Author: Dingtian Zhang <alandtzhang@gmail.com>
+Date:   Fri Dec 13 16:28:23 2013 -0500
+
+    I’m crazy
+
+commit 537b34449cd0faf2f4ba574468d6f8b28f7250b9
+Author: Dingtian Zhang <alandtzhang@gmail.com>
+Date:   Fri Dec 13 16:25:13 2013 -0500
+
+    manual merrrrrrrrrrrrrrrrrrrrrrrrge
+
+commit d8f202414c1e2f982a3568a7cbfc6fdc44508bec
+Author: Dingtian Zhang <alandtzhang@gmail.com>
+Date:   Fri Dec 13 16:21:30 2013 -0500
+
+    manual merrrrrrge again
+
+commit f505b30063dbf72f182953e9bca4008426d226b5
+Author: Dingtian Zhang <alandtzhang@gmail.com>
+Date:   Fri Dec 13 16:20:55 2013 -0500
+
+    manual merge again
+
+commit 12d527ed8660f7f55ea26a090c193b93bc18846b
+Author: Dingtian Zhang <alandtzhang@gmail.com>
+Date:   Fri Dec 13 16:07:00 2013 -0500
+
+    manual merge
+
+commit 32ee4e2df652ab0fe1a4716d445531ffcb13eb25
+Author: Dingtian Zhang <alandtzhang@gmail.com>
+Date:   Fri Dec 13 16:06:33 2013 -0500
+
+    manual merge
+
+commit b470f7e56c75a3a988328c01b745e9fe4a896e3a
+Author: Dingtian Zhang <alandtzhang@gmail.com>
+Date:   Fri Dec 13 15:46:02 2013 -0500
+
+    fixing strange stuff
+
+commit 0300c67ade623f5a5ef251a63ba9d7d5279ad549
+Author: Dingtian Zhang <alandtzhang@gmail.com>
+Date:   Fri Dec 13 15:43:51 2013 -0500
+
+    eliminate some strange lines
+
+commit d6d5cd94c3dfa971b193c1c2c2103d872159a496
+Author: Dingtian Zhang <alandtzhang@gmail.com>
+Date:   Fri Dec 13 15:18:53 2013 -0500
+
+    added some comments
+
+commit 3528823d56856e38d4dd5a3701dedf085551a5de
+Author: Dingtian Zhang <alandtzhang@gmail.com>
+Date:   Thu Dec 12 22:22:44 2013 -0500
+
+    added load & save function
+
+commit ce909675445d20115715b8680368509d70a8c7ae
+Author: Dingtian Zhang <alandtzhang@gmail.com>
+Date:   Sat Nov 23 08:13:42 2013 -0500
+
+    Added swarmic intelligence
+
+commit 9d6f9b16e38637568c7d59ba4f41c96f6d6c8835
+Author: Monet Tomioka <mtomioka3@gatech.edu>
+Date:   Fri Nov 15 16:05:58 2013 -0500
+
+    Flow line class added -Monet
+
+commit 2dca36ec013e10f4771090b0ed9fbdb70cf266fa
+Author: Dingtian Zhang <alandtzhang@gmail.com>
+Date:   Sat Nov 9 11:48:48 2013 -0500
+
+    Added redraw method
+
+commit cd141f330de75cde3b496fe568a1ff1cb114b772
+Merge: 295de9a 8315d8c
+Author: Cora Wilson <coratatum@gmail.com>
+Date:   Fri Nov 8 16:02:39 2013 -0500
+
+    Merged in cwilson79/coco_sketch_cora_fork (pull request #2)
+    
+    Cora's Vehicle
+
+commit 8315d8caaacc70be9e2cc29e9350134f5bc9c4ed
+Author: Cora Wilson <coratatum@gmail.com>
+Date:   Fri Nov 8 16:00:15 2013 -0500
+
+    [
+
+commit 44be20d65698e8c3a50eb273803c0fd0b5536dc0
+Merge: aa87887 f1e62ce
+Author: Cora Wilson <coratatum@gmail.com>
+Date:   Fri Nov 8 15:53:16 2013 -0500
+
+    vehicle
+
+commit d1c62aab1d3d38120052f09f529370f315c57839
+Author: Dingtian Zhang <alandtzhang@gmail.com>
+Date:   Thu Nov 7 23:06:08 2013 -0500
+
+    Added line point insertion mechanism
+
+commit 845127bfe3dd79e9cac6effb17d1720f6b703318
+Author: Dingtian Zhang <alandtzhang@gmail.com>
+Date:   Thu Nov 7 19:44:04 2013 -0500
+
+    Fixed a few bugs
+
+commit aa878871a92ee46abbb4d3d0c5349f3201686b38
+Author: Cora Wilson <coratatum@gmail.com>
+Date:   Fri Nov 1 15:34:55 2013 -0400
+
+    integrating vehicle class
+
+commit e3c97d7792bbbf3edb2c9e8d7b2883d73ae39fa8
+Author: Dingtian Zhang <alandtzhang@gmail.com>
+Date:   Fri Oct 18 18:42:54 2013 -0400
+
+    Modified criteria for linegrouping
+
+commit f1e62ce3073dda09c1305dc9ceba5ef04896ad60
+Merge: 5fdb3f2 295de9a
+Author: Cora Wilson <coratatum@gmail.com>
+Date:   Fri Oct 11 16:12:10 2013 -0400
+
+    Merged dharmabumvida/coco_sketch into master
+
+commit 295de9a1310ed17dd80f2173834e97f70c3113fc
+Merge: 250ef7c 59c00dd
+Author: Alan Zhang <alandtzhang@gmail.com>
+Date:   Fri Oct 11 16:02:40 2013 -0400
+
+    Merged in alanzhang/coco_sketch_alanz (pull request #1)
+    
+    Hello, Nick
+
+commit 250ef7c6ee4bfdd8f9311ebd9f1f72b503ad64ae
+Merge: d025204 0a2759c
+Author: Dingtian Zhang <alandtzhang@gmail.com>
+Date:   Fri Oct 11 15:07:11 2013 -0400
+
+    Merge branch 'master' of https://bitbucket.org/dharmabumvida/coco_sketch
+
+commit d025204d3b29eef7a9e7c0acd844f175e058cfc8
+Author: Dingtian Zhang <alandtzhang@gmail.com>
+Date:   Fri Oct 11 15:06:56 2013 -0400
+
+    add printLineID
+
+commit 0a2759cabcf81d5cdf361d77c0d1e53423e88265
+Author: dharmabumvida <dharmabumvida@yahoo.com>
+Date:   Fri Oct 11 15:05:11 2013 -0400
+
+    no message
+
+commit 59c00dd124d6dd743f53c48a29cb3519813fe346
+Author: Dingtian Zhang <alandtzhang@gmail.com>
+Date:   Fri Oct 11 13:47:14 2013 -0400
+
+    Change Points to PVectors
+
+commit a1f4160d146ae0bec46318bcbbdf079b6c22c241
+Author: Dingtian Zhang <alandtzhang@gmail.com>
+Date:   Fri Oct 11 13:43:18 2013 -0400
+
+    Merged with Nick's branch.
+
+commit d989725ff00551dde531f2788d64ba4c7f594949
+Author: Dingtian Zhang <alandtzhang@gmail.com>
+Date:   Thu Oct 10 20:54:27 2013 -0400
+
+    Revert "no message"
+    
+    This reverts commit 99dcea70e3ef60f65f31bd4cc6ecc05264862ae5.
+
+commit 99dcea70e3ef60f65f31bd4cc6ecc05264862ae5
+Author: Dingtian Zhang <alandtzhang@gmail.com>
+Date:   Thu Oct 10 20:53:52 2013 -0400
+
+    no message
+
+commit 1a0110ab57b94478adc644f1292e29582bab056b
+Author: Dingtian Zhang <alandtzhang@gmail.com>
+Date:   Sat Sep 28 18:15:21 2013 -0400
+
+    I haven't merged with Nick.
+
+commit 5fdb3f2ccd4e74de83f627d5234905a3012e8d7b
+Merge: a1437a6 117fb9f
+Author: Cora Wilson <coratatum@gmail.com>
+Date:   Thu Sep 26 11:48:31 2013 -0400
+
+    Merged dharmabumvida/coco_sketch into master
+
+commit 117fb9f961a87b978348ebf90f5ced258ce3003a
+Author: dharmabumvida <dharmabumvida@yahoo.com>
+Date:   Tue Sep 24 18:05:57 2013 -0400
+
+    Just cleaning line class up a bit.
+
+commit 455726918504c247bd91b4ab69e12c699ee8a39d
+Author: dharmabumvida <dharmabumvida@yahoo.com>
+Date:   Tue Sep 24 18:00:03 2013 -0400
+
+    Updated the line class to use vectors. I corrected the existing dependencies, so everything runs. However, you should go back over your code and optimize for the PVector because I did not discriminate in my changes. I saw a lot of redundancies and left them because I didn't want to spend time figuring out how everything worked.
+
+commit bd899a4220e737350b28c8981eae9e722f70a9f3
+Author: dharmabumvida <dharmabumvida@yahoo.com>
+Date:   Fri Sep 13 16:14:55 2013 -0400
+
+    Adding the Nature of Code example with FlowField
+
+commit a1437a6943ca52ce6eb53a1299fe9c6273e3aef1
+Merge: a5fe221 1e5e81f
+Author: Cora Wilson <coratatum@gmail.com>
+Date:   Fri Sep 13 15:28:27 2013 -0400
+
+    Merged dharmabumvida/coco_sketch into master
+
+commit 1e5e81f042314fca39e3cbcc63b81ecea4bc46a3
+Author: Monet Tomioka <mtomioka3@gatech.edu>
+Date:   Fri Sep 13 15:19:00 2013 -0400
+
+    Added Decision_Engine and Line_Mod class
+
+commit a5fe22110ee8da3983c2b32fef550a25af82f78a
+Author: Nick Davis <nicholas.davis10@gmail.com>
+Date:   Mon Sep 9 14:42:29 2013 -0400
+
+    Add all source files
