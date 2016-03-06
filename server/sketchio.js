@@ -107,9 +107,9 @@ app.post('/admin_room/join', function (req, res) {
 		}
 		if(!isExist){
 			roomInfo.players.push(msg.newPlayer.id);
-			newPlayer.curRoom = roomInfo.id;
-			room.players.push(newPlayer);
 		}
+		newPlayer.curRoom = roomInfo.id;
+		room.players.push(newPlayer);
 	}
 
     // 2. if yes, then add a player inside of the room.players attributes
