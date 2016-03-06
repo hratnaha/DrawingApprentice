@@ -1,8 +1,14 @@
 var hallapp = angular.module('appHall', ['ngResource']);
 
+hallapp.config(['$httpProvider', function($httpProvider) {
+        $httpProvider.defaults.useXDomain = true;
+        delete $httpProvider.defaults.headers.common['X-Requested-With'];
+    }
+]);
+
 hallapp.controller('hallController', ['$scope', '$resource', function ($scope, $resource) {
-    var CreateRoom = $resource('/room/create');
-    var JoinRoom = $resource('/room/join');
+    var CreateRoom = $resource('create');
+    var JoinRoom = $resource('join');// add DrawingApprentice in the path to comfort our complicated proxy settings
 
     $scope.rooms = []
     CreateRoom.query(function (results) {
@@ -29,7 +35,7 @@ hallapp.controller('hallController', ['$scope', '$resource', function ($scope, $
         room.$save(function (result) {
             // redirect to the app page
             if(result.isSucceed)
-                window.location.href = "/app";
+                window.location.href = "../app/";
         });
     }
 }]);

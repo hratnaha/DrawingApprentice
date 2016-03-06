@@ -66,11 +66,11 @@ app.get('/', function (req, res) {
     res.render('index', { user: req });
 });
 
-app.get('/room/create', function (req, res) {
+app.get('/admin_room/create', function (req, res) {
     res.json(roomsInfo);
 });
 
-app.post('/room/create', function (req, res) {
+app.post('/admin_room/create', function (req, res) {
     var roomInfo = req.body;
     var newRoomInfo = {};
     newRoomInfo.name = roomInfo.name;
@@ -79,7 +79,7 @@ app.post('/room/create', function (req, res) {
     newRoomInfo.host = "chipin01"; // hard-coded for now;
     newRoomInfo.players = [];
     canvas2D.CreateBlankThumb(newRoomInfo.id);
-    newRoomInfo.thumb = '/session_pic/' + newRoomInfo.id + '_thumb.png';
+    newRoomInfo.thumb = '../session_pic/' + newRoomInfo.id + '_thumb.png';
     res.json(newRoomInfo);
     roomsInfo.push(newRoomInfo);
     // initialize apprentice
@@ -91,14 +91,15 @@ app.post('/room/create', function (req, res) {
     curRooms[newRoomInfo.id] = room;
 });
 
-app.post('/room/join', function (req, res) {
+app.post('/admin_room/join', function (req, res) {
     // 1. check if the room exists
     var msg = req.body;
-    var room = curRooms[msg.id];
+    var room = curRooms[msg.id]; 
     var roomInfo = room ? room.roomInfo : null;
     // 2. if yes, then add a player inside of the room.players attributes
     //   so that the room knows there is a new player joining in.
     if (room && roomInfo && onlineUsers[msg.newPlayer.id]) {
+        console.log("client is joing a room: " + roomInfo.id );
         var newPlayer = onlineUsers[msg.newPlayer.id];
         roomInfo.players.push(msg.newPlayer.id);
         newPlayer.curRoom = roomInfo.id;
@@ -117,10 +118,11 @@ function ensureAuthenticated(req, res, next) {
 function authenticationSucceed(req, res){
     console.log("user " + req.user.id + " logged in");
     onlineUsers[req.user.id] = req.user;
-    res.redirect('/DrawingApprentice/admin_room');//res.redirect('/app');
+    res.redirect('/DrawingApprentice/admin_room/');//res.redirect('/app');
 }
 // if the user pass thorugh authentication, render the app
 app.get('/app', ensureAuthenticated, function (req, res) {
+    console.log("client start accessing app resources");
     var user = onlineUsers[req.user.id];
     var roomID = '';
     if(user){
