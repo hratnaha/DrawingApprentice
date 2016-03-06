@@ -221,7 +221,7 @@ class gameroom {
                         y: thisobj.userTurnStrokes.bound.top - deltaHeight / 2
                     });
                 }
-                canvas2D.SaveToFile(turnContext, "tmpname", false, function(filename, err1){
+                canvas2D.SaveToFile(turnContext, thisobj.roomInfo.id + "-tmp", false, function(filename, err1){
                     if(!err1){
                         // recognize the image using sketchClass
                          if(thisobj.sketchClassfier){
