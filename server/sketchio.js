@@ -124,6 +124,12 @@ app.post('/admin_room/join', function (req, res) {
     }
 });
 
+app.post('/admin_room/delete', function (req, res){
+   
+   
+    
+});
+
 // ensure authentication
 function ensureAuthenticated(req, res, next) {
     if (req.isAuthenticated()) { return next(); }

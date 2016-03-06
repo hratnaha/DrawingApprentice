@@ -9,7 +9,8 @@ hallapp.config(['$httpProvider', function($httpProvider) {
 hallapp.controller('hallController', ['$scope', '$resource', function ($scope, $resource) {
     var CreateRoom = $resource('create');
     var JoinRoom = $resource('join');// add DrawingApprentice in the path to comfort our complicated proxy settings
-
+    var DeleteRoom = $resource('delete');
+    
     $scope.rooms = []
     CreateRoom.query(function (results) {
         $scope.rooms = results;
@@ -36,6 +37,17 @@ hallapp.controller('hallController', ['$scope', '$resource', function ($scope, $
             // redirect to the app page
             if(result.isSucceed)
                 window.location.href = "../app/";
+        });
+    }
+    $scope.deleteRoom = function(roomID){
+        var room = new DeleteRoom();
+        room.id = roomID;
+        room.requester = userData.id;
+        room.$save(function(result){
+            if(result.isSucceed){
+                console.log('remove room' + roomID)
+           
+            }
         });
     }
 }]);
