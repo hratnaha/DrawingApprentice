@@ -171,8 +171,8 @@ class gameroom {
         
     }
     updateServerPic(){
-        // update the server pic every 10 user lines
-        if(this.userStrokes.length > 0 && this.userStrokes.length % 10 == 0){
+        // update the server pic /*every 10 user lines*/
+        if(this.userStrokes.length > 0 /*&& this.userStrokes.length % 10 == 0*/){
             // draw both user lines and computer lines
             var drawingContext = canvas2D.Initialize(this.canvasSize.width, this.canvasSize.height);
             while (this.userStrokes.length > this.indexULines && this.compStrokes.length > this.indexCLines) {
@@ -189,6 +189,7 @@ class gameroom {
             var id = this.roomInfo.id; 
             canvas2D.SaveToFile(drawingContext, id, false, function(filename, err){
                 if(!err){
+		    console.log("saving thumbnail filename: " + filename);
                     var thumbContext = canvas2D.InitializeFromFile(filename).resize(80,60);
                     canvas2D.SaveToFile(thumbContext, id, true);
                 }

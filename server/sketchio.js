@@ -96,14 +96,28 @@ app.post('/admin_room/join', function (req, res) {
     var msg = req.body;
     var room = curRooms[msg.id]; 
     var roomInfo = room ? room.roomInfo : null;
+
+	function addIfPlayerExists(id, newPlayer){
+		var isExist = false;
+		for(var i=0;i<roomInfo.players.length;i++){
+			if(roomInfo.players == id){
+				isExist = true;
+				break;
+			}
+		}
+		if(!isExist){
+			roomInfo.players.push(msg.newPlayer.id);
+			newPlayer.curRoom = roomInfo.id;
+			room.players.push(newPlayer);
+		}
+	}
+
     // 2. if yes, then add a player inside of the room.players attributes
     //   so that the room knows there is a new player joining in.
     if (room && roomInfo && onlineUsers[msg.newPlayer.id]) {
-        console.log("client is joing a room: " + roomInfo.id );
+        console.log("player: " + msg.newPlayer.id + " is joining the room");
         var newPlayer = onlineUsers[msg.newPlayer.id];
-        roomInfo.players.push(msg.newPlayer.id);
-        newPlayer.curRoom = roomInfo.id;
-        room.players.push(newPlayer);
+        addIfPlayerExists(msg.newPlayer.id, newPlayer);
         // 3. tell the client to redirect to app page
         var rmsg = {isSucceed: true};
         res.json(rmsg);
