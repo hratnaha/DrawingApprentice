@@ -123,11 +123,23 @@ app.post('/admin_room/join', function (req, res) {
         res.json(rmsg);
     }
 });
-
+Array.prototype.remove = function(index){
+  this.splice(index,1);
+}
 app.post('/admin_room/delete', function (req, res){
-   
-   
-    
+    var msg = req.body;
+    var rmsg = {isSucceed: false};
+    console.log(msg.requester);
+    if(curRooms[msg.id] && msg.requester == "105775598272793470839"){	        
+	delete curRooms[msg.id];
+	for(var i=0;i<roomsInfo.length;i++){
+	    if(roomsInfo[i].id == msg.id){
+	    	roomsInfo.remove(i);
+		break;
+	    }	
+	}
+    }
+    res.json(rmsg);
 });
 
 // ensure authentication
