@@ -119,20 +119,44 @@ put js files before css files
           </li>  
 
       </ul><!--setting_button-->
-            <label><input type="checkbox" id="Checkbox" onClick="TurnOnOffAgent();" value="" style="margin:1em 1em;"></label>
+
        
     </div><!-- /#nav_toggle_content -->
 
       <script>
-          function testFunction(){
-          document.getElementById('label').value = "Tested"; 
-          }
+function testFunction(){
+    document.getElementById('label').value = "Tested"; 
+}
+
+function testFunction2(value){
+    /*
+    A = Baseline (setAgentOn = false; useRandom = false;)
+    B = Human (setAgentOn = false; useRandom = false;)
+    C = Random (setAgentOn = false; useRandom = true; )
+    D = Agent on (setAgentOn = true; useRandom = false;)
+    */
+    switch(value){
+        case "A":
+        setRoomType(1);
+        break;
+        case "B":
+        setRoomType(2);
+        break;
+        case "C":
+        setRoomType(4);
+        break;
+        case "D":
+        setRoomType(3);
+        break;
+    }
+    console.log("The value of radio is: " + value); 
+}
           </script>
 
   <div class="navbar-inner row">
          	<div class="col-lg-6">
             	  <div class="row">
-                   <h4 style="margin-left:10em;margin-top:0;margin-bottom:-1em;color:black;">Line Thickness</h4>
+                   <h4 style="margin-top:0;margin-bottom:-1em;color:black;">Line Thickness</h4>
                 </div>
                 
                 <div class="row">
@@ -146,7 +170,7 @@ put js files before css files
                        		 <!--========S L I D E R : http://seiyria.com/bootstrap-slider/==========-->
             
             <div class="row">
-                <h4 style="margin-left:10em;margin-top:0;margin-bottom:-1em;color:black;">Agent Creativity Level</h4>
+                <h4 style="margin-left:0em;margin-top:0;margin-bottom:-1em;color:black;">Agent Creativity Level</h4>
             </div>
             <div class="row">
                 <input id="ex8" data-slider-id='ex1Slider' type="text" data-slider-min="0" data-slider-max="100" data-slider-step="1" data-slider-value="50" style="z-index:9999;margin-top:-1em;"/>
@@ -171,17 +195,11 @@ put js files before css files
 
       <div class="col-lg-6">
           <div class="row">
-              <h4 style="margin-left:2em;margin-top:0;margin-bottom:-1em;color:black;">You Are Drawing:</h4>
+              <h4 style="margin-top:0;margin-bottom:-1em;color:black;">You Are Drawing:</h4>
           </div>
-          <input class="row" id="label" type="text" value="Object Type">
-              <style>
-                  #label{
-                  width:6em;
-                  height:2em;
-                  font-size:14px;
-                  }
-              </style>
-          </input>
+          <div class="row">
+              <input id="label" class="row" type="text" value="Object Type" style="width:10em; margin-right:3em; height:2em;font-size:14px;position:center;"/>
+          </div>
       </div>
             
               

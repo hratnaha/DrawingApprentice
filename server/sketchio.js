@@ -31,11 +31,20 @@ var express = require('express'),
     app = express(),
     canvas2D = require('./libImage'),
     uuid = require('node-uuid'),
+    zerorpc = require("zerorpc"),
     curRooms = {},
     roomsInfo = [],
     onlineUsers = {},
-    Room = Room = require('./lib_GameHall/gameroom');;
+    Room = require('./lib_GameHall/gameroom');;
 
+var options = {timeout:60};
+
+// setting up the local 
+var sketchClassfier = new zerorpc.Client(options);
+sketchClassfier.connect("tcp://127.0.0.1:4242");
+
+var lineGenerator = new zerorpc.Client(options);
+lineGenerator.connect("tcp://127.0.0.1:4243");
 
 // Passport session setup.
 passport.serializeUser(function (user, done) {
@@ -86,7 +95,7 @@ app.post('/admin_room/create', function (req, res) {
     var apprentice = new Apprentice();
     apprentice.setCurrentTime((new Date()).getTime());
     // create a room
-    var room = new Room(newRoomInfo, apprentice);
+    var room = new Room(newRoomInfo, apprentice, sketchClassfier, lineGenerator);
     
     curRooms[newRoomInfo.id] = room;
 });
@@ -218,7 +227,7 @@ io.on('connection', function (so) {
 
             if(!room){
                 apprentice = new Apprentice();
-                room = new Room(null, apprentice);
+                room = new Room(null, apprentice, sketchClassfier);
             }
             else
                 apprentice = room.apprentice;
@@ -307,9 +316,11 @@ io.on('connection', function (so) {
         var d = JSON.parse(level);
         apprentice.setCreativityLevel(d);
     });
-    so.on('setAgentOn', function (ison) {
-        var isOnBool = JSON.parse(ison);
-        apprentice.setAgentOn(!isOnBool);
+    so.on('setRoomType', function (type) {
+        var t = JSON.parse(type);
+        if(room){
+            room.setRoomType(t);
+        }
     });
     so.on('getData', getData);
     so.on('touchdown', function () {
