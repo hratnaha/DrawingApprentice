@@ -37,7 +37,7 @@ var express = require('express'),
     onlineUsers = {},
     Room = require('./lib_GameHall/gameroom');;
 
-var options = {timeout:60};
+var options = {timeout:600000};
 
 // setting up the local 
 var sketchClassfier = new zerorpc.Client(options);

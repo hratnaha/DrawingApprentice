@@ -8,7 +8,8 @@ var java = require("java"),
     canvas2D = require('../libImage'),
     Quadtree = require('../lib_geom/quadtree'),
     uuid = require('node-uuid'),
-    fs = require("fs");
+    fs = require("fs"),
+    generator = require('./linegenerator');
 
 var waitForTurn = 4000;
 function insertLineSegments(quadtree, stroke){
@@ -229,7 +230,8 @@ class gameroom {
                                 // report back to the client
                                 if(!error2){
                                     console.log(result);
-                                    if(thisobj.lineGenerator){
+                                    var result = generator.GetSketchesInCategory(result);
+                                    /*if(thisobj.lineGenerator){
                                         thisobj.lineGenerator.invoke("completeSketch", result, filename, function(error3, result2){
                                             if(!error3){
                                                 var newstroke = {};
@@ -263,7 +265,7 @@ class gameroom {
                                                
                                             } 
                                         });
-                                    }
+                                    }*/
                                     so.emit('classifyObject', result);
                                 }
                             });
