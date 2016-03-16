@@ -25,7 +25,8 @@
     "passport-google-oauth": "latest",
     "socket.io": "^1.0.6",
     "websocket": "^1.0.8",
-    "node-uuid": "latest"
+    "node-uuid": "latest",
+    "xml2js": "latest"
   },
   "author": "Chih-Pin Hsiao",
   "license": "BSD",
