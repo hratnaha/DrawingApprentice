@@ -4,6 +4,7 @@ var socket;
 var botCanvas = {};
 var isdrawing = false;
 var ison = true;
+var randomLines = false; //use random lines? 
 var curStroke = [];
 var finishStroke = false;
 var lineThickness;
@@ -310,6 +311,10 @@ function TurnOnOffAgent() {
         socket.emit('setAgentOn', false);
 		console.log(ison);
     }
+}
+
+function setRoomType(type){
+    socket.emit('setRoomType', type);
 }
 
 function onUpdateScore(newScore){
