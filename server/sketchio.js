@@ -31,21 +31,29 @@ var express = require('express'),
     app = express(),
     canvas2D = require('./libImage'),
     uuid = require('node-uuid'),
-    zerorpc = require("zerorpc"),
     curRooms = {},
     roomsInfo = [],
     onlineUsers = {},
     Room = require('./lib_GameHall/gameroom');;
 
+var zerorpc;
+try {
+    zerorpc = require("zerorpc");
+} catch (err) {
+    console.error(err);
+}
+
 var options = {timeout:600000};
 
 // setting up the local 
-var sketchClassfier = new zerorpc.Client(options);
-sketchClassfier.connect("tcp://127.0.0.1:4242");
-
-var lineGenerator = new zerorpc.Client(options);
-lineGenerator.connect("tcp://127.0.0.1:4243");
-
+var sketchClassfier, lineGenerator;
+if (zerorpc) {
+    sketchClassfier = new zerorpc.Client(options);
+    sketchClassfier.connect("tcp://127.0.0.1:4242");
+    
+    lineGenerator = new zerorpc.Client(options);
+    lineGenerator.connect("tcp://127.0.0.1:4243");
+}
 // Passport session setup.
 passport.serializeUser(function (user, done) {
     done(null, user);

@@ -83,6 +83,7 @@ class gameroom {
     constructor(roomInfo, apprentice, sketchClassfier, lineGenerator){
         this.players = [];
         this.sockets = [];
+        this.groups = [];
         this.compStrokes = [];
         this.userStrokes = [];
         this.userTurnStrokes = [];
@@ -148,7 +149,12 @@ class gameroom {
             clearTimeout(this.timeout);
         }
     }
-    addStroke(userStroke, so){
+    addStroke(userStroke, so) {
+    
+    //this.players.forEach()
+    //match the userID from userStroke.userID to the player IDs
+        //
+
         // for closure variable for the "this" object in the call back
         var thisobj = this;
         this.numTurnStrokes++;

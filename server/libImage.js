@@ -5,8 +5,8 @@
 "use strict";
 
 var fs = require('fs'),
-    gm,
-    Canvas,
+    gm = null,
+    Canvas = null,
     Image;
     
 try{
@@ -62,11 +62,11 @@ module.exports = {
         return null;
     },
     InitializeFromFile : function(file){
-        if(gm && isUsingGM){
+        if(gm && isUsingGM && ctx != null){
             var ctx = gm(file)
             .fill("transparent");
             return ctx;
-        }else if(Canvas){
+        }else if(Canvas && ctx != null){
             try{
                 var buff = fs.readFileSync(file);
                 var img = new Image;
@@ -84,31 +84,33 @@ module.exports = {
     },
     CreateBlankThumb: function(picName){
         var imgpath = __dirname + '/session_pic/' + picName + '_thumb.png';
-        if(Canvas){
-            var canvas = new Canvas(80, 60)
+        if (ctx != null) {
+            if (Canvas) {
+                var canvas = new Canvas(80, 60)
               , ctx = canvas.getContext('2d')
               , out = fs.createWriteStream(imgpath)
               , stream = canvas.pngStream();
-
-            stream.on('data', function(chunk){
-                out.write(chunk);
-            });
-
-            stream.on('end', function(){
-                console.log('saved png');
-            });
-        }
-        else if(gm){
-            var ctx = gm(80, 60, "#ffffff");
-            ctx.write(imgpath, function (err) {
-                if(err)
-                    console.log(err);
-            });
+                
+                stream.on('data', function (chunk) {
+                    out.write(chunk);
+                });
+                
+                stream.on('end', function () {
+                    console.log('saved png');
+                });
+            }
+            else if (gm) {
+                var ctx = gm(80, 60, "#ffffff");
+                ctx.write(imgpath, function (err) {
+                    if (err)
+                        console.log(err);
+                });
+            }
         }
     },
     DrawLine : function(ctx, line, translate){
         translate = translate ? translate: {x : 0, y : 0};
-        if(line.allPoints && line.allPoints.length > 0){
+        if(line.allPoints && line.allPoints.length > 0 && ctx != null){
             if(Canvas){
                 if(line.color)
                     ctx.strokeStyle = 'rgba(' + line.color.r +',' + line.color.g + ', ' + line.color.b + ', 1)';
@@ -139,20 +141,22 @@ module.exports = {
                 }else
                     lineColor = rgbToHex(line.colorR, line.colorG, line.colorB);
                 //console.log(hexColor);
-                ctx.stroke(lineColor, line.lineWidth);
-                var pts = [];
-                for(var ptID in line.allPoints){
-                    var pt = line.allPoints[ptID];
-                    pts.push(pt.x - translate.x, pt.y - translate.y);
+                if (ctx) {
+                    ctx.stroke(lineColor, line.lineWidth);
+                    var pts = [];
+                    for (var ptID in line.allPoints) {
+                        var pt = line.allPoints[ptID];
+                        pts.push(pt.x - translate.x, pt.y - translate.y);
+                    }
+                    //console.log("num of points: " + pts.length);
+                    //if(pts.length < 500)
+                    ctx.drawPolyline(pts);
                 }
-                //console.log("num of points: " + pts.length);
-                //if(pts.length < 500)
-                ctx.drawPolyline(pts);
             }
         }
     },
     ConvertDrawingToPng: function(canvasSize, picName, userLines, computerLines){
-        if(gm){
+        if(gm && ctx != null){
             var ctx = this.Initialize(canvasSize.width, canvasSize.height);
          
             var alllines = [];
@@ -172,7 +176,7 @@ module.exports = {
         }
     },
     SaveToFile : function(ctx, picName, isThumb, callback){
-        if(gm){
+        if(gm && ctx != null){
             var filename = isThumb ? picName + "_thumb" : picName;
             filename = __dirname + '/session_pic/' + filename + '.png'; 
             ctx.write(filename, function (err) {

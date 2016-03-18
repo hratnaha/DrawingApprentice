@@ -34,6 +34,7 @@ function sketchUtil() {
         var colorB = color.b / 255;
         
         var now = (new Date()).getTime();
+        var userid = userData == "" ? "unknown" : userData.id;
         var newstroke = {
                        // create a temporary stroke for sending
             type : "stroke",
@@ -48,7 +49,8 @@ function sketchUtil() {
                 },
                 lineWidth : y,
                 allPoints : []
-            }
+            },
+            userid : userid
         };
         return newstroke;
     }
