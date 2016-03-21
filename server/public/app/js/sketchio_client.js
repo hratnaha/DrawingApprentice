@@ -141,10 +141,15 @@ function onDataReceived(allData) {
 
     var userLines = allData.userLines;
     var computerLines = allData.computerLines;
+    var labeledGroups = allData.labeledGroups; 
 
     var userBlob = new Blob([userLines],
         {type: "text/plain;charset=utf-8"});
     saveAs(userBlob, timestamp + "userLines.txt");
+    
+    var groupBlob = new Blob([userLines],
+        { type: "text/plain;charset=utf-8" });
+    saveAs(userBlob, timestamp + "groupLines.txt");
 
     setTimeout(function() {
         var computerBlob = new Blob([computerLines],
@@ -196,10 +201,12 @@ function changeGrouping(){
     }
 }
 
-function setGroupLabel(label){
-    var groupLabel = label;
-    //stringify and emit the label to server
+function getData(){
+    socket.emit('getData'); 
+}
 
+function setGroupLabel(label){
+    socket.emit('onLabel', label); 
 }
 
 function setMode(mode) {

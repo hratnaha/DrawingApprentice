@@ -24,6 +24,7 @@ module.exports = {
 
             var userLines;
             var computerLines;
+            var groupLines = apprentice.labeledGroups;  
 
             apprentice.getUserLines(function (err, item) {
                 if (err) {
@@ -80,7 +81,8 @@ module.exports = {
                     gender: userProfile['gender'],
                     email: userProfile['email'],
                     userLines: userLines,
-                    computerLines: computerLines
+                    computerLines: computerLines, 
+                    labeledGroups: groupLines 
                 });
                 req.write(postData);
                 req.end();

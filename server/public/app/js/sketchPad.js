@@ -124,6 +124,8 @@ function sketchUtil() {
                 }
                 else {
                     var label = prompt("Please enter the type of object you drew:", "Object");
+                    console.log("Label is: " + label); 
+                    setGroupLabel(label); 
                     changeGrouping();
                     context.clearRect(0, 0, canvas.width, canvas.height);
                 }

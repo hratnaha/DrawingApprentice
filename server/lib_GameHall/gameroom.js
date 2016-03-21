@@ -83,7 +83,7 @@ class gameroom {
     constructor(roomInfo, apprentice, sketchClassfier, lineGenerator){
         this.players = [];
         this.sockets = [];
-        this.groups = [];
+        this.newGroup = [];
         this.compStrokes = [];
         this.userStrokes = [];
         this.userTurnStrokes = [];
@@ -92,6 +92,7 @@ class gameroom {
         this.userTurnStrokes.clear = clear;
         this.roomInfo = roomInfo ? roomInfo : this.createRoomInfo();
         this.apprentice = apprentice;
+        this.apprentice.labeledGroups = []; 
         this.canvasSize = { width: 0, height: 0 };
         this.indexULines = 0;   // for counting the number of user strokes the user has drawn
         this.indexCLines = 0;   // for counting the number of computer strokes the room has drawn
@@ -180,7 +181,9 @@ class gameroom {
         // Todo: reconstruct the message to send out
 
         if (this.isGrouping) {
+            var newTurn = []; 
             this.apprentice.Grouping(function (err, result) {
+            console.log("Inside the grouping, result is: " + result);
                 if (result != null) {
                     for (var i = 0; i < result.sizeSync(); i++) {
                         var newline = result.getSync(i);
@@ -188,16 +191,17 @@ class gameroom {
                         var newpkpts = [];
                         for (var j = 0; j < newline.sizeSync(); j++) {
                             var newpt = newline.getSync(j);
-
                             newpkpts.push(CreatePacketPoint(newpt));
                         }
-                        userStroke.allPoints = newpkpts;
-
+                        newTurn.push(newpkpts); 
+                        //userStroke.allPoints = newpkpts;
                         // decode to JSON and send the message
-                        var resultmsg = JSON.stringify(userStroke);
-                        so.emit('respondStroke', resultmsg);
-                        this.apprentice.setModeSync(0);
-                    }
+                        //var resultmsg = JSON.stringify(userStroke);
+                        //so.emit('respondStroke', resultmsg);
+                        //this.apprentice.setModeSync(0);
+                }
+                thisobj.newGroup.push(newTurn);
+                console.log("Length of newGroup = " + thisobj.newGroup.length); 
                 }
             });
         } else {
