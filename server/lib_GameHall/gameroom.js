@@ -232,46 +232,25 @@ class gameroom {
                     if(!err1){
                         // recognize the image using sketchClass
                          if(thisobj.sketchClassfier){
-                            thisobj.sketchClassfier.invoke("recognize_Image", filename, function(error2, result) {
+                            thisobj.sketchClassfier.invoke("recognize_Image", filename, function(err2, result) {
                                 // report back to the client
-                                if(!error2){
-                                    console.log(result);
-                                    var result = generator.GetSketchesInCategory(result);
-                                    /*if(thisobj.lineGenerator){
-                                        thisobj.lineGenerator.invoke("completeSketch", result, filename, function(error3, result2){
-                                            if(!error3){
-                                                var newstroke = {};
-                                                newstroke['allPoints'] = [];
-                                                newstroke['lineWidth'] = 2;
-                                                newstroke['color'] = {r: 0, g: 1, b: 0};
-
-                                                var i = 0;
-                                                while(i<result2.length){
-                                                    if(result2[i].x > 0 && result2[i].y > 0){
-                                                        newstroke['allPoints'].push(result2[i]);
-                                                    }else{
-                                                        if(newstroke['allPoints'].length > 2){
-                                                            var resultmsg = JSON.stringify(newstroke);
-                                                            // and send it to all the players
-                                                            if(thisobj.sockets.length > 0){
-                                                                for(var j=0;j<thisobj.sockets.length;j++){
-                                                                    var tarso = thisobj.sockets[j];
-                                                                    tarso.emit('respondStroke', resultmsg);
-                                                                }
-                                                            }else
-                                                                so.emit('respondStroke', resultmsg);                        
-                                                        }
-                                                        newstroke = {};
-                                                        newstroke['allPoints'] = [];
-                                                        newstroke['lineWidth'] = 2;
-                                                        newstroke['color'] = {r: 0, g: 1, b: 0};
+                                if(!err2){
+                                    console.log("recognized result: " + result);
+                                    generator.GetSketchesInCategory(result, function(strokes, err3){
+                                        if(!err3){
+                                            for(var i=0;i < strokes.length; i++){
+                                                var stroke = strokes[i];
+                                                var resultmsg = JSON.stringify(stroke);
+                                                if(thisobj.sockets.length > 0){
+                                                    for(var j=0;j<thisobj.sockets.length;j++){
+                                                        var tarso = thisobj.sockets[j];
+                                                        tarso.emit('respondStroke', resultmsg);
                                                     }
-                                                    i++;
-                                                }
-                                               
-                                            } 
-                                        });
-                                    }*/
+                                                }else
+                                                    so.emit('respondStroke', resultmsg);
+                                            }
+                                        }
+                                    });
                                     so.emit('classifyObject', result);
                                 }
                             });
@@ -369,8 +348,11 @@ class gameroom {
             canvas2D.SaveToFile(drawingContext, id, false, function(filename, err){
                 // draw the thumbnail
                 if(!err){
-                    var thumbContext = canvas2D.InitializeFromFile(filename).resize(80,60);
-                    canvas2D.SaveToFile(thumbContext, id, true);
+                    // var thumbContext = canvas2D.InitializeFromFile(filename).resize(80,60);
+                    // canvas2D.SaveToFile(thumbContext, id, true);
+                    drawingContext.width = 80;
+                    drawingContext.height = 60;
+                    canvas2D.SaveToFile(drawingContext, id, true);
                 }
             });
         }
