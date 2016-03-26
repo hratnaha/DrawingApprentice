@@ -239,12 +239,13 @@ io.on('connection', function (so) {
         }
 
         function emitData() {
-            var allLines = {
+            var allData = {
                 userLines: userLines,
-                computerLines: computerLines
+                computerLines: computerLines, 
+                labeledGroups: apprentice.labeledGroups
             };
 
-            so.emit('allData', allLines);
+            so.emit('allData', allData);
         }
     }
 
@@ -278,7 +279,21 @@ io.on('connection', function (so) {
             room.onModeChanged(m);
         }
     }
+    
+    function onLabel(label){
+        console.log("onLabel " + label); 
+        var labeledGroup = {
+            label : label,
+            //get lines in the newGroup waiting area
+            lines: room.newGroup.pop()
+            //is there only one new entry? problem point//also if two users group at same time, this is an problematic approach
+        };
+        apprentice.labeledGroups.push(labeledGroup);
+         
 
+    }
+    
+    so.on('onLabel', onLabel); 
     so.on('onOpen', onOpen);
     so.on('SetCreativty', function (level) {
         var d = JSON.parse(level);
