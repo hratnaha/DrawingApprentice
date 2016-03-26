@@ -232,35 +232,35 @@ class gameroom {
                         y: thisobj.userTurnStrokes.bound.top - deltaHeight / 2
                     });
                 }
-                canvas2D.SaveToFile(turnContext, thisobj.roomInfo.id + "-tmp", false, function(filename, err1){
-                    if(!err1){
-                        // recognize the image using sketchClass
-                         if(thisobj.sketchClassfier){
-                            thisobj.sketchClassfier.invoke("recognize_Image", filename, function(err2, result) {
-                                // report back to the client
-                                if(!err2){
-                                    console.log("recognized result: " + result);
-                                    generator.GetSketchesInCategory(result, function(strokes, err3){
-                                        if(!err3){
-                                            for(var i=0;i < strokes.length; i++){
-                                                var stroke = strokes[i];
-                                                var resultmsg = JSON.stringify(stroke);
-                                                if(thisobj.sockets.length > 0){
-                                                    for(var j=0;j<thisobj.sockets.length;j++){
-                                                        var tarso = thisobj.sockets[j];
-                                                        tarso.emit('respondStroke', resultmsg);
-                                                    }
-                                                }else
-                                                    so.emit('respondStroke', resultmsg);
-                                            }
-                                        }
-                                    });
-                                    so.emit('classifyObject', result);
-                                }
-                            });
-                        }
-                    }
-                });
+                // canvas2D.SaveToFile(turnContext, thisobj.roomInfo.id + "-tmp", false, function(filename, err1){
+                //     if(!err1){
+                //         // recognize the image using sketchClass
+                //          if(thisobj.sketchClassfier){
+                //             thisobj.sketchClassfier.invoke("recognize_Image", filename, function(err2, result) {
+                //                 // report back to the client
+                //                 if(!err2){
+                //                     console.log("recognized result: " + result);
+                //                     generator.GetSketchesInCategory(result, function(strokes, err3){
+                //                         if(!err3){
+                //                             for(var i=0;i < strokes.length; i++){
+                //                                 var stroke = strokes[i];
+                //                                 var resultmsg = JSON.stringify(stroke);
+                //                                 if(thisobj.sockets.length > 0){
+                //                                     for(var j=0;j<thisobj.sockets.length;j++){
+                //                                         var tarso = thisobj.sockets[j];
+                //                                         tarso.emit('respondStroke', resultmsg);
+                //                                     }
+                //                                 }else
+                //                                     so.emit('respondStroke', resultmsg);
+                //                             }
+                //                         }
+                //                     });
+                //                     so.emit('classifyObject', result);
+                //                 }
+                //             });
+                //         }
+                //     }
+                // });
                 // reset the user turn strokes
                 thisobj.userTurnStrokes.clear();
                 
@@ -354,8 +354,8 @@ class gameroom {
                 if(!err){
                     // var thumbContext = canvas2D.InitializeFromFile(filename).resize(80,60);
                     // canvas2D.SaveToFile(thumbContext, id, true);
-                    drawingContext.width = 80;
-                    drawingContext.height = 60;
+                    drawingContext.canvas.width = 80;
+                    drawingContext.canvas.height = 60;
                     canvas2D.SaveToFile(drawingContext, id, true);
                 }
             });

@@ -68,7 +68,8 @@ function initWebSocket() {
             botStroke = curStroke.shift();
             botColor = rgbDoubleToHex(botStroke.color.r, botStroke.color.g, botStroke.color.b);
             ctx.beginPath();
-            ctx.moveTo(botStroke.allPoints[0].x, botStroke.allPoints[0].y);
+            if(botStroke.allPoints.length > 0)
+                ctx.moveTo(botStroke.allPoints[0].x, botStroke.allPoints[0].y);
 			ctx.strokeStyle = botColor;
             ctx.globalAlpha = opacity2;
             ctx.lineWidth = botStroke.lineWidth;
