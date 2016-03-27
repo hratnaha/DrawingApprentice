@@ -103,6 +103,7 @@ class gameroom {
         this.lineGenerator = lineGenerator;
         this.numTurnStrokes = 0;
         this.setRoomType(enum_RoomType.apprentice);
+        this.prevDrawn = 1;
     }
     createRoomInfo(){
         var roomInfo = {};
@@ -334,7 +335,8 @@ class gameroom {
     }
     updateServerPic(){
         // update the server pic every 10 user lines
-        if(this.userStrokes.length > 0 && this.userStrokes.length % 10 == 0){
+        if(this.userStrokes.length > 0 && this.userStrokes.length / 10 > this.prevDrawn){
+            this.prevDrawn = Math.ceil(this.userStrokes.length / 10);
             // draw both user lines and computer lines
             var drawingContext = canvas2D.Initialize(this.canvasSize.width, this.canvasSize.height);
             while (this.userStrokes.length > this.indexULines && this.compStrokes.length > this.indexCLines) {
@@ -352,11 +354,13 @@ class gameroom {
             canvas2D.SaveToFile(drawingContext, id, false, function(filename, err){
                 // draw the thumbnail
                 if(!err){
-                    // var thumbContext = canvas2D.InitializeFromFile(filename).resize(80,60);
-                    // canvas2D.SaveToFile(thumbContext, id, true);
-                    drawingContext.canvas.width = 80;
-                    drawingContext.canvas.height = 60;
-                    canvas2D.SaveToFile(drawingContext, id, true);
+                    canvas2D.isUsingGM = true;
+                    var thumbContext = canvas2D.InitializeFromFile(filename).resize(80,60);
+                    canvas2D.SaveToFile(thumbContext, id, true);
+                    canvas2D.isUsingGM = false;
+                    //drawingContext.width = 80;
+                    //drawingContext.height = 60;
+                    // canvas2D.SaveToFile(drawingContext, id, true);
                 }
             });
         }

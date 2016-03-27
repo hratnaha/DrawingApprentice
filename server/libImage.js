@@ -43,13 +43,14 @@ function hexToRgb(hex) {
     } : null;
 }
 
-var isUsingGM = false;
+
 
 module.exports = {
+    isUsingGM : false,    
     //Iinitialize the drawing context that has white background
     // and transparent filling in of the drawing lines
     Initialize : function(width, height, useGM){
-        isUsingGM = useGM;
+        this.isUsingGM = useGM;
         if(gm && useGM){
             var ctx = gm(width, height, "#ffffff")
                 .fill("transparent");
@@ -64,7 +65,7 @@ module.exports = {
         return null;
     },
     InitializeFromFile : function(file){
-        if(gm && isUsingGM){
+        if(gm && this.isUsingGM){
             var ctx = gm(file)
             .fill("transparent");
             return ctx;
@@ -183,7 +184,7 @@ module.exports = {
         var filename = isThumb ? picName + "_thumb" : picName;
         filename = __dirname + '/session_pic/' + filename + '.png';
         if(ctx != null){
-            if (Canvas) {
+            if (Canvas && !this.isUsingGM) {
                 var out = fs.createWriteStream(filename)
                     , stream = ctx.pngStream();
                 
