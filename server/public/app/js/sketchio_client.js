@@ -71,7 +71,8 @@ function initWebSocket() {
             botStroke = curStroke.shift();
             botColor = rgbDoubleToHex(botStroke.color.r, botStroke.color.g, botStroke.color.b);
             ctx.beginPath();
-            ctx.moveTo(botStroke.allPoints[0].x, botStroke.allPoints[0].y);
+            if(botStroke.allPoints.length > 0)
+                ctx.moveTo(botStroke.allPoints[0].x, botStroke.allPoints[0].y);
 			ctx.strokeStyle = botColor;
             ctx.globalAlpha = opacity2;
             ctx.lineWidth = botStroke.lineWidth;
@@ -144,10 +145,15 @@ function onDataReceived(allData) {
 
     var userLines = allData.userLines;
     var computerLines = allData.computerLines;
+    var labeledGroups = allData.labeledGroups; 
 
     var userBlob = new Blob([userLines],
         {type: "text/plain;charset=utf-8"});
     saveAs(userBlob, timestamp + "userLines.txt");
+    
+    var groupBlob = new Blob([userLines],
+        { type: "text/plain;charset=utf-8" });
+    saveAs(userBlob, timestamp + "groupLines.txt");
 
     setTimeout(function() {
         var computerBlob = new Blob([computerLines],
@@ -199,10 +205,12 @@ function changeGrouping(){
     }
 }
 
-function setGroupLabel(label){
-    var groupLabel = label;
-    //stringify and emit the label to server
+function getData(){
+    socket.emit('getData'); 
+}
 
+function setGroupLabel(label){
+    socket.emit('onLabel', label); 
 }
 
 function setMode(mode) {

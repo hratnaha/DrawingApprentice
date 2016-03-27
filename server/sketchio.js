@@ -37,15 +37,24 @@ var express = require('express'),
     onlineUsers = {},
     Room = require('./lib_GameHall/gameroom');;
 
-var options = {timeout:60};
+var zerorpc;
+try {
+    zerorpc = require("zerorpc");
+} catch (err) {
+    console.error(err);
+}
+
+var options = {timeout:600000};
 
 // setting up the local 
-var sketchClassfier = new zerorpc.Client(options);
-sketchClassfier.connect("tcp://127.0.0.1:4242");
-
-var lineGenerator = new zerorpc.Client(options);
-lineGenerator.connect("tcp://127.0.0.1:4243");
-
+var sketchClassfier, lineGenerator;
+if (zerorpc) {
+    sketchClassfier = new zerorpc.Client(options);
+    sketchClassfier.connect("tcp://127.0.0.1:4242");
+    
+    // lineGenerator = new zerorpc.Client(options);
+    // lineGenerator.connect("tcp://127.0.0.1:4243");
+}
 // Passport session setup.
 passport.serializeUser(function (user, done) {
     done(null, user);
@@ -266,12 +275,13 @@ io.on('connection', function (so) {
         }
 
         function emitData() {
-            var allLines = {
+            var allData = {
                 userLines: userLines,
-                computerLines: computerLines
+                computerLines: computerLines, 
+                labeledGroups: apprentice.labeledGroups
             };
 
-            so.emit('allData', allLines);
+            so.emit('allData', allData);
         }
     }
 
@@ -305,12 +315,21 @@ io.on('connection', function (so) {
             room.onModeChanged(m);
         }
     }
+    
+    function onLabel(label){
+        console.log("onLabel " + label); 
+        var labeledGroup = {
+            label : label,
+            //get lines in the newGroup waiting area
+            lines: room.newGroup.pop()
+            //is there only one new entry? problem point//also if two users group at same time, this is an problematic approach
+        };
+        apprentice.labeledGroups.push(labeledGroup);
+         
 
-    function classifyObject(objectLabel) {
-        var label = JSON.stringify(objectLabel)
-        so.emit('classifyObject', label)
     }
-
+    
+    so.on('onLabel', onLabel); 
     so.on('onOpen', onOpen);
     so.on('SetCreativty', function (level) {
         var d = JSON.parse(level);

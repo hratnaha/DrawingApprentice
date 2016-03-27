@@ -101,7 +101,7 @@ put js files before css files
         </li>
           <!--Instead of downloading the line data, this button should download a PNG image -->
         <li>
-            <button class="btn btn-default btn-lg" onClick ="testFunction()"style="float:left;margin-left:1em;">
+            <button class="btn btn-default btn-lg" onClick ="getData()"style="float:left;margin-left:1em;">
            Settings
             </button>
         </li>
@@ -201,6 +201,22 @@ function testFunction2(value){
               <input id="label" class="row" type="text" value="Object Type" style="width:10em; margin-right:3em; height:2em;font-size:14px;position:center;"/>
           </div>
       </div>
+      <div class="col-lg-6">
+          <div class="row" style="margin-top:1em; margin-right:10em;">
+                             
+              <form>
+              <!--Condition A-->
+              <input type="radio" name="myradio" onclick="testFunction2(this.value);" value="A">  A 
+              <!--Condition B-->
+              <input type="radio" name="myradio" onclick="testFunction2(this.value);" value="B" /> B
+              <!--Condition C-->
+              <input type="radio" name="myradio" onclick="testFunction2(this.value);" value="C" /> C
+              <!--Condition D-->
+              <input type="radio" name="myradio" onclick="testFunction2(this.value);" value="D" /> D
+              </form>
+          </div>
+      </div>
+
             
               
             </div><!--slider_row_2-->
@@ -209,7 +225,6 @@ function testFunction2(value){
    
   </div><!-- /.container-fluid -->
   
-</div>
 
 <div class="modal fade" id="new" role="dialog" data-backdrop="static">
             	<div class="modal-dialog" data-backdrop="static">
