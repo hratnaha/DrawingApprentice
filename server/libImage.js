@@ -103,7 +103,9 @@ module.exports = {
         if(gm){
             var filename = isThumb ? picName + "_thumb" : picName;
             filename = __dirname + '/session_pic/' + filename + '.png'; 
-            ctx.write(filename, function (err) {
+            console.log("save to file: " + filename);
+	    ctx.write(filename, function (err) {
+		console.log("see if there is any error:");
                 if(err) console.error(err);
                 if(handleError != null && typeof handleError === "function"){
                     handleError.call(this, filename, err);

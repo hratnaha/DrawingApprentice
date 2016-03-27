@@ -319,8 +319,8 @@ function onUpdateScore(newScore){
     var score = JSON.parse(newScore);
     totalScore = score; 
     console.log("Inside update score:" + " " + totalScore);
-     document.getElementById("score").innerHTML = "total score = " + totalScore;
-	console.log("totalScore is:" + " " + totalScore);
+    // document.getElementById("score").innerHTML = "total score = " + totalScore;
+	//console.log("totalScore is:" + " " + totalScore);
 }
 
 function onClassifyObject(label){

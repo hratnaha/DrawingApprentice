@@ -47,6 +47,7 @@ class gameroom {
         this.indexULines = 0;
         this.indexCLines = 0;
         this.isGrouping = false;
+        this.prevDrawn = 1;
     }
     createRoomInfo(){
         var roomInfo = {};
@@ -110,7 +111,7 @@ class gameroom {
                         // decode to JSON and send the message
                         var resultmsg = JSON.stringify(userStroke);
                         so.emit('respondStroke', resultmsg);
-                        this.apprentice.setModeSync(0);
+                        thisobj.apprentice.setModeSync(0);
                     }
                 }
             });
@@ -161,6 +162,7 @@ class gameroom {
                     }
                 });
             }, 2000);
+	//	this.udpateServerPic();
         }
         for(var i=0;i<this.sockets.length;i++){
             var tarso = this.sockets[i];
@@ -172,7 +174,8 @@ class gameroom {
     }
     updateServerPic(){
         // update the server pic /*every 10 user lines*/
-        if(this.userStrokes.length > 0 /*&& this.userStrokes.length % 10 == 0*/){
+        if(this.userStrokes.length > 0 && this.userStrokes.length / 10 > this.prevDrawn){
+            this.prevDrawn = Math.ceil(this.userStrokes.length / 10);
             // draw both user lines and computer lines
             var drawingContext = canvas2D.Initialize(this.canvasSize.width, this.canvasSize.height);
             while (this.userStrokes.length > this.indexULines && this.compStrokes.length > this.indexCLines) {
@@ -188,11 +191,11 @@ class gameroom {
             this.indexULines = 0;
             var id = this.roomInfo.id; 
             canvas2D.SaveToFile(drawingContext, id, false, function(filename, err){
-                if(!err){
+                //if(!err){
 		    console.log("saving thumbnail filename: " + filename);
                     var thumbContext = canvas2D.InitializeFromFile(filename).resize(80,60);
                     canvas2D.SaveToFile(thumbContext, id, true);
-                }
+                //}
             });
         }
     }
