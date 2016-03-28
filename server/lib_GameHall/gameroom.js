@@ -198,19 +198,12 @@ class gameroom {
                         newTurn.push(newpkpts); 
                         //userStroke.allPoints = newpkpts;
                         // decode to JSON and send the message
-<<<<<<< HEAD
                         //var resultmsg = JSON.stringify(userStroke);
                         //so.emit('respondStroke', resultmsg);
                         //this.apprentice.setModeSync(0);
-                }
-                thisobj.newGroup.push(newTurn);
-                console.log("Length of newGroup = " + thisobj.newGroup.length); 
-=======
-                        var resultmsg = JSON.stringify(userStroke);
-                        so.emit('respondStroke', resultmsg);
-                        thisobj.apprentice.setModeSync(0);
                     }
->>>>>>> 69543de6e32526d7d1a8e5a8fd5d0ca64eb2c5e4
+                    thisobj.newGroup.push(newTurn);
+                    console.log("Length of newGroup = " + thisobj.newGroup.length); 
                 }
             });
         } else {
@@ -343,11 +336,7 @@ class gameroom {
         }
     }
     updateServerPic(){
-<<<<<<< HEAD
-        // update the server pic every 10 user lines
-=======
         // update the server pic /*every 10 user lines*/
->>>>>>> 69543de6e32526d7d1a8e5a8fd5d0ca64eb2c5e4
         if(this.userStrokes.length > 0 && this.userStrokes.length / 10 > this.prevDrawn){
             this.prevDrawn = Math.ceil(this.userStrokes.length / 10);
             // draw both user lines and computer lines
