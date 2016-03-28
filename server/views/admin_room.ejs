@@ -114,9 +114,9 @@
                     <img class="room-thumb" alt="" src={{room.thumb}} />
                     <div class="room-name">{{room.name}}</div>
                     <div class="room-host">Number of Players: {{room.players.length}}</div>
-		    <%if (user.id == "105775598272793470839") { %>
-                        <button class="btn btn-success btn-lg room-delete" ng-click="deleteRoom(room.id)">Delete</button>    
-                    <% } %>
+		    <% if(userid == "105775598272793470839"){ %>
+			<button class="btn btn-success btn-lg room-delete" ng-click="deleteRoom(room.id)">Delete</button>
+		    <% } %>
                     <button class="btn btn-success btn-lg room-join" ng-click="joinRoom(room.id)">Join</button>
                 </div>
           </div>

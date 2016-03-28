@@ -182,7 +182,7 @@ app.get('/app', ensureAuthenticated, function (req, res) {
     res.render('app', { user: req.user._raw, sessionId: req.sessionID, roomId: roomID});
 });
 app.get('/admin_room', ensureAuthenticated, function (req, res) {
-    res.render('admin_room', { user: req.user._raw });
+    res.render('admin_room', { user: req.user._raw, userid: req.user.id });
 });
 
 // facebook authentication
