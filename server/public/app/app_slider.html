@@ -11,7 +11,11 @@ put js files before css files
     <script src="https://cdn.socket.io/socket.io-1.0.6.js"></script>
 	<script type="text/javascript" src="js/sketchPad.js"></script>
 	<script type="text/javascript" src="/js/vendor/bootstrap-slider.js"></script>
+     <script src="js/jquery.ui.touch-punch.min.js"></script>
     <script type="text/javascript" src="/js/vendor/FileSaver.min.js"></script>
+    
+     <script>$('#slider').draggable();</script>
+     
     <link rel="stylesheet" type="text/css" href="/css/bootstrap.min.css" />
     <link rel="stylesheet" type="text/css" href="/css/bootstrap-slider.css" />
     <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css" />
@@ -36,62 +40,16 @@ put js files before css files
     <div class="collapse navbar-collapse" id="nav_toggle_content">
     	<div class="row agent-panel">
         	 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                <div class="row">
-                	   
-                 
+                <div class="row">    	   
+               	  <h3>Creativity:</h3>
                      <section  class="creativity-section">	
+                        
                         <span class="tooltip"></span> <!-- Tooltip -->
                         <div id="slider"></div> <!-- the Slider -->
                         <span class="volume"></span> <!-- Volume -->
                     </section>
                         	
-                                <!--input id="ex15" data-slider-id='ex1Slider' type="text" data-slider-min="1" data-slider-max="25" data-slider-step="1" data-slider-value="1" style="z-index:9999;margin-top:-1em;"/>
-                                <script>
-                                	var slider = new Slider("#ex15", {
-										tooltip: 'always'
-									});
-	
-                                </script-->
-                    
-                       
-         	<!--div class="drawing-mode-button">
-                    	<button class="btn-mode"><img src="../img/tracing.gif" /></button>
-                        <button class="btn-mode"><img src="../img/mimicking.gif" /></button>
-                        <button class="btn-mode"><img src="../img/transforming.gif" /></button>
-                    </div-->
-              
-                	 <!--ul class="nav navbar-nav setting_buton">  	  
-        <li>
-            <button class="btn btn-default btn-lg" onClick ="location.href = '/admin_room'" style="float:left;margin-left:1em;">
-           Exit
-            </button>
-        </li>
-        <!--What is the link to get to the room selection? -->
-         <!--li>
-            <button class="btn btn-default btn-lg" onClick="downloadCanvas(this);" style="float:left;margin-left:1em; display:none">
-           Download
-            </button>
-        </li>
-          <!--Instead of downloading the line data, this button should download a PNG image -->
-        <!--li>
-            <button class="btn btn-default btn-lg" onClick ="testFunction()"style="float:left;margin-left:1em;">
-           Settings
-            </button>
-        </li>
-         <li>
-            <button class="btn btn-default btn-lg" id="trash" style="float:left;margin-left:1em;">
-           Restart
-            </button>
-        </li>  
-        <li>
-            <a class="btn btn-default btn-lg" style="float:left;margin-left:1em;height:47px;line-height:12px" onclick="downloadCanvas(this)">Download</a>
-        </li>
 
-          <li>
-              <button id="group" class="btn btn-default btn-lg" style="float:left;margin-left:1em;"onclick="changeGrouping()"> Group </button>
-          </li>  
-
-      </ul><!--setting_button-->
                 </div><!--row-->
 
              <div class="voting_btn">

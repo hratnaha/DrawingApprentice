@@ -681,11 +681,12 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#5a5a5a', end
 	width:80%;
 	border-top-left-radius:2em;
 	border-top-right-radius:2em;
-	height:15%;
+	height:120px;
 	border:1px solid black;
 	position:absolute;
 	z-index:1000;
-	bottom:-5px;
+	/*bottom:-5px; adjust for ipad*/
+	bottom: -5px;
 	left:10%;
 	background: rgb(0,0,0); /* Old browsers */
 	background: -moz-linear-gradient(top, rgba(0,0,0,1) 0%, rgba(69,72,77,1) 100%); /* FF3.6-15 */
@@ -695,7 +696,7 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#5a5a5a', end
 }
 	
 #user-panel-content{
-	height:80%;
+	height:70px;
 	}
 #user-panel-content .row:nth-child(1){
 	height:inherit;
@@ -713,7 +714,7 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#5a5a5a', end
   position:absolute;
   z-index:9999;
   left:85%;
-  bottom:8%;
+  bottom:5%;
 }
 
 
@@ -767,7 +768,7 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#5a5a5a', end
   position:absolute;
   z-index:9999;
   left:85%;
-  bottom:8%;
+  bottom:5%;
 }
 
 #toggle.on span {
@@ -797,13 +798,13 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#5a5a5a', end
 	}
 
 .setting-button-content .btn{
-	width:5em;
-	height:5em;
+	width:4em;
+	height:4em;
 	border-radius:100%;
 	background-color:white;
 	float:left;
-	margin-left:2em;
-	margin-top:1em;
+	margin-left:1em;
+	margin-top:2%;
 
 	}
 	
@@ -813,7 +814,6 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#5a5a5a', end
 
 .setting-button-content i{
 	color:black;
-	
 	}	
 	
 .drawing-mode-button{
@@ -847,7 +847,7 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#5a5a5a', end
 	margin-bottom:3em;
 	position: absolute;
 	left:10%;
-	top:3em;
+	top:4em;
 }
 
 
@@ -857,12 +857,11 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#5a5a5a', end
 	height: auto;
 	margin: 0 auto;
 	margin-top:3em;
-	margin-bottom:3em;
 	position: absolute;
 	margin-left:10%;
 	}
 	
-.thickness h3{
+.thickness h3, .thickness h4,.thickness h5, .thickness h6 {
 	display: inline-block;
     position: absolute;
     z-index: 10000;
@@ -932,7 +931,7 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#5a5a5a', end
 	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#8045484d', endColorstr='#80000000',GradientType=0 ); /* IE6-9 */
 }
 .volume {
-	margin-top:-30px;
+	margin-top:-50px;
 	content: "";
 	display: inline-block;
 	width: 100px;
@@ -956,6 +955,8 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#5a5a5a', end
 	outline: none;
 	top: -7px;
 	margin-left: -12px;
+	-ms-touch-action: none;
+	touch-action: none;
 }
 
 
@@ -1048,4 +1049,9 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#5a5a5a', end
 	z-index:9999;
 	right:10%;
 	top:1em;
+	}
+.agent-panel h3{
+	display:inline-block;
+	padding-left:25%;
+	margin-bottom:2em;
 	}

@@ -8,15 +8,22 @@ put js files before css files
 --> 
     <script src="/js/vendor/jquery-1.11.2.min.js"></script>
     <script src="/js/vendor/jquery-ui-1.10.1.custom.min.js"></script>
+    <script src="js/jquery.ui.touch-punch.min.js"></script>
+    <!--script src="../bower_components/jquery.mobile-1.4.5/jquery.mobile-1.4.5.js"></script-->
     <script src="https://cdn.socket.io/socket.io-1.0.6.js"></script>
     <script src="../bower_components/bootstrap/dist/js/bootstrap.js"></script>
 	<script type="text/javascript" src="js/sketchPad.js"></script>
 	
-	<script type="text/javascript" src="/js/vendor/bootstrap-slider.js"></script>
+	<!--script type="text/javascript" src="/js/vendor/bootstrap-slider.js"></script-->
     <script type="text/javascript" src="/js/vendor/FileSaver.min.js"></script>
+    
+    <script>$('.ui-slider-handle').draggable();</script>
+    <script>$('#slider').draggable();</script>
+    
     <link rel="stylesheet" type="text/css" href="/css/bootstrap.min.css" />
-    <link rel="stylesheet" type="text/css" href="/css/bootstrap-slider.css" />
+    <!--link rel="stylesheet" type="text/css" href="/css/bootstrap-slider.css" /-->
     <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css" />
+    <link rel="stylesheet" type="text/css" href="../bower_components/jquery.mobile-1.4.5/jquery.mobile-1.4.5.css" />
     <link rel="stylesheet" type="text/css" href="css/style.css" />
 
 </head>
@@ -110,7 +117,7 @@ put js files before css files
                 </div>
                 
                 <div class="row">
-            <input id="line-thickness-slider" data-slider-id='ex1Slider' type="text" data-slider-min="1" data-slider-max="100" data-slider-step="1" data-slider-value="50" style="z-index:9999;margin-top:-1em;"/>
+            <input id="line-thickness-slider" data-slider-id='ex1Slider' type="text" data-slider-min="1" data-slider-max="100" data-slider-step="1" data-slider-value="50" style="z-index:9999;"/>
                 </div>
              
            
@@ -448,10 +455,10 @@ put js files before css files
       
         <div class="setting-button col-lg-5">
         	<ul class="setting-button-content">
-            	<li><button class="btn" href="#"><i class="fa fa-trash fa-3x"></i></button></li>
-                <li><button class="btn" href="#"><i class="fa fa-download fa-3x"></i></button></li>
-                <li><button class="btn" href="#"><i class="fa fa-plus-square-o fa-3x"></i></button></li>
-                 <li><button class="btn" href="#"><i class="fa fa-cogs fa-3x"></i></button></li>
+            	<li><button class="btn" href="#"><i class="fa fa-trash fa-2x"></i></button></li>
+                <li><button class="btn" href="#"><i class="fa fa-download fa-2x"></i></button></li>
+                <li><button class="btn" href="#"><i class="fa fa-plus-square-o fa-2x"></i></button></li>
+                 <li><button class="btn" href="#"><i class="fa fa-cogs fa-2x"></i></button></li>
                
             </ul>
         </div><!--setting-button col-lg-5-->
@@ -459,7 +466,7 @@ put js files before css files
 
 	
             <div class="row thickness">
-                      	<h3>Thickness</h3>
+                      	<h5>Thickness</h5>
                  	 <section class="thickness-section">	
 
                         <div id="slider-thickness"></div> <!-- the Slider -->

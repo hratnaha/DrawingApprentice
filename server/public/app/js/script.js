@@ -443,7 +443,7 @@ $(function() {
           tooltip.fadeIn('fast');
         },
  
-        change: function(event, ui) {
+        slide: function(event, ui) {
  
             var value = slider.slider('value'),
                 volume = $('.volume');
@@ -495,7 +495,7 @@ $(function() {
           tooltip.fadeIn('fast');
         },
  
-        slide: function(event, ui) {
+        stop: function(event, ui) {
  
             lineThickness = sliderThickness.slider('value'),
                 thickness = $('.thickness');
@@ -519,7 +519,7 @@ $(function() {
  
         },
  
-        stop: function(event,ui) {
+        change: function(event,ui) {
           tooltip.fadeOut('fast');
         },
     });

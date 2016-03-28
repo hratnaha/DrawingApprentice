@@ -1,4 +1,4 @@
-var ioUri = "http://128.61.118.201:8080"; //replace with the Websocket URL
+var ioUri = "http://172.20.10.7:8080"; //replace with the Websocket URL
 var output;
 var socket;
 var botCanvas = {};
@@ -51,7 +51,7 @@ function initWebSocket() {
 
 		
 		$('#slider').slider({
-			stop: function(event, ui) {
+			change: function(event, ui) {
 				 console.log('Current Creativity Value:' + ' ' + ui.value/ 100);
        		     socket.emit("SetCreativty", ui.value);
 			}
