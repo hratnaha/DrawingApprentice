@@ -60,7 +60,8 @@ module.exports = {
             });
         }
     },
-    DrawLine : function(ctx, line){
+    DrawLine : function(ctx, line, translate){
+        translate = translate ? translate: {x : 0, y : 0};
         if(line.allPoints && line.allPoints.length > 0){
             var lineColor;
             if(line.color){
@@ -72,7 +73,7 @@ module.exports = {
             var pts = [];
             for(var ptID in line.allPoints){
                 var pt = line.allPoints[ptID];
-                pts.push(pt.x, pt.y);
+                pts.push(pt.x - translate.x, pt.y - translate.y);
             }
             //console.log("num of points: " + pts.length);
             //if(pts.length < 500)
@@ -99,7 +100,7 @@ module.exports = {
             this.SaveToFile(ctx, picName);
         }
     },
-    SaveToFile : function(ctx, picName, isThumb, handleError){
+    SaveToFile : function(ctx, picName, isThumb, callback){
         if(gm){
             var filename = isThumb ? picName + "_thumb" : picName;
             filename = __dirname + '/session_pic/' + filename + '.png'; 
@@ -107,8 +108,8 @@ module.exports = {
 	    ctx.write(filename, function (err) {
 		console.log("see if there is any error:");
                 if(err) console.error(err);
-                if(handleError != null && typeof handleError === "function"){
-                    handleError.call(this, filename, err);
+                if(callback != null && typeof callback === "function"){
+                    callback.call(this, filename, err);
                 }
             });
         }        
