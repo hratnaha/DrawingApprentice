@@ -337,7 +337,9 @@ function onUpdateScore(newScore){
 }
 
 function onClassifyObject(label){
-    var newLabel = JSON.parse(label)
-    document.getElementById('label').value = newLabel;
+    console.log("recognized as: ");
+    console.log(label);
+    //var newLabel = JSON.parse(label)
+    //document.getElementById('label').value = newLabel;
 }
 

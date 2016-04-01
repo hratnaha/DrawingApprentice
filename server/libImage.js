@@ -199,6 +199,7 @@ module.exports = {
                     }
                 });
             }else if(gm){
+		console.log("using gm to save image")
                 ctx.write(filename, function (err) {
                     if(err) console.error(err);
                     if(callback != null && typeof callback === "function"){

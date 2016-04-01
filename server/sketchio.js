@@ -333,7 +333,10 @@ io.on('connection', function (so) {
     so.on('onOpen', onOpen);
     so.on('SetCreativty', function (level) {
         var d = JSON.parse(level);
-        apprentice.setCreativityLevel(d);
+	if(room)
+	    room.setCreativity(d);
+	else
+            apprentice.setCreativityLevel(d);
     });
     so.on('setRoomType', function (type) {
         var t = JSON.parse(type);

@@ -234,39 +234,52 @@ class gameroom {
                         y: thisobj.userTurnStrokes.bound.top - deltaHeight / 2
                     });
                 }
+		
+		if(thisobj.creativity == 100){
+                console.log("try save for turn");
+		var offsetObj = {x: thisobj.userTurnStrokes.bound.right, y: thisobj.userTurnStrokes.bound.top};
+		canvas2D.SaveToFile(turnContext, thisobj.roomInfo.id + "-tmp", false, function(filename, err1){
+                    if(!err1){
+                        // recognize the image using sketchClass
+                         if(thisobj.sketchClassfier){
+                            thisobj.sketchClassfier.invoke("recognize_Image", filename, function(err2, result) {
+                                // report back to the client
+                                if(!err2){
+                                    console.log("recognized result: " + result);
+                                    generator.GetSketchesInCategory(result, offsetObj, function(strokes, err3){
+                                        if(!err3){
+                                            try{
+					    for(var i=0;i < strokes.length; i++){
+                                                var stroke = strokes[i];
+                                                var resultmsg = JSON.stringify(stroke);
+                                                if(thisobj.sockets.length > 0){
+						    console.log("prepare to send lines back through sockets: " + resultmsg);
+                                                    for(var j=0;j<thisobj.sockets.length;j++){
+                                                        var tarso = thisobj.sockets[j];
+							tarso.emit('respondStroke', resultmsg);
+							console.log("finish sending stroke");
+                                                    }
+                                                }else{
+						    console.log("prepare to send lines through so");
+                                                    so.emit('respondStroke', resultmsg);
+						}
+                                            }
+					    }catch(err4){
+					    	console.log(err4);
+					    }
+                                        }
+                                    });
+                                    so.emit('classifyObject', result);
+                                }
+                            });
+                        }
+                    }
+                });
 
-                // canvas2D.SaveToFile(turnContext, thisobj.roomInfo.id + "-tmp", false, function(filename, err1){
-                //     if(!err1){
-                //         // recognize the image using sketchClass
-                //          if(thisobj.sketchClassfier){
-                //             thisobj.sketchClassfier.invoke("recognize_Image", filename, function(err2, result) {
-                //                 // report back to the client
-                //                 if(!err2){
-                //                     console.log("recognized result: " + result);
-                //                     generator.GetSketchesInCategory(result, function(strokes, err3){
-                //                         if(!err3){
-                //                             for(var i=0;i < strokes.length; i++){
-                //                                 var stroke = strokes[i];
-                //                                 var resultmsg = JSON.stringify(stroke);
-                //                                 if(thisobj.sockets.length > 0){
-                //                                     for(var j=0;j<thisobj.sockets.length;j++){
-                //                                         var tarso = thisobj.sockets[j];
-                //                                         tarso.emit('respondStroke', resultmsg);
-                //                                     }
-                //                                 }else
-                //                                     so.emit('respondStroke', resultmsg);
-                //                             }
-                //                         }
-                //                     });
-                //                     so.emit('classifyObject', result);
-                //                 }
-                //             });
-                //         }
-                //     }
-                // });
+		
                 // reset the user turn strokes
                 thisobj.userTurnStrokes.clear();
-                
+                }else{
                 switch(thisobj.roomtype){
                     case enum_RoomType.recorded:
                         if(thisobj.recordedData){
@@ -325,6 +338,7 @@ class gameroom {
                         });
                     break;
                 }
+		}
                 thisobj.numTurnStrokes = 0; // clean to 0;
             }, waitForTurn);
         }
@@ -380,6 +394,11 @@ class gameroom {
             this.isGrouping = false;
         else
             this.apprentice.setModeSync(m);
+    }
+    setCreativity(level){
+	console.log("set creativity level:" + level);
+    	this.apprentice.setCreativityLevel(level);
+	this.creativity = level;
     }
 }
 module.exports = gameroom;
