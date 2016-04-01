@@ -699,9 +699,12 @@ class SketchNet:
         data = []
         data.append(img)
         data = np.array(data)
-        data = data.reshape((1, 3, 224, 224))
+        data = data.reshape((-1, 3, 224, 224))
+	
+	data = data.astype(dtype='float')
+        print("Image shape after preprocessing: ", data.shape)
 
-        output = self.network.get_output_for(data)
+        #output = self.network.get_output_for(data)
         output = lasagne.layers.get_output(self.network,data,deterministic=True)
         #output = np.array(output)
         print(output)
@@ -773,31 +776,33 @@ s.run()
 
 
 # Debug Code to Test the accurcay of the model
-# from os import walk
-# from random import randint
+#from os import walk
+#from random import randint
 
 
 
-# testStart = SketchNet()
-# if testStart.load:
-#     count = 0.0
-#     corr = 0.0
-#     filepath = 'data/png/'
-#     diretories = []
-#     for (dirpath, dirnames, filenames) in walk(filepath):
-#         for dirname in dirnames:
-#             for (dirpath2, dirnames2, filenames2) in walk(filepath + dirname):
-#                 if count > 100:
-#                     break
-#                 rand1 = randint(0, 40)
-#                 rand2 = randint(0, 40)
-#                 result1 = testStart.recognize_Image(filepath + dirname + '/' + filenames2[rand1])
-#                 result2 = testStart.recognize_Image(filepath + dirname + '/' + filenames2[rand2])
-#                 count = count + 2
-#                 if result1 == dirname:
-#                     corr = corr + 1
-#                 if result2 == dirname:
-#                     corr = corr + 1
-#                 accuracy = corr / count
-#                 print(accuracy)
-#         break
+#testStart = SketchNet()
+#print("loading finished")
+#if testStart.load:
+#    count = 0.0
+#    corr = 0.0
+#    filepath = 'data/png/'
+#    diretories = []
+#    for (dirpath, dirnames, filenames) in walk(filepath):
+#        dirnames.sort()
+#	for dirname in dirnames:
+#            for (dirpath2, dirnames2, filenames2) in walk(filepath + dirname):
+#                if count > 200:
+#                    break
+#                rand1 = randint(0, 40)
+#                rand2 = randint(0, 40)
+#                result1 = testStart.recognize_Image(filepath + dirname + '/' + filenames2[rand1])
+#                result2 = testStart.recognize_Image(filepath + dirname + '/' + filenames2[rand2])
+#                count = count + 2
+#                if result1 == dirname:
+#                    corr = corr + 1
+#                if result2 == dirname:
+#                    corr = corr + 1
+#                accuracy = corr / count
+#                print(accuracy)
+#        break
