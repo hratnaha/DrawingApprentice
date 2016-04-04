@@ -13,9 +13,9 @@
     <link rel="stylesheet" href="fonts/font-awesome/css/font-awesome.min.css">
 
     <!-- Montserrat Sans -->
-    <link href='http://fonts.googleapis.com/css?family=Montserrat:400, 700' rel='stylesheet' type='text/css'>        
+    <link href='https://fonts.googleapis.com/css?family=Montserrat:400, 700' rel='stylesheet' type='text/css'>        
     <!-- Lato Font -->
-    <link href='http://fonts.googleapis.com/css?family=Lato:300,700' rel='stylesheet' type='text/css'>
+    <link href='https://fonts.googleapis.com/css?family=Lato:300,700' rel='stylesheet' type='text/css'>
 
     <!-- Stylesheet -->
     <link href="css/style.css" rel="stylesheet">
@@ -114,6 +114,9 @@
                     <img class="room-thumb" alt="" src={{room.thumb}} />
                     <div class="room-name">{{room.name}}</div>
                     <div class="room-host">Number of Players: {{room.players.length}}</div>
+		    <% if(userid == "105775598272793470839"){ %>
+			<button class="btn btn-success btn-lg room-delete" ng-click="deleteRoom(room.id)">Delete</button>
+		    <% } %>
                     <button class="btn btn-success btn-lg room-join" ng-click="joinRoom(room.id)">Join</button>
                 </div>
           </div>
@@ -142,12 +145,14 @@
           </div>
           <div class="col-md-6 col-sm-6 col-xs-12">
             <div class="">
-            <p class="social-media">
+<!--            
+	    <p class="social-media">
               <a href="#" data-toggle="tooltip" title="twitter"><i class="fa fa-twitter"></i></a>
               <a href="#" data-toggle="tooltip" title="facebook"><i class="fa fa-facebook"></i></a>
               <a href="#" data-toggle="tooltip" title="linkedin"><i class="fa fa-linkedin"></i></a>
               <a href="#" data-toggle="tooltip" title="github"><i class="fa fa-github"></i></a>
             </p>
+--!>
          </div>
         </div>
       </div>  

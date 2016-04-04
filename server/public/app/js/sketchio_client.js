@@ -1,4 +1,5 @@
-var ioUri = "http://localhost:8080"; //replace with the Websocket URL
+var ioUri = "http://localhost:8080"; //"http://130.207.124.45"; //
+
 var output;
 var socket;
 var botCanvas = {};
@@ -22,8 +23,10 @@ function initWebSocket() {
     botCanvas.setAttribute('height', container.offsetHeight);
 
     output = document.getElementById("output");
-    socket = io.connect(ioUri);
 
+    socket = io.connect(ioUri); // for local version
+    //socket = io.connect(ioUri, { 'path': '/DrawingApprentice/socket.io' }); // for adam server
+    
     socket.on('newconnection', onOpen);
     socket.on('respondStroke', onNewStroke);
     socket.on('allData', onDataReceived);
@@ -329,12 +332,14 @@ function onUpdateScore(newScore){
     var score = JSON.parse(newScore);
     totalScore = score; 
     console.log("Inside update score:" + " " + totalScore);
-     document.getElementById("score").innerHTML = "total score = " + totalScore;
-	console.log("totalScore is:" + " " + totalScore);
+    // document.getElementById("score").innerHTML = "total score = " + totalScore;
+	//console.log("totalScore is:" + " " + totalScore);
 }
 
 function onClassifyObject(label){
-    var newLabel = JSON.parse(label)
-    document.getElementById('label').value = newLabel;
+    console.log("recognized as: ");
+    console.log(label);
+    //var newLabel = JSON.parse(label)
+    //document.getElementById('label').value = newLabel;
 }
 
