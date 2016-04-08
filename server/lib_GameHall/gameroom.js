@@ -237,7 +237,9 @@ class gameroom {
 		
 		if(thisobj.creativity == 100){
                 console.log("try save for turn");
-		var offsetObj = {x: thisobj.userTurnStrokes.bound.right, y: thisobj.userTurnStrokes.bound.top};
+		//var offsetObj = {x: thisobj.userTurnStrokes.bound.right, y: thisobj.userTurnStrokes.bound.top};
+		var node = thisobj.quadtree.findLeastUsageOnLevel(5);
+		var offsetObj = {x: node.bounds.x, y: node.bounds.y+50};
 		canvas2D.SaveToFile(turnContext, thisobj.roomInfo.id + "-tmp", false, function(filename, err1){
                     if(!err1){
                         // recognize the image using sketchClass
@@ -251,6 +253,7 @@ class gameroom {
                                             try{
 					    for(var i=0;i < strokes.length; i++){
                                                 var stroke = strokes[i];
+						insertLineSegments(thisobj.quadtree, stroke);
                                                 var resultmsg = JSON.stringify(stroke);
                                                 if(thisobj.sockets.length > 0){
 						    console.log("prepare to send lines back through sockets: " + resultmsg);

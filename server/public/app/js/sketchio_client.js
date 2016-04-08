@@ -118,13 +118,39 @@ function MoveLogoBack () {
 function onNewStroke(data) {
 	moveLogo.style.left = "90%";
 	moveLogo.style.top = "3%";
-    console.log(data);
+    
     // decode the data into the new stroke
     var botStroke = JSON.parse(data);
-    curStroke.push(botStroke);
-	logo.style.position = "absolute";
-	logo.style.left = data.x;
-	logo.style.top = data.y;
+
+	if(botStroke.data){
+		$("#tmp_path").attr("d", botStroke.data);
+		var path = $('#tmp_path').get(0);
+		var pathLen = path.getTotalLength();
+
+		var curLength = 0;
+		var pts = [];
+
+		while(curLength < pathLen){
+			var pt = path.getPointAtLength(curLength);
+			var newx = pt.x + botStroke.offset.x;
+			var newy = pt.y + botStroke.offset.y;
+			pts.push({x: newx, y: newy});
+			curLength += 7;
+		}
+		var pt = path.getPointAtLength(pathLen);
+		var newx = pt.x + botStroke.offset.x;
+		var newy = pt.y + botStroke.offset.y;
+		pts.push({x:newx, y:newy});
+
+		console.log(pts);
+		botStroke.allPoints = pts;
+		
+	}
+		curStroke.push(botStroke);
+		logo.style.position = "absolute";
+		logo.style.left = data.x;
+		logo.style.top = data.y;
+	
 }
 
 function onOpen(data) {

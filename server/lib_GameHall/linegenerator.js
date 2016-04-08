@@ -21,6 +21,7 @@ module.exports = {
                 var strokes = JSON.parse(data);
 
                 for(var i=0;i < strokes.length; i++){
+		    strokes[i]['offset'] = offset;
                     strokes[i]['data'] = strokes[i].data;
                     strokes[i]['lineWidth'] = 2;
                     strokes[i]['color'] = {r: 0, g: 0, b: 0, a: 0};
