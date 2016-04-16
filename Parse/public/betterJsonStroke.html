@@ -1,0 +1,59 @@
+<html>
+<head>
+    <script src="https://code.jquery.com/jquery-1.12.0.min.js"></script>
+    <script src="https://cdn.socket.io/socket.io-1.4.5.js"></script>
+    
+    
+</head>
+<body>
+    <svg version="1.1" id="pathbuilder" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" style="visibility: hidden;">
+        <path id="tmp_path" d="" />
+    </svg>
+    <script>
+        
+var ioUri = "http://localhost:8080";
+var socket = io(ioUri);
+socket.on('connection', onOpen);
+        
+function onOpen(data) {
+    var hello = { hello : 'hello' };
+
+    socket.emit("onOpen", hello);
+}
+
+socket.on('newStroke', function(data){
+    var input = JSON.parse(data);
+    
+    for(var i=0;i<input.strokes.length;i++){
+        if(input.strokes[i].data){
+            $("#tmp_path").attr("d", input.strokes[i].data);
+            var path = $('#tmp_path').get(0);
+            var pathLen = path.getTotalLength();
+
+            var curLength = 0;
+            var pts = [];
+
+            while(curLength < pathLen){
+                    var pt = path.getPointAtLength(curLength);
+                    var newx = pt.x;
+                    var newy = pt.y;
+                    pts.push({x: newx, y: newy});
+                    curLength += 7;
+            }
+            var pt = path.getPointAtLength(pathLen);
+            var newx = pt.x;
+            var newy = pt.y;
+            pts.push({x:newx, y:newy});
+            input.strokes[i].points = pts;
+
+        }
+    }
+
+    var resultMsg = JSON.stringify(input);
+    socket.emit('respond', resultMsg);
+});
+        
+    </script>
+    
+</body>
+</html>

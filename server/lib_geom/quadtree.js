@@ -240,5 +240,25 @@ class Quadtree {
 
 		this.nodes = [];
 	}
+    
+    findLeastUsageOnLevel ( level ){
+        var objCount = this.max_objects + 1;
+        var selNode = this.nodes[0];
+        for(var i=0;i<this.nodes.length;i++)
+        {
+            var curnode = this.nodes[i];
+            if(curnode.objects.length < objCount){
+                objCount = curnode.objects.length;
+                selNode = this.nodes[i];
+            }
+        }
+        
+        if(this.level < level && this.level <= this.max_levels && selNode){
+            return selNode.findLeastUsageOnLevel(level);
+        }else if(!selNode)
+            return this;
+        else
+            return selNode;
+    }
 }
 module.exports = Quadtree;
