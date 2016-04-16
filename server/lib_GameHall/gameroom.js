@@ -24,7 +24,9 @@ function insertLineSegments(quadtree, stroke){
             var bound = {x: left, y: top, width: bwidth, height: bheight, fromline: stroke};
             quadtree.insert(bound);
         }
-    }
+	console.log("add a stroke into the quadtree!!");
+    }else
+	console.log("couldn't add the stroke into the quadtree!!");
 }
 function CreatePacketPoint(newpt) {
     // construct a new packet point
@@ -235,11 +237,17 @@ class gameroom {
                     });
                 }
 		
-		if(thisobj.creativity == 100){
+		if(thisobj.creativity > 90){
                 console.log("try save for turn");
 		//var offsetObj = {x: thisobj.userTurnStrokes.bound.right, y: thisobj.userTurnStrokes.bound.top};
 		var node = thisobj.quadtree.findLeastUsageOnLevel(5);
-		var offsetObj = {x: node.bounds.x, y: node.bounds.y+50};
+		var tolX = thisobj.canvasSize.width / 8;
+		var tolY = thisobj.canvasSize.height / 8;
+		var offsetX = node.bounds.x + tolX > thisobj.canvasSize.width ? node.bounds.x - tolX : node.bounds.x;
+		var offsetY = node.bounds.y + tolY > thisobj.canvasSize.height ? node.bounds.y - tolY : node.bounds.y;
+		//offsetX = offsetX < tolX ? offsetX + tolX : offsetX;
+		offsetY = offsetY < tolY ? offsetY + tolY : offsetY;
+		var offsetObj = {x: offsetX, y: offsetY};
 		canvas2D.SaveToFile(turnContext, thisobj.roomInfo.id + "-tmp", false, function(filename, err1){
                     if(!err1){
                         // recognize the image using sketchClass
@@ -249,14 +257,16 @@ class gameroom {
                                 if(!err2){
                                     console.log("recognized result: " + result);
                                     generator.GetSketchesInCategory(result, offsetObj, function(strokes, err3){
-                                        if(!err3){
+                                        console.log(err3);
+					if(!err3){
+					    console.log(strokes);
                                             try{
 					    for(var i=0;i < strokes.length; i++){
                                                 var stroke = strokes[i];
 						insertLineSegments(thisobj.quadtree, stroke);
                                                 var resultmsg = JSON.stringify(stroke);
                                                 if(thisobj.sockets.length > 0){
-						    console.log("prepare to send lines back through sockets: " + resultmsg);
+						    //console.log("prepare to send lines back through sockets: " + resultmsg);
                                                     for(var j=0;j<thisobj.sockets.length;j++){
                                                         var tarso = thisobj.sockets[j];
 							tarso.emit('respondStroke', resultmsg);
@@ -278,7 +288,7 @@ class gameroom {
                         }
                     }
                 });
-
+		thisobj.precreativityLevel = 100; // hack for fix the bug
 		
                 // reset the user turn strokes
                 thisobj.userTurnStrokes.clear();
@@ -303,6 +313,9 @@ class gameroom {
                         thisobj.apprentice.getDecision(function (err, results) {
                             if (results != null) {
                                 var resultSize = results.sizeSync();
+				if(thisobj.precreativityLevel && thisobj.precreativityLevel > 90 )
+					thisobj.precreativityLevel = 0;
+				else{
                                 for (var j = 0; j < resultSize; j++) {
                                     // deal with the case when the subject switch between 
                                     // random mode and apprentice mode
@@ -337,6 +350,7 @@ class gameroom {
                                     thisobj.updateServerPic();
                                     thisobj.indexRLines++;
                                 }
+				}
                             }
                         });
                     break;
@@ -402,6 +416,10 @@ class gameroom {
 	console.log("set creativity level:" + level);
     	this.apprentice.setCreativityLevel(level);
 	this.creativity = level;
+	/*if(level == 100)
+		generator.mode = 2;
+	else
+		generator.mode = 1;*/
     }
 }
 module.exports = gameroom;

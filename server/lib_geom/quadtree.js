@@ -42,7 +42,7 @@ class Quadtree {
 	constructor( bounds, max_objects, max_levels, level, room, reach4thLevel ) {
 		
 		this.max_objects= max_objects || 10;
-		this.max_levels	= max_levels || 4;
+		this.max_levels	= max_levels || 10;
 		
 		this.level 		= level || 0;
 		this.bounds 	= bounds;
@@ -241,7 +241,7 @@ class Quadtree {
 		this.nodes = [];
 	}
 	findLeastUsageOnLevel ( level ){
-        	var objCount = this.max_objects + 1;
+        	var objCount = Number.MAX_VALUE;
         	var selNode = this.nodes[0];
         	for(var i=0;i<this.nodes.length;i++)
         	{
