@@ -24,9 +24,7 @@ function insertLineSegments(quadtree, stroke){
             var bound = {x: left, y: top, width: bwidth, height: bheight, fromline: stroke};
             quadtree.insert(bound);
         }
-	console.log("add a stroke into the quadtree!!");
-    }else
-	console.log("couldn't add the stroke into the quadtree!!");
+    }
 }
 function CreatePacketPoint(newpt) {
     // construct a new packet point
@@ -237,125 +235,113 @@ class gameroom {
                     });
                 }
 		
-		if(thisobj.creativity > 90){
-                console.log("try save for turn");
-		//var offsetObj = {x: thisobj.userTurnStrokes.bound.right, y: thisobj.userTurnStrokes.bound.top};
-		var node = thisobj.quadtree.findLeastUsageOnLevel(5);
-		var tolX = thisobj.canvasSize.width / 8;
-		var tolY = thisobj.canvasSize.height / 8;
-		var offsetX = node.bounds.x + tolX > thisobj.canvasSize.width ? node.bounds.x - tolX : node.bounds.x;
-		var offsetY = node.bounds.y + tolY > thisobj.canvasSize.height ? node.bounds.y - tolY : node.bounds.y;
-		//offsetX = offsetX < tolX ? offsetX + tolX : offsetX;
-		offsetY = offsetY < tolY ? offsetY + tolY : offsetY;
-		var offsetObj = {x: offsetX, y: offsetY};
-		canvas2D.SaveToFile(turnContext, thisobj.roomInfo.id + "-tmp", false, function(filename, err1){
-                    if(!err1){
-                        // recognize the image using sketchClass
-                         if(thisobj.sketchClassfier){
-                            thisobj.sketchClassfier.invoke("recognize_Image", filename, function(err2, result) {
-                                // report back to the client
-                                if(!err2){
-                                    console.log("recognized result: " + result);
-                                    generator.GetSketchesInCategory(result, offsetObj, function(strokes, err3){
-                                        console.log(err3);
-					if(!err3){
-					    console.log(strokes);
-                                            try{
-					    for(var i=0;i < strokes.length; i++){
-                                                var stroke = strokes[i];
-						insertLineSegments(thisobj.quadtree, stroke);
-                                                var resultmsg = JSON.stringify(stroke);
-                                                if(thisobj.sockets.length > 0){
-						    //console.log("prepare to send lines back through sockets: " + resultmsg);
-                                                    for(var j=0;j<thisobj.sockets.length;j++){
-                                                        var tarso = thisobj.sockets[j];
-							tarso.emit('respondStroke', resultmsg);
-							console.log("finish sending stroke");
+		        if(thisobj.creativity > 90){
+		            canvas2D.SaveToFile(turnContext, thisobj.roomInfo.id + "-tmp", false, function(filename, err1){
+                        if(!err1){
+                            // recognize the image using sketchClass
+                            if(thisobj.sketchClassfier){
+                                thisobj.sketchClassfier.invoke("recognize_Image", filename, function(err2, result) {
+                                    // report back to the client
+                                    if(!err2){
+                                        generator.GetSketchesInCategory(result, thisobj.quadtree, thisobj.canvasSize, function(strokes, err3){
+                                            console.log(err3);
+					                        if(!err3){
+					                            console.log(strokes);
+                                                try{
+					                                for(var i=0;i < strokes.length; i++){
+                                                        var stroke = strokes[i];
+						                                insertLineSegments(thisobj.quadtree, stroke);
+                                                        var resultmsg = JSON.stringify(stroke);
+                                                        if(thisobj.sockets.length > 0){
+						                                    //console.log("prepare to send lines back through sockets: " + resultmsg);
+                                                            for(var j=0;j<thisobj.sockets.length;j++){
+                                                                var tarso = thisobj.sockets[j];
+							                                    tarso.emit('respondStroke', resultmsg);
+							                                    console.log("finish sending stroke");
+                                                            }
+                                                        }else{
+						                                    console.log("prepare to send lines through so");
+                                                            so.emit('respondStroke', resultmsg);
+						                                }
                                                     }
-                                                }else{
-						    console.log("prepare to send lines through so");
-                                                    so.emit('respondStroke', resultmsg);
-						}
+					                            }catch(err4){
+					    	                        console.log(err4);
+					                            }
                                             }
-					    }catch(err4){
-					    	console.log(err4);
-					    }
-                                        }
-                                    });
-                                    so.emit('classifyObject', result);
-                                }
-                            });
-                        }
-                    }
-                });
-		thisobj.precreativityLevel = 100; // hack for fix the bug
-		
-                // reset the user turn strokes
-                thisobj.userTurnStrokes.clear();
-                }else{
-                switch(thisobj.roomtype){
-                    case enum_RoomType.recorded:
-                        if(thisobj.recordedData){
-                            
-                            for(var i = thisobj.numTurnStrokes; i>0;i--){
-                                var curStroke = thisobj.recordedData[thisobj.indexRLines];
-                                curStroke.color = thisobj.userStrokes[thisobj.indexRLines].color;
-                                curStroke.lineWidth = thisobj.userStrokes[thisobj.indexRLines].lineWidth;
-                                var resultmsg = JSON.stringify(curStroke);
-                                so.emit('respondStroke', resultmsg);
-                                thisobj.indexRLines++;
-                            }
-                            // update the server pic
-                            // thisobj.updateServerPic();
-                        }
-                    break;
-                    case enum_RoomType.apprentice:
-                        thisobj.apprentice.getDecision(function (err, results) {
-                            if (results != null) {
-                                var resultSize = results.sizeSync();
-				if(thisobj.precreativityLevel && thisobj.precreativityLevel > 90 )
-					thisobj.precreativityLevel = 0;
-				else{
-                                for (var j = 0; j < resultSize; j++) {
-                                    // deal with the case when the subject switch between 
-                                    // random mode and apprentice mode
-                                    var curStIndex = thisobj.indexRLines >= thisobj.userStrokes.length ?
-                                        thisobj.userStrokes.length - 1 : thisobj.indexRLines;
-                                    // get the stroke attributes from the corresponding user stroke  
-                                    var curStroke = thisobj.userStrokes[curStIndex];
-                                    var newpkpts = [];
-                                    var result = results.getSync(j);
-                                    for (var i = 0; i < result.sizeSync(); i++) {
-                                        var newpt = result.getSync(i);
-                                        newpkpts.push(CreatePacketPoint(newpt));
+                                        });
+                                        so.emit('classifyObject', result);
                                     }
-                                    var compStroke = JSON.parse(JSON.stringify(curStroke));
-                                    compStroke.allPoints = newpkpts;
-                                    compStroke.time = (new Date()).getTime();
-
-                                    // decode to JSON and send the message
-                                    var resultmsg = JSON.stringify(compStroke);
-                                    // and send it to all the players
-                                    if(thisobj.sockets.length > 0){
-                                        for(var i=0;i<thisobj.sockets.length;i++){
-                                            var tarso = thisobj.sockets[i];
-                                            tarso.emit('respondStroke', resultmsg);
-                                        }
-                                    }else
-                                        so.emit('respondStroke', resultmsg);
-                                    
-                                    thisobj.compStrokes.push(compStroke);
-                                    insertLineSegments(thisobj.quadtree, compStroke);
-                                    
-                                    thisobj.updateServerPic();
+                                });
+                            }
+                        }
+                    });
+		            thisobj.precreativityLevel = 100; // hack for fix the bug
+		
+                    // reset the user turn strokes
+                    thisobj.userTurnStrokes.clear();
+                }else{
+                    switch(thisobj.roomtype){
+                        case enum_RoomType.recorded:
+                            if(thisobj.recordedData){
+                                for(var i = thisobj.numTurnStrokes; i>0;i--){
+                                    var curStroke = thisobj.recordedData[thisobj.indexRLines];
+                                    curStroke.color = thisobj.userStrokes[thisobj.indexRLines].color;
+                                    curStroke.lineWidth = thisobj.userStrokes[thisobj.indexRLines].lineWidth;
+                                    var resultmsg = JSON.stringify(curStroke);
+                                    so.emit('respondStroke', resultmsg);
                                     thisobj.indexRLines++;
                                 }
-				}
+                                // update the server pic
+                                // thisobj.updateServerPic();
                             }
-                        });
-                    break;
-                }
-		}
+                        break;
+                        case enum_RoomType.apprentice:
+                            thisobj.apprentice.getDecision(function (err, results) {
+                                if (results != null) {
+                                    var resultSize = results.sizeSync();
+				                    if(thisobj.precreativityLevel && thisobj.precreativityLevel > 90 )
+                                        thisobj.precreativityLevel = 0;
+                                    else{
+                                        for (var j = 0; j < resultSize; j++) {
+                                            // deal with the case when the subject switch between 
+                                            // random mode and apprentice mode
+                                            var curStIndex = thisobj.indexRLines >= thisobj.userStrokes.length ?
+                                                thisobj.userStrokes.length - 1 : thisobj.indexRLines;
+                                            // get the stroke attributes from the corresponding user stroke  
+                                            var curStroke = thisobj.userStrokes[curStIndex];
+                                            var newpkpts = [];
+                                            var result = results.getSync(j);
+                                            for (var i = 0; i < result.sizeSync(); i++) {
+                                                var newpt = result.getSync(i);
+                                                newpkpts.push(CreatePacketPoint(newpt));
+                                            }
+                                            var compStroke = JSON.parse(JSON.stringify(curStroke));
+                                            compStroke.allPoints = newpkpts;
+                                            compStroke.time = (new Date()).getTime();
+
+                                            // decode to JSON and send the message
+                                            var resultmsg = JSON.stringify(compStroke);
+                                            // and send it to all the players
+                                            if(thisobj.sockets.length > 0){
+                                                for(var i=0;i<thisobj.sockets.length;i++){
+                                                    var tarso = thisobj.sockets[i];
+                                                    tarso.emit('respondStroke', resultmsg);
+                                                }
+                                            }else
+                                                so.emit('respondStroke', resultmsg);
+                                            
+                                            thisobj.compStrokes.push(compStroke);
+                                            insertLineSegments(thisobj.quadtree, compStroke);
+                                            
+                                            thisobj.updateServerPic();
+                                            thisobj.indexRLines++;
+                                        }
+				                    }
+                                }
+                            });
+                        break;
+                    }
+		        }
                 thisobj.numTurnStrokes = 0; // clean to 0;
             }, waitForTurn);
         }
