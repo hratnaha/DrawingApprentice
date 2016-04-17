@@ -246,7 +246,7 @@ class gameroom {
                                         generator.GetSketchesInCategory(result, thisobj.quadtree, thisobj.canvasSize, function(strokes, err3){
                                             console.log(err3);
 					                        if(!err3){
-					                            console.log(strokes);
+					                            //console.log(strokes);
                                                 try{
 					                                for(var i=0;i < strokes.length; i++){
                                                         var stroke = strokes[i];

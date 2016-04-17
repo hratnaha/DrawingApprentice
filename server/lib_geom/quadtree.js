@@ -174,7 +174,7 @@ class Quadtree {
 	 
 	 	this.objects.push( pRect );
 		
-		if( this.objects.length > this.max_objects && this.level < this.max_levels ) {
+		if( this.level < 3 /*force to split*/ || this.objects.length > this.max_objects && this.level < this.max_levels ) {
 			
 			//split if we don't already have subnodes
 			if( typeof this.nodes[0] === 'undefined' ) {
@@ -208,15 +208,14 @@ class Quadtree {
 			
 		//if we have subnodes ...
 		if( typeof this.nodes[0] !== 'undefined' ) {
-			
-			//if pRect fits into a subnode ..
+			console.log("find in subnode");
 			if( index !== -1 ) {
-				returnObjects = returnObjects.concat( this.nodes[index].retrieve( pRect ) );
+				returnObjects = this.nodes[index].retrieve( pRect );
 				
 			//if pRect does not fit into a subnode, check it against all subnodes
 			} else {
 				for( var i=0; i < this.nodes.length; i=i+1 ) {
-					returnObjects = returnObjects.concat( this.nodes[i].retrieve( pRect ) );
+					returnObjects = this.nodes[i].retrieve( pRect );
 				}
 			}
 		}

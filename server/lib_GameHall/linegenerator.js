@@ -32,8 +32,8 @@ function findLeastUsageInQuadtree(quadtree, box, canvasSize){
     var boxWidth = box.right - box.left;
     var boxHeight = box.bottom - box.top;
     
-    var widthInterval = (canvasSize.width - boxWidth) / 15;
-    var heightInterval = (canvasSize.height - boxHeight) / 15;
+    var widthInterval = (canvasSize.width - boxWidth) / 5;
+    var heightInterval = (canvasSize.height - boxHeight) / 5;
     var curXpos = 0;
     var curYpos = 0;
     var offset = {x: 0, y: 0};
@@ -45,15 +45,16 @@ function findLeastUsageInQuadtree(quadtree, box, canvasSize){
             y: curYpos,
             width: boxWidth,
             height: boxHeight};
-        
+	console.log("curBox:");
+	console.log(curBox);   
+	console.log("hit objects:");     
+
         var hitObjects = quadtree.retrieve(curBox);
-        
         if(hitObjects.length < minCount){
-            
             offset = {x: curXpos, y: curYpos};
-            minCount = hitObjects.Length;
+            minCount = hitObjects.length;
         }
-        
+        console.log(hitObjects.length); 
         curXpos = curXpos + widthInterval;
         if(curXpos >= canvasSize.width){
             curXpos = 0;
@@ -110,7 +111,7 @@ module.exports = {
                 // }
                 var strokes = JSON.parse(data).strokes;
                 var bbox = getBBox(strokes);
-                
+                 
                 var offset = findLeastUsageInQuadtree(quadtree, bbox, canvasSize);
                 offset = {
                     x: offset.x - bbox.x,
