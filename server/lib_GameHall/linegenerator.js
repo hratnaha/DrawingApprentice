@@ -32,36 +32,37 @@ function findLeastUsageInQuadtree(quadtree, box, canvasSize){
     var boxWidth = box.right - box.left;
     var boxHeight = box.bottom - box.top;
     
-    var widthInterval = (canvasSize.width - boxWidth) / 5;
-    var heightInterval = (canvasSize.height - boxHeight) / 5;
+    var widthInterval = (canvasSize.width - boxWidth) / 3;
+    var heightInterval = (canvasSize.height - boxHeight) / 3;
     var curXpos = 0;
-    var curYpos = 0;
+    var curYpos = 200; // account for the top bar
     var offset = {x: 0, y: 0};
     var minCount = Number.MAX_VALUE;
     
+    console.log(quadtree);
     while(curYpos < canvasSize.height){
         var curBox = {
             x: curXpos,
             y: curYpos,
             width: boxWidth,
             height: boxHeight};
-	console.log("curBox:");
-	console.log(curBox);   
-	console.log("hit objects:");     
+	//console.log("curBox:");
+	//console.log(curBox);   
+	//console.log("hit objects:");     
 
         var hitObjects = quadtree.retrieve(curBox);
         if(hitObjects.length < minCount){
             offset = {x: curXpos, y: curYpos};
             minCount = hitObjects.length;
         }
-        console.log(hitObjects.length); 
+        //console.log(hitObjects.length); 
         curXpos = curXpos + widthInterval;
         if(curXpos >= canvasSize.width){
             curXpos = 0;
             curYpos = curYpos + heightInterval;
         }
     }
-    
+    //console.log(offset);
     return offset;
 }
 
@@ -114,10 +115,11 @@ module.exports = {
                  
                 var offset = findLeastUsageInQuadtree(quadtree, bbox, canvasSize);
                 offset = {
-                    x: offset.x - bbox.x,
-                    y: offset.y - bbox.y
+                    x: offset.x - bbox.left,
+                    y: offset.y - bbox.top
                 };
-                
+                //console.log("use offset");
+		//console.log(offset);
                 for(var i=0;i < strokes.length; i++){
         		    strokes[i]['offset'] = offset;
                     strokes[i]['data'] = strokes[i].data;

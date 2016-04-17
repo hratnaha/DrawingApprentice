@@ -208,14 +208,14 @@ class Quadtree {
 			
 		//if we have subnodes ...
 		if( typeof this.nodes[0] !== 'undefined' ) {
-			console.log("find in subnode");
+			//console.log("find in subnode");
 			if( index !== -1 ) {
-				returnObjects = this.nodes[index].retrieve( pRect );
+				returnObjects = returnObjects.concat(this.nodes[index].retrieve( pRect ));
 				
 			//if pRect does not fit into a subnode, check it against all subnodes
 			} else {
 				for( var i=0; i < this.nodes.length; i=i+1 ) {
-					returnObjects = this.nodes[i].retrieve( pRect );
+					returnObjects = returnObjects.concat(this.nodes[i].retrieve( pRect ));
 				}
 			}
 		}
