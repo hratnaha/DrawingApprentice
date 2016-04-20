@@ -29,7 +29,8 @@ function initWebSocket() {
     socket.on('allData', onDataReceived);
     socket.on('disconnected', saveDataOnDb);
     socket.on('updateScore', onUpdateScore);
-    socket.on('classifyObject', onClassifyObject)
+    socket.on('classifyObject', onClassifyObject); 
+    socket.on('statsData', onStatsQuery); 
 
 	var logo = document.getElementById("logo");
 
@@ -95,7 +96,7 @@ function initWebSocket() {
 			MoveLogoBack();
         }
     }, 20);
-
+    //
 }
 
 
@@ -158,6 +159,80 @@ function onDataReceived(allData) {
     }, 500);
 }
 
+function onStatsQuery(allData) {
+    var userLines = JSON.parse(allData.userLines);
+    var computerLines = JSON.parse(allData.computerLines);
+    InitChart(userLines);
+    InitChart2(userLines); 
+    //var userLines = allData.userLines;
+    console.log(userLines);
+    console.log("First comp line length: " + computerLines[0].totalDistance);
+    var userLineCount = userLines.length;
+    var compLineCount = computerLines.length;
+    var avgUserLineLength = getAverageLength(userLines);
+    var userTimeData = getUserDrawingTime(userLines);
+    var averageLineTime = userTimeData.averageTime;
+    var totalDrawingTime = userTimeData.totalTime;
+    
+    
+    //var compLines = allData.compLines;
+    //var compLineCount = compLines.length; 
+    $("#myInnerModal").append("<p>Number of user lines: " + userLineCount + "</p><br>");
+    $("#myInnerModal").append("<p>Number of computer lines: " + compLineCount + "</p><br>");
+    $("#myInnerModal").append("<p>Average length of user lines: " + avgUserLineLength + "</p><br>");
+    $("#myInnerModal").append("<p>Average time spent on line: " + averageLineTime + "ms</p><br>");
+    $("#myInnerModal").append("<p>Total time spent drawing: " + totalDrawingTime + "ms</p><br>");
+    
+    //$("#myInnerModal").append("<p>Average length of computer lines: " + avgCompLineLength + "</p><br>");
+    
+    function getAverageLength(lines) {
+        console.log("Line: " + lines);
+        var sum = 0;
+        for (var i = 0; i < lines.length; i++) {
+            console.log("Total dist for line: " + lines[i].totalDistance);
+            sum = sum + lines[i].totalDistance;
+            console.log("New sum for averaging: " + sum);
+        }
+        var avg = sum / lines.length;
+        console.log(avg);
+        return avg;
+    }
+    
+    function getUserDrawingTime(lines) {
+        console.log("Trying to get user drawing time"); 
+        var totalTime = 0;
+        var totalWait = 0; 
+        for (var i = 0; i < lines.length; i++) {
+            var curLine = lines[i];
+            var points = curLine.allPoints;
+            var finalPoint = points[points.length - 1];
+            var finalTime = finalPoint.timestamp;
+            var elapsedTime = finalTime - points[0].timestamp;
+            console.log("Elapsed: " + elapsedTime);
+            totalTime = totalTime + elapsedTime;
+            /*
+            if(i >= 1) {
+                var previousLineEndPoint = line[i-1].allPoints[line[i-1].allPoints.length - 1];
+                var finalTimeStamp = finalPoint.timestamp;
+                var curStartPoint = line[i].allPoints[0]; 
+                var curStamp = curEndPoint.timestamp; 
+                var hangTime = curStamp - finalTimeStamp; 
+                totalWait = totalWait + hangTime; 
+                console.log("Wait:" + totalWait); 
+        }
+             * */
+        }
+        var averageTime = totalTime / lines.length;
+        var values = {
+            averageTime: averageTime, 
+            totalTime: totalTime
+        }
+        console.log("Total time: " + totalTime); 
+        return values;
+    }
+}
+
+
 function onTouchUp(message) {
     socket.emit('touchup', message);
 }
@@ -203,6 +278,11 @@ function changeGrouping(){
 
 function getData(){
     socket.emit('getData'); 
+}
+
+function getData_noSave() {
+    //console.log("in getData no save"); 
+    socket.emit('getData_noSave'); 
 }
 
 function setGroupLabel(label){

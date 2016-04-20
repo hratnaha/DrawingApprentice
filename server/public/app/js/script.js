@@ -250,6 +250,14 @@ function FullScreenCanvas() {
 
 
 }); //document ready
+
+
+function getStats() {
+    var allData = getData();
+    var userLines = allData.userLines;
+    var compLines = allData.computerLines;
+    console.log("userLines = " + userLines);
+}
 	 
 function componentToHex(c) {
     var hex = c.toString(16);
@@ -283,6 +291,9 @@ function clearcanvas() {
 		myCanvasContext3.clearRect(0, 0, canvas.width, canvas.height);
 }
 
+
+
+
 $("#grouping").click(function(){
 	if($("#grouping").hasClass("isGrouping")){
 		$("#grouping").removeClass("isGrouping");
@@ -294,3 +305,284 @@ $("#grouping").click(function(){
 	}
 });
 
+//D3 viz stuff
+function InitChart(data) {
+    //Drawing Activity over Time
+    $('#ActivityChart').append('<svg id="visualisation" width="1100" height="350"></svg>');
+
+    console.log("in the initChart, starting to build the data: ");
+    console.log(data); 
+    var startTime = data[0].allPoints[0].timestamp;
+    var lineData = []; 
+    console.log("Start time: " + startTime);
+    console.log("Data.length = " + data.length); 
+    
+
+    for (var i = 0; i < data.length; i++) {
+        //cycle through lines
+        //code for adding zero before line
+        //console.log("In the first for loop, i=" + i + "total length: " + data.length);
+        
+        if (i != 0) {
+                //if not the first line, then add zero points before point before line
+            var initialTime = data[i].allPoints[0].timestamp;
+            var normalTime = initialTime - startTime;
+            var newPoint = {
+                'x': normalTime - 1,
+                'y': 0
+            };
+            //console.log("Adding point before: " + newPoint);
+            lineData.push(newPoint); 
+        }
+        for (var j = 0; j < data[i].allPoints.length ; j++) {
+            //console.log("In the second loop, j=" + j + "length of j loop: " + data[i].allPoints.length); 
+            //cycle through points        
+            //normalize timestamps to first time stamp
+            var curPoint = data[i].allPoints[j];
+            var initialTime = curPoint.timestamp;
+            var normalTime = initialTime - startTime;
+
+            var newPoint = {
+                'x': normalTime,
+                'y': 1
+            };
+            lineData.push(newPoint); 
+
+
+        }
+        //console.log("LineData: ");
+        //console.log(lineData); 
+
+        //code for adding zero point after line
+        var lastPoint = data[i].allPoints[data[i].allPoints.length - 1];
+        //console.log("Trying to add in the zero point after, LastPoint: " + lastPoint); 
+        var initialTime = lastPoint.timestamp;
+        var normalTime = initialTime - startTime;
+        var newPoint = {
+            'x': normalTime + 1,
+            'y': 0
+        };
+        lineData.push(newPoint);         
+         
+    }
+
+    
+    
+    /*
+    var lineData = [{
+            'x': 1,
+            'y': 5
+        }, {
+            'x': 20,
+            'y': 20
+        }, {
+            'x': 40,
+            'y': 10
+        }, {
+            'x': 60,
+            'y': 40
+        }, {
+            'x': 80,
+            'y': 5
+        }, {
+            'x': 100,
+            'y': 60
+        }, {
+            'x': 150,
+            'y': 200
+        }
+    ];
+    
+    */
+    
+    var vis = d3.select("#visualisation"),
+        WIDTH = 1000,
+        HEIGHT = 300,
+        MARGINS = {
+            top: 20,
+            right: 20,
+            bottom: 20,
+            left: 50
+        },
+        xRange = d3.scale.linear().range([MARGINS.left, WIDTH - MARGINS.right]).domain([d3.min(lineData, function (d) {
+                return d.x;
+            }),
+            d3.max(lineData, function (d) {
+                return d.x;
+            })
+        ]),
+
+        yRange = d3.scale.linear().range([HEIGHT - MARGINS.top, MARGINS.bottom]).domain([d3.min(lineData, function (d) {
+                return d.y;
+            }),
+            d3.max(lineData, function (d) {
+                return d.y;
+            })
+        ]),
+
+        xAxis = d3.svg.axis()
+      .scale(xRange)
+      .tickSize(5)
+      .tickSubdivide(false),
+
+        yAxis = d3.svg.axis()
+      .scale(yRange)
+      .tickSize(5)
+      .orient("left")
+      .tickSubdivide(true);
+    
+    
+    vis.append("svg:g")
+    .attr("class", "x axis")
+    .attr("transform", "translate(0," + (HEIGHT - MARGINS.bottom) + ")")
+    .call(xAxis);
+    
+    vis.append("svg:g")
+    .attr("class", "y axis")
+    .attr("transform", "translate(" + (MARGINS.left) + ",0)")
+    .call(yAxis);
+    
+    // now add titles to the axes
+    vis.append("text")
+            .attr("text-anchor", "middle")// this makes it easy to centre the text as the transform is applied to the anchor
+            .attr("transform", "translate(" + (20 / 2) + "," + (HEIGHT / 2) + ")rotate(-90)")// text is drawn off the screen top left, move down and out and rotate
+            .text("Active or Not");
+    vis.append("text")
+            .attr("text-anchor", "middle")// this makes it easy to centre the text as the transform is applied to the anchor
+            .attr("transform", "translate(" + (WIDTH / 2) + "," + (15 + HEIGHT - (1 / 3)) + ")")// centre below axis
+            .text("Time (ms)");
+    
+    var lineFunc = d3.svg.line()
+  .x(function (d) {
+        return xRange(d.x);
+    })
+  .y(function (d) {
+        return yRange(d.y);
+    })
+  .interpolate('linear');
+    
+    vis.append("svg:path")
+  .attr("d", lineFunc(lineData))
+  .attr("stroke", "blue")
+  .attr("stroke-width", 2)
+  .attr("fill", "none");
+
+}
+
+function InitChart2(data) {
+    //line length over line order
+    $('#LengthChart').append('<svg id="visualisation2" width="1100" height="350"></svg>');
+    var lineData = [];
+
+    for (var i = 0; i < data.length; i++) {
+        //cycle through lines to find their length 
+        var length = data[i].totalDistance;
+        var newPt = {
+            'x': i,
+            'y': length
+        }
+        lineData.push(newPt);
+        console.log(lineData); 
+    }
+   
+    
+    
+    /*
+    var lineData = [{
+            'x': 1,
+            'y': 5
+        }, {
+            'x': 20,
+            'y': 20
+        }, {
+            'x': 40,
+            'y': 10
+        }, {
+            'x': 60,
+            'y': 40
+        }, {
+            'x': 80,
+            'y': 5
+        }, {
+            'x': 100,
+            'y': 60
+        }, {
+            'x': 150,
+            'y': 200
+        }
+    ];
+    
+    */
+    
+    var vis = d3.select("#visualisation2"),
+        WIDTH = 1000,
+        HEIGHT = 300,
+        MARGINS = {
+            top: 20,
+            right: 20,
+            bottom: 20,
+            left: 50
+        },
+        xRange = d3.scale.linear().range([MARGINS.left, WIDTH - MARGINS.right]).domain([d3.min(lineData, function (d) {
+                return d.x;
+            }),
+            d3.max(lineData, function (d) {
+                return d.x;
+            })
+        ]),
+
+        yRange = d3.scale.linear().range([HEIGHT - MARGINS.top, MARGINS.bottom]).domain([d3.min(lineData, function (d) {
+                return d.y;
+            }),
+            d3.max(lineData, function (d) {
+                return d.y;
+            })
+        ]),
+
+        xAxis = d3.svg.axis()
+      .scale(xRange)
+      .tickSize(5)
+      .tickSubdivide(true),
+
+        yAxis = d3.svg.axis()
+      .scale(yRange)
+      .tickSize(5)
+      .orient("left")
+      .tickSubdivide(true);
+    
+    
+    vis.append("svg:g")
+    .attr("class", "x axis")
+    .attr("transform", "translate(0," + (HEIGHT - MARGINS.bottom) + ")")
+    .call(xAxis);
+    
+    vis.append("svg:g")
+    .attr("class", "y axis")
+    .attr("transform", "translate(" + (MARGINS.left) + ",0)")
+    .call(yAxis);
+    
+    vis.append("text")
+            .attr("text-anchor", "middle")// this makes it easy to centre the text as the transform is applied to the anchor
+            .attr("transform", "translate(" + (20 / 2) + "," + (HEIGHT / 2) + ")rotate(-90)")// text is drawn off the screen top left, move down and out and rotate
+            .text("Line Length");
+    vis.append("text")
+            .attr("text-anchor", "middle")// this makes it easy to centre the text as the transform is applied to the anchor
+            .attr("transform", "translate(" + (WIDTH / 2) + "," + (15 + HEIGHT - (1/ 3)) + ")")// centre below axis
+            .text("Line Number");
+    
+    var lineFunc = d3.svg.line()
+  .x(function (d) {
+        return xRange(d.x);
+    })
+  .y(function (d) {
+        return yRange(d.y);
+    })
+  .interpolate('linear');
+    
+    vis.append("svg:path")
+  .attr("d", lineFunc(lineData))
+  .attr("stroke", "blue")
+  .attr("stroke-width", 2)
+  .attr("fill", "none");
+
+}

@@ -180,25 +180,25 @@ io.on('connection', function (so) {
     // set up closure varialbes
     var utilDatabase = require('./libDatabase');
     var apprentice;
-    var room;
+    var room; //this is the game room, grab the data from here rather than apprentice 
     var userProfile;
     var sessionID;
     var totalScore = 0;
     
     console.log("new client connected");
-
+    
     so.emit('newconnection', { hello: "world" });
-
+    
     function onOpen(hello) {
         if (hello) {
             var thisPlayer;
-            if(onlineUsers[hello.user.id]){
+            if (onlineUsers[hello.user.id]) {
                 thisPlayer = onlineUsers[hello.user.id];
                 room = curRooms[thisPlayer.curRoom];
                 room.sockets.push(so);
             }
-
-            if(!room){
+            
+            if (!room) {
                 apprentice = new Apprentice();
                 room = new Room(null, apprentice, sketchClassfier);
             }
@@ -212,11 +212,11 @@ io.on('connection', function (so) {
             utilDatabase.initializeParameters(userProfile, sessionID, apprentice, room.canvasSize);
         }
     }
-
+    
     function getData() {
         var userLines;
         var computerLines;
-
+        
         apprentice.getUserLines(function (err, item) {
             if (err) {
                 console.log(err);
@@ -226,7 +226,7 @@ io.on('connection', function (so) {
                 afterUserLines();
             }
         });
-
+        
         function afterUserLines() {
             apprentice.getComputerLines(function (err, item) {
                 if (err) {
@@ -237,17 +237,60 @@ io.on('connection', function (so) {
                 }
             });
         }
-
+        
         function emitData() {
             var allData = {
                 userLines: userLines,
                 computerLines: computerLines, 
                 labeledGroups: apprentice.labeledGroups
             };
-
+            
             so.emit('allData', allData);
         }
     }
+    
+    function getData_noSave() {
+        //console.log("In getData_before");
+        
+        //instead of calling apprentice, grab data from room; 
+        //obj rec data is stored in the room, not apprentice 
+        //room.compStrokes
+        //!need array of recognizedObjects
+        
+        var userLines;
+        var computerLines;
+        
+        apprentice.getUserLines(function (err, item) {
+            if (err) {
+                console.log(err);
+
+            } else {
+                userLines = item;
+                afterUserLines();
+            }
+        });
+        
+        function afterUserLines() {
+            apprentice.getComputerLines(function (err, item) {
+                if (err) {
+                    console.log(err);
+                } else {
+                    computerLines = item;
+                    emitData();
+                }
+            });
+        }
+        
+        function emitData() {
+            var allData = {
+                userLines: userLines,
+                computerLines: computerLines, 
+                labeledGroups: apprentice.labeledGroups
+            };
+            
+            so.emit('statsData', allData);
+        }
+}
 
     function onNewStrokeReceived(data) {
         var d = JSON.parse(data);
@@ -315,6 +358,7 @@ io.on('connection', function (so) {
     so.on('clear', onClear);
     so.on('submit', submitResult);
     so.on('vote', vote);
+    so.on('getData_noSave', getData_noSave);
 });
 //===================== Finished Socket io server Set Up ====================\\
 
