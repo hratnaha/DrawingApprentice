@@ -5,7 +5,7 @@ server/.ntvs_analysis.dat
 server/.ntvs_analysis.dat.tmp
 server/DrawingApprenticeServer.v12.suo
 server/bin/Microsoft.NodejsTools.WebRole.dll
-Iconr
+*./Iconr
 Cornucopia/Iconr
 Cornucopia/cornucopia/Iconr
 Cornucopia/cornucopia-lib/Iconr
@@ -243,3 +243,21 @@ Parse/obj/Debug/JsonParse.njsprojResolveAssemblyReference.cache
 Parse/test1.txt
 server/session_pic/LHy9fI4RsOWPherzFhvmtOXfv9Nt6dmN.png
 server/session_pic/
+Cornucopia
+server/public
+./Iconr
+*.
+DApp Website (old)/Iconr
+Parse/Iconr
+Parse/.vs/Iconr
+Parse/.vs/config/Iconr
+Parse/.vscode/Iconr
+server/.vscode/Iconr
+server/configuration/Iconr
+server/jars/Iconr
+server/lib_GameHall/Iconr
+server/lib_GameHall/prev_session/Iconr
+server/lib_geom/Iconr
+server/views/Iconr
+SketchClassifier/Iconr
+Website/Iconr
