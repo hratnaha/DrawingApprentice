@@ -19,14 +19,23 @@ import theano.tensor as T
 from image import ImageDataGenerator
 
 import lasagne
-
+from lasagne.layers import InputLayer
+from lasagne.layers import DenseLayer
+from lasagne.layers import ConcatLayer
+from lasagne.layers import NonlinearityLayer
+from lasagne.layers import GlobalPoolLayer
+from lasagne.layers.conv import Conv2DLayer as ConvLayer
+from lasagne.layers.pool import MaxPool2DLayer as PoolLayerDNN
+from lasagne.layers import MaxPool2DLayer as PoolLayer
+from lasagne.layers import LocalResponseNormalization2DLayer as LRNLayer
+from lasagne.nonlinearities import softmax, linear
+from lasagne.layers import DropoutLayer
 
 # ################## Download and prepare the MNIST dataset ##################
 # This is just some way of getting the MNIST dataset from an online location
 # and loading it into numpy arrays. It doesn't involve Lasagne at all.
 
-num_categories = 50
-
+num_categories = 100
 batch_size = 50
 
 categories = ['airplane',    'alarm clock',    'angel',    'ant',    'apple',    'arm',    'armchair',    'ashtray',    'axe',    'backpack',    'banana',    'barn',    'baseball bat',    'basket',    'bathtub',    'bear (animal)',    'bed',    'bee',    'beer-mug',    'bell',    'bench',    'bicycle',    'binoculars',    'blimp',    'book',    'bookshelf',    'boomerang',    'bottle opener',    'bowl',    'brain',    'bread',    'bridge',    'bulldozer',    'bus',    'bush',    'butterfly',    'cabinet',    'cactus',    'cake',    'calculator',    'camel',    'camera',    'candle',    'cannon',    'canoe',    'car (sedan)',    'carrot',    'castle',    'cat',    'cell phone',    'chair',    'chandelier',    'church',    'cigarette',    'cloud',    'comb',    'computer monitor',    'computer-mouse',    'couch',    'cow',    'crab',    'crane (machine)',    'crocodile',    'crown',    'cup',    'diamond',    'dog',    'dolphin',    'donut',    'door',    'door handle',    'dragon',    'duck',    'ear',    'elephant',    'envelope',    'eye',    'eyeglasses',    'face',    'fan',    'feather',    'fire hydrant',    'fish',    'flashlight',    'floor lamp',    'flower with stem',    'flying bird',    'flying saucer',    'foot',    'fork',    'frog',    'frying-pan',    'giraffe',    'grapes',    'grenade',    'guitar',    'hamburger',    'hammer',    'hand',    'harp',    'hat',    'head',    'head-phones',    'hedgehog',    'helicopter',    'helmet',    'horse',    'hot air balloon',    'hot-dog',    'hourglass',    'house',    'human-skeleton',    'ice-cream-cone',    'ipod',    'kangaroo',    'key',    'keyboard',    'knife',    'ladder',    'laptop',    'leaf',    'lightbulb',    'lighter',    'lion',    'lobster',    'loudspeaker',    'mailbox',    'megaphone',    'mermaid',    'microphone',    'microscope',    'monkey',    'moon',    'mosquito',    'motorbike',    'mouse (animal)',    'mouth',    'mug',    'mushroom',    'nose',    'octopus',    'owl',    'palm tree',    'panda',    'paper clip',    'parachute',    'parking meter',    'parrot',    'pear',    'pen',    'penguin',    'person sitting',    'person walking',    'piano',    'pickup truck',    'pig',    'pigeon',    'pineapple',    'pipe (for smoking)',    'pizza',    'potted plant',    'power outlet',    'present',    'pretzel',    'pumpkin',    'purse',    'rabbit',    'race car',    'radio',    'rainbow',    'revolver',    'rifle',    'rollerblades',    'rooster',    'sailboat',    'santa claus',    'satellite',    'satellite dish',    'saxophone',    'scissors',    'scorpion',    'screwdriver',    'sea turtle',    'seagull',    'shark',    'sheep',    'ship',    'shoe',    'shovel',    'skateboard',    'skull',    'skyscraper',    'snail',    'snake',    'snowboard',    'snowman',    'socks',    'space shuttle',    'speed-boat',    'spider',    'sponge bob',    'spoon',    'squirrel',    'standing bird',    'stapler',    'strawberry',    'streetlight',    'submarine',    'suitcase',    'sun',    'suv',    'swan',    'sword',    'syringe',    't-shirt',    'table',    'tablelamp',    'teacup',    'teapot',    'teddy-bear',    'telephone',    'tennis-racket',    'tent',    'tiger',    'tire',    'toilet',    'tomato',    'tooth',    'toothbrush',    'tractor',    'traffic light',    'train',    'tree',    'trombone',    'trousers',    'truck',    'trumpet',    'tv',    'umbrella',    'van',    'vase',    'violin',    'walkie talkie',    'wheel',    'wheelbarrow',    'windmill',    'wine-bottle',    'wineglass',    'wrist-watch',    'zebra']
@@ -579,6 +588,58 @@ def build_model_vgg16(input_var=None):
     net['prob'] = NonlinearityLayer(net['fc8'], softmax)
 
     return net['prob']
+
+def build_model_VGG_CNN_S(input_var=None):
+    net = {}
+
+    net['input'] = InputLayer((None, 3, 224, 224), input_var=input_var)
+    net['conv1'] = ConvLayer(net['input'],
+                             num_filters=96,
+                             filter_size=7,
+                             stride=2,
+                             flip_filters=False)
+    # caffe has alpha = alpha * pool_size
+    #net['norm1'] = NormLayer(net['conv1'], alpha=0.0001)
+    net['pool1'] = PoolLayer(net['conv1'],
+                             pool_size=3,
+                             stride=3,
+                             ignore_border=False)
+    net['conv2'] = ConvLayer(net['pool1'],
+                             num_filters=256,
+                             filter_size=5,
+                             flip_filters=False)
+    net['pool2'] = PoolLayer(net['conv2'],
+                             pool_size=2,
+                             stride=2,
+                             ignore_border=False)
+    net['conv3'] = ConvLayer(net['pool2'],
+                             num_filters=512,
+                             filter_size=3,
+                             pad=1,
+                             flip_filters=False)
+    net['conv4'] = ConvLayer(net['conv3'],
+                             num_filters=512,
+                             filter_size=3,
+                             pad=1,
+                             flip_filters=False)
+    net['conv5'] = ConvLayer(net['conv4'],
+                             num_filters=512,
+                             filter_size=3,
+                             pad=1,
+                             flip_filters=False)
+    net['pool5'] = PoolLayer(net['conv5'],
+                             pool_size=3,
+                             stride=3,
+                             ignore_border=False)
+    net['fc6'] = DenseLayer(net['pool5'], num_units=4096)
+    net['drop6'] = DropoutLayer(net['fc6'], p=0.5)
+    net['fc7'] = DenseLayer(net['drop6'], num_units=4096)
+    net['drop7'] = DropoutLayer(net['fc7'], p=0.5)
+    net['fc8'] = DenseLayer(net['drop7'], num_units=num_categories, nonlinearity=None)
+    net['prob'] = NonlinearityLayer(net['fc8'], softmax)
+
+    return net['prob']
+
 # ############################# Batch iterator ###############################
 # This is just a simple helper function iterating over training data in
 # mini-batches of a particular size, optionally in random order. It assumes
@@ -610,13 +671,20 @@ class SketchNet:
         startTime = time.time()
 
         img = io.imread(filePath,as_grey=True)
+        #img = io.imread(filePath,as_grey=True)
         #img = io.imread('airplane2.jpg')
         #img = filters.sobel(img)
-        img = color.rgb2grey(img)
+        #img = color.rgb2grey(img)
 
         img = sp.imresize(img, (224, 224))
         #img = img - np.median(img,axis=None,out=None,overwrite_input=False,keepdims=True)
-        img = img - np.mean(img)
+        img = img[:, :, np.newaxis]
+        img = np.repeat(img, 3, axis=2)
+        img = np.swapaxes(img, 2, 0)
+        img = img.flatten() #reshape((9216))
+        img = np.abs(img - np.mean(img))
+
+        #img = img - np.mean(img)
         # np.mean(img,axis=None,dtype=None,out=None,keepdims=True)
         #to save features
         # import matplotlib.pyplot as plt
@@ -626,14 +694,20 @@ class SketchNet:
         #end save
            # imgflip = np.fliplr(img)
         #io.imshow(img)
-        img = img.flatten()
+        #img = img.flatten()
 
         data = []
         data.append(img)
-        feature = np.array(data)
-        feature = feature.reshape((-1, 1, 224, 224))
-        output = lasagne.layers.get_output(self.network,feature,deterministic=True)
+        data = np.array(data)
+        data = data.reshape((-1, 3, 224, 224))
+	
+	data = data.astype(dtype='float')
+        print("Image shape after preprocessing: ", data.shape)
+
+        #output = self.network.get_output_for(data)
+        output = lasagne.layers.get_output(self.network,data,deterministic=True)
         #output = np.array(output)
+        print(output)
         classes = np.argmax(output.eval())
         duration = time.time() - startTime
         print(categories[classes])
@@ -654,9 +728,9 @@ class SketchNet:
         # Create neural network model (depending on first command line parameter)
         print("Loading model...")
         #network = build_cnn(input_var)
-        network = build_model_vgg16(input_var)
+        network = build_model_VGG_CNN_S(input_var)
         #load weights from file
-        param = np.load('model_VGG_all.npz')
+        param = np.load('model_VGGCNN.npz')
         lasagne.layers.set_all_param_values(network, param['arr_0'])
         print("loaded paramters from saved model")
         self.load = True
@@ -702,31 +776,33 @@ s.run()
 
 
 # Debug Code to Test the accurcay of the model
-# from os import walk
-# from random import randint
+#from os import walk
+#from random import randint
 
 
 
-# testStart = SketchNet()
-# if testStart.load:
-#     count = 0.0
-#     corr = 0.0
-#     filepath = 'data/png/'
-#     diretories = []
-#     for (dirpath, dirnames, filenames) in walk(filepath):
-#         for dirname in dirnames:
-#             for (dirpath2, dirnames2, filenames2) in walk(filepath + dirname):
-#                 if count > 100:
-#                     break
-#                 rand1 = randint(0, 40)
-#                 rand2 = randint(0, 40)
-#                 result1 = testStart.recognize_Image(filepath + dirname + '/' + filenames2[rand1])
-#                 result2 = testStart.recognize_Image(filepath + dirname + '/' + filenames2[rand2])
-#                 count = count + 2
-#                 if result1 == dirname:
-#                     corr = corr + 1
-#                 if result2 == dirname:
-#                     corr = corr + 1
-#                 accuracy = corr / count
-#                 print(accuracy)
-#         break
+#testStart = SketchNet()
+#print("loading finished")
+#if testStart.load:
+#    count = 0.0
+#    corr = 0.0
+#    filepath = 'data/png/'
+#    diretories = []
+#    for (dirpath, dirnames, filenames) in walk(filepath):
+#        dirnames.sort()
+#	for dirname in dirnames:
+#            for (dirpath2, dirnames2, filenames2) in walk(filepath + dirname):
+#                if count > 200:
+#                    break
+#                rand1 = randint(0, 40)
+#                rand2 = randint(0, 40)
+#                result1 = testStart.recognize_Image(filepath + dirname + '/' + filenames2[rand1])
+#                result2 = testStart.recognize_Image(filepath + dirname + '/' + filenames2[rand2])
+#                count = count + 2
+#                if result1 == dirname:
+#                    corr = corr + 1
+#                if result2 == dirname:
+#                    corr = corr + 1
+#                accuracy = corr / count
+#                print(accuracy)
+#        break

@@ -99,10 +99,12 @@ class gameroom {
         this.indexRLines = 0;   // for counting the number of recorded strokes used in the program
         this.indexPLines = 0;   // for counting the number strokes processed by apprentice
         this.isGrouping = false;
+        this.prevDrawn = 1;
         this.sketchClassfier = sketchClassfier;
         this.lineGenerator = lineGenerator;
         this.numTurnStrokes = 0;
         this.setRoomType(enum_RoomType.apprentice);
+        this.prevDrawn = 1;
     }
     createRoomInfo(){
         var roomInfo = {};
@@ -150,12 +152,12 @@ class gameroom {
             clearTimeout(this.timeout);
         }
     }
+
     addStroke(userStroke, so) {
     
     //this.players.forEach()
     //match the userID from userStroke.userID to the player IDs
         //
-
         // for closure variable for the "this" object in the call back
         var thisobj = this;
         this.numTurnStrokes++;
@@ -199,9 +201,9 @@ class gameroom {
                         //var resultmsg = JSON.stringify(userStroke);
                         //so.emit('respondStroke', resultmsg);
                         //this.apprentice.setModeSync(0);
-                }
-                thisobj.newGroup.push(newTurn);
-                console.log("Length of newGroup = " + thisobj.newGroup.length); 
+                    }
+                    thisobj.newGroup.push(newTurn);
+                    console.log("Length of newGroup = " + thisobj.newGroup.length); 
                 }
             });
         } else {
@@ -232,59 +234,52 @@ class gameroom {
                         y: thisobj.userTurnStrokes.bound.top - deltaHeight / 2
                     });
                 }
-                canvas2D.SaveToFile(turnContext, thisobj.roomInfo.id + "-tmp", false, function(filename, err1){
-                    if(!err1){
+		
+		        if(thisobj.creativity == 100){
+                    console.log("try save for turn");
+		            var offsetObj = {x: thisobj.userTurnStrokes.bound.right, y: thisobj.userTurnStrokes.bound.top};
+		            canvas2D.SaveToFile(turnContext, thisobj.roomInfo.id + "-tmp", false, function(filename, err1){
+                        if(!err1){
                         // recognize the image using sketchClass
-                         if(thisobj.sketchClassfier){
-                            thisobj.sketchClassfier.invoke("recognize_Image", filename, function(error2, result) {
+                            if(thisobj.sketchClassfier){
+                                thisobj.sketchClassfier.invoke("recognize_Image", filename, function(err2, result) {
                                 // report back to the client
-                                if(!error2){
-                                    console.log(result);
-                                    var result = generator.GetSketchesInCategory(result);
-                                    /*if(thisobj.lineGenerator){
-                                        thisobj.lineGenerator.invoke("completeSketch", result, filename, function(error3, result2){
-                                            if(!error3){
-                                                var newstroke = {};
-                                                newstroke['allPoints'] = [];
-                                                newstroke['lineWidth'] = 2;
-                                                newstroke['color'] = {r: 0, g: 1, b: 0};
-
-                                                var i = 0;
-                                                while(i<result2.length){
-                                                    if(result2[i].x > 0 && result2[i].y > 0){
-                                                        newstroke['allPoints'].push(result2[i]);
-                                                    }else{
-                                                        if(newstroke['allPoints'].length > 2){
-                                                            var resultmsg = JSON.stringify(newstroke);
-                                                            // and send it to all the players
-                                                            if(thisobj.sockets.length > 0){
-                                                                for(var j=0;j<thisobj.sockets.length;j++){
-                                                                    var tarso = thisobj.sockets[j];
-                                                                    tarso.emit('respondStroke', resultmsg);
-                                                                }
-                                                            }else
-                                                                so.emit('respondStroke', resultmsg);                        
+                                if(!err2){
+                                    console.log("recognized result: " + result);
+                                    generator.GetSketchesInCategory(result, offsetObj, function(strokes, err3){
+                                        if(!err3){
+                                            try{
+					                            for(var i=0;i < strokes.length; i++){
+                                                    var stroke = strokes[i];
+                                                    var resultmsg = JSON.stringify(stroke);
+                                                    if(thisobj.sockets.length > 0){
+						                                console.log("prepare to send lines back through sockets: " + resultmsg);
+                                                        for(var j=0;j<thisobj.sockets.length;j++){
+                                                            var tarso = thisobj.sockets[j];
+							                                tarso.emit('respondStroke', resultmsg);
+							                                console.log("finish sending stroke");
                                                         }
-                                                        newstroke = {};
-                                                        newstroke['allPoints'] = [];
-                                                        newstroke['lineWidth'] = 2;
-                                                        newstroke['color'] = {r: 0, g: 1, b: 0};
-                                                    }
-                                                    i++;
+                                                    }else{
+						                                console.log("prepare to send lines through so");
+                                                        so.emit('respondStroke', resultmsg);
+						                            }
                                                 }
-                                               
-                                            } 
-                                        });
-                                    }*/
+					                        }catch(err4){
+					    	                    console.log(err4);
+					                        }
+                                        }
+                                    });
                                     so.emit('classifyObject', result);
                                 }
                             });
                         }
                     }
                 });
+
+		
                 // reset the user turn strokes
                 thisobj.userTurnStrokes.clear();
-                
+                }else{
                 switch(thisobj.roomtype){
                     case enum_RoomType.recorded:
                         if(thisobj.recordedData){
@@ -343,6 +338,7 @@ class gameroom {
                         });
                     break;
                 }
+		}
                 thisobj.numTurnStrokes = 0; // clean to 0;
             }, waitForTurn);
         }
@@ -354,8 +350,9 @@ class gameroom {
         }
     }
     updateServerPic(){
-        // update the server pic every 10 user lines
-        if(this.userStrokes.length > 0 && this.userStrokes.length % 10 == 0){
+        // update the server pic /*every 10 user lines*/
+        if(this.userStrokes.length > 0 && this.userStrokes.length / 10 > this.prevDrawn){
+            this.prevDrawn = Math.ceil(this.userStrokes.length / 10);
             // draw both user lines and computer lines
             var drawingContext = canvas2D.Initialize(this.canvasSize.width, this.canvasSize.height);
             while (this.userStrokes.length > this.indexULines && this.compStrokes.length > this.indexCLines) {
@@ -373,8 +370,11 @@ class gameroom {
             canvas2D.SaveToFile(drawingContext, id, false, function(filename, err){
                 // draw the thumbnail
                 if(!err){
+		            console.log("saving thumbnail filename: " + filename);
+                    canvas2D.isUsingGM = true;
                     var thumbContext = canvas2D.InitializeFromFile(filename).resize(80,60);
                     canvas2D.SaveToFile(thumbContext, id, true);
+                    canvas2D.isUsingGM = false;
                 }
             });
         }
@@ -394,6 +394,11 @@ class gameroom {
             this.isGrouping = false;
         else
             this.apprentice.setModeSync(m);
+    }
+    setCreativity(level){
+	console.log("set creativity level:" + level);
+    	this.apprentice.setCreativityLevel(level);
+	this.creativity = level;
     }
 }
 module.exports = gameroom;

@@ -76,7 +76,7 @@ var jsonIndex = 0;
 for (var i = 0; i < alldirs.length; i++) {
     var category = alldirs[i];
     var dirpath = 'svg/' + category + '/';
-    var files = fs.readdirSync(dirpath);;
+    var files = fs.readdirSync(dirpath);
     
     for (var fileIndex = 0; fileIndex < files.length; fileIndex++) {
         var filename = files[fileIndex];

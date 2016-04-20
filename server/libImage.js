@@ -43,13 +43,14 @@ function hexToRgb(hex) {
     } : null;
 }
 
-var isUsingGM = false;
+
 
 module.exports = {
+    isUsingGM : false,    
     //Iinitialize the drawing context that has white background
     // and transparent filling in of the drawing lines
     Initialize : function(width, height, useGM){
-        isUsingGM = useGM;
+        this.isUsingGM = useGM;
         if(gm && useGM){
             var ctx = gm(width, height, "#ffffff")
                 .fill("transparent");
@@ -57,16 +58,18 @@ module.exports = {
         }else if(Canvas){
             var canvas = new Canvas(width, height)
               , ctx = canvas.getContext('2d');
-            return ctx;
+            ctx.fillStyle = "#ffffff";
+            ctx.fillRect(0, 0, width, height);
+            return canvas;
         }
         return null;
     },
     InitializeFromFile : function(file){
-        if(gm && isUsingGM && ctx != null){
+        if(gm && this.isUsingGM){
             var ctx = gm(file)
             .fill("transparent");
             return ctx;
-        }else if(Canvas && ctx != null){
+        }else if(Canvas){
             try{
                 var buff = fs.readFileSync(file);
                 var img = new Image;
@@ -75,7 +78,7 @@ module.exports = {
                   , ctx = canvas.getContext('2d');
                 ctx.drawImage(img, 0, 0, img.width, img.height);
                 
-                return ctx;
+                return canvas;//ctx;
             }catch(err){
                 console.error(err);   
             }
@@ -84,56 +87,58 @@ module.exports = {
     },
     CreateBlankThumb: function(picName){
         var imgpath = __dirname + '/session_pic/' + picName + '_thumb.png';
-        if (ctx != null) {
-            if (Canvas) {
-                var canvas = new Canvas(80, 60)
-              , ctx = canvas.getContext('2d')
-              , out = fs.createWriteStream(imgpath)
-              , stream = canvas.pngStream();
-                
-                stream.on('data', function (chunk) {
-                    out.write(chunk);
-                });
-                
-                stream.on('end', function () {
-                    console.log('saved png');
-                });
-            }
-            else if (gm) {
-                var ctx = gm(80, 60, "#ffffff");
-                ctx.write(imgpath, function (err) {
-                    if (err)
-                        console.log(err);
-                });
-            }
+        if (Canvas) {
+            var canvas = new Canvas(80, 60)
+                , ctx = canvas.getContext('2d')
+                , out = fs.createWriteStream(imgpath)
+                , stream = canvas.pngStream();
+            ctx.fillStyle = "#ffffff";
+            ctx.fillRect(0,0,80,60);
+            
+            stream.on('data', function (chunk) {
+                out.write(chunk);
+            });
+            
+            stream.on('end', function () {
+                console.log('saved png');
+            });
+        }
+        else if (gm) {
+            var ctx = gm(80, 60, "#ffffff");
+            ctx.write(imgpath, function (err) {
+                if (err)
+                    console.log(err);
+            });
         }
     },
     DrawLine : function(ctx, line, translate){
         translate = translate ? translate: {x : 0, y : 0};
         if(line.allPoints && line.allPoints.length > 0 && ctx != null){
             if(Canvas){
+                var ctx2d = ctx.getContext('2d');
                 if(line.color)
-                    ctx.strokeStyle = 'rgba(' + line.color.r +',' + line.color.g + ', ' + line.color.b + ', 1)';
+                    ctx2d.strokeStyle = 'rgba(' + (line.color.r * 255) +',' + (line.color.g * 255) + ', ' + (line.color.b * 255) + ', 1)';
                 else
-                    ctx.strokeStyle = 'rgba(' + line.colorR +',' + line.colorG + ', ' + line.colorB + ', 1)';
-                ctx.lineWidth = line.lineWidth;
+                    ctx2d.strokeStyle = 'rgba(' + (line.colorR * 255) +',' + (line.colorG * 255) + ', ' + (line.colorB * 255) + ', 1)';
+                ctx2d.lineWidth = line.lineWidth;
                 
                 function drawLine(line){
                     if(line.allPoints && line.allPoints.length > 0){
-                        ctx.beginPath();
-                        ctx.moveTo(line.allPoints[0].x - translate.x, line.allPoints[0].y - translate.y);
+                        ctx2d.beginPath();
+                        ctx2d.moveTo(line.allPoints[0].x - translate.x, line.allPoints[0].y - translate.y);
 
                         for(var ptID in line.allPoints){
                             if(ptID > 0){
                                 var pt = line.allPoints[ptID];
-                                ctx.lineTo(pt.x - translate.x, pt.y - translate.y); 
+                                ctx2d.lineTo(pt.x - translate.x, pt.y - translate.y); 
                             }
                         }
-                        ctx.stroke();
+                        ctx2d.stroke();
                     }
                 }
                 
                 drawLine(line);
+                console.log('draw line on canvas');
             }else if(gm){
                 var lineColor;
                 if(line.color){
@@ -176,15 +181,30 @@ module.exports = {
         }
     },
     SaveToFile : function(ctx, picName, isThumb, callback){
-        if(gm && ctx != null){
-            var filename = isThumb ? picName + "_thumb" : picName;
-            filename = __dirname + '/session_pic/' + filename + '.png'; 
-            ctx.write(filename, function (err) {
-                if(err) console.error(err);
-                if(callback != null && typeof callback === "function"){
-                    callback.call(this, filename, err);
-                }
-            });
-        }        
+        var filename = isThumb ? picName + "_thumb" : picName;
+        filename = __dirname + '/session_pic/' + filename + '.png';
+        if(ctx != null){
+            if (Canvas && !this.isUsingGM) {
+                var out = fs.createWriteStream(filename)
+                    , stream = ctx.pngStream();
+                
+                stream.on('data', function (chunk) {
+                    out.write(chunk);
+                });
+                
+                stream.on('end', function () {
+                    if(callback != null && typeof callback === "function"){
+                        callback.call(this, filename);
+                    }
+                });
+            }else if(gm){
+                ctx.write(filename, function (err) {
+                    if(err) console.error(err);
+                    if(callback != null && typeof callback === "function"){
+                        callback.call(this, filename, err);
+                    }
+                });
+            }    
+        }    
     }
 }
