@@ -268,17 +268,22 @@ public class Apprentice {
 
 				int size_main = this.allGroups.size() - 1;
 				int size_lines = this.allGroups.get(size_main).getSize() - 1;
+				//just return the user lines (ll below), then return that to the HTML 
 				int preDecision = -1;
 				for (int i = 0; i < this.allGroups.get(size_main).getSize(); ++i) {
-					Line l1 = this.allGroups.get(size_main).lines.get(i);
-					Decision_Engine engine = new Decision_Engine(l1, line2,
+					Line l = this.allGroups.get(size_main).lines.get(i);
+					//need to make a new packetpoint including all the lines from the group
+					
+					
+					//stuff below is comp generating lines for each line in the group
+					/*Decision_Engine engine = new Decision_Engine(l1, line2,
 							(float) Math.sqrt(Math.pow(width, 2)
 									+ Math.pow(height, 2)));
 
 					Line l = engine.decision(preDecision);
 					preDecision = engine.curDecisionID;
 					l.compGenerated = true;
-
+*/
 					// System.out.println("line generated");
 
 					ArrayList<SketchPoint> result = new ArrayList<>();
@@ -297,7 +302,7 @@ public class Apprentice {
 					}
 					results.add(result);
 
-					System.out.println("Added a line from lasso");
+					System.out.println("Returned lines in the lasso");
 				}
 				System.out.println("num of lines: " + results.size());
 				return results;
