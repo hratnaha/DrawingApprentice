@@ -13,6 +13,8 @@ var totalScore = 0;
 var scoreGiven = 0;
 var tipColor = "#000000";
 
+
+
 function initWebSocket() {
     
     botCanvas = document.getElementById('botpad');
@@ -43,10 +45,28 @@ function initWebSocket() {
 	var ctx2 = sketchPadCanvas.getContext('2d');
     ctx.lineWidth = 0.1;
 
-    $('#ex8').slider().on('slideStop', function (ev) {
+	
+	/*$('#slider').slider().on('slideStop', function (ev) {
         console.log('Current Creativity Value:' + ' ' + ev.value / 100);
         socket.emit("SetCreativty", ev.value);
-    });
+		
+    });*/
+	
+
+		
+		$('#slider').slider({
+			change: function(event, ui) {
+				 console.log('Current Creativity Value:' + ' ' + ui.value/ 100);
+       		     socket.emit("SetCreativty", ui.value);
+			}
+		});
+	
+
+
+   /* $('#ex8').slider().on('slideStop', function (ev) {
+        console.log('Current Creativity Value:' + ' ' + ev.value / 100);
+        socket.emit("SetCreativty", ev.value);
+    });*/
 
     var timer = setInterval(function () {
 
@@ -254,18 +274,49 @@ function groupingMode(chk) {
     }
 }
 
-function DownVote() {
-    socket.emit('vote', 0, totalScore);
+function sleep(milliseconds) {
+  var start = new Date().getTime();
+  for (var i = 0; i < 1e7; i++) {
+    if ((new Date().getTime() - start) > milliseconds){
+      break;
+    }
+  }
 }
 
+
+upvoteConfirm = $("#upvoteconfirmation");
+downvoteConfirm = $("#downvoteconfirmation");
+
+
+function DownVote() {
+	
+    socket.emit('vote', 0, totalScore);
+	downvoteConfirm.show("fast").delay( 2000 );
+	
+	//downvoteConfirm.style.display = "block";
+	//upvoteConfirm.style.display = "none";
+	downvoteConfirm.hide("fast");
+}
+
+
 function UpVote() {
-    console.log("upvoted"); 
+    console.log("upvoted2"); 
+	
+	upvoteConfirm.show("fast").delay( 2000 );
+	//upvoteConfirm.css("display","block");
 	socket.emit('vote', 1, totalScore);
+	//downvoteConfirm.style.display = "none";
+	
+	//upvoteConfirm.css("display","none");
+	upvoteConfirm.hide("fast");
+	console.log(upvoteConfirm);
+	
 }
 
 function downloadData() {
     console.log('getting data...');
     socket.emit('getData');
+	
 }
 
 
@@ -343,3 +394,20 @@ function onClassifyObject(label){
     //document.getElementById('label').value = newLabel;
 }
 
+
+function ChooseCreativity(value){
+		 	console.log(value);
+		    switch( value ) {
+				   case 1: 
+						socket.emit("SetCreativty", 1);
+					    break;
+				   case 2: 
+					    socket.emit("SetCreativty", 50);
+					    break;
+				   case 3:
+				   		socket.emit("SetCreativty", 90);
+				   		break;
+				   		
+				}
+}
+	    
