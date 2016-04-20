@@ -1,0 +1,12 @@
+{
+  "name": "The Drawing Apprentice",
+  "authors": [
+    "Lisa Li <liza90319@hotmail.com>"
+  ],
+  "description": "Drawing wih Co-Creatie AI",
+  "main": "index.html",
+  "moduleType": [],
+  "license": "MIT",
+  "homepage": "",
+  "private": true
+}

@@ -1,0 +1,468 @@
+<html>
+<head>
+<title>The Drawing Apprentice</title>
+
+<!--
+put js files before css files
+
+--> 
+  <script src="../bower_components/jquery/dist/jquery.js"></script>
+  <script src="../bower_components/jquery-ui/jquery-ui.js"></script>
+  <script src="https://cdn.socket.io/socket.io-1.0.6.js"></script>
+	<script type="text/javascript" src="js/sketchPad.js"></script>
+	<script type="text/javascript" src="js/sketchio_client.js"></script>
+  
+  
+	  <script type="text/javascript" src="/js/vendor/bootstrap-slider.js"></script>
+    <script type="text/javascript" src="/js/vendor/FileSaver.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="/css/bootstrap.min.css" />
+    <link rel="stylesheet" type="text/css" href="/css/bootstrap-slider.css" />
+    <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css" />
+    <link rel="stylesheet" type="text/css" href="css/style.css" />
+
+</head>
+<body>
+<div class="navbar navbar-static-top navbar-customize">
+  <div class="navbar-inner">
+    <!-- Brand and toggle get grouped for better mobile display -->
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#nav_toggle_content" aria-expanded="false">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="#">The Drawing Apprentice</a>
+    </div>
+
+    <!-- Collect the nav links, forms, and other content for toggling -->
+    <div class="collapse navbar-collapse" id="nav_toggle_content">
+      <ul class="nav navbar-nav color">
+      	<li>
+            <div class="btn btn-md btn-color navbar-btn">
+                <input type="button" name="saveForm" class="btTxt submit saveForm" id="color1" />
+            </div>
+        </li>
+        <li>
+            <div class="btn btn-md btn-color navbar-btn">
+                <input type="button" name="saveForm" class="btTxt submit saveForm" id="color2" />
+            </div>
+        </li>
+        <li>
+            <div class="btn btn-md btn-color navbar-btn">
+                <input type="button" name="saveForm" class="btTxt submit saveForm" id="color3" />
+            </div>
+        </li>
+        <li>
+            <div class="btn btn-md btn-color navbar-btn">
+                <input type="button" name="saveForm" class="btTxt submit saveForm" id="color4" />
+            </div>
+        </li>
+        <li>
+            <div class="btn btn-md btn-color navbar-btn">
+                <input type="button" name="saveForm" class="btTxt submit saveForm" id="color5" />
+            </div>
+        </li>
+        <li>
+            <div class="btn btn-md btn-color navbar-btn">
+                <input type="button" name="saveForm" class="btTxt submit saveForm" id="color6" />
+            </div>
+        </li>
+        <li>
+            <div class="btn btn-md btn-color navbar-btn">
+                <input type="button" name="saveForm" class="btTxt submit saveForm" id="color7" />
+            </div>
+        </li>
+        <li>
+            <div class="btn btn-md btn-color navbar-btn">
+                <input type="button" name="saveForm" class="btTxt submit saveForm" id="color8" />
+            </div>
+        </li>
+        <li>
+            <div class="btn btn-md btn-color navbar-btn">
+                <input type="button" name="saveForm" class="btTxt submit saveForm" id="color9" />
+            </div>
+        </li>
+        <!--li>
+            <div class="btn btn-md btn-color navbar-btn">
+                <input type="button" name="saveForm" class="btTxt submit saveForm" id="color10" />
+            </div>
+        </li-->
+      </ul><!--color-->
+      <ul class="nav navbar-nav setting_buton">  	  
+        <li>
+            <button class="btn btn-default btn-lg" onClick ="location.href = '/admin_room'" style="float:left;margin-left:1em;">
+           Exit
+            </button>
+        </li>
+        <!--What is the link to get to the room selection? -->
+         <li>
+            <button class="btn btn-default btn-lg" onClick="downloadCanvas(this);" style="float:left;margin-left:1em; display:none">
+           Download
+            </button>
+        </li>
+          <!--Instead of downloading the line data, this button should download a PNG image -->
+        <li>
+            <button class="btn btn-default btn-lg" onClick ="testFunction()"style="float:left;margin-left:1em;">
+           Settings
+            </button>
+        </li>
+         <li>
+            <button class="btn btn-default btn-lg" id="trash" style="float:left;margin-left:1em;">
+           Restart
+            </button>
+        </li>  
+        <li>
+            <a class="btn btn-default btn-lg" style="float:left;margin-left:1em;height:47px;line-height:12px" onclick="downloadCanvas(this)">Download</a>
+        </li>
+
+          <li>
+              <button id="group" class="btn btn-default btn-lg" style="float:left;margin-left:1em;"onclick="changeGrouping()"> Group </button>
+          </li>  
+
+      </ul><!--setting_button-->
+            <label><input type="checkbox" id="Checkbox" onClick="TurnOnOffAgent();" value="" style="margin:1em 1em;"></label>
+       
+    </div><!-- /#nav_toggle_content -->
+
+      <script>
+          function testFunction(){
+          document.getElementById('label').value = "Tested"; 
+          }
+          </script>
+
+  <div class="navbar-inner row">
+         	<div class="col-lg-6">
+            	  <div class="row">
+                   <h4 style="margin-left:10em;margin-top:0;margin-bottom:-1em;color:black;">Line Thickness</h4>
+                </div>
+                
+                <div class="row">
+            <input id="ex15" data-slider-id='ex1Slider' type="text" data-slider-min="1" data-slider-max="100" data-slider-step="1" data-slider-value="50" style="z-index:9999;margin-top:-1em;"/>
+                </div>
+             
+           
+           </div><!--slide_row_1-->
+
+           <div class="col-lg-6">      
+                       		 <!--========S L I D E R : http://seiyria.com/bootstrap-slider/==========-->
+            
+            <div class="row">
+                <h4 style="margin-left:10em;margin-top:0;margin-bottom:-1em;color:black;">Agent Creativity Level</h4>
+            </div>
+            <div class="row">
+                <input id="ex8" data-slider-id='ex1Slider' type="text" data-slider-min="0" data-slider-max="100" data-slider-step="1" data-slider-value="50" style="z-index:9999;margin-top:-1em;"/>
+            </div>
+            <script>
+            $("#ex8").slider({
+					tooltip: 'always'
+				});
+	
+				// Without JQuery
+				var slider = new Slider("#ex8", {
+					tooltip: 'always'
+				});
+				
+				var slider = new Slider("#ex15", {
+					tooltip: 'always'
+				});
+	
+			
+            </script>
+            </div>
+
+      <div class="col-lg-6">
+          <div class="row">
+              <h4 style="margin-left:2em;margin-top:0;margin-bottom:-1em;color:black;">You Are Drawing:</h4>
+          </div>
+          <input class="row" id="label" type="text" value="Object Type">
+              <style>
+                  #label{
+                  width:6em;
+                  height:2em;
+                  font-size:14px;
+                  }
+              </style>
+          </input>
+      </div>
+            
+              
+            </div><!--slider_row_2-->
+         
+         </div>
+   
+  </div><!-- /.container-fluid -->
+  
+</div>
+
+<div class="modal fade" id="new" role="dialog" data-backdrop="static">
+            	<div class="modal-dialog" data-backdrop="static">
+                	<div class="modal-content" data-backdrop="static" style="z-index:5000;">
+                    	<form class="form-horizontal" data-backdrop="static">
+                            <div class="modal-header" data-backdrop="static">
+                                <button type="button" class="close" data-dismiss="modal">&times;</button>
+
+                                <h3 style="padding-left:3%;">New Canvas</h3>
+                            </div>
+                            
+                            <div class="modal-body" data-backdrop="static">
+                            	<div class="form-group" data-backdrop="static">
+                                	<label for="Participant-ID" class="col-lg-4 control-label">Participant ID</label>
+                                    <div class="col-lg-8">
+                                    	<input type="text" class="form-control" id="Participant-ID" placeholder="Put Participant ID Here"/>
+                                    </div> 
+                                </div><!--/.form-group-->
+                                
+                               <div class="form-group" data-backdrop="static">
+                                        <label for="Human-Collaborator" class="col-lg-4 control-label">Human Collaborator</label>
+                                        <div class="col-lg-8">
+                                            <input type="text" class="form-control" id="Human-Collaborator" placeholder="Human Collaborator"/>
+                                        </div> 
+                               </div><!--/.form-group-->
+                                
+                                
+                               <div class="form-group" data-backdrop="static">
+                                        <label for="Drawing-Mode" class="col-lg-4 control-label">Drawing Mode</label>
+                                        <div class="col-lg-8">
+                                        	<button class="btn btn-lg btn-default modal-btn" onclick="ChangeMode1()">Global</button>
+                                            <button class="btn btn-lg btn-default modal-btn" onclick="ChangeMode2()">Regional </button>
+                                            <button class="btn btn-lg btn-default modal-btn" onclick="ChangeMode3()">Local </button>
+                                        </div> 
+                               </div><!--/.form-group-->
+                                
+                                
+                            </div><!--/.modal-body-->
+                            
+                            <div class="modal-footer">
+                            	<button class="btn btn-lg btn-warning pull-left modal-btn">Setting</button>
+                                <a data-backdrop='static'><button class="btn btn-lg btn-info modal-btn">Open Recent</button></a>
+                                <a class="btn btn-lg btn-danger" id="close" data-dismiss="modal">Close</a>
+                                  <script>
+                            		$('.modal-btn').click(function() { return false; });
+									$('#close').click(function(){
+									$("#icon").css("z-index","1000");
+									});
+                                </script>
+                            </div><!--/.modal-footer-->
+                       </form> 
+                    </div><!--modal-content-->
+                </div><!--/.modal-dialog-->
+            </div><!--/.modal fade-->       	
+    
+    <div id="container">
+    <div id="logo_placeholder"></div>
+			 
+             
+             <!--========V O T E==========-->
+             <div class="voting_btn"  style="position:absolute;z-index:9999;top:35%;right:3em;">
+                 <div class="row">
+                    <button class="btn btn-vote" onClick="UpVote();" id="up"><i class="fa fa-arrow-circle-up fa-5x"></i></button>
+                 </div>
+                 
+                 <div id="score">
+                 	<p>testing</p>
+                 	<style>
+                    	#score{
+							width:6em;
+							height:4em;
+							border:1px solid black;
+							font-size:14px;
+							}
+                    </style>
+                 </div>
+                 <div class="row">
+                    <button class="btn btn-vote" onClick="DownVote();" id="down"><i class="fa fa-arrow-circle-down fa-5x"></i></button>
+                 </div>
+             </div>
+
+        
+        
+            <div class="control-group">
+
+        </div>
+    
+    
+    <div class="ui-widget-content" id="logo" style="width:9em;height:auto;z-index:9999;top:-1em;left: 90%;">
+            <script type="text/javascript">
+        var userData = "";
+        var sessionId = "";       
+        var roomId = ""; 
+
+        $(function() {
+        $( "#logo" ).draggable();
+        });
+        
+        function onMouseMove(evt) {
+        var Line1 = document.getElementById("L1");
+        var Line2 = document.getElementById("L2");
+        var c1 = document.getElementById("innercircle");
+        var c2 = document.getElementById("innercircle2");
+        var posx = evt.clientX;
+        var posy = evt.clientY;
+        
+        Line1.setAttribute('d', "M250 310 L "+posx+" "+posy);
+        Line2.setAttribute('d', "M355 310 L "+posx+" "+posy);
+        var totalLength = Line1.getTotalLength();
+        var totalLength2 = Line2.getTotalLength(); 
+        
+        if(totalLength < 5) {
+        
+        c1.setAttribute('cx', evt.clientX);
+        c1.setAttribute('cy', evt.clientY);
+        
+        } else {
+        //alert('AAa');
+        var PAL = Line1.getPointAtLength(5);
+        c1.setAttribute('cx', PAL.x);
+        c1.setAttribute('cy', PAL.y);
+        }
+        
+        if(totalLength2 < 5) {
+        c2.setAttribute('cx', evt.clientX);
+        c2.setAttribute('cy', evt.clientY);
+        
+        } else {
+        var PAL2 = Line2.getPointAtLength(5);
+        c2.setAttribute('cx', PAL2.x);
+        c2.setAttribute('cy', PAL2.y);
+        }
+        }
+        document.onmousemove = onMouseMove;
+        </script>
+
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Generator: Adobe Illustrator 18.1.1, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
+<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+	 viewBox="0 0 612 792" enable-background="new 0 0 612 792" xml:space="preserve">
+<path fill="#050405" d="M401.5,259"/>
+<path fill="#F5F5F5" d="M213.5,263.8v85.8c0,0,0,0.8,0,1.2v0c0,7.7,25.6,14.2,61.1,16.5v-87C239.1,278,213.5,271.5,213.5,263.8z"/>
+<path fill="#EBEBEB" d="M304.1,281.2c-10.1,0-19.9-0.3-29.5-0.9v87c9.6,0.6,19.3,0.9,29.5,0.9c13.1,0,25.6-0.5,36.9-1.5v-87
+	C329.7,280.7,317.2,281.2,304.1,281.2z"/>
+<path fill="#FF9E7D" d="M394.1,214.3c0-9.6-40.3-17.4-90.1-17.4c-49.7,0-90.1,7.8-90.1,17.4V264c0,9.6,40.3,17.4,90.1,17.4
+	c49.7,0,90.1-7.8,90.1-17.4V214.3z M304.5,226.3c41.4,0,76.1-4.7,86.7-11.1c-4.1,7.7-41.3,13.8-86.7,13.8
+	c-45.4,0-82.6-6.1-86.7-13.8C228.4,221.6,263.1,226.3,304.5,226.3z M304.5,236c-49,0-88.7-7.7-88.7-17.2c0-0.2,0.1-0.3,0.1-0.5
+	c9.8,7.5,45.7,13.1,88.6,13.1c42.9,0,78.8-5.6,88.6-13.1c0,0.2,0.1,0.3,0.1,0.5C393.3,228.3,353.5,236,304.5,236z"/>
+<path fill="#D6D6D6" d="M340.9,279.7v87c31.4-2.7,53.2-8.8,53.2-15.9c0-0.4,0-1.2,0-1.2v-85.8C394.1,270.9,372.3,277,340.9,279.7z"
+	/>
+<path fill="#050405" d="M274.6,555.3"/>
+<circle fill="#050405" cx="259.8" cy="311.1" r="7"/>
+<circle fill="#050405" cx="352.6" cy="311.1" r="7"/>
+
+<g>
+	<path fill="#494849" d="M309.6,363.5c-3.5,0-7-0.8-10.6-2.4c-8.1-3.6-15-10.1-20.7-19.5c-0.4-0.7-0.5-1.6-0.1-2.3
+		c0.5-0.9,1.5-1.4,2.8-1.4c1.3,0,2.3,0.5,2.9,1.4c2.5,4.1,6.8,9.9,13.4,14.5c3.9,2.7,7.9,4.1,11.7,4.1c10.6,0,19-10.1,24.3-18.6
+		c0.5-0.9,1.6-1.4,2.9-1.4c1.3,0,2.3,0.5,2.8,1.4c0.4,0.7,0.4,1.6-0.1,2.3C335.7,347,325.5,363.5,309.6,363.5z"/>
+</g>
+<g>
+	<polygon fill="none" points="226.9,240.9 226.9,234 226.9,234 226.9,314.4 226.9,314.4 	"/>
+	<polygon fill="none" points="226.9,315.4 226.9,315.4 226.9,315.4 	"/>
+</g>
+<path fill="#F7CABF" d="M304.5,226.3c-41.4,0-76.1-4.7-86.7-11.1c4.1,7.7,41.3,13.8,86.7,13.8c45.4,0,82.6-6.1,86.7-13.8
+	C380.6,221.6,345.9,226.3,304.5,226.3z"/>
+<path fill="#C6684F" d="M304.5,231.4c-42.9,0-78.8-5.6-88.6-13.1c0,0.2-0.1,0.3-0.1,0.5c0,9.5,39.7,17.2,88.7,17.2
+	s88.7-7.7,88.7-17.2c0-0.2-0.1-0.3-0.1-0.5C383.3,225.8,347.5,231.4,304.5,231.4z"/>
+<path fill="#FDBD4B" d="M274.7,587.5v-4.2V367.5c-35.3-2.4-60.6-8.8-60.6-16.5v0c0-0.4,0-1.2,0-1.2v-27h0v236.7v4.2
+	c7.3-5.6,14.8-7.1,26.1-7.1C253.8,556.5,268.1,576.7,274.7,587.5z"/>
+<g>
+	<path fill="#EBD19A" d="M372,558c-13,0.7-24.4,19-31,29.8c-6.3-10.6-18.4-25.7-32.3-25.7c-13.6,0-32.8,25.4-34.1,25.1
+		c-6.6-10.8-20.9-31-34.5-31c-11.3,0-18.8,1.5-26.1,7.1v9.9c0,2.6,0.7,5.1,2,7.3l76,125.7c5.5,9.1,18.6,9.1,24.1,0l76-125.7
+		c1.3-2.2,2-4.7,2-7.3V565C394.1,565,384,557.3,372,558z"/>
+	<path fill="#F6B34D" d="M308.7,562.1c13.9,0,26,15.1,32.3,25.7l0-221.1c-11,0.9-23,1.4-35.8,1.4c-10.1,0-20.4-0.3-30.6-0.9V583v4.2
+		C275.9,587.5,295.1,562.1,308.7,562.1z"/>
+	<path fill="#E3A34B" d="M340.9,366.6L340.9,366.6l0,221.2c6.6-10.8,18-29,31-29.8c12-0.7,22.1,7,22.1,7v-4.2V350.7
+		C394.1,357.8,372.3,363.9,340.9,366.6z"/>
+</g>
+<path id="tip" fill="#050405" d="M304.1,650.5c-14.4,0-27.9,3.6-39.7,10l27.7,45.8c5.5,9.1,18.6,9.1,24.1,0l27.7-45.8
+	C332,654.1,318.4,650.5,304.1,650.5z"/>
+<path  id="tip-highlight" fill="#444444" d="M290.1,651.7c-9.2,1.5-17.8,4.5-25.7,8.8l27.7,45.8c2.7,4.5,7.4,6.8,12,6.8L290.1,651.7z"/>
+<g id="eyes">
+	<path id="L1" d="M250,310L0,0"/>
+	<path id="L2" d="M0,0"/>
+	<circle id="outercircle" fill="#FFFFFF" stroke="#000000" stroke-width="3" cx="250" cy="310" r="20"/>
+	<circle id="outercircle2" fill="#FFFFFF" stroke="#000000" stroke-width="3" cx="355" cy="310" r="20"/>
+	<circle id="innercircle" stroke="#000000" cx="250" cy="310" r="15"/>
+	<circle id="innercircle2" stroke="#000000" cx="355" cy="310" r="15"/>
+</g>
+
+</svg>
+
+    </div><!--logo-->
+    
+    <div id="buttons" style="z-index:5000;">
+        <input type="color" name="background" id="background" value="#000000" style="display:none;"/>
+        <input type="button" id="clear" value="Clear" style="display:none;" />
+        <select id="mode" style="display:none;">
+            <option value="local" style="z-index:2000;">Local</option>
+            <option value="region" style="z-index:2000;">Region</option>
+            <option value="global" style="z-index:2000;">Global</option>
+           <!--input id="cboxGrouping" type="checkbox" name="grouping" value="Grouping" />Grouping-->
+        </select>
+       
+    </div><!--#buttons-->
+        <canvas id="both">Sorry, your browser is not supported.
+        <script>
+        var myCanvas1 = document.getElementById("both");
+   		var myCanvasContext1 = myCanvas1.getContext('2d');
+		</script>
+        </canvas>
+        
+        <canvas id="botpad">Sorry, your browser is not supported.
+        <script>
+        var myCanvas2 = document.getElementById("botpad");
+   		var myCanvasContext2 = myCanvas2.getContext('2d');
+		</script>
+        </canvas>
+        
+        <canvas id="sketchpad">Sorry, your browser is not supported.
+        <script>
+        var myCanvas3 = document.getElementById("sketchpad");
+   		var myCanvasContext3 = myCanvas3.getContext('2d');
+		</script>
+        </canvas>
+     
+
+
+    </div><!--container-->
+
+
+
+
+<!--script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script-->
+
+<script type="text/javascript" src="js/script.js"></script>
+<script type="text/javascript">
+    var bothCanvas = document.getElementById("both");
+    var bothInputContext = bothCanvas.getContext("2d");
+
+    window.addEventListener("load", initWebSocket, false);
+    window.addEventListener('load', sketchUtil, false);
+
+    //document.getElementById('trash').addEventListener('click', function () {
+      //  sketchpad.width = sketchpad.width;
+        //clearCanvas();
+    //}, false);
+    $("#mode").change(setMode); //what does this do?
+	console.log("test");
+    $("#cboxGrouping").change(groupingMode);
+</script>
+<div id="output"></div>
+
+
+
+</body>
+
+<footer class="bottom_footer">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-lg-2"></div>
+      <div class="col-lg-8" onclick="">
+        <div onclick="toggleBottomUi()" id="bottomUiDiv" class="bottom_footer_ui">
+        </div>
+      </div>
+      <div class="col-lg-2"></div>
+    </div>
+  </div>
+</footer>
+
+
+</html>
