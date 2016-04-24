@@ -13,14 +13,31 @@ put js files before css files
 	<script type="text/javascript" src="js/sketchio_client.js"></script>
 	<script type="text/javascript" src="/js/vendor/bootstrap-slider.js"></script>
     <script type="text/javascript" src="/js/vendor/FileSaver.min.js"></script>
+    <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.0.3/angular.min.js">
+    </script>
+    <script src="//netdna.bootstrapcdn.com/twitter-bootstrap/2.2.2/js/bootstrap.min.js">
+    </script>
+    <script src='http://d3js.org/d3.v3.min.js'>
+    </script>
+
     <link rel="stylesheet" type="text/css" href="/css/bootstrap.min.css" />
     <link rel="stylesheet" type="text/css" href="/css/bootstrap-slider.css" />
     <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css" />
     <link rel="stylesheet" type="text/css" href="css/style.css" />
 
+
+
 </head>
 <body>
+
+
 <div class="navbar navbar-static-top navbar-customize">
+
+    <!-- Trigger/Open The Modal 
+    <button id="myBtn">Open Modal</button>
+        -->
+    <!-- The Modal -->
+    
   <div class="navbar-inner">
     <!-- Brand and toggle get grouped for better mobile display -->
     <div class="navbar-header">
@@ -117,13 +134,114 @@ put js files before css files
           <li>
               <button id="group" class="btn btn-default btn-lg" style="float:left;margin-left:1em;"onclick="changeGrouping()"> Group </button>
           </li>  
+          <li>
+              <button class="btn btn-default btn-lg" id="myBtn" style="float:left;margin-left:1em;">
+                  Stats
+              </button>
+          </li>  
+
+
 
       </ul><!--setting_button-->
+
+
 
        
     </div><!-- /#nav_toggle_content -->
 
+      <div id="myModal" class="modal">
+
+          <!-- Modal content -->
+          <div id="innerModal" class="modal-content">
+              <span class="close">x</span>
+              <h3>Drawing Statistics</h3><br />
+
+
+              <ul class="nav nav-tabs" id="tabContent">
+                  <li class="active"><a href="#myInnerModal" data-toggle="tab">Basic Info</a></li>
+                  <li><a href="#outerchart" data-toggle="tab">Charts</a></li>
+                  <li><a href="#funstuff" data-toggle="tab">Fun Stuff</a></li>
+              </ul>
+
+              <div class="tab-content">
+                  <div class="tab-pane active" id="myInnerModal">
+                      Basic Info
+                      <p>Some other stuff</p>
+                  </div>
+
+                  <div class="tab-pane" id="outerchart">
+                      <h3 align="center"> Drawing Acvtivity Over Time</h3>
+                      <div align="center" id="ActivityChart">
+
+                      </div>
+                      <br>
+                      <h3 align="center"> Line Length Temporally Ordered</h3>
+                      <div align="center" id="LengthChart">
+
+                      </div>
+
+                  </div>
+
+                  <div class="tab-pane" id="funstuff">
+                      This is fun! 
+                  </div>
+              </div>
+          </div>
+      </div>
+
       <script>
+
+          // Get the modal
+          var modal = document.getElementById('myModal');
+
+          // Get the button that opens the m
+          var btn = document.getElementById("myBtn");
+
+          // Get the  element that closes the modal
+          var span = document.getElementsByClassName("close")[0];
+
+          // When the user clicks the button, open the modal
+          btn.onclick = function() {
+          console.log("Calling get data no save");
+          getData_noSave(); 
+          //InitChart(); 
+         
+          //var userLines = allData.userLines; 
+          //var compLines = allData.computerLines; 
+           
+          modal.style.display = "block";
+          }
+
+          // When the user clicks on (x), close the modal
+          span.onclick = function() {
+          $("#myInnerModal").html("");
+          $("#ActivityChart").html("");
+          $("#LengthChart").html("");
+          console.log("Deleting the stuff"); 
+          modal.style.display = "none";
+          }
+
+          // When the user clicks anywhere outside of the modal, close it
+          window.onclick = function(event) {
+          if (event.target == modal) {
+          $("#myInnerModal").html("");
+          $("#ActivityChart").html("");
+          $("#LengthChart").html("");
+
+          modal.style.display = "none";
+          }
+          }
+      </script>
+
+
+      <script>
+
+          function showStats(){
+          console.log("Trying to show stats"); 
+            document.getElementById('openModal').style.display = "block";
+          
+          }
+
 function testFunction(){
     document.getElementById('label').value = "Tested"; 
 }
@@ -151,7 +269,10 @@ function testFunction2(value){
     }
     console.log("The value of radio is: " + value); 
 }
+          
           </script>
+
+     
 
   <div class="navbar-inner row">
          	<div class="col-lg-6">
@@ -461,7 +582,11 @@ function testFunction2(value){
 	console.log("test");
     $("#cboxGrouping").change(groupingMode);
 </script>
+
 <div id="output"></div>
+
+    
 
 </body>
 </html>
+
