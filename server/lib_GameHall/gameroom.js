@@ -402,10 +402,10 @@ class gameroom {
 	console.log("set creativity level:" + level);
     	this.apprentice.setCreativityLevel(level);
 	this.creativity = level;
-	/*if(level == 100)
+	if(level == 100)
 		generator.mode = 2;
 	else
-		generator.mode = 1;*/
+		generator.mode = 1;
     }
 }
 module.exports = gameroom;

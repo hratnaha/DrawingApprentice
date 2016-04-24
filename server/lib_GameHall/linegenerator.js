@@ -1,6 +1,6 @@
 var xml2js = require('xml2js'),
     fs = require("fs");
-    //dict = require("objDictionary");
+    dict = require("./objDictionary");
 
 
 // find bbox from a series of strokes
@@ -32,14 +32,14 @@ function findLeastUsageInQuadtree(quadtree, box, canvasSize){
     var boxWidth = box.right - box.left;
     var boxHeight = box.bottom - box.top;
     
-    var widthInterval = (canvasSize.width - boxWidth) / 3;
-    var heightInterval = (canvasSize.height - boxHeight) / 3;
+    var widthInterval = (canvasSize.width - boxWidth) / 10;
+    var heightInterval = (canvasSize.height - boxHeight - 600) / 10;
     var curXpos = 0;
     var curYpos = 200; // account for the top bar
     var offset = {x: 0, y: 0};
     var minCount = Number.MAX_VALUE;
     
-    console.log(quadtree);
+    //console.log(quadtree);
     while(curYpos < canvasSize.height){
         var curBox = {
             x: curXpos,
@@ -66,28 +66,62 @@ function findLeastUsageInQuadtree(quadtree, box, canvasSize){
     return offset;
 }
 
+function pickCategoryInDict(dict, oriCategory){
+	var diclength = dict.length;
+	console.log("finding: " + oriCategory);
+        for(var i=0;i<diclength;i++){
+		//console.log(dict[i]);
+                if(dict[i] == oriCategory){
+               		var selIndex = Math.floor((Math.random() * diclength) + 1);
+                        var selCate = dict[selIndex];
+                        console.log("selected class = " + selCate);
+                        return selCate;
+                }
+        }
+	return "";
+}
+
 function decideCategory(oriCategory){
 	var selCategories = [];
 	
 	for ( var subcate in dict ){
 		if (dict.hasOwnProperty(subcate)) {
-			var subDict = dict[subcate];     	   		
-			
+			var subDict = dict[subcate];
 			if(Array.isArray(subDict)){
-			
+				var pickedCate = pickCategoryInDict(subDict, oriCategory);
+				if(pickedCate != "")
+					return pickedCate;
 			}else{
 				for ( var subsubcate in subDict ){
-					
+					var subsubDict = subDict[subsubcate];
+					if(Array.isArray(subsubDict)){
+						var pickedCate = pickCategoryInDict(subsubDict, oriCategory);
+						if(pickedCate != "")
+							return pickedCate;
+					}else{
+						for(var subsubsubcate in subsubDict){
+							var subsubsubDict = subsubDict[subsubsubcate];
+							if(Array.isArray(subsubsubDict)){
+                                                		var pickedCate = pickCategoryInDict(subsubsubDict, oriCategory);
+                                                		if(pickedCate != "")
+                                                        		return pickedCate;
+                                        		}
+						}
+					}
 				}
 			}
     		}	
 	}
-
+	return oriCategory;
 }
 
 module.exports = {
     GetSketchesInCategory : function(category, quadtree, canvasSize, callback){
-        var node = quadtree.findLeastUsageOnLevel(5);
+        var newcate = category;
+	console.log(this.mode);
+	if(this.mode == 2) newcate = decideCategory(category);
+
+	var node = quadtree.findLeastUsageOnLevel(5);
         var tolX = canvasSize.width / 8;
         var tolY = canvasSize.height / 8;
         var offsetX = node.bounds.x + tolX > canvasSize.width ? node.bounds.x - tolX : node.bounds.x;
@@ -96,12 +130,13 @@ module.exports = {
         offsetY = offsetY < tolY ? offsetY + tolY : offsetY;
         var offset = {x: offsetX, y: offsetY};
         
-	    var dirpath = 'lib_GameHall/pre_sketch2/' + category + '/';
+	var dirpath = 'lib_GameHall/pre_sketch2/' + newcate + '/';
         var parser = new xml2js.Parser();
         
         fs.readdir(dirpath, function(err, files){
             if(err){
-                throw new Error('directory is not found!!');
+                //throw new Error('directory is not found!!');
+		return "";
             }
             var fileIndex = Math.floor(Math.random() * files.length);
             var filename = files[fileIndex];
