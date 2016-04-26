@@ -51,56 +51,79 @@ put js files before css files
     <!-- Collect the nav links, forms, and other content for toggling -->
     <div class="collapse navbar-collapse" id="nav_toggle_content">
     	<div class="row agent-panel">
-        	 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                 <div class="row">
-                	<div class="drawing-mode-button">
-                    	<button class="btn-mode" id="btnTracing"><img class="img-toggle" src="images/Tracing.jpg"/></button>
+                    <div class="drawing-mode-button">
+                        <button class="btn-mode" id="btnTracing"><img class="img-toggle" src="images/Tracing.jpg" /></button>
                         <button class="btn-mode" id="btnMimicking"><img class="img-toggle" src="images/Mimicking.jpg" /></button>
                         <button class="btn-mode" id="btnTransforming"><img class="img-toggle" src="images/Transforming.jpg" /></button>
+                        <!--Here are the new buttons-->
+                        <button class="btn-mode" id="btnObjRecSame"><img class="img-toggle" src="images/Transforming.jpg" /></button>
+                        <button class="btn-mode" id="btnObjRecRelated"><img class="img-toggle" src="images/Transforming.jpg" /></button>
                     </div>
-              
-                	 <!--ul class="nav navbar-nav setting_buton">  	  
-        <li>
-            <button class="btn btn-default btn-lg" onClick ="location.href = '/admin_room'" style="float:left;margin-left:1em;">
-           Exit
-            </button>
-        </li>
-        <!--What is the link to get to the room selection? -->
-         <!--li>
-            <button class="btn btn-default btn-lg" onClick="downloadCanvas(this);" style="float:left;margin-left:1em; display:none">
-           Download
-            </button>
-        </li>
-          <!--Instead of downloading the line data, this button should download a PNG image -->
-        <!--li>
-            <button class="btn btn-default btn-lg" onClick ="testFunction()"style="float:left;margin-left:1em;">
-           Settings
-            </button>
-        </li>
-         <li>
-            <button class="btn btn-default btn-lg" id="trash" style="float:left;margin-left:1em;">
-           Restart
-            </button>
-        </li>  
-        <li>
-            <a class="btn btn-default btn-lg" style="float:left;margin-left:1em;height:47px;line-height:12px" onclick="downloadCanvas(this)">Download</a>
-        </li>
 
-          <li>
-              <button id="group" class="btn btn-default btn-lg" style="float:left;margin-left:1em;"onclick="changeGrouping()"> Group </button>
-          </li>  
 
-      </ul><!--setting_button-->
+                    <!--ul class="nav navbar-nav setting_buton">
+            <li>
+                <button class="btn btn-default btn-lg" onClick ="location.href = '/admin_room'" style="float:left;margin-left:1em;">
+               Exit
+                </button>
+            </li>
+            <!--What is the link to get to the room selection? -->
+                    <!--li>
+                <button class="btn btn-default btn-lg" onClick="downloadCanvas(this);" style="float:left;margin-left:1em; display:none">
+               Download
+                </button>
+            </li>
+              <!--Instead of downloading the line data, this button should download a PNG image -->
+                    <!--li>
+                  <button class="btn btn-default btn-lg" onClick ="testFunction()"style="float:left;margin-left:1em;">
+                 Settings
+                  </button>
+              </li>
+               <li>
+                  <button class="btn btn-default btn-lg" id="trash" style="float:left;margin-left:1em;">
+                 Restart
+                  </button>
+              </li>
+              <li>
+                  <a class="btn btn-default btn-lg" style="float:left;margin-left:1em;height:47px;line-height:12px" onclick="downloadCanvas(this)">Download</a>
+              </li>
+
+                <li>
+                    <button id="group" class="btn btn-default btn-lg" style="float:left;margin-left:1em;"onclick="changeGrouping()"> Group </button>
+                </li>
+
+            </ul><!--setting_button-->
                 </div><!--row-->
 
-             <div class="voting_btn"  style="position:absolute;z-index:9999;right:20%;top:1em;">
+                <div id="speechBubble" style="display:none; position:absolute;right:8%;top:1em;width:245px;height:190px;background-repeat:no-repeat; background-size:contain; background-image:url('images/speechBubble.png');">
+                    <div id="bubbleText" style="font-family:'Gill Sans';width:170px;word-wrap:break-word;padding-left:1em;padding-top:1em;">
+                        
+                    </div>
+                    <!--
+            <div class="row">
+                <h4 style="color:black; position:center">You Are Drawing:</h4>
+            </div>
+            <div class="row">
+                <input id="label" class="row" type="text" value="Object Type" style="width:10em; margin-left:.5em;height:2em;font-size:14px;" />
+            </div>
+             </div>
+                -->
+                    <!--<img height="120" width="200" style="display:block;"src="images/speechBubble.png">
+                    <p>You are drawing x</p>
+                        -->
+                </div>
+
+                <div class="voting_btn" style="position:absolute;z-index:9999;right:23%;top:1em;">
                     <button class="btn btn-vote" onClick="UpVote();" id="up"><i class="fa fa-thumbs-up fa-5x"></i></i></button>
                     <button class="btn btn-vote" onClick="DownVote();" id="down"><i class="fa fa-thumbs-down fa-5x"></i></i></i></button>
 
-             </div>
+                </div>
 
-        
-        
+
+
+                </svg>
             </div><!--col-lg-12-->
         </div><!--agent-panel-->
         
@@ -462,9 +485,11 @@ put js files before css files
       
         <div class="setting-button col-lg-5">
         	<ul class="setting-button-content">
-            	<li><button class="btn" href="#"><i class="fa fa-trash fa-2x"></i></button></li>
-                <li><button class="btn" href="#"><i class="fa fa-download fa-2x"></i></button></li>
-                <li><button class="btn" href="#"><i class="fa fa-plus-square-o fa-2x"></i></button></li>
+            	<li><button class="btn" id ="trash" href="#"><i class="fa fa-trash fa-2x"></i></button></li>
+                <li><button class="btn" href="#" onclick="downloadCanvas(this);"><i class="fa fa-download fa-2x"></i></button></li>
+                <li><a class="btn" onclick="downloadCanvas(this);"><i class="fa fa-download fa-2x"></i></a></li>
+
+                </li><li><button onClick="displaySpeech('house','cat');"class="btn" href="#"><i class="fa fa-plus-square-o fa-2x"></i></button></li>
                  <li><button class="btn" href="#"><i class="fa fa-cogs fa-2x"></i></button></li>
                 <li>
                     <button class="btn" id="myBtn" style="float:left;margin-left:1em;">
@@ -516,10 +541,17 @@ put js files before css files
                     </div>
                     <br />
                     <h3 align="center"> Line Length Temporally Ordered</h3>
+
+
                     <div align="center" id="LengthChart">
-
+                       
+                     </div>
+                    <!--
+                    <h3 align="center"> Drawing Activity Over Time (Interactive)</h3>
+                    <div align="center" id="ActivityChart2">
+                        <svg id="visualization3" width="1100" height="500"></svg>
                     </div>
-
+                    -->
                 </div>
 
                 <div class="tab-pane" id="funstuff">

@@ -653,6 +653,160 @@ function InitChart2(data) {
 }
 
 
+
+function InitChart3(){
+
+    //change svg call
+    //change data source
+    //add style component
+    
+    //$('#ActivityChart2').append('<svg id="visualization3" width="1100" height="500"></svg>');
+    
+    /*
+    var lineData = [];
+    
+    for (var i = 0; i < data.length; i++) {
+        //cycle through lines to find their length 
+        var length = data[i].totalDistance;
+        var newPt = {
+            'x': i,
+            'y': length
+        }
+        lineData.push(newPt);
+        console.log(lineData);
+    }
+    */
+    var lineData = [{
+            'x': 1,
+            'y': 5
+        }, {
+            'x': 20,
+            'y': 20
+        }, {
+            'x': 40,
+            'y': 10
+        }, {
+            'x': 60,
+            'y': 40
+        }, {
+            'x': 80,
+            'y': 5
+        }, {
+            'x': 100,
+            'y': 60
+        }, {
+            'x': 150,
+            'y': 200
+        }
+    ];
+    
+    
+    var margin = { top: 10, right: 10, bottom: 100, left: 40 },
+        margin2 = { top: 430, right: 10, bottom: 20, left: 40 },
+        width = 960 - margin.left - margin.right,
+        height = 500 - margin.top - margin.bottom,
+        height2 = 500 - margin2.top - margin2.bottom;
+    
+    var parseDate = d3.time.format("%b %Y").parse;
+    
+    var x = d3.scale.linear().range([0, width]),
+        x2 = d3.scale.linear().range([0, width]),
+        y = d3.scale.linear().range([height, 0]),
+        y2 = d3.scale.linear().range([height2, 0]);
+    
+    var xAxis = d3.svg.axis().scale(x).orient("bottom"),
+        xAxis2 = d3.svg.axis().scale(x2).orient("bottom"),
+        yAxis = d3.svg.axis().scale(y).orient("left");
+    
+    var brush = d3.svg.brush()
+    .x(x2)
+    .on("brush", brushed);
+    
+    var area = d3.svg.area()
+    .interpolate("monotone")
+    .x(function (d) { return x(d.x); })
+    .y0(height)
+    .y1(function (d) { return y(d.y); });
+    
+    var area2 = d3.svg.area()
+    .interpolate("monotone")
+    .x(function (d) { return x2(d.x); })
+    .y0(height2)
+    .y1(function (d) { return y2(d.y); });
+    
+    var svg = d3.select("#visualization3")
+    .attr("width", width + margin.left + margin.right)
+    .attr("height", height + margin.top + margin.bottom);
+    
+    svg.append("defs").append("clipPath")
+    .attr("id", "clip")
+  .append("rect")
+    .attr("width", width)
+    .attr("height", height);
+    
+    var focus = svg.append("g")
+    .attr("class", "focus")
+    .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+    
+    var context = svg.append("g")
+    .attr("class", "context")
+    .attr("transform", "translate(" + margin2.left + "," + margin2.top + ")");
+    
+    loadData(lineData);
+    function loadData(data) {
+        x.domain(d3.extent(data.map(function (d) { return d.x; })));
+        y.domain([0, d3.max(data.map(function (d) { return d.y; }))]);
+        x2.domain(x.domain());
+        y2.domain(y.domain());
+        
+        focus.append("path")
+      .datum(data)
+      .attr("class", "area")
+      .attr("d", area);
+        
+        focus.append("g")
+      .attr("class", "x axis")
+      .attr("transform", "translate(0," + height + ")")
+      .call(xAxis);
+        
+        focus.append("g")
+      .attr("class", "y axis")
+      .call(yAxis);
+        
+        context.append("path")
+      .datum(data)
+      .attr("class", "area")
+      .attr("d", area2);
+        
+        context.append("g")
+      .attr("class", "x axis")
+      .attr("transform", "translate(0," + height2 + ")")
+      .call(xAxis2);
+        
+        context.append("g")
+      .attr("class", "x brush")
+      .call(brush)
+    .selectAll("rect")
+      .attr("y", -6)
+      .attr("height", height2 + 7);
+    }
+    
+    function brushed() {
+        x.domain(brush.empty() ? x2.domain() : brush.extent());
+        focus.select(".area").attr("d", area);
+        focus.select(".x.axis").call(xAxis);
+    }
+    
+    function type(d) {
+        d.date = parseDate(d.date);
+        d.price = +d.price;
+        return d;
+    }
+
+}
+
+
+
 var bottomToggleBoolean = false;
 
 var toggleBottomUi = function() {
@@ -826,6 +980,10 @@ $(function() {
 btnTracing = $("#btnTracing img");
 btnMimicking = $("#btnMimicking img");
 btnTransforming = $("#btnTransforming img");
+//new buttons
+btnObjRecSame = $("#btnObjRecSame img");
+btnObjRecRelated = $("#btnObjRecRelated img");
+
 
 
 btnTracing.click(function(){
@@ -880,6 +1038,43 @@ btnTransforming.click(function(){
     }
 });
 
+btnObjRecSame.click(function () {
+    ChooseCreativity(4);
+    /*
+    var ending = btnMimicking.attr('src').slice(-3); //, src.slice( -3 );
+    switch (ending) {
+        case 'jpg':
+            btnTracing.attr('src', "images/Tracing.jpg");
+            btnMimicking.attr('src', "images/Mimicking.jpg");
+            btnTransforming.attr('src', "images/Transforming.gif");
+            break;
+        case 'gif':
+            btnTracing.attr('src', "images/Tracing.jpg");
+            btnMimicking.attr('src', "images/Mimicking.jpg");
+            btnTransforming.attr('src', "images/Transforming.jpg");
+            break;
+    }
+     * */
+});
+
+btnObjRecRelated.click(function () {
+    ChooseCreativity(5);
+    /*
+    var ending = btnMimicking.attr('src').slice(-3); //, src.slice( -3 );
+    switch (ending) {
+        case 'jpg':
+            btnTracing.attr('src', "images/Tracing.jpg");
+            btnMimicking.attr('src', "images/Mimicking.jpg");
+            btnTransforming.attr('src', "images/Transforming.gif");
+            break;
+        case 'gif':
+            btnTracing.attr('src', "images/Tracing.jpg");
+            btnMimicking.attr('src', "images/Mimicking.jpg");
+            btnTransforming.attr('src', "images/Transforming.jpg");
+            break;
+    }
+     */
+});
 
 
 
@@ -931,3 +1126,23 @@ function downVotePouty(){
 	$('#logo img').attr("src","images/buddy_pouty.gif");
 	
 	}
+
+function displaySpeech(reco_Object, drawn_Object){
+    //get the current mode
+    //use the object from 
+    var string = "<p> I think you're drawing a " + reco_Object + ". I'll draw a " + drawn_Object + " to go with it. </p>";
+    
+    $("#bubbleText").html(string);
+    $("#speechBubble").fadeIn();
+
+    setTimeout(hideBubble, 5000)
+
+    
+    //$("#speechBubble").show(); 
+
+}
+
+function hideBubble(){
+    console.log("Trying to hide the bubble"); 
+    $("#speechBubble").fadeOut();
+}

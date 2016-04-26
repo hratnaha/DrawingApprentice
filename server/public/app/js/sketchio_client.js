@@ -187,7 +187,8 @@ function onStatsQuery(allData) {
     var userLines = JSON.parse(allData.userLines);
     var computerLines = JSON.parse(allData.computerLines);
     InitChart(userLines);
-    InitChart2(userLines); 
+    InitChart2(userLines);
+    InitChart3(userLines); 
     //var userLines = allData.userLines;
     console.log(userLines);
     console.log("First comp line length: " + computerLines[0].totalDistance);
@@ -401,6 +402,7 @@ function downloadData() {
 
 
 function downloadCanvas(link) {
+    console.log("Working on downloading canvas"); 
     var canvas = document.getElementById('both');
     var context = canvas.getContext('2d'); 
     var w = canvas.width;
@@ -476,7 +478,7 @@ function onClassifyObject(label){
 
 
 function ChooseCreativity(value){
-		 	console.log(value);
+		 	console.log("Setting creativity" + value);
 		    switch( value ) {
 				   case 1: 
 						socket.emit("SetCreativty", 1);
@@ -485,8 +487,14 @@ function ChooseCreativity(value){
 					    socket.emit("SetCreativty", 50);
 					    break;
 				   case 3:
-				   		socket.emit("SetCreativty", 90);
+				   		socket.emit("SetCreativty", 70);
 				   		break;
+                case 4:
+                    socket.emit("SetCreativty", 95);
+                         break;
+                case 5:
+                    socket.emit("SetCreativty", 100);
+                    break;
 				   		
 				}
 }

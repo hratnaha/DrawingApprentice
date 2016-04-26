@@ -2328,4 +2328,37 @@ label {
 .room-join{
     display: inline-block;
 }
+#speechBubble{
+    background-image:url("images/speechBubble.png");
+    background-repeat:no-repeat;  
+}
+#bubbleText{
+    font-family:"Comic Sans MS", cursive, sans-serif;
+}
 
+
+/*
+#visualization3 {
+  font: 10px sans-serif;
+}
+
+
+#visualization3 .axis path,
+.axis line {
+  fill: none;
+  stroke: #000;
+  shape-rendering: crispEdges;
+}
+
+ #visualization3 .area{
+  fill: steelblue;
+  clip-path: url(#clip);
+}
+
+#visualization3 .brush .extent {
+  stroke: #fff;
+  fill-opacity: .125;
+  shape-rendering: crispEdges;
+}
+
+    */
