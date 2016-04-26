@@ -328,7 +328,13 @@ io.on('connection', function (so) {
          
 
     }
-    
+	
+	function onDisconnect(){
+		utilDatabase.onSaveDataOnDb();
+		console.log("save to pic");
+		room.updateServerPic(true);		
+	}   
+ 
     so.on('onLabel', onLabel); 
     so.on('onOpen', onOpen);
     so.on('SetCreativty', function (level) {
@@ -348,7 +354,7 @@ io.on('connection', function (so) {
     so.on('touchdown', function () {
        room.resetTimeout();
     });
-    so.on('disconnect', utilDatabase.onSaveDataOnDb);
+    so.on('disconnect', onDisconnect);
     so.on('touchup', onNewStrokeReceived);
     so.on('setMode', onSetMode);
     so.on('clear', onClear);

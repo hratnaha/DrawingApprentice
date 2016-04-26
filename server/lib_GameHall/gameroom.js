@@ -250,7 +250,9 @@ class gameroom {
                                                 try{
 					                                for(var i=0;i < strokes.length; i++){
                                                         var stroke = strokes[i];
-						                                insertLineSegments(thisobj.quadtree, stroke);
+						                                stroke.timestamp = (new Date()).getTime();
+														insertLineSegments(thisobj.quadtree, stroke);
+														thisobj.compStrokes.push(stroke);
                                                         var resultmsg = JSON.stringify(stroke);
                                                         if(thisobj.sockets.length > 0){
 						                                    //console.log("prepare to send lines back through sockets: " + resultmsg);
@@ -320,8 +322,8 @@ class gameroom {
                                             compStroke.time = (new Date()).getTime();
 
                                             // decode to JSON and send the message
-                                            var resultmsg = JSON.stringify(compStroke);
-                                            // and send it to all the players
+											var resultmsg = JSON.stringify(compStroke);
+											// and send it to all the players
                                             if(thisobj.sockets.length > 0){
                                                 for(var i=0;i<thisobj.sockets.length;i++){
                                                     var tarso = thisobj.sockets[i];
@@ -352,14 +354,16 @@ class gameroom {
                 tarso.emit('respondStroke', JSON.stringify(userStroke));
         }
     }
-    updateServerPic(){
+    updateServerPic(isForce){
+		isForce = typeof isForce !== 'undefined' ? isForce : false;
         // update the server pic /*every 10 user lines*/
-        if(this.userStrokes.length > 0 && this.userStrokes.length / 10 > this.prevDrawn){
+        if(this.userStrokes.length > 0 && (this.userStrokes.length / 10 > this.prevDrawn || isForce)){
             this.prevDrawn = Math.ceil(this.userStrokes.length / 10);
             // draw both user lines and computer lines
             var drawingContext = canvas2D.Initialize(this.canvasSize.width, this.canvasSize.height);
             while (this.userStrokes.length > this.indexULines && this.compStrokes.length > this.indexCLines) {
-                if(this.userStrokes[this.indexULines].timestamp < this.compStrokes[this.indexCLines].timestamp){
+                console.log("draw line");
+				if(this.userStrokes[this.indexULines].timestamp < this.compStrokes[this.indexCLines].timestamp){
                     canvas2D.DrawLine(drawingContext, this.userStrokes[this.indexULines]);
                     this.indexULines++;
                 }else{

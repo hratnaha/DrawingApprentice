@@ -55,7 +55,7 @@ module.exports = {
             }
 
             function saveData() {
-                canvas2D.ConvertDrawingToPng(canvasSize, sessionID, userLines, computerLines);
+                //canvas2D.ConvertDrawingToPng(canvasSize, sessionID, userLines, computerLines);
 
                 var options = {
                     host: mongoConfig.host,

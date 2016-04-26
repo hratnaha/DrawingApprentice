@@ -39,16 +39,12 @@ function findLeastUsageInQuadtree(quadtree, box, canvasSize){
     var offset = {x: 0, y: 0};
     var minCount = Number.MAX_VALUE;
     
-    //console.log(quadtree);
     while(curYpos < canvasSize.height){
         var curBox = {
             x: curXpos,
             y: curYpos,
             width: boxWidth,
-            height: boxHeight};
-	//console.log("curBox:");
-	//console.log(curBox);   
-	//console.log("hit objects:");     
+            height: boxHeight};     
 
         var hitObjects = quadtree.retrieve(curBox);
         if(hitObjects.length < minCount){
