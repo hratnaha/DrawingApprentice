@@ -532,6 +532,7 @@ $(function() {
 btnTracing = $("#btnTracing img");
 btnMimicking = $("#btnMimicking img");
 btnTransforming = $("#btnTransforming img");
+btnObjRec = $("#btnObjRec img");
 
 
 btnTracing.click(function(){
@@ -542,11 +543,13 @@ btnTracing.click(function(){
            btnTracing.attr('src',"images/Tracing.gif"); //= this.attr('src').replace( /jpg$/, 'gif' );
 		   btnMimicking.attr('src',"images/Mimicking.jpg");
 		   btnTransforming.attr('src',"images/Transforming.jpg");
+		   btnObjRec.attr('src','images/object-recognition.jpg')
            break;
        case 'gif': 
            btnTracing.attr('src',"images/Tracing.jpg");
 		   btnMimicking.attr('src',"images/Mimicking.jpg");
 		   btnTransforming.attr('src',"images/Transforming.jpg");
+		   btnObjRec.attr('src','images/object-recognition.jpg')
            break;
     }
 });
@@ -560,31 +563,59 @@ btnMimicking.click(function(){
            btnTracing.attr('src',"images/Tracing.jpg"); 
 		   btnMimicking.attr('src',"images/Mimicking.gif");
 		   btnTransforming.attr('src',"images/Transforming.jpg");
+		   btnObjRec.attr('src','images/object-recognition.jpg')
            break;
        case 'gif': 
            btnTracing.attr('src',"images/Tracing.jpg");
 		   btnMimicking.attr('src',"images/Mimicking.jpg");
 		   btnTransforming.attr('src',"images/Transforming.jpg");
+		   btnObjRec.attr('src','images/object-recognition.jpg')
            break;
     }
 });
 
 btnTransforming.click(function(){
 	ChooseCreativity(3);
-	  var ending = btnMimicking.attr('src').slice(-3); //, src.slice( -3 );
+	  var ending = btnTransforming.attr('src').slice(-3); //, src.slice( -3 );
     switch( ending ) {
        case 'jpg': 
            btnTracing.attr('src',"images/Tracing.jpg"); 
 		   btnMimicking.attr('src',"images/Mimicking.jpg");
 		   btnTransforming.attr('src',"images/Transforming.gif");
+		   btnObjRec.attr('src','images/object-recognition.jpg')
            break;
        case 'gif': 
            btnTracing.attr('src',"images/Tracing.jpg");
 		   btnMimicking.attr('src',"images/Mimicking.jpg");
 		   btnTransforming.attr('src',"images/Transforming.jpg");
+		   btnObjRec.attr('src','images/object-recognition.jpg')
            break;
     }
 });
+
+
+//Case Button Object Recognition
+btnObjRec.click(function(){
+	ChooseCreativity(3);
+	  var ending = btnObjRec.attr('src').slice(-3); //, src.slice( -3 );
+    switch( ending ) {
+       case 'jpg': 
+           btnTracing.attr('src',"images/Tracing.jpg"); 
+		   btnMimicking.attr('src',"images/Mimicking.jpg");
+		   btnTransforming.attr('src',"images/Transforming.jpg");
+		   btnObjRec.attr('src','images/object-recognition.gif')
+           break;
+       case 'gif': 
+           btnTracing.attr('src',"images/Tracing.jpg");
+		   btnMimicking.attr('src',"images/Mimicking.jpg");
+		   btnTransforming.attr('src',"images/Transforming.jpg");
+		   btnObjRec.attr('src','images/object-recognition.jpg')
+           break;
+    }
+});
+
+
+
 
 
 
