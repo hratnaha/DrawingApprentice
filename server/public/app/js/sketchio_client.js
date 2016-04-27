@@ -1,4 +1,4 @@
-var ioUri = "http://localhost:8080"; //"http://130.207.124.45"; //
+var ioUri = "http://128.61.124.6:8080"; //"http://130.207.124.45"; //
 
 var output;
 var socket;
