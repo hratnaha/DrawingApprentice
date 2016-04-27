@@ -315,6 +315,14 @@ function FullScreenCanvas() {
 
 
 }); //document ready
+
+
+function getStats() {
+    var allData = getData();
+    var userLines = allData.userLines;
+    var compLines = allData.computerLines;
+    console.log("userLines = " + userLines);
+}
 	 
 function componentToHex(c) {
     var hex = c.toString(16);
@@ -348,6 +356,9 @@ function clearcanvas() {
 		myCanvasContext3.clearRect(0, 0, canvas.width, canvas.height);
 }
 
+
+
+
 $("#grouping").click(function(){
 	if($("#grouping").hasClass("isGrouping")){
 		$("#grouping").removeClass("isGrouping");
@@ -358,6 +369,443 @@ $("#grouping").click(function(){
 		groupingMode(true);
 	}
 });
+
+//D3 viz stuff
+function InitChart(data) {
+    //Drawing Activity over Time
+    $('#ActivityChart').append('<svg id="visualisation" width="1100" height="350"></svg>');
+
+    console.log("in the initChart, starting to build the data: ");
+    console.log(data); 
+    var startTime = data[0].allPoints[0].timestamp;
+    var lineData = []; 
+    console.log("Start time: " + startTime);
+    console.log("Data.length = " + data.length); 
+    
+
+    for (var i = 0; i < data.length; i++) {
+        //cycle through lines
+        //code for adding zero before line
+        //console.log("In the first for loop, i=" + i + "total length: " + data.length);
+        
+        if (i != 0) {
+                //if not the first line, then add zero points before point before line
+            var initialTime = data[i].allPoints[0].timestamp;
+            var normalTime = initialTime - startTime;
+            var newPoint = {
+                'x': normalTime - 1,
+                'y': 0
+            };
+            //console.log("Adding point before: " + newPoint);
+            lineData.push(newPoint); 
+        }
+        for (var j = 0; j < data[i].allPoints.length ; j++) {
+            //console.log("In the second loop, j=" + j + "length of j loop: " + data[i].allPoints.length); 
+            //cycle through points        
+            //normalize timestamps to first time stamp
+            var curPoint = data[i].allPoints[j];
+            var initialTime = curPoint.timestamp;
+            var normalTime = initialTime - startTime;
+
+            var newPoint = {
+                'x': normalTime,
+                'y': 1
+            };
+            lineData.push(newPoint); 
+
+
+        }
+        //console.log("LineData: ");
+        //console.log(lineData); 
+
+        //code for adding zero point after line
+        var lastPoint = data[i].allPoints[data[i].allPoints.length - 1];
+        //console.log("Trying to add in the zero point after, LastPoint: " + lastPoint); 
+        var initialTime = lastPoint.timestamp;
+        var normalTime = initialTime - startTime;
+        var newPoint = {
+            'x': normalTime + 1,
+            'y': 0
+        };
+        lineData.push(newPoint);         
+         
+    }
+
+    
+    
+    /*
+    var lineData = [{
+            'x': 1,
+            'y': 5
+        }, {
+            'x': 20,
+            'y': 20
+        }, {
+            'x': 40,
+            'y': 10
+        }, {
+            'x': 60,
+            'y': 40
+        }, {
+            'x': 80,
+            'y': 5
+        }, {
+            'x': 100,
+            'y': 60
+        }, {
+            'x': 150,
+            'y': 200
+        }
+    ];
+    
+    */
+    
+    var vis = d3.select("#visualisation"),
+        WIDTH = 1000,
+        HEIGHT = 300,
+        MARGINS = {
+            top: 20,
+            right: 20,
+            bottom: 20,
+            left: 50
+        },
+        xRange = d3.scale.linear().range([MARGINS.left, WIDTH - MARGINS.right]).domain([d3.min(lineData, function (d) {
+                return d.x;
+            }),
+            d3.max(lineData, function (d) {
+                return d.x;
+            })
+        ]),
+
+        yRange = d3.scale.linear().range([HEIGHT - MARGINS.top, MARGINS.bottom]).domain([d3.min(lineData, function (d) {
+                return d.y;
+            }),
+            d3.max(lineData, function (d) {
+                return d.y;
+            })
+        ]),
+
+        xAxis = d3.svg.axis()
+      .scale(xRange)
+      .tickSize(5)
+      .tickSubdivide(false),
+
+        yAxis = d3.svg.axis()
+      .scale(yRange)
+      .tickSize(5)
+      .orient("left")
+      .tickSubdivide(true);
+    
+    
+    vis.append("svg:g")
+    .attr("class", "x axis")
+    .attr("transform", "translate(0," + (HEIGHT - MARGINS.bottom) + ")")
+    .call(xAxis);
+    
+    vis.append("svg:g")
+    .attr("class", "y axis")
+    .attr("transform", "translate(" + (MARGINS.left) + ",0)")
+    .call(yAxis);
+    
+    // now add titles to the axes
+    vis.append("text")
+            .attr("text-anchor", "middle")// this makes it easy to centre the text as the transform is applied to the anchor
+            .attr("transform", "translate(" + (20 / 2) + "," + (HEIGHT / 2) + ")rotate(-90)")// text is drawn off the screen top left, move down and out and rotate
+            .text("Active or Not");
+    vis.append("text")
+            .attr("text-anchor", "middle")// this makes it easy to centre the text as the transform is applied to the anchor
+            .attr("transform", "translate(" + (WIDTH / 2) + "," + (15 + HEIGHT - (1 / 3)) + ")")// centre below axis
+            .text("Time (ms)");
+    
+    var lineFunc = d3.svg.line()
+  .x(function (d) {
+        return xRange(d.x);
+    })
+  .y(function (d) {
+        return yRange(d.y);
+    })
+  .interpolate('linear');
+    
+    vis.append("svg:path")
+  .attr("d", lineFunc(lineData))
+  .attr("stroke", "blue")
+  .attr("stroke-width", 2)
+  .attr("fill", "none");
+
+}
+
+function InitChart2(data) {
+    //line length over line order
+    $('#LengthChart').append('<svg id="visualisation2" width="1100" height="350"></svg>');
+    var lineData = [];
+
+    for (var i = 0; i < data.length; i++) {
+        //cycle through lines to find their length 
+        var length = data[i].totalDistance;
+        var newPt = {
+            'x': i,
+            'y': length
+        }
+        lineData.push(newPt);
+        console.log(lineData); 
+    }
+   
+    
+    
+    /*
+    var lineData = [{
+            'x': 1,
+            'y': 5
+        }, {
+            'x': 20,
+            'y': 20
+        }, {
+            'x': 40,
+            'y': 10
+        }, {
+            'x': 60,
+            'y': 40
+        }, {
+            'x': 80,
+            'y': 5
+        }, {
+            'x': 100,
+            'y': 60
+        }, {
+            'x': 150,
+            'y': 200
+        }
+    ];
+    
+    */
+    
+    var vis = d3.select("#visualisation2"),
+        WIDTH = 1000,
+        HEIGHT = 300,
+        MARGINS = {
+            top: 20,
+            right: 20,
+            bottom: 20,
+            left: 50
+        },
+        xRange = d3.scale.linear().range([MARGINS.left, WIDTH - MARGINS.right]).domain([d3.min(lineData, function (d) {
+                return d.x;
+            }),
+            d3.max(lineData, function (d) {
+                return d.x;
+            })
+        ]),
+
+        yRange = d3.scale.linear().range([HEIGHT - MARGINS.top, MARGINS.bottom]).domain([d3.min(lineData, function (d) {
+                return d.y;
+            }),
+            d3.max(lineData, function (d) {
+                return d.y;
+            })
+        ]),
+
+        xAxis = d3.svg.axis()
+      .scale(xRange)
+      .tickSize(5)
+      .tickSubdivide(true),
+
+        yAxis = d3.svg.axis()
+      .scale(yRange)
+      .tickSize(5)
+      .orient("left")
+      .tickSubdivide(true);
+    
+    
+    vis.append("svg:g")
+    .attr("class", "x axis")
+    .attr("transform", "translate(0," + (HEIGHT - MARGINS.bottom) + ")")
+    .call(xAxis);
+    
+    vis.append("svg:g")
+    .attr("class", "y axis")
+    .attr("transform", "translate(" + (MARGINS.left) + ",0)")
+    .call(yAxis);
+    
+    vis.append("text")
+            .attr("text-anchor", "middle")// this makes it easy to centre the text as the transform is applied to the anchor
+            .attr("transform", "translate(" + (20 / 2) + "," + (HEIGHT / 2) + ")rotate(-90)")// text is drawn off the screen top left, move down and out and rotate
+            .text("Line Length");
+    vis.append("text")
+            .attr("text-anchor", "middle")// this makes it easy to centre the text as the transform is applied to the anchor
+            .attr("transform", "translate(" + (WIDTH / 2) + "," + (15 + HEIGHT - (1/ 3)) + ")")// centre below axis
+            .text("Line Number");
+    
+    var lineFunc = d3.svg.line()
+  .x(function (d) {
+        return xRange(d.x);
+    })
+  .y(function (d) {
+        return yRange(d.y);
+    })
+  .interpolate('linear');
+    
+    vis.append("svg:path")
+  .attr("d", lineFunc(lineData))
+  .attr("stroke", "blue")
+  .attr("stroke-width", 2)
+  .attr("fill", "none");
+
+}
+
+
+
+function InitChart3(){
+
+    //change svg call
+    //change data source
+    //add style component
+    
+    //$('#ActivityChart2').append('<svg id="visualization3" width="1100" height="500"></svg>');
+    
+    /*
+    var lineData = [];
+    
+    for (var i = 0; i < data.length; i++) {
+        //cycle through lines to find their length 
+        var length = data[i].totalDistance;
+        var newPt = {
+            'x': i,
+            'y': length
+        }
+        lineData.push(newPt);
+        console.log(lineData);
+    }
+    */
+    var lineData = [{
+            'x': 1,
+            'y': 5
+        }, {
+            'x': 20,
+            'y': 20
+        }, {
+            'x': 40,
+            'y': 10
+        }, {
+            'x': 60,
+            'y': 40
+        }, {
+            'x': 80,
+            'y': 5
+        }, {
+            'x': 100,
+            'y': 60
+        }, {
+            'x': 150,
+            'y': 200
+        }
+    ];
+    
+    
+    var margin = { top: 10, right: 10, bottom: 100, left: 40 },
+        margin2 = { top: 430, right: 10, bottom: 20, left: 40 },
+        width = 960 - margin.left - margin.right,
+        height = 500 - margin.top - margin.bottom,
+        height2 = 500 - margin2.top - margin2.bottom;
+    
+    var parseDate = d3.time.format("%b %Y").parse;
+    
+    var x = d3.scale.linear().range([0, width]),
+        x2 = d3.scale.linear().range([0, width]),
+        y = d3.scale.linear().range([height, 0]),
+        y2 = d3.scale.linear().range([height2, 0]);
+    
+    var xAxis = d3.svg.axis().scale(x).orient("bottom"),
+        xAxis2 = d3.svg.axis().scale(x2).orient("bottom"),
+        yAxis = d3.svg.axis().scale(y).orient("left");
+    
+    var brush = d3.svg.brush()
+    .x(x2)
+    .on("brush", brushed);
+    
+    var area = d3.svg.area()
+    .interpolate("monotone")
+    .x(function (d) { return x(d.x); })
+    .y0(height)
+    .y1(function (d) { return y(d.y); });
+    
+    var area2 = d3.svg.area()
+    .interpolate("monotone")
+    .x(function (d) { return x2(d.x); })
+    .y0(height2)
+    .y1(function (d) { return y2(d.y); });
+    
+    var svg = d3.select("#visualization3")
+    .attr("width", width + margin.left + margin.right)
+    .attr("height", height + margin.top + margin.bottom);
+    
+    svg.append("defs").append("clipPath")
+    .attr("id", "clip")
+  .append("rect")
+    .attr("width", width)
+    .attr("height", height);
+    
+    var focus = svg.append("g")
+    .attr("class", "focus")
+    .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+    
+    var context = svg.append("g")
+    .attr("class", "context")
+    .attr("transform", "translate(" + margin2.left + "," + margin2.top + ")");
+    
+    loadData(lineData);
+    function loadData(data) {
+        x.domain(d3.extent(data.map(function (d) { return d.x; })));
+        y.domain([0, d3.max(data.map(function (d) { return d.y; }))]);
+        x2.domain(x.domain());
+        y2.domain(y.domain());
+        
+        focus.append("path")
+      .datum(data)
+      .attr("class", "area")
+      .attr("d", area);
+        
+        focus.append("g")
+      .attr("class", "x axis")
+      .attr("transform", "translate(0," + height + ")")
+      .call(xAxis);
+        
+        focus.append("g")
+      .attr("class", "y axis")
+      .call(yAxis);
+        
+        context.append("path")
+      .datum(data)
+      .attr("class", "area")
+      .attr("d", area2);
+        
+        context.append("g")
+      .attr("class", "x axis")
+      .attr("transform", "translate(0," + height2 + ")")
+      .call(xAxis2);
+        
+        context.append("g")
+      .attr("class", "x brush")
+      .call(brush)
+    .selectAll("rect")
+      .attr("y", -6)
+      .attr("height", height2 + 7);
+    }
+    
+    function brushed() {
+        x.domain(brush.empty() ? x2.domain() : brush.extent());
+        focus.select(".area").attr("d", area);
+        focus.select(".x.axis").call(xAxis);
+    }
+    
+    function type(d) {
+        d.date = parseDate(d.date);
+        d.price = +d.price;
+        return d;
+    }
+
+}
+
+
 
 var bottomToggleBoolean = false;
 
@@ -532,7 +980,10 @@ $(function() {
 btnTracing = $("#btnTracing img");
 btnMimicking = $("#btnMimicking img");
 btnTransforming = $("#btnTransforming img");
-btnObjRec = $("#btnObjRec img");
+
+btnObjRecSame = $("#btnObjRecSame img");
+btnObjRecRelated = $("#btnObjRecRelated img");
+
 
 
 btnTracing.click(function(){
@@ -543,13 +994,13 @@ btnTracing.click(function(){
            btnTracing.attr('src',"images/Tracing.gif"); //= this.attr('src').replace( /jpg$/, 'gif' );
 		   btnMimicking.attr('src',"images/Mimicking.jpg");
 		   btnTransforming.attr('src',"images/Transforming.jpg");
-		   btnObjRec.attr('src','images/object-recognition.jpg')
+		   btnObjRecSame.attr('src','images/object-recognition.jpg')
            break;
        case 'gif': 
            btnTracing.attr('src',"images/Tracing.jpg");
 		   btnMimicking.attr('src',"images/Mimicking.jpg");
 		   btnTransforming.attr('src',"images/Transforming.jpg");
-		   btnObjRec.attr('src','images/object-recognition.jpg')
+		   btnObjRecSame.attr('src','images/object-recognition.jpg')
            break;
     }
 });
@@ -563,13 +1014,13 @@ btnMimicking.click(function(){
            btnTracing.attr('src',"images/Tracing.jpg"); 
 		   btnMimicking.attr('src',"images/Mimicking.gif");
 		   btnTransforming.attr('src',"images/Transforming.jpg");
-		   btnObjRec.attr('src','images/object-recognition.jpg')
+		   btnObjRecSame.attr('src','images/object-recognition.jpg')
            break;
        case 'gif': 
            btnTracing.attr('src',"images/Tracing.jpg");
 		   btnMimicking.attr('src',"images/Mimicking.jpg");
 		   btnTransforming.attr('src',"images/Transforming.jpg");
-		   btnObjRec.attr('src','images/object-recognition.jpg')
+		   btnObjRecSame.attr('src','images/object-recognition.jpg')
            break;
     }
 });
@@ -582,13 +1033,13 @@ btnTransforming.click(function(){
            btnTracing.attr('src',"images/Tracing.jpg"); 
 		   btnMimicking.attr('src',"images/Mimicking.jpg");
 		   btnTransforming.attr('src',"images/Transforming.gif");
-		   btnObjRec.attr('src','images/object-recognition.jpg')
+		   btnObjRecSame.attr('src','images/object-recognition.jpg')
            break;
        case 'gif': 
            btnTracing.attr('src',"images/Tracing.jpg");
 		   btnMimicking.attr('src',"images/Mimicking.jpg");
 		   btnTransforming.attr('src',"images/Transforming.jpg");
-		   btnObjRec.attr('src','images/object-recognition.jpg')
+		   btnObjRecSame.attr('src','images/object-recognition.jpg')
            break;
     }
 });
@@ -597,23 +1048,60 @@ btnTransforming.click(function(){
 //Case Button Object Recognition
 btnObjRec.click(function(){
 	ChooseCreativity(3);
-	  var ending = btnObjRec.attr('src').slice(-3); //, src.slice( -3 );
+	  var ending = btnObjRecSame.attr('src').slice(-3); //, src.slice( -3 );
     switch( ending ) {
        case 'jpg': 
            btnTracing.attr('src',"images/Tracing.jpg"); 
 		   btnMimicking.attr('src',"images/Mimicking.jpg");
 		   btnTransforming.attr('src',"images/Transforming.jpg");
-		   btnObjRec.attr('src','images/object-recognition.gif')
+		   btnObjRecSame.attr('src','images/object-recognition.gif')
            break;
        case 'gif': 
            btnTracing.attr('src',"images/Tracing.jpg");
 		   btnMimicking.attr('src',"images/Mimicking.jpg");
 		   btnTransforming.attr('src',"images/Transforming.jpg");
-		   btnObjRec.attr('src','images/object-recognition.jpg')
+		   btnObjRecSame.attr('src','images/object-recognition.jpg')
            break;
     }
 });
 
+btnObjRecSame.click(function () {
+    ChooseCreativity(4);
+    /*
+    var ending = btnMimicking.attr('src').slice(-3); //, src.slice( -3 );
+    switch (ending) {
+        case 'jpg':
+            btnTracing.attr('src', "images/Tracing.jpg");
+            btnMimicking.attr('src', "images/Mimicking.jpg");
+            btnTransforming.attr('src', "images/Transforming.gif");
+            break;
+        case 'gif':
+            btnTracing.attr('src', "images/Tracing.jpg");
+            btnMimicking.attr('src', "images/Mimicking.jpg");
+            btnTransforming.attr('src', "images/Transforming.jpg");
+            break;
+    }
+     * */
+});
+
+btnObjRecRelated.click(function () {
+    ChooseCreativity(5);
+    /*
+    var ending = btnMimicking.attr('src').slice(-3); //, src.slice( -3 );
+    switch (ending) {
+        case 'jpg':
+            btnTracing.attr('src', "images/Tracing.jpg");
+            btnMimicking.attr('src', "images/Mimicking.jpg");
+            btnTransforming.attr('src', "images/Transforming.gif");
+            break;
+        case 'gif':
+            btnTracing.attr('src', "images/Tracing.jpg");
+            btnMimicking.attr('src', "images/Mimicking.jpg");
+            btnTransforming.attr('src', "images/Transforming.jpg");
+            break;
+    }
+     */
+});
 
 
 
@@ -668,3 +1156,23 @@ function downVotePouty(){
 	$('#logo img').attr("src","images/buddy_pouty.gif");
 	
 	}
+
+function displaySpeech(reco_Object, drawn_Object){
+    //get the current mode
+    //use the object from 
+    var string = "<p> I think you're drawing a " + reco_Object + ". I'll draw a " + drawn_Object + " to go with it. </p>";
+    
+    $("#bubbleText").html(string);
+    $("#speechBubble").fadeIn();
+
+    setTimeout(hideBubble, 5000)
+
+    
+    //$("#speechBubble").show(); 
+
+}
+
+function hideBubble(){
+    console.log("Trying to hide the bubble"); 
+    $("#speechBubble").fadeOut();
+}

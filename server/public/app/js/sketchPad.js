@@ -218,7 +218,7 @@ function sketchUtil() {
 var pressurevalue = 0;
 var log = function (msg) {
     $("<div>").text(msg).appendTo($("#log"));
-    console.log(msg);
+    //console.log(msg);
 };
 var logtouch = function (evtype, t) {
     pressurevalue = t.webkitForce;
