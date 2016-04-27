@@ -1046,7 +1046,7 @@ btnTransforming.click(function(){
 
 
 //Case Button Object Recognition
-btnObjRec.click(function(){
+btnObjRecSame.click(function(){
 	ChooseCreativity(3);
 	  var ending = btnObjRecSame.attr('src').slice(-3); //, src.slice( -3 );
     switch( ending ) {
