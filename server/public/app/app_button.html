@@ -87,7 +87,8 @@ put js files before css files
                   </button>
               </li>
               <li>
-                  <a class="btn btn-default btn-lg" style="float:left;margin-left:1em;height:47px;line-height:12px" onclick="downloadCanvas(this)">Download</a>
+                  <a class="btn btn-default btn-lg" style="float:left;margin-left:1em;height:47px;line-height:12px" onclick="downloadCanvas(this)">
+                        </a>
               </li>
 
                 <li>
@@ -486,14 +487,12 @@ put js files before css files
         <div class="setting-button col-lg-5">
         	<ul class="setting-button-content">
             	<li><button class="btn" id ="trash" href="#"><i class="fa fa-trash fa-2x"></i></button></li>
-                <li><button class="btn" href="#" onclick="downloadCanvas(this);"><i class="fa fa-download fa-2x"></i></button></li>
-                <li><a class="btn" onclick="downloadCanvas(this);"><i class="fa fa-download fa-2x"></i></a></li>
-
-                </li><li><button onClick="displaySpeech('house','cat');"class="btn" href="#"><i class="fa fa-plus-square-o fa-2x"></i></button></li>
+                <!--<li><button class="btn"  id="download" ><i class="fa fa-download fa-2x"></i></button></li>-->
+                <li><a class="btn" id="download"><i style="margin-top:.5em;"class="fa fa-download fa-2x"></i></a></li>
+                <li><button onClick="displaySpeech('house','cat');"class="btn" href="#"><i class="fa fa-plus-square-o fa-2x"></i></button></li>
                  <li><button class="btn" href="#"><i class="fa fa-cogs fa-2x"></i></button></li>
                 <li>
-                    <button class="btn" id="myBtn" style="float:left;margin-left:1em;">
-                        Stats
+                    <button class="btn" id="myBtn" style="float:left;margin-left:1em;"><i class="fa fa-bar-chart fa-2x" aria-hidden="true"></i>
                     </button>
                 </li>  
                
@@ -562,6 +561,7 @@ put js files before css files
     </div>
 
     <script>
+
 
         // Get the modal
         var modal = document.getElementById('myModal');

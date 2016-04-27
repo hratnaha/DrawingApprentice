@@ -281,8 +281,11 @@ $("#trash").click(function(){
 
 
 
-$("#download").click(function(){
-	save();
+    $("#download").click(function (){
+        console.log("In the download function. This is: ");
+        console.log(this); 
+        downloadCanvas(this);
+	//save();
 });
 
 
@@ -1141,6 +1144,31 @@ function displaySpeech(reco_Object, drawn_Object){
     //$("#speechBubble").show(); 
 
 }
+
+$("#up").click("displayFeedback(1);")
+$("#down").click("displayFeedback(0);")
+
+
+function displayFeedack(vote) {
+    //get the current mode
+    //use the object from 
+    if (vote == 1) {
+        var string = "<p> Glad you liked it! I'll do that more often."
+    }
+    else {
+        var string = "<p> Alright, I'll do that less often."
+    }
+    
+    $("#bubbleText").html(string);
+    $("#speechBubble").fadeIn();
+    
+    setTimeout(hideBubble, 5000)
+
+    //$("#speechBubble").show(); 
+
+}
+
+
 
 function hideBubble(){
     console.log("Trying to hide the bubble"); 
