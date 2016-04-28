@@ -89,7 +89,8 @@ put js files before css files
                   </button>
               </li>
               <li>
-                  <a class="btn btn-default btn-lg" style="float:left;margin-left:1em;height:47px;line-height:12px" onclick="downloadCanvas(this)">Download</a>
+                  <a class="btn btn-default btn-lg" style="float:left;margin-left:1em;height:47px;line-height:12px" onclick="downloadCanvas(this)">
+                        </a>
               </li>
 
                 <li>
@@ -100,7 +101,7 @@ put js files before css files
                 </div><!--row-->
 
                 <div id="speechBubble" style="display:none; position:absolute;right:8%;top:1em;width:245px;height:190px;background-repeat:no-repeat; background-size:contain; background-image:url('images/speechBubble.png');">
-                    <div id="bubbleText" style="font-family:'Gill Sans';width:170px;word-wrap:break-word;padding-left:1em;padding-top:1em;">
+                    <div id="bubbleText" style="font-family:'Gill Sans'; font-size:130%;   width:175px;word-wrap:break-word;padding-left:1em;padding-top:.7em;">
                         
                     </div>
                     <!--
@@ -118,14 +119,18 @@ put js files before css files
                 </div>
 
                 <div class="voting_btn" style="position:absolute;z-index:9999;right:23%;top:1em;">
+<<<<<<< HEAD
                     <button class="btn btn-vote" onClick="UpVote();" id="up"></button>
                     <button class="btn btn-vote" onClick="DownVote();" id="down"></button>
+=======
+                    <button class="btn btn-vote" onclick="UpVote();" id="up"><i class="fa fa-thumbs-up fa-5x"></i></i></button>
+                    <button class="btn btn-vote" onclick="DownVote();" id="down"><i class="fa fa-thumbs-down fa-5x"></i></i></i></button>
+>>>>>>> 7d7d4b48463d14b3f9ae1e744d12c7a252ccf5ca
 
                 </div>
 
 
 
-                </svg>
             </div><!--col-lg-12-->
         </div><!--agent-panel-->
         
@@ -488,14 +493,12 @@ put js files before css files
         <div class="setting-button col-lg-5">
         	<ul class="setting-button-content">
             	<li><button class="btn" id ="trash" href="#"><i class="fa fa-trash fa-2x"></i></button></li>
-                <li><button class="btn" href="#" onclick="downloadCanvas(this);"><i class="fa fa-download fa-2x"></i></button></li>
-                <li><a class="btn" onclick="downloadCanvas(this);"><i class="fa fa-download fa-2x"></i></a></li>
-
-                </li><li><button onClick="displaySpeech('house','cat');"class="btn" href="#"><i class="fa fa-plus-square-o fa-2x"></i></button></li>
+                <!--<li><button class="btn"  id="download" ><i class="fa fa-download fa-2x"></i></button></li>-->
+                <li><a class="btn" id="download"><i style="margin-top:.5em;"class="fa fa-download fa-2x"></i></a></li>
+                <li><button onClick="displaySpeech('house','cat');"class="btn" href="#"><i class="fa fa-plus-square-o fa-2x"></i></button></li>
                  <li><button class="btn" href="#"><i class="fa fa-cogs fa-2x"></i></button></li>
                 <li>
-                    <button class="btn" id="myBtn" style="float:left;margin-left:1em;">
-                        Stats
+                    <button class="btn" id="myBtn" style="float:left;margin-left:1em;"><i class="fa fa-bar-chart fa-2x" aria-hidden="true"></i>
                     </button>
                 </li>  
                
@@ -564,6 +567,7 @@ put js files before css files
     </div>
 
     <script>
+
 
         // Get the modal
         var modal = document.getElementById('myModal');

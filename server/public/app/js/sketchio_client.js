@@ -370,26 +370,29 @@ downvoteConfirm = $("#downvoteconfirmation");
 
 
 function DownVote() {
-	
-    socket.emit('vote', 0, totalScore);
-	downvoteConfirm.show("fast").delay( 2000 );
+    displayMessage("Sorry you didn't like it. I'll do that less.");
+
+    //socket.emit('vote', 0, totalScore);
+	//downvoteConfirm.show("fast").delay( 2000 );
 	
 	//downvoteConfirm.style.display = "block";
 	//upvoteConfirm.style.display = "none";
-	downvoteConfirm.hide("fast");
+	//downvoteConfirm.hide("fast");
 }
 
 
 function UpVote() {
-    console.log("upvoted2"); 
-	
-	upvoteConfirm.show("fast").delay( 2000 );
+    console.log("upvoted2");
+    displayMessage("Glad you liked it! I'll do that more often.");
+
+
+	//upvoteConfirm.show("fast").delay( 2000 );
 	//upvoteConfirm.css("display","block");
-	socket.emit('vote', 1, totalScore);
+	//socket.emit('vote', 1, totalScore);//add score count to the room, get that with user data
 	//downvoteConfirm.style.display = "none";
 	
 	//upvoteConfirm.css("display","none");
-	upvoteConfirm.hide("fast");
+	//upvoteConfirm.hide("fast");
 	console.log(upvoteConfirm);
 	
 }
@@ -402,8 +405,12 @@ function downloadData() {
 
 
 function downloadCanvas(link) {
-    console.log("Working on downloading canvas"); 
+    console.log("Working on downloading canvas");
     var canvas = document.getElementById('both');
+    var filename = 'test.png'; 
+    link.href = document.getElementById('both').toDataURL();
+    link.download = filename;
+    /*
     var context = canvas.getContext('2d'); 
     var w = canvas.width;
     var h = canvas.height;
@@ -421,6 +428,7 @@ function downloadCanvas(link) {
     
     link.href = imageData; 
     link.download = 'test.png';
+     * */
 }
 
 
@@ -470,6 +478,9 @@ function onUpdateScore(newScore){
 }
 
 function onClassifyObject(label){
+    //var objToDraW = label.selection;
+    //var objRecognized = label.classification;
+    //displaySpeech(objRecognized, objToDraw); 
     console.log("recognized as: ");
     console.log(label);
     //var newLabel = JSON.parse(label)
