@@ -321,7 +321,7 @@ io.on('connection', function (so) {
             var allData = {
                 userLines: userLines,
                 computerLines: computerLines, 
-                labeledGroups: apprentice.labeledGroups
+                labeledGroups: apprentice.labeledGroups 
             };
             
             so.emit('statsData', allData);
@@ -335,7 +335,22 @@ io.on('connection', function (so) {
         room.addStroke(stroke, so);
     }
 
-    function vote(isUp, score) {
+    function vote(isUp) {
+        //var value = JSON.parse(isUP); 
+        console.log("In server. Votin up. Room = ");
+        if (isUp==1) {
+            if (room.upVoteCount == null)
+                room.upVoteCount = 1;
+            else
+                room.upVoteCount = room.upVoteCount + 1; 
+        }
+        else {
+            if (room.downVoteCount == null)
+                room.downVoteCount = 1;
+            else
+                room.downVoteCount = room.downVoteCount + 1; 
+        }
+        /*
         var vote = isUp ? 1 : 0;
         if (isUp)
             totalScore += 10;
@@ -344,8 +359,8 @@ io.on('connection', function (so) {
         //totalScore = isUp ? (totalScore + 10) : (totalScore - 10); 
         if(room)
             room.broadcast('updateScore', JSON.stringify(totalScore));
-
-        apprentice.voteSync(vote);
+        */
+        apprentice.voteSync(isUp);
     }
 
     function onClear() {
