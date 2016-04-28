@@ -56,7 +56,10 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#898c90', end
 	transform: scale(1.5);
 	}
 #up{
+	width:50px;
 	color:#4CD964;
+	background-image:url(../images/ThumbUp.png);
+	background-size:cover;
 	}
 #up:active{
 	color:#014511;
