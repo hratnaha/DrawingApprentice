@@ -1,4 +1,4 @@
-var ioUri = "http://128.61.124.6:8080"; //"http://130.207.124.45"; //
+var ioUri = "http://localhost:8080"; //"http://130.207.124.45"; //
 
 var output;
 var socket;
@@ -370,27 +370,29 @@ downvoteConfirm = $("#downvoteconfirmation");
 
 
 function DownVote() {
-    displayFeedback(0); 
-    socket.emit('vote', 0, totalScore);
-	downvoteConfirm.show("fast").delay( 2000 );
+    displayMessage("Sorry you didn't like it. I'll do that less.");
+
+    //socket.emit('vote', 0, totalScore);
+	//downvoteConfirm.show("fast").delay( 2000 );
 	
 	//downvoteConfirm.style.display = "block";
 	//upvoteConfirm.style.display = "none";
-	downvoteConfirm.hide("fast");
+	//downvoteConfirm.hide("fast");
 }
 
 
 function UpVote() {
     console.log("upvoted2");
-    displayFeedback(1); 
+    displayMessage("Glad you liked it! I'll do that more often.");
 
-	upvoteConfirm.show("fast").delay( 2000 );
+
+	//upvoteConfirm.show("fast").delay( 2000 );
 	//upvoteConfirm.css("display","block");
-	socket.emit('vote', 1, totalScore);
+	//socket.emit('vote', 1, totalScore);//add score count to the room, get that with user data
 	//downvoteConfirm.style.display = "none";
 	
 	//upvoteConfirm.css("display","none");
-	upvoteConfirm.hide("fast");
+	//upvoteConfirm.hide("fast");
 	console.log(upvoteConfirm);
 	
 }

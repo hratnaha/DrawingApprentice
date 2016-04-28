@@ -252,24 +252,8 @@ $(function AdjustLineThickness() {
    });*/
    
    $('#ex15').slider().on('slideStop', function(ev){
-						//ctx.lineWidth = ev.value*20;
-						//lineThickness = ev.value*3;
-						//ctx.lineWidth = ev.value*20;
-						//ctx2.lineWidth = ev.value*20;
-						y = ev.value/3;
-						//ctx.lineWidth = y/2;
-						//y = ev.value*3;
-						//console.log( 'Current Thickness Value:' + ' ' + ctx.lineWidth);				
+						y = ev.value/3;		
 	});	
-
-
-
-
-
-
-
-
-
 						
 });
 
@@ -279,16 +263,12 @@ $("#trash").click(function(){
 	clearCanvas();
 });
 
-
-
     $("#download").click(function (){
         console.log("In the download function. This is: ");
         console.log(this); 
         downloadCanvas(this);
 	//save();
 });
-
-
 
 $("#toggle").click(function(){
         $("#user-panel").toggle();
@@ -311,12 +291,7 @@ function FullScreenCanvas() {
                  */
         	}
 			$("#canvas").offset({ top: 0, left: 0 });
-			
 }
-
-
-
-
 }); //document ready
 
 
@@ -377,7 +352,6 @@ $("#grouping").click(function(){
 function InitChart(data) {
     //Drawing Activity over Time
     $('#ActivityChart').append('<svg id="visualisation" width="1100" height="350"></svg>');
-
     console.log("in the initChart, starting to build the data: ");
     console.log(data); 
     var startTime = data[0].allPoints[0].timestamp;
@@ -387,43 +361,28 @@ function InitChart(data) {
     
 
     for (var i = 0; i < data.length; i++) {
-        //cycle through lines
-        //code for adding zero before line
-        //console.log("In the first for loop, i=" + i + "total length: " + data.length);
-        
         if (i != 0) {
-                //if not the first line, then add zero points before point before line
             var initialTime = data[i].allPoints[0].timestamp;
             var normalTime = initialTime - startTime;
             var newPoint = {
                 'x': normalTime - 1,
                 'y': 0
             };
-            //console.log("Adding point before: " + newPoint);
             lineData.push(newPoint); 
         }
         for (var j = 0; j < data[i].allPoints.length ; j++) {
-            //console.log("In the second loop, j=" + j + "length of j loop: " + data[i].allPoints.length); 
-            //cycle through points        
-            //normalize timestamps to first time stamp
             var curPoint = data[i].allPoints[j];
             var initialTime = curPoint.timestamp;
             var normalTime = initialTime - startTime;
-
             var newPoint = {
                 'x': normalTime,
                 'y': 1
             };
             lineData.push(newPoint); 
-
-
         }
-        //console.log("LineData: ");
-        //console.log(lineData); 
 
         //code for adding zero point after line
         var lastPoint = data[i].allPoints[data[i].allPoints.length - 1];
-        //console.log("Trying to add in the zero point after, LastPoint: " + lastPoint); 
         var initialTime = lastPoint.timestamp;
         var normalTime = initialTime - startTime;
         var newPoint = {
@@ -433,35 +392,6 @@ function InitChart(data) {
         lineData.push(newPoint);         
          
     }
-
-    
-    
-    /*
-    var lineData = [{
-            'x': 1,
-            'y': 5
-        }, {
-            'x': 20,
-            'y': 20
-        }, {
-            'x': 40,
-            'y': 10
-        }, {
-            'x': 60,
-            'y': 40
-        }, {
-            'x': 80,
-            'y': 5
-        }, {
-            'x': 100,
-            'y': 60
-        }, {
-            'x': 150,
-            'y': 200
-        }
-    ];
-    
-    */
     
     var vis = d3.select("#visualisation"),
         WIDTH = 1000,
@@ -553,35 +483,6 @@ function InitChart2(data) {
         console.log(lineData); 
     }
    
-    
-    
-    /*
-    var lineData = [{
-            'x': 1,
-            'y': 5
-        }, {
-            'x': 20,
-            'y': 20
-        }, {
-            'x': 40,
-            'y': 10
-        }, {
-            'x': 60,
-            'y': 40
-        }, {
-            'x': 80,
-            'y': 5
-        }, {
-            'x': 100,
-            'y': 60
-        }, {
-            'x': 150,
-            'y': 200
-        }
-    ];
-    
-    */
-    
     var vis = d3.select("#visualisation2"),
         WIDTH = 1000,
         HEIGHT = 300,
@@ -955,19 +856,6 @@ $(function() {
  
             tooltip.css('left', lineThickness).text(ui.value); //have to scale value * n
  
-           /* if(value <= 33) { 
-                thickness.css('background-position', '0 -15px');
-            } 
-            else if (value <= 66 && value > 33) {
-                thickness.css('background-position', '0 -110px');
-            } 
-            else if (value > 66 && value <= 100) {
-                thickness.css('background-position', '0 -220px');
-            };*/
-           // else {
-           //     volume.css('background-position', '0 -75px');
-           // }
- 
         },
  
         change: function(event,ui) {
@@ -1143,12 +1031,10 @@ var slider = new Slider("#ex15", {
 
 function AppendSuccessMsg(){
 	$(".alert").addClass("alert-success");
-		
 }
 
 function AppendSuccessMsg(){
 	$(".alert").addClass("alert-success");
-		
 }
 
 
@@ -1161,43 +1047,22 @@ function downVotePouty(){
 	}
 
 function displaySpeech(reco_Object, drawn_Object){
-    //get the current mode
-    //use the object from 
     var string = "<p> I think you're drawing a " + reco_Object + ". I'll draw a " + drawn_Object + " to go with it. </p>";
     
     $("#bubbleText").html(string);
     $("#speechBubble").fadeIn();
 
-    setTimeout(hideBubble, 5000)
+    setTimeout(hideBubble, 5000); 
 
-    
-    //$("#speechBubble").show(); 
 
 }
 
-$("#up").click("displayFeedback(1);")
-$("#down").click("displayFeedback(0);")
 
-
-function displayFeedack(vote) {
-    //get the current mode
-    //use the object from 
-    if (vote == 1) {
-        var string = "<p> Glad you liked it! I'll do that more often."
-    }
-    else {
-        var string = "<p> Alright, I'll do that less often."
-    }
-    
+function displayMessage(string) {
     $("#bubbleText").html(string);
-    $("#speechBubble").fadeIn();
-    
-    setTimeout(hideBubble, 5000)
-
-    //$("#speechBubble").show(); 
-
+    $("#speechBubble").fadeIn(); 
+    setTimeout(hideBubble, 5000); 
 }
-
 
 
 function hideBubble(){
