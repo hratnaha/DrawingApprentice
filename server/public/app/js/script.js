@@ -886,12 +886,14 @@ btnTracing.click(function(){
 		   btnMimicking.attr('src',"images/Mimicking.jpg");
 		   btnTransforming.attr('src',"images/Transforming.jpg");
 		   btnObjRecSame.attr('src','images/object-recognition.jpg')
+		   btnObjRecRelated.attr('src','images/object-recognition-semantic.jpg')
            break;
        case 'gif': 
            btnTracing.attr('src',"images/Tracing.jpg");
 		   btnMimicking.attr('src',"images/Mimicking.jpg");
 		   btnTransforming.attr('src',"images/Transforming.jpg");
 		   btnObjRecSame.attr('src','images/object-recognition.jpg')
+		   btnObjRecRelated.attr('src','images/object-recognition-semantic.jpg')
            break;
     }
 });
@@ -906,13 +908,16 @@ btnMimicking.click(function(){
 		   btnMimicking.attr('src',"images/Mimicking.gif");
 		   btnTransforming.attr('src',"images/Transforming.jpg");
 		   btnObjRecSame.attr('src','images/object-recognition.jpg')
+		   btnObjRecRelated.attr('src','images/object-recognition-semantic.jpg')
            break;
        case 'gif': 
            btnTracing.attr('src',"images/Tracing.jpg");
 		   btnMimicking.attr('src',"images/Mimicking.jpg");
 		   btnTransforming.attr('src',"images/Transforming.jpg");
 		   btnObjRecSame.attr('src','images/object-recognition.jpg')
+		   btnObjRecRelated.attr('src','images/object-recognition-semantic.jpg')
            break;
+		   
     }
 });
 
@@ -925,12 +930,14 @@ btnTransforming.click(function(){
 		   btnMimicking.attr('src',"images/Mimicking.jpg");
 		   btnTransforming.attr('src',"images/Transforming.gif");
 		   btnObjRecSame.attr('src','images/object-recognition.jpg')
+		   btnObjRecRelated.attr('src','images/object-recognition-semantic.jpg')
            break;
        case 'gif': 
            btnTracing.attr('src',"images/Tracing.jpg");
 		   btnMimicking.attr('src',"images/Mimicking.jpg");
 		   btnTransforming.attr('src',"images/Transforming.jpg");
 		   btnObjRecSame.attr('src','images/object-recognition.jpg')
+		   btnObjRecRelated.attr('src','images/object-recognition-semantic.jpg')
            break;
     }
 });
@@ -946,12 +953,37 @@ btnObjRecSame.click(function(){
 		   btnMimicking.attr('src',"images/Mimicking.jpg");
 		   btnTransforming.attr('src',"images/Transforming.jpg");
 		   btnObjRecSame.attr('src','images/object-recognition.gif')
+		   btnObjRecRelated.attr('src','images/object-recognition-semantic.jpg')
            break;
        case 'gif': 
            btnTracing.attr('src',"images/Tracing.jpg");
 		   btnMimicking.attr('src',"images/Mimicking.jpg");
 		   btnTransforming.attr('src',"images/Transforming.jpg");
 		   btnObjRecSame.attr('src','images/object-recognition.jpg')
+		   btnObjRecRelated.attr('src','images/object-recognition-semantic.jpg')
+           break;
+    }
+});
+
+
+//Case Button Related Object Recognition
+btnObjRecRelated.click(function(){
+	ChooseCreativity(3);
+	  var ending = btnObjRecSame.attr('src').slice(-3); //, src.slice( -3 );
+    switch( ending ) {
+       case 'jpg': 
+           btnTracing.attr('src',"images/Tracing.jpg"); 
+		   btnMimicking.attr('src',"images/Mimicking.jpg");
+		   btnTransforming.attr('src',"images/Transforming.jpg");
+		   btnObjRecSame.attr('src','images/object-recognition.jpg')
+		   btnObjRecRelated.attr('src','images/object-recognition-semantic.gif')
+           break;
+       case 'gif': 
+           btnTracing.attr('src',"images/Tracing.jpg");
+		   btnMimicking.attr('src',"images/Mimicking.jpg");
+		   btnTransforming.attr('src',"images/Transforming.jpg");
+		   btnObjRecSame.attr('src','images/object-recognition.jpg')
+		   btnObjRecRelated.attr('src','images/object-recognition-semantic.jpg')
            break;
     }
 });

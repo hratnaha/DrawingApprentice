@@ -59,8 +59,8 @@ put js files before css files
                         <button class="btn-mode" id="btnTransforming"><img class="img-toggle" src="images/Transforming.jpg" /></button>
           <button class="btn-mode" id="btnObjRecSame"><img class="img-toggle" src="images/object-recognition.jpg" /></button>
                <!--Here are the new buttons-->
+                        <button class="btn-mode" id="btnObjRecRelated"><img class="img-toggle" src="images/object-recognition-semantic.jpg" /></button>
                        
-                        <button class="btn-mode" id="btnObjRecRelated"><img class="img-toggle" src="images/Transforming.jpg" /></button>
 
                     </div>
 
@@ -119,8 +119,12 @@ put js files before css files
                 </div>
 
                 <div class="voting_btn" style="position:absolute;z-index:9999;right:23%;top:1em;">
+                    <button class="btn btn-vote" onClick="UpVote();" id="up"></button>
+                    <button class="btn btn-vote" onClick="DownVote();" id="down"></button>
+
                     <button class="btn btn-vote" onclick="UpVote();" id="up"><i class="fa fa-thumbs-up fa-5x"></i></i></button>
                     <button class="btn btn-vote" onclick="DownVote();" id="down"><i class="fa fa-thumbs-down fa-5x"></i></i></i></button>
+
 
                 </div>
 
