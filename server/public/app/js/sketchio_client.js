@@ -139,7 +139,6 @@ function MoveLogoBack () {
 function onNewStroke(data) {
 	moveLogo.style.left = "90%";
 	moveLogo.style.top = "3%";
-    console.log(data);
     // decode the data into the new stroke
     var botStroke = JSON.parse(data);
     curStroke.push(botStroke);
