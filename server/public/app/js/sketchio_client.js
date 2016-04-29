@@ -186,6 +186,10 @@ function onDataReceived(allData) {
 function onStatsQuery(allData) {
     var userLines = JSON.parse(allData.userLines);
     var computerLines = JSON.parse(allData.computerLines);
+    //var room = JSON.parse(allData.room);
+    //var upVote = room.upVoteCount;
+    //var downVote = room.downVoteCount;
+    //console.log("Upvotes: " + upVote + "DownVotes: " + downVote); 
     InitChart(userLines);
     InitChart2(userLines);
     InitChart3(userLines); 
@@ -374,7 +378,8 @@ function DownVote() {
 
     //socket.emit('vote', 0, totalScore);
 	//downvoteConfirm.show("fast").delay( 2000 );
-	
+    socket.emit('vote', 0);//add score count to the room, get that with user data
+
 	//downvoteConfirm.style.display = "block";
 	//upvoteConfirm.style.display = "none";
 	//downvoteConfirm.hide("fast");
@@ -388,7 +393,7 @@ function UpVote() {
 
 	//upvoteConfirm.show("fast").delay( 2000 );
 	//upvoteConfirm.css("display","block");
-	//socket.emit('vote', 1, totalScore);//add score count to the room, get that with user data
+	socket.emit('vote', 1);//add score count to the room, get that with user data
 	//downvoteConfirm.style.display = "none";
 	
 	//upvoteConfirm.css("display","none");
