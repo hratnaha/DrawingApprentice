@@ -168,7 +168,7 @@ function ensureAuthenticated(req, res, next) {
 function authenticationSucceed(req, res){
     console.log("user " + req.user.id + " logged in");
     onlineUsers[req.user.id] = req.user;
-    res.redirect('/admin_room/');//res.redirect('/app');
+    res.redirect('/DrawingApprentice/admin_room/');//res.redirect('/app');
 }
 // if the user pass thorugh authentication, render the app
 app.get('/app', ensureAuthenticated, function (req, res) {
@@ -326,7 +326,7 @@ io.on('connection', function (so) {
             
             so.emit('statsData', allData);
         }
-}
+    }
 
     function onNewStrokeReceived(data) {
         var d = JSON.parse(data);
