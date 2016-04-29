@@ -1,4 +1,4 @@
-var ioUri = "http://130.207.124.45"; //"http://localhost:8080"; //
+var ioUri = "http://localhost:8080"; //"http://130.207.124.45"; //
 
 var output;
 var socket;
@@ -13,6 +13,8 @@ var totalScore = 0;
 var scoreGiven = 0;
 var tipColor = "#000000";
 
+
+
 function initWebSocket() {
     
     botCanvas = document.getElementById('botpad');
@@ -24,15 +26,16 @@ function initWebSocket() {
 
     output = document.getElementById("output");
 
-    //socket = io.connect(ioUri); // for local version
-    socket = io.connect(ioUri, { 'path': '/DrawingApprentice/socket.io' }); // for adam server
+    socket = io.connect(ioUri); // for local version
+    //socket = io.connect(ioUri, { 'path': '/DrawingApprentice/socket.io' }); // for adam server
     
     socket.on('newconnection', onOpen);
     socket.on('respondStroke', onNewStroke);
     socket.on('allData', onDataReceived);
     socket.on('disconnected', saveDataOnDb);
     socket.on('updateScore', onUpdateScore);
-    socket.on('classifyObject', onClassifyObject)
+    socket.on('classifyObject', onClassifyObject); 
+    socket.on('statsData', onStatsQuery); 
 
 	var logo = document.getElementById("logo");
 
@@ -43,10 +46,28 @@ function initWebSocket() {
 	var ctx2 = sketchPadCanvas.getContext('2d');
     ctx.lineWidth = 0.1;
 
-    $('#ex8').slider().on('slideStop', function (ev) {
+	
+	/*$('#slider').slider().on('slideStop', function (ev) {
         console.log('Current Creativity Value:' + ' ' + ev.value / 100);
         socket.emit("SetCreativty", ev.value);
-    });
+		
+    });*/
+	
+
+		
+		$('#slider').slider({
+			change: function(event, ui) {
+				 console.log('Current Creativity Value:' + ' ' + ui.value/ 100);
+       		     socket.emit("SetCreativty", ui.value);
+			}
+		});
+	
+
+
+   /* $('#ex8').slider().on('slideStop', function (ev) {
+        console.log('Current Creativity Value:' + ' ' + ev.value / 100);
+        socket.emit("SetCreativty", ev.value);
+    });*/
 
     var timer = setInterval(function () {
 
@@ -99,7 +120,7 @@ function initWebSocket() {
 			MoveLogoBack();
         }
     }, 20);
-
+    //
 }
 
 
@@ -188,6 +209,85 @@ function onDataReceived(allData) {
     }, 500);
 }
 
+function onStatsQuery(allData) {
+    var userLines = JSON.parse(allData.userLines);
+    var computerLines = JSON.parse(allData.computerLines);
+    //var room = JSON.parse(allData.room);
+    //var upVote = room.upVoteCount;
+    //var downVote = room.downVoteCount;
+    //console.log("Upvotes: " + upVote + "DownVotes: " + downVote); 
+    InitChart(userLines);
+    InitChart2(userLines);
+    InitChart3(userLines); 
+    //var userLines = allData.userLines;
+    console.log(userLines);
+    console.log("First comp line length: " + computerLines[0].totalDistance);
+    var userLineCount = userLines.length;
+    var compLineCount = computerLines.length;
+    var avgUserLineLength = getAverageLength(userLines);
+    var userTimeData = getUserDrawingTime(userLines);
+    var averageLineTime = userTimeData.averageTime;
+    var totalDrawingTime = userTimeData.totalTime;
+    
+    
+    //var compLines = allData.compLines;
+    //var compLineCount = compLines.length; 
+    $("#myInnerModal").append("<p>Number of user lines: " + userLineCount + "</p><br>");
+    $("#myInnerModal").append("<p>Number of computer lines: " + compLineCount + "</p><br>");
+    $("#myInnerModal").append("<p>Average length of user lines: " + avgUserLineLength + "</p><br>");
+    $("#myInnerModal").append("<p>Average time spent on line: " + averageLineTime + "ms</p><br>");
+    $("#myInnerModal").append("<p>Total time spent drawing: " + totalDrawingTime + "ms</p><br>");
+    
+    //$("#myInnerModal").append("<p>Average length of computer lines: " + avgCompLineLength + "</p><br>");
+    
+    function getAverageLength(lines) {
+        console.log("Line: " + lines);
+        var sum = 0;
+        for (var i = 0; i < lines.length; i++) {
+            console.log("Total dist for line: " + lines[i].totalDistance);
+            sum = sum + lines[i].totalDistance;
+            console.log("New sum for averaging: " + sum);
+        }
+        var avg = sum / lines.length;
+        console.log(avg);
+        return avg;
+    }
+    
+    function getUserDrawingTime(lines) {
+        console.log("Trying to get user drawing time"); 
+        var totalTime = 0;
+        var totalWait = 0; 
+        for (var i = 0; i < lines.length; i++) {
+            var curLine = lines[i];
+            var points = curLine.allPoints;
+            var finalPoint = points[points.length - 1];
+            var finalTime = finalPoint.timestamp;
+            var elapsedTime = finalTime - points[0].timestamp;
+            console.log("Elapsed: " + elapsedTime);
+            totalTime = totalTime + elapsedTime;
+            /*
+            if(i >= 1) {
+                var previousLineEndPoint = line[i-1].allPoints[line[i-1].allPoints.length - 1];
+                var finalTimeStamp = finalPoint.timestamp;
+                var curStartPoint = line[i].allPoints[0]; 
+                var curStamp = curEndPoint.timestamp; 
+                var hangTime = curStamp - finalTimeStamp; 
+                totalWait = totalWait + hangTime; 
+                console.log("Wait:" + totalWait); 
+        }
+             * */
+        }
+        var averageTime = totalTime / lines.length;
+        var values = {
+            averageTime: averageTime, 
+            totalTime: totalTime
+        }
+        console.log("Total time: " + totalTime); 
+        return values;
+    }
+}
+
+
 function onTouchUp(message) {
     socket.emit('touchup', message);
 }
@@ -235,6 +335,11 @@ function getData(){
     socket.emit('getData'); 
 }
 
+function getData_noSave() {
+    //console.log("in getData no save"); 
+    socket.emit('getData_noSave'); 
+}
+
 function setGroupLabel(label){
     socket.emit('onLabel', label); 
 }
@@ -280,23 +385,63 @@ function groupingMode(chk) {
     }
 }
 
-function DownVote() {
-    socket.emit('vote', 0, totalScore);
+function sleep(milliseconds) {
+  var start = new Date().getTime();
+  for (var i = 0; i < 1e7; i++) {
+    if ((new Date().getTime() - start) > milliseconds){
+      break;
+    }
+  }
 }
 
+
+upvoteConfirm = $("#upvoteconfirmation");
+downvoteConfirm = $("#downvoteconfirmation");
+
+
+function DownVote() {
+    displayMessage("Sorry you didn't like it. I'll do that less.");
+
+    //socket.emit('vote', 0, totalScore);
+	//downvoteConfirm.show("fast").delay( 2000 );
+    socket.emit('vote', 0);//add score count to the room, get that with user data
+
+	//downvoteConfirm.style.display = "block";
+	//upvoteConfirm.style.display = "none";
+	//downvoteConfirm.hide("fast");
+}
+
+
 function UpVote() {
-    console.log("upvoted"); 
-	socket.emit('vote', 1, totalScore);
+    console.log("upvoted2");
+    displayMessage("Glad you liked it! I'll do that more often.");
+
+
+	//upvoteConfirm.show("fast").delay( 2000 );
+	//upvoteConfirm.css("display","block");
+	socket.emit('vote', 1);//add score count to the room, get that with user data
+	//downvoteConfirm.style.display = "none";
+	
+	//upvoteConfirm.css("display","none");
+	//upvoteConfirm.hide("fast");
+	console.log(upvoteConfirm);
+	
 }
 
 function downloadData() {
     console.log('getting data...');
     socket.emit('getData');
+	
 }
 
 
 function downloadCanvas(link) {
+    console.log("Working on downloading canvas");
     var canvas = document.getElementById('both');
+    var filename = 'test.png'; 
+    link.href = document.getElementById('both').toDataURL();
+    link.download = filename;
+    /*
     var context = canvas.getContext('2d'); 
     var w = canvas.width;
     var h = canvas.height;
@@ -314,6 +459,7 @@ function downloadCanvas(link) {
     
     link.href = imageData; 
     link.download = 'test.png';
+     * */
 }
 
 
@@ -363,9 +509,35 @@ function onUpdateScore(newScore){
 }
 
 function onClassifyObject(label){
+    //var objToDraW = label.selection;
+    //var objRecognized = label.classification;
+    //displaySpeech(objRecognized, objToDraw); 
     console.log("recognized as: ");
     console.log(label);
     //var newLabel = JSON.parse(label)
     //document.getElementById('label').value = newLabel;
 }
 
+
+function ChooseCreativity(value){
+		 	console.log("Setting creativity" + value);
+		    switch( value ) {
+				   case 1: 
+						socket.emit("SetCreativty", 1);
+					    break;
+				   case 2: 
+					    socket.emit("SetCreativty", 50);
+					    break;
+				   case 3:
+				   		socket.emit("SetCreativty", 70);
+				   		break;
+                case 4:
+                    socket.emit("SetCreativty", 95);
+                         break;
+                case 5:
+                    socket.emit("SetCreativty", 100);
+                    break;
+				   		
+				}
+}
+	    

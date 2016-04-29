@@ -5,20 +5,20 @@
 <!--
 put js files before css files
 --> 
-    <script src="../js/vendor/jquery-1.11.2.min.js"></script>
-    <script src="../js/vendor/jquery-ui-1.10.1.custom.min.js"></script>
+    <script src="/js/vendor/jquery-1.11.2.min.js"></script>
+    <script src="/js/vendor/jquery-ui-1.10.1.custom.min.js"></script>
     <script src="https://cdn.socket.io/socket.io-1.0.6.js"></script>
-	<script type="text/javascript" src="../app/js/sketchPad.js"></script>
-	<script type="text/javascript" src="../app/js/sketchio_client.js"></script>
-	<script type="text/javascript" src="../js/vendor/bootstrap-slider.js"></script>
-    <script type="text/javascript" src="../js/vendor/FileSaver.min.js"></script>
-    <link rel="stylesheet" type="text/css" href="../css/bootstrap.min.css" />
-	<link rel="stylesheet" type="text/css" href="../css/bootstrap-slider.css" />
+	<script type="text/javascript" src="js/sketchPad.js"></script>
+	<script type="text/javascript" src="js/sketchio_client.js"></script>
+	<script type="text/javascript" src="/js/vendor/bootstrap-slider.js"></script>
+    <script type="text/javascript" src="/js/vendor/FileSaver.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="/css/bootstrap.min.css" />
+	<link rel="stylesheet" type="text/css" href="/css/bootstrap-slider.css" />
     <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css" />
     <link rel="stylesheet" type="text/css" href="css/style.css" />
 </head>
 <body>
-<div class="navbar navbar-static-top navbar-customize" style="min-height: 120px;">
+<div class="navbar navbar-static-top navbar-customize">
   <div class="navbar-inner">
     <!-- Brand and toggle get grouped for better mobile display -->
     <div class="navbar-header">
@@ -129,7 +129,7 @@ put js files before css files
 </div>
                 
 <div class="row">
-   <input id="ex15" data-slider-id='ex1Slider' type="text" data-slider-min="1" data-slider-max="25" data-slider-step="1" data-slider-value="1" style="z-index:9999;margin-top:-1em;"/>
+    <input id="ex15" data-slider-id='ex1Slider' type="text" data-slider-min="1" data-slider-max="100" data-slider-step="1" data-slider-value="50" style="z-index:9999;margin-top:-1em;"/>
 </div>
            </div><!--slide_row_1-->
            <div class="col-lg-6">      
@@ -156,7 +156,6 @@ put js files before css files
 </script>
 
             <div class="col-lg-6">
-<!--
 <div class="row">
     <h4 style="margin-left:2em;margin-top:0;margin-bottom:-1em;color:black;">You Are Drawing:</h4>
 </div>
@@ -169,7 +168,6 @@ put js files before css files
         }
     </style>
 </input>
--->
             </div>  
         </div>
     </div>
@@ -239,7 +237,7 @@ put js files before css files
                     <button class="btn btn-vote" onClick="UpVote();" id="up"><i class="fa fa-arrow-circle-up fa-5x"></i></button>
                  </div>
                  
-                 <!--<div id="score">
+                 <div id="score">
                  	<p>testing</p>
                  	<style>
                     	#score{
@@ -249,7 +247,7 @@ put js files before css files
 							font-size:14px;
 							}
                     </style>
-                 </div>-->
+                 </div>
                  <div class="row">
                     <button class="btn btn-vote" onClick="DownVote();" id="down"><i class="fa fa-arrow-circle-down fa-5x"></i></button>
                  </div>

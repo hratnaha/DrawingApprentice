@@ -11,11 +11,9 @@ var http = require('http'),
     mongoConfig = require('./configuration/mongoServerConfig');
 
 function CheckMongoDatabase (accessToken, refreshToken, profile, done) {
-    console.log("Check Mongo Database!!");
     process.nextTick(function () {
         //Check whether the User exists or not using profile.id
         (function checkIfUserExists(userId, cb) {
-            console.log("check if user exists!!");
             // Query database server if userId exists. Call callback with its data or error.
             var options = {
                 host: mongoConfig.host,

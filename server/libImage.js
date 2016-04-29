@@ -113,7 +113,6 @@ module.exports = {
     },
     DrawLine : function(ctx, line, translate){
         translate = translate ? translate: {x : 0, y : 0};
-
         if(line.allPoints && line.allPoints.length > 0 && ctx != null){
             if(Canvas){
                 var ctx2d = ctx.getContext('2d');
@@ -199,7 +198,6 @@ module.exports = {
                     }
                 });
             }else if(gm){
-		console.log("using gm to save image")
                 ctx.write(filename, function (err) {
                     if(err) console.error(err);
                     if(callback != null && typeof callback === "function"){

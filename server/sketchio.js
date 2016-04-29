@@ -31,7 +31,7 @@ var express = require('express'),
     app = express(),
     canvas2D = require('./libImage'),
     uuid = require('node-uuid'),
-    zerorpc = require("zerorpc"),
+    zerorpc,
     curRooms = {},
     roomsInfo = [],
     onlineUsers = {},
@@ -168,7 +168,7 @@ function ensureAuthenticated(req, res, next) {
 function authenticationSucceed(req, res){
     console.log("user " + req.user.id + " logged in");
     onlineUsers[req.user.id] = req.user;
-    res.redirect('/DrawingApprentice/admin_room/');//res.redirect('/app');
+    res.redirect('/admin_room/');//res.redirect('/app');
 }
 // if the user pass thorugh authentication, render the app
 app.get('/app', ensureAuthenticated, function (req, res) {
@@ -209,32 +209,32 @@ app.listen(3000);
 //===================== Set up socket io server =====================\\
 var server = http.Server(app);
 var io = require('socket.io')(server);
-//server.listen(8080);
-server.listen(81); // for adam server
+server.listen(8080); // for local debug
+//server.listen(81); // for adam server
 
 io.on('connection', function (so) {
     // set up closure varialbes
     var utilDatabase = require('./libDatabase');
     var apprentice;
-    var room;
+    var room; //this is the game room, grab the data from here rather than apprentice 
     var userProfile;
     var sessionID;
     var totalScore = 0;
     
     console.log("new client connected");
-
+    
     so.emit('newconnection', { hello: "world" });
-
+    
     function onOpen(hello) {
         if (hello) {
             var thisPlayer;
-            if(onlineUsers[hello.user.id]){
+            if (onlineUsers[hello.user.id]) {
                 thisPlayer = onlineUsers[hello.user.id];
                 room = curRooms[thisPlayer.curRoom];
                 room.sockets.push(so);
             }
-
-            if(!room){
+            
+            if (!room) {
                 apprentice = new Apprentice();
                 room = new Room(null, apprentice, sketchClassfier);
             }
@@ -248,11 +248,11 @@ io.on('connection', function (so) {
             utilDatabase.initializeParameters(userProfile, sessionID, apprentice, room.canvasSize);
         }
     }
-
+    
     function getData() {
         var userLines;
         var computerLines;
-
+        
         apprentice.getUserLines(function (err, item) {
             if (err) {
                 console.log(err);
@@ -262,7 +262,7 @@ io.on('connection', function (so) {
                 afterUserLines();
             }
         });
-
+        
         function afterUserLines() {
             apprentice.getComputerLines(function (err, item) {
                 if (err) {
@@ -273,17 +273,60 @@ io.on('connection', function (so) {
                 }
             });
         }
-
+        
         function emitData() {
             var allData = {
                 userLines: userLines,
                 computerLines: computerLines, 
                 labeledGroups: apprentice.labeledGroups
             };
-
+            
             so.emit('allData', allData);
         }
     }
+    
+    function getData_noSave() {
+        //console.log("In getData_before");
+        
+        //instead of calling apprentice, grab data from room; 
+        //obj rec data is stored in the room, not apprentice 
+        //room.compStrokes
+        //!need array of recognizedObjects
+        
+        var userLines;
+        var computerLines;
+        
+        apprentice.getUserLines(function (err, item) {
+            if (err) {
+                console.log(err);
+
+            } else {
+                userLines = item;
+                afterUserLines();
+            }
+        });
+        
+        function afterUserLines() {
+            apprentice.getComputerLines(function (err, item) {
+                if (err) {
+                    console.log(err);
+                } else {
+                    computerLines = item;
+                    emitData();
+                }
+            });
+        }
+        
+        function emitData() {
+            var allData = {
+                userLines: userLines,
+                computerLines: computerLines, 
+                labeledGroups: apprentice.labeledGroups 
+            };
+            
+            so.emit('statsData', allData);
+        }
+}
 
     function onNewStrokeReceived(data) {
         var d = JSON.parse(data);
@@ -292,7 +335,22 @@ io.on('connection', function (so) {
         room.addStroke(stroke, so);
     }
 
-    function vote(isUp, score) {
+    function vote(isUp) {
+        //var value = JSON.parse(isUP); 
+        console.log("In server. Votin up. Room = ");
+        if (isUp==1) {
+            if (room.upVoteCount == null)
+                room.upVoteCount = 1;
+            else
+                room.upVoteCount = room.upVoteCount + 1; 
+        }
+        else {
+            if (room.downVoteCount == null)
+                room.downVoteCount = 1;
+            else
+                room.downVoteCount = room.downVoteCount + 1; 
+        }
+        /*
         var vote = isUp ? 1 : 0;
         if (isUp)
             totalScore += 10;
@@ -301,8 +359,8 @@ io.on('connection', function (so) {
         //totalScore = isUp ? (totalScore + 10) : (totalScore - 10); 
         if(room)
             room.broadcast('updateScore', JSON.stringify(totalScore));
-
-        apprentice.voteSync(vote);
+        */
+        apprentice.voteSync(isUp);
     }
 
     function onClear() {
@@ -361,6 +419,7 @@ io.on('connection', function (so) {
     so.on('clear', onClear);
     so.on('submit', submitResult);
     so.on('vote', vote);
+    so.on('getData_noSave', getData_noSave);
 });
 //===================== Finished Socket io server Set Up ====================\\
 

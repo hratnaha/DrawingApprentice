@@ -2,10 +2,10 @@
 module.exports = {
     "clientID" 		        : "88221843053-ti20vnrpur3dsle5f88d95j2ck3qfkgq.apps.googleusercontent.com",
     "clientSecret"	        : "rWLki6oLWqiY-8me8xq9DnWM",
-    "callbackURL"			: "http://adam.cc.gatech.edu/DrawingApprentice/auth/google/callback",    
+    "callbackURL"			: "/auth/google/callback",    
     "profileFields"         : ['emails', 'first_name', 'last_name', 'gender', 'age_range'],
     "use_database"			: "false",
-    "host"					: "130.207.124.45",
+    "host"					: "localhost",
     "username"				: "root",
     "password"				: "",
     "database"				: ""
