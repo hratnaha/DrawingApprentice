@@ -40,8 +40,8 @@ hallapp.controller('hallController', ['$scope', '$resource', function ($scope, $
         room.$save(function (result) {
             // redirect to the app page
             if(result.isSucceed)
-                // window.location.href = "../app/";// server
-                window.location.href = "/app";      // local
+                window.location.href = "../app/";// server
+                //window.location.href = "/app";      // local
         });
     }
     $scope.deleteRoom = function(roomID){
