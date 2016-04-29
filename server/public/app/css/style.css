@@ -56,17 +56,25 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#898c90', end
 	transform: scale(1.5);
 	}
 #up{
-	width:50px;
+	width:5em;
+	height:5em;
 	color:#4CD964;
-	background-image:url(../images/ThumbUp.png);
+	background:url(../images/ThumbUp.png) no-repeat 95% 95%;
 	background-size:cover;
+	background-origin: content-box;
+	padding:.5em .5em;
 	}
 #up:active{
 	color:#014511;
 	transform: scale(1.5);
 	}
 #down{
-	color:#FF2D55;
+	width:5em;
+	height:5em;
+	background:url(../images/ThumbDown.png) no-repeat 95% 95%;
+	background-size:cover;
+	background-origin: content-box;
+	padding:.5em .5em;
 	}
 #down:active{
 	color:#98070A;
