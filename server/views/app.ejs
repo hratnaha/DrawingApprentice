@@ -27,144 +27,257 @@ put js files before css files
 </head>
 <body>
 <div class="navbar navbar-static-top navbar-customize">
-    <div class="navbar-inner">
-        <!-- Brand and toggle get grouped for better mobile display -->
-        <div class="navbar-header">
-            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#nav_toggle_content" aria-expanded="false">
-                <span class="sr-only">Toggle navigation</span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-            </button>
-        </div>
-
-    <!-- Collect the nav links, forms, and other content for toggling -->
-        <div class="collapse navbar-collapse" id="nav_toggle_content">
-            <div class="row agent-panel">
-                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                    <div class="row">
-                        <div class="drawing-mode-button">
-                            <button class="btn-mode" id="btnTracing"><img class="img-toggle" src="images/Tracing.jpg" /></button>
-                            <button class="btn-mode" id="btnMimicking"><img class="img-toggle" src="images/Mimicking.jpg" /></button>
-                            <button class="btn-mode" id="btnTransforming"><img class="img-toggle" src="images/Transforming.jpg" /></button>
-                            <button class="btn-mode" id="btnObjRecSame"><img class="img-toggle" src="images/object-recognition.jpg" /></button>
-                            <button class="btn-mode" id="btnObjRecRelated"><img class="img-toggle" src="images/object-recognition-semantic.jpg" /></button>
-                        </div>
-                    </div><!--row-->
-
-                    <div id="speechBubble" style="display:none; position:absolute;right:8%;top:1em;width:245px;height:190px;background-repeat:no-repeat; background-size:contain; background-image:url('images/speechBubble.png');">
-                        <div id="bubbleText" style="font-family:'Gill Sans'; font-size:130%;   width:175px;word-wrap:break-word;padding-left:1em;padding-top:.7em;"></div>
-                    </div>
-
-                    <div class="voting_btn" style="position:absolute;z-index:9999;right:25%;top:1em;">
-                        <button class="btn btn-vote" onClick="UpVote();" id="up"></button>
-                        <button class="btn btn-vote" onClick="DownVote();" id="down"></button>
-                    </div>
-                </div><!--col-lg-12-->
-            </div><!--agent-panel-->
-        </div><!-- /#nav_toggle_content -->
-
-<script>
-    function testFunction(){
-        document.getElementById('label').value = "Tested"; 
-    }
-</script>
-
-        <div class="navbar-inner row">
-            <div class="col-lg-6">
-                <div class="row">
-                    <h4 style="margin-left:10em;margin-top:0;margin-bottom:-1em;color:black;"></h4>
-                </div>
-                <div class="row">
-                    <input id="line-thickness-slider" data-slider-id='ex1Slider' type="text" data-slider-min="1" data-slider-max="100" data-slider-step="1" data-slider-value="50" style="z-index:9999;"/>
-                </div>
-            </div><!--slide_row_1-->
-        </div>
-        
-<script>
-    $("#agent-creativity-slider").slider({
-        tooltip: 'always'
-    });
-
-    $("#line-thickness-slider").slider({
-        tooltip: 'always'
-    });
-
-    // Without JQuery
-    var slider = new Slider("#agent-creativity-slider", {
-        tooltip: 'always'
-    });
-
-    var slider = new Slider("#line-thickness-slider", {
-        tooltip: 'always'
-    });
-</script>
-
-        <div class="alert alert-success" role="alert" id="upvoteconfirmation">
-            <h2 style="text-align:center"><strong>I got you!</strong> You have upvoted!</h2>
-        </div>
-
-        <div class="alert alert-warning" role="alert" id="downvoteconfirmation">
-            <h2 style="text-align:center"><strong>I got you!</strong> You have down voted!</h2>
-        </div>
-  
+  <div class="navbar-inner">
+    <!-- Brand and toggle get grouped for better mobile display -->
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#nav_toggle_content" aria-expanded="false">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+ 
     </div>
 
-    <div class="modal fade" id="new" role="dialog" data-backdrop="static">
-        <div class="modal-dialog" data-backdrop="static">
-            <div class="modal-content" data-backdrop="static" style="z-index:5000;">
-                <form class="form-horizontal" data-backdrop="static">
-                    <div class="modal-header" data-backdrop="static">
-                        <button type="button" class="close" data-dismiss="modal">&times;</button>
-                            <h3 style="padding-left:3%;">New Canvas</h3>
-                        </div>
+    <!-- Collect the nav links, forms, and other content for toggling -->
+    <div class="collapse navbar-collapse" id="nav_toggle_content">
+    	<div class="row agent-panel">
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                <div class="row">
+                    <div class="drawing-mode-button">
+                        <button class="btn-mode" id="btnTracing"><img class="img-toggle" src="images/Tracing.jpg" /></button>
+                        <button class="btn-mode" id="btnMimicking"><img class="img-toggle" src="images/Mimicking.jpg" /></button>
+                        <button class="btn-mode" id="btnTransforming"><img class="img-toggle" src="images/Transforming.jpg" /></button>
+          <button class="btn-mode" id="btnObjRecSame"><img class="img-toggle" src="images/object-recognition.jpg" /></button>
+               <!--Here are the new buttons-->
+                        <button class="btn-mode" id="btnObjRecRelated"><img class="img-toggle" src="images/object-recognition-semantic.jpg" /></button>
+                       
+
+                    </div>
+
+
+                    <!--ul class="nav navbar-nav setting_buton">
+            <li>
+                <button class="btn btn-default btn-lg" onClick ="location.href = '/admin_room'" style="float:left;margin-left:1em;">
+               Exit
+                </button>
+            </li>
+            <!--What is the link to get to the room selection? -->
+                    <!--li>
+                <button class="btn btn-default btn-lg" onClick="downloadCanvas(this);" style="float:left;margin-left:1em; display:none">
+               Download
+                </button>
+            </li>
+              <!--Instead of downloading the line data, this button should download a PNG image -->
+                    <!--li>
+                  <button class="btn btn-default btn-lg" onClick ="testFunction()"style="float:left;margin-left:1em;">
+                 Settings
+                  </button>
+              </li>
+               <li>
+                  <button class="btn btn-default btn-lg" id="trash" style="float:left;margin-left:1em;">
+                 Restart
+                  </button>
+              </li>
+              <li>
+                  <a class="btn btn-default btn-lg" style="float:left;margin-left:1em;height:47px;line-height:12px" onclick="downloadCanvas(this)">
+                        </a>
+              </li>
+
+                <li>
+                    <button id="group" class="btn btn-default btn-lg" style="float:left;margin-left:1em;"onclick="changeGrouping()"> Group </button>
+                </li>
+
+            </ul><!--setting_button-->
+                </div><!--row-->
+
+                <div id="speechBubble" style="display:none; position:absolute;right:8%;top:1em;width:245px;height:190px;background-repeat:no-repeat; background-size:contain; background-image:url('images/speechBubble.png');">
+                    <div id="bubbleText" style="font-family:'Gill Sans'; font-size:130%;   width:175px;word-wrap:break-word;padding-left:1em;padding-top:.7em;">
                         
-                        <div class="modal-body" data-backdrop="static">
-                            <div class="form-group" data-backdrop="static">
-                                <label for="Participant-ID" class="col-lg-4 control-label">Participant ID</label>
-                                <div class="col-lg-8">
-                                    <input type="text" class="form-control" id="Participant-ID" placeholder="Put Participant ID Here"/>
-                                </div> 
-                            </div><!--/.form-group-->
-                            
-                            <div class="form-group" data-backdrop="static">
-                                    <label for="Human-Collaborator" class="col-lg-4 control-label">Human Collaborator</label>
-                                    <div class="col-lg-8">
-                                        <input type="text" class="form-control" id="Human-Collaborator" placeholder="Human Collaborator"/>
-                                    </div> 
-                            </div><!--/.form-group-->
-                            
-                            
-                            <div class="form-group" data-backdrop="static">
-                                    <label for="Drawing-Mode" class="col-lg-4 control-label">Drawing Mode</label>
-                                    <div class="col-lg-8">
-                                        <button class="btn btn-lg btn-default modal-btn" onclick="ChangeMode1()">Global</button>
-                                        <button class="btn btn-lg btn-default modal-btn" onclick="ChangeMode2()">Regional </button>
-                                        <button class="btn btn-lg btn-default modal-btn" onclick="ChangeMode3()">Local </button>
-                                    </div> 
-                            </div><!--/.form-group-->
-                        </div><!--/.modal-body-->
-                            
-                        <div class="modal-footer">
-                            <button class="btn btn-lg btn-warning pull-left modal-btn">Setting</button>
-                            <a data-backdrop='static'><button class="btn btn-lg btn-info modal-btn">Open Recent</button></a>
-                            <a class="btn btn-lg btn-danger" id="close" data-dismiss="modal">Close</a>
-                                <script>
-                                $('.modal-btn').click(function() { return false; });
-                                $('#close').click(function(){
-                                $("#icon").css("z-index","1000");
-                                });
-                            </script>
-                        </div><!--/.modal-footer-->
-                    </form> 
-                </div><!--modal-content-->
-            </div><!--/.modal-dialog-->
-        </div><!--/.modal fade-->      	
+                    </div>
+                    <!--
+            <div class="row">
+                <h4 style="color:black; position:center">You Are Drawing:</h4>
+            </div>
+            <div class="row">
+                <input id="label" class="row" type="text" value="Object Type" style="width:10em; margin-left:.5em;height:2em;font-size:14px;" />
+            </div>
+             </div>
+                -->
+                    <!--<img height="120" width="200" style="display:block;"src="images/speechBubble.png">
+                    <p>You are drawing x</p>
+                        -->
+                </div>
+
+                <div class="voting_btn" style="position:absolute;z-index:9999;right:25%;top:1em;">
+                    <button class="btn btn-vote" onClick="UpVote();" id="up"></button>
+                    <button class="btn btn-vote" onClick="DownVote();" id="down"></button>
+
+                    <!--button class="btn btn-vote" onclick="UpVote();" id="up"><!--i class="fa fa-thumbs-up fa-5x"></i--></button>
+                    <!--button class="btn btn-vote" onclick="DownVote();" id="down"><!--i class="fa fa-thumbs-down fa-5x"></i--><!--/button-->
+
+
+                </div>
+
+
+
+            </div><!--col-lg-12-->
+        </div><!--agent-panel-->
+        
+       
+     
+            <!--label><input type="checkbox" id="Checkbox" onClick="TurnOnOffAgent();" value="" style="margin:1em 1em;"></label-->
+       
+    </div><!-- /#nav_toggle_content -->
+   
+
+      <script>
+          function testFunction(){
+          document.getElementById('label').value = "Tested"; 
+          }
+          </script>
+
+  <div class="navbar-inner row">
+         	<div class="col-lg-6">
+            	  <div class="row">
+                   <h4 style="margin-left:10em;margin-top:0;margin-bottom:-1em;color:black;"></h4>
+                </div>
+                
+                <div class="row">
+            <input id="line-thickness-slider" data-slider-id='ex1Slider' type="text" data-slider-min="1" data-slider-max="100" data-slider-step="1" data-slider-value="50" style="z-index:9999;"/>
+                </div>
+             
+           
+           </div><!--slide_row_1-->
+
+       
+                       		 <!--========S L I D E R : http://seiyria.com/bootstrap-slider/==========-->
+         
+ 
+            
+             <!--div class="col-lg-6">      
+                <div class="row">
+                	 <h4 style="margin-left:10em;margin-top:0;margin-bottom:-1em;color:black;">Agent Creativity Level</h4>
+                    <input id="agent-creativity-slider" data-slider-id='ex1Slider' type="text" data-slider-min="0" data-slider-max="100" data-slider-step="1" data-slider-value="50" style="z-index:9999;margin-top:-1em;"/>
+                </div>
+            </div-->
+           
+          
+            
+             <script>
+            $("#agent-creativity-slider").slider({
+					tooltip: 'always'
+			});
+			
+			$("#line-thickness-slider").slider({
+					tooltip: 'always'
+			});
+	
+			// Without JQuery
+			var slider = new Slider("#agent-creativity-slider", {
+					tooltip: 'always'
+			});
+				
+			var slider = new Slider("#line-thickness-slider", {
+					tooltip: 'always'
+			});
+	
+			
+            </script>
+
+      <!--div class="col-lg-6">
+          <div class="row">
+              <h4 style="margin-left:2em;margin-top:0;margin-bottom:-1em;color:black;">You Are Drawing:</h4>
+          </div>
+          <input class="row" id="label" type="text" value="Object Type">
+              <style>
+                  #label{
+                  width:6em;
+                  height:2em;
+                  font-size:14px;
+                  }
+              </style>
+          </input>
+      </div-->
+            
+              
+            </div><!--slider_row_2-->
+         
+         </div>
+   
+  </div><!-- /.container-fluid -->
+  	
+   
+   <div class="alert alert-success" role="alert" id="upvoteconfirmation">
+    	<h2 style="text-align:center"><strong>I got you!</strong> You have upvoted!</h2>
+    </div>
     
-        <div id="container">
-            <div id="logo_placeholder"></div>
+     <div class="alert alert-warning" role="alert" id="downvoteconfirmation">
+    	<h2 style="text-align:center"><strong>I got you!</strong> You have down voted!</h2>
+    </div>
+  
+</div>
+
+<div class="modal fade" id="new" role="dialog" data-backdrop="static">
+            	<div class="modal-dialog" data-backdrop="static">
+                	<div class="modal-content" data-backdrop="static" style="z-index:5000;">
+                    	<form class="form-horizontal" data-backdrop="static">
+                            <div class="modal-header" data-backdrop="static">
+                                <button type="button" class="close" data-dismiss="modal">&times;</button>
+
+                                <h3 style="padding-left:3%;">New Canvas</h3>
+                            </div>
+                            
+                            <div class="modal-body" data-backdrop="static">
+                            	<div class="form-group" data-backdrop="static">
+                                	<label for="Participant-ID" class="col-lg-4 control-label">Participant ID</label>
+                                    <div class="col-lg-8">
+                                    	<input type="text" class="form-control" id="Participant-ID" placeholder="Put Participant ID Here"/>
+                                    </div> 
+                                </div><!--/.form-group-->
+                                
+                               <div class="form-group" data-backdrop="static">
+                                        <label for="Human-Collaborator" class="col-lg-4 control-label">Human Collaborator</label>
+                                        <div class="col-lg-8">
+                                            <input type="text" class="form-control" id="Human-Collaborator" placeholder="Human Collaborator"/>
+                                        </div> 
+                               </div><!--/.form-group-->
+                                
+                                
+                               <div class="form-group" data-backdrop="static">
+                                        <label for="Drawing-Mode" class="col-lg-4 control-label">Drawing Mode</label>
+                                        <div class="col-lg-8">
+                                        	<button class="btn btn-lg btn-default modal-btn" onclick="ChangeMode1()">Global</button>
+                                            <button class="btn btn-lg btn-default modal-btn" onclick="ChangeMode2()">Regional </button>
+                                            <button class="btn btn-lg btn-default modal-btn" onclick="ChangeMode3()">Local </button>
+                                        </div> 
+                               </div><!--/.form-group-->
+                                
+                                
+                            </div><!--/.modal-body-->
+                            
+                            <div class="modal-footer">
+                            	<button class="btn btn-lg btn-warning pull-left modal-btn">Setting</button>
+                                <a data-backdrop='static'><button class="btn btn-lg btn-info modal-btn">Open Recent</button></a>
+                                <a class="btn btn-lg btn-danger" id="close" data-dismiss="modal">Close</a>
+                                  <script>
+                            		$('.modal-btn').click(function() { return false; });
+									$('#close').click(function(){
+									$("#icon").css("z-index","1000");
+									});
+                                </script>
+                            </div><!--/.modal-footer-->
+                       </form> 
+                    </div><!--modal-content-->
+                </div><!--/.modal-dialog-->
+            </div><!--/.modal fade-->       	
     
-            <div class="ui-widget-content" id="logo" style="width:9em;height:auto;z-index:9999;top:-1em;left: 90%;">
+    <div id="container">
+    <div id="logo_placeholder"></div>
+			 
+         
+      
+    <div class="ui-widget-content" id="logo" style="width:9em;height:auto;z-index:9999;top:-1em;left: 90%;">
 <script type="text/javascript">
         var userData = <%- user %>;
 		var sessionId = <%- JSON.stringify(sessionId) %>;      
@@ -267,9 +380,8 @@ put js files before css files
 </g>
 
 </svg>
-    </div><!--logo-->
 
-    
+    </div><!--logo-->
     
     <div id="buttons" style="z-index:5000;">
         <input type="color" name="background" id="background" value="#000000" style="display:none;"/>
@@ -282,9 +394,6 @@ put js files before css files
         </select>
        
     </div><!--#buttons-->
-	<svg version="1.1" id="pathbuilder" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" style="visibility: hidden;">
-		<path id="tmp_path" d="" />
-	</svg>
         <canvas id="both">Sorry, your browser is not supported.
         <script>
         var myCanvas1 = document.getElementById("both");
@@ -306,8 +415,9 @@ put js files before css files
 		</script>
         </canvas>
     </div>
-
- <a href="#user-panel" id="toggle">
+    
+    
+    <a href="#user-panel" id="toggle">
     	<span></span>
         
     </a>
@@ -446,7 +556,9 @@ put js files before css files
         </div>
     </div>
 
-<script>
+    <script>
+
+
         // Get the modal
         var modal = document.getElementById('myModal');
 
@@ -488,25 +600,32 @@ put js files before css files
         }
         }
 
-</script>
+        </script>
 
-<script type="text/javascript" src="js/script.js"></script>
-<script type="text/javascript">
-    var bothCanvas = document.getElementById("both");
-    var bothInputContext = bothCanvas.getContext("2d");
-    
-    window.addEventListener("load", initWebSocket, false);
-    window.addEventListener("load", sketchUtil, false);
+            <!--script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script-->
 
-    //document.getElementById('trash').addEventListener('click', function () {
-      //  sketchpad.width = sketchpad.width;
-        //clearCanvas();
-    //}, false);
-    $("#mode").change(setMode); //what does this do?
-	console.log("test");
-    $("#cboxGrouping").change(groupingMode);
-</script>
-<div id="output"></div>
+            <script type="text/javascript" src="js/sketchio_client.js">
+            </script>
+            <script type="text/javascript" src="js/script.js">
+            </script>
+            <script type="text/javascript">
+                var bothCanvas = document.getElementById("both");
+                var bothInputContext = bothCanvas.getContext("2d");
+
+                window.addEventListener("load", initWebSocket, false);
+                window.addEventListener('load', sketchUtil, false);
+
+                //document.getElementById('trash').addEventListener('click', function () {
+                //  sketchpad.width = sketchpad.width;
+                //clearCanvas();
+                //}, false);
+                $("#mode").change(setMode); //what does this do?
+                console.log("test");
+                $("#cboxGrouping").change(groupingMode);
+            </script>
+            <div id="output"></div>
+
+        </script>
 
 </body>
 </html>
