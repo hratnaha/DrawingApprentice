@@ -209,8 +209,8 @@ app.listen(3000);
 //===================== Set up socket io server =====================\\
 var server = http.Server(app);
 var io = require('socket.io')(server);
-server.listen(8080); // for local debug
-//server.listen(81); // for adam server
+//server.listen(8080); // for local debug
+server.listen(81); // for adam server
 
 io.on('connection', function (so) {
     // set up closure varialbes

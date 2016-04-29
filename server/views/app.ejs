@@ -5,263 +5,189 @@
 <!--
 put js files before css files
 --> 
-    <script src="/js/vendor/jquery-1.11.2.min.js"></script>
-    <script src="/js/vendor/jquery-ui-1.10.1.custom.min.js"></script>
-    <script src="https://cdn.socket.io/socket.io-1.0.6.js"></script>
-	<script type="text/javascript" src="js/sketchPad.js"></script>
-	<script type="text/javascript" src="js/sketchio_client.js"></script>
-	<script type="text/javascript" src="/js/vendor/bootstrap-slider.js"></script>
+    <script type="text/javascript" src="/js/vendor/jquery-1.11.2.min.js"></script>
+    <script type="text/javascript" src="/js/vendor/jquery-ui-1.10.1.custom.min.js"></script>
+    <script type="text/javascript" src="js/jquery.ui.touch-punch.min.js"></script>
+    <script type="text/javascript" src="https://cdn.socket.io/socket.io-1.0.6.js"></script>
+    <script type="text/javascript" src="../bower_components/bootstrap/dist/js/bootstrap.js"></script>
+    <script type="text/javascript" src="js/sketchPad.js"></script>
+    <script type="text/javascript" src="js/sketchio_client.js"></script>
+    <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.0.3/angular.min.js"></script>
+    <script src="//netdna.bootstrapcdn.com/twitter-bootstrap/2.2.2/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="/js/vendor/bootstrap-slider.js"></script>
     <script type="text/javascript" src="/js/vendor/FileSaver.min.js"></script>
+
+    <script>$('.ui-slider-handle').draggable();</script>
+    <script>$('#slider').draggable();</script>
+
     <link rel="stylesheet" type="text/css" href="/css/bootstrap.min.css" />
-	<link rel="stylesheet" type="text/css" href="/css/bootstrap-slider.css" />
     <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css" />
     <link rel="stylesheet" type="text/css" href="css/style.css" />
 </head>
 <body>
 <div class="navbar navbar-static-top navbar-customize">
-  <div class="navbar-inner">
-    <!-- Brand and toggle get grouped for better mobile display -->
-    <div class="navbar-header">
-      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#nav_toggle_content" aria-expanded="false">
-        <span class="sr-only">Toggle navigation</span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-      </button>
-      <a class="navbar-brand" href="#">The Drawing Apprentice</a>
-    </div>
+    <div class="navbar-inner">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#nav_toggle_content" aria-expanded="false">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+        </div>
 
     <!-- Collect the nav links, forms, and other content for toggling -->
-    <div class="collapse navbar-collapse" id="nav_toggle_content">
-<ul class="nav navbar-nav color">
-    <li>
-        <div class="btn btn-md btn-color navbar-btn">
-            <input type="button" name="saveForm" class="btTxt submit saveForm" id="color1" />
-        </div>
-    </li>
-    <li>
-        <div class="btn btn-md btn-color navbar-btn">
-            <input type="button" name="saveForm" class="btTxt submit saveForm" id="color2" />
-        </div>
-    </li>
-    <li>
-        <div class="btn btn-md btn-color navbar-btn">
-            <input type="button" name="saveForm" class="btTxt submit saveForm" id="color3" />
-        </div>
-    </li>
-    <li>
-        <div class="btn btn-md btn-color navbar-btn">
-            <input type="button" name="saveForm" class="btTxt submit saveForm" id="color4" />
-        </div>
-    </li>
-    <li>
-        <div class="btn btn-md btn-color navbar-btn">
-            <input type="button" name="saveForm" class="btTxt submit saveForm" id="color5" />
-        </div>
-    </li>
-    <li>
-        <div class="btn btn-md btn-color navbar-btn">
-            <input type="button" name="saveForm" class="btTxt submit saveForm" id="color6" />
-        </div>
-    </li>
-    <li>
-        <div class="btn btn-md btn-color navbar-btn">
-            <input type="button" name="saveForm" class="btTxt submit saveForm" id="color7" />
-        </div>
-    </li>
-    <li>
-        <div class="btn btn-md btn-color navbar-btn">
-            <input type="button" name="saveForm" class="btTxt submit saveForm" id="color8" />
-        </div>
-    </li>
-    <li>
-        <div class="btn btn-md btn-color navbar-btn">
-            <input type="button" name="saveForm" class="btTxt submit saveForm" id="color9" />
-        </div>
-    </li>
-</ul><!--color-->
-<ul class="nav navbar-nav setting_buton">  	  
-    <li>
-        <button class="btn btn-default btn-lg" onClick ="location.href = '/admin_room'" style="float:left;margin-left:1em;">
-        Exit
-        </button>
-    </li>
-    <!--What is the link to get to the room selection? -->
-    <li>
-        <button class="btn btn-default btn-lg" onClick="downloadCanvas(this);" style="float:left;margin-left:1em; display:none">
-        Download
-        </button>
-    </li>
-        <!--Instead of downloading the line data, this button should download a PNG image -->
-    <li>
-        <button class="btn btn-default btn-lg" onClick ="settingFunction()"style="float:left;margin-left:1em;">
-        Settings
-        </button>
-    </li>
-    <li>
-        <button class="btn btn-default btn-lg" id="trash" style="float:left;margin-left:1em;">
-        Restart
-        </button>
-    </li>  
-    <li>
-        <a class="btn btn-default btn-lg" style="float:left;margin-left:1em;height:47px;line-height:12px" onclick="downloadCanvas(this)">
-        Download
-        </a>
-    </li>
-    <li>
-        <button id="group" class="btn btn-default btn-lg" style="float:left;margin-left:1em;"onclick="changeGrouping()">
-        Group
-        </button>
-    </li>
-</ul><!--setting_button-->
-<label><input type="checkbox" id="Checkbox" onClick="TurnOnOffAgent();" value="" style="margin:1em 1em;"></label>       
-    </div><!-- /#nav_toggle_content -->
+        <div class="collapse navbar-collapse" id="nav_toggle_content">
+            <div class="row agent-panel">
+                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                    <div class="row">
+                        <div class="drawing-mode-button">
+                            <button class="btn-mode" id="btnTracing"><img class="img-toggle" src="images/Tracing.jpg" /></button>
+                            <button class="btn-mode" id="btnMimicking"><img class="img-toggle" src="images/Mimicking.jpg" /></button>
+                            <button class="btn-mode" id="btnTransforming"><img class="img-toggle" src="images/Transforming.jpg" /></button>
+                            <button class="btn-mode" id="btnObjRecSame"><img class="img-toggle" src="images/object-recognition.jpg" /></button>
+                            <button class="btn-mode" id="btnObjRecRelated"><img class="img-toggle" src="images/object-recognition-semantic.jpg" /></button>
+                        </div>
+                    </div><!--row-->
+
+                    <div id="speechBubble" style="display:none; position:absolute;right:8%;top:1em;width:245px;height:190px;background-repeat:no-repeat; background-size:contain; background-image:url('images/speechBubble.png');">
+                        <div id="bubbleText" style="font-family:'Gill Sans'; font-size:130%;   width:175px;word-wrap:break-word;padding-left:1em;padding-top:.7em;"></div>
+                    </div>
+
+                    <div class="voting_btn" style="position:absolute;z-index:9999;right:25%;top:1em;">
+                        <button class="btn btn-vote" onClick="UpVote();" id="up"></button>
+                        <button class="btn btn-vote" onClick="DownVote();" id="down"></button>
+                    </div>
+                </div><!--col-lg-12-->
+            </div><!--agent-panel-->
+        </div><!-- /#nav_toggle_content -->
+
 <script>
-    function settingFunction(){
+    function testFunction(){
         document.getElementById('label').value = "Tested"; 
     }
 </script>
-<!--========S L I D E R : http://seiyria.com/bootstrap-slider/==========-->
-        <div class="navbar-inner row">
-         	<div class="col-lg-6">
-<div class="row">
-    <h4 style="margin-left:10em;margin-top:0;margin-bottom:-1em;color:black;">Line Thickness</h4>
-</div>
-                
-<div class="row">
-    <input id="ex15" data-slider-id='ex1Slider' type="text" data-slider-min="1" data-slider-max="100" data-slider-step="1" data-slider-value="50" style="z-index:9999;margin-top:-1em;"/>
-</div>
-           </div><!--slide_row_1-->
-           <div class="col-lg-6">      
-<div class="row">
-    <h4 style="margin-left:10em;margin-top:0;margin-bottom:-1em;color:black;">Agent Creativity Level</h4>
-</div>
-<div class="row">
-    <input id="ex8" data-slider-id='ex1Slider' type="text" data-slider-min="0" data-slider-max="100" data-slider-step="1" data-slider-value="50" style="z-index:9999;margin-top:-1em;"/>
-</div>
-            </div><!--slide_row_2-->
-<script>
-    $("#ex8").slider({
-            tooltip: 'always'
-        });
 
-        // Without JQuery
-        var slider = new Slider("#ex8", {
-            tooltip: 'always'
-        });
+        <div class="navbar-inner row">
+            <div class="col-lg-6">
+                <div class="row">
+                    <h4 style="margin-left:10em;margin-top:0;margin-bottom:-1em;color:black;"></h4>
+                </div>
+                <div class="row">
+                    <input id="line-thickness-slider" data-slider-id='ex1Slider' type="text" data-slider-min="1" data-slider-max="100" data-slider-step="1" data-slider-value="50" style="z-index:9999;"/>
+                </div>
+            </div><!--slide_row_1-->
+        </div>
         
-        var slider = new Slider("#ex15", {
-            tooltip: 'always'
-        });
+<script>
+    $("#agent-creativity-slider").slider({
+        tooltip: 'always'
+    });
+
+    $("#line-thickness-slider").slider({
+        tooltip: 'always'
+    });
+
+    // Without JQuery
+    var slider = new Slider("#agent-creativity-slider", {
+        tooltip: 'always'
+    });
+
+    var slider = new Slider("#line-thickness-slider", {
+        tooltip: 'always'
+    });
 </script>
 
-            <div class="col-lg-6">
-<div class="row">
-    <h4 style="margin-left:2em;margin-top:0;margin-bottom:-1em;color:black;">You Are Drawing:</h4>
-</div>
-<input class="row" id="label" type="text" value="Object Type">
-    <style>
-        #label{
-        width:6em;
-        height:2em;
-        font-size:14px;
-        }
-    </style>
-</input>
-            </div>  
+        <div class="alert alert-success" role="alert" id="upvoteconfirmation">
+            <h2 style="text-align:center"><strong>I got you!</strong> You have upvoted!</h2>
         </div>
+
+        <div class="alert alert-warning" role="alert" id="downvoteconfirmation">
+            <h2 style="text-align:center"><strong>I got you!</strong> You have down voted!</h2>
+        </div>
+  
     </div>
-</div>
-              
-<div class="modal fade" id="new" role="dialog" data-backdrop="static">
-            	<div class="modal-dialog" data-backdrop="static">
-                	<div class="modal-content" data-backdrop="static" style="z-index:5000;">
-                    	<form class="form-horizontal" data-backdrop="static">
-                            <div class="modal-header" data-backdrop="static">
-                                <button type="button" class="close" data-dismiss="modal">&times;</button>
 
-                                <h3 style="padding-left:3%;">New Canvas</h3>
-                            </div>
+    <div class="modal fade" id="new" role="dialog" data-backdrop="static">
+        <div class="modal-dialog" data-backdrop="static">
+            <div class="modal-content" data-backdrop="static" style="z-index:5000;">
+                <form class="form-horizontal" data-backdrop="static">
+                    <div class="modal-header" data-backdrop="static">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                            <h3 style="padding-left:3%;">New Canvas</h3>
+                        </div>
+                        
+                        <div class="modal-body" data-backdrop="static">
+                            <div class="form-group" data-backdrop="static">
+                                <label for="Participant-ID" class="col-lg-4 control-label">Participant ID</label>
+                                <div class="col-lg-8">
+                                    <input type="text" class="form-control" id="Participant-ID" placeholder="Put Participant ID Here"/>
+                                </div> 
+                            </div><!--/.form-group-->
                             
-                            <div class="modal-body" data-backdrop="static">
-                            	<div class="form-group" data-backdrop="static">
-                                	<label for="Participant-ID" class="col-lg-4 control-label">Participant ID</label>
+                            <div class="form-group" data-backdrop="static">
+                                    <label for="Human-Collaborator" class="col-lg-4 control-label">Human Collaborator</label>
                                     <div class="col-lg-8">
-                                    	<input type="text" class="form-control" id="Participant-ID" placeholder="Put Participant ID Here"/>
+                                        <input type="text" class="form-control" id="Human-Collaborator" placeholder="Human Collaborator"/>
                                     </div> 
-                                </div><!--/.form-group-->
-                                
-                               <div class="form-group" data-backdrop="static">
-                                        <label for="Human-Collaborator" class="col-lg-4 control-label">Human Collaborator</label>
-                                        <div class="col-lg-8">
-                                            <input type="text" class="form-control" id="Human-Collaborator" placeholder="Human Collaborator"/>
-                                        </div> 
-                               </div><!--/.form-group-->
-                                
-                                
-                               <div class="form-group" data-backdrop="static">
-                                        <label for="Drawing-Mode" class="col-lg-4 control-label">Drawing Mode</label>
-                                        <div class="col-lg-8">
-                                        	<button class="btn btn-lg btn-default modal-btn" onclick="ChangeMode1()">Global</button>
-                                            <button class="btn btn-lg btn-default modal-btn" onclick="ChangeMode2()">Regional </button>
-                                            <button class="btn btn-lg btn-default modal-btn" onclick="ChangeMode3()">Local </button>
-                                        </div> 
-                               </div><!--/.form-group-->
-                                
-                                
-                            </div><!--/.modal-body-->
+                            </div><!--/.form-group-->
                             
-                            <div class="modal-footer">
-                            	<button class="btn btn-lg btn-warning pull-left modal-btn">Setting</button>
-                                <a data-backdrop='static'><button class="btn btn-lg btn-info modal-btn">Open Recent</button></a>
-                                <a class="btn btn-lg btn-danger" id="close" data-dismiss="modal">Close</a>
-                                  <script>
-                            		$('.modal-btn').click(function() { return false; });
-									$('#close').click(function(){
-									$("#icon").css("z-index","1000");
-									});
-                                </script>
-                            </div><!--/.modal-footer-->
-                       </form> 
-                    </div><!--modal-content-->
-                </div><!--/.modal-dialog-->
-            </div><!--/.modal fade-->       	
+                            
+                            <div class="form-group" data-backdrop="static">
+                                    <label for="Drawing-Mode" class="col-lg-4 control-label">Drawing Mode</label>
+                                    <div class="col-lg-8">
+                                        <button class="btn btn-lg btn-default modal-btn" onclick="ChangeMode1()">Global</button>
+                                        <button class="btn btn-lg btn-default modal-btn" onclick="ChangeMode2()">Regional </button>
+                                        <button class="btn btn-lg btn-default modal-btn" onclick="ChangeMode3()">Local </button>
+                                    </div> 
+                            </div><!--/.form-group-->
+                        </div><!--/.modal-body-->
+                            
+                        <div class="modal-footer">
+                            <button class="btn btn-lg btn-warning pull-left modal-btn">Setting</button>
+                            <a data-backdrop='static'><button class="btn btn-lg btn-info modal-btn">Open Recent</button></a>
+                            <a class="btn btn-lg btn-danger" id="close" data-dismiss="modal">Close</a>
+                                <script>
+                                $('.modal-btn').click(function() { return false; });
+                                $('#close').click(function(){
+                                $("#icon").css("z-index","1000");
+                                });
+                            </script>
+                        </div><!--/.modal-footer-->
+                    </form> 
+                </div><!--modal-content-->
+            </div><!--/.modal-dialog-->
+        </div><!--/.modal fade-->      	
     
-    <div id="container">
-    <div id="logo_placeholder"></div>
-			 
-             
-             <!--========V O T E==========-->
-             <div class="voting_btn"  style="position:absolute;z-index:9999;top:35%;right:3em;">
-                 <div class="row">
+        <div id="container">
+            <div id="logo_placeholder"></div>
+			  
+            <!--========V O T E==========-->
+            <div class="voting_btn"  style="position:absolute;z-index:9999;top:35%;right:3em;">
+                <div class="row">
                     <button class="btn btn-vote" onClick="UpVote();" id="up"><i class="fa fa-arrow-circle-up fa-5x"></i></button>
-                 </div>
-                 
-                 <div id="score">
-                 	<p>testing</p>
-                 	<style>
-                    	#score{
-							width:6em;
-							height:4em;
-							border:1px solid black;
-							font-size:14px;
-							}
+                </div>
+                
+                <div id="score">
+                    <p>testing</p>
+                    <style>
+                        #score{
+                            width:6em;
+                            height:4em;
+                            border:1px solid black;
+                            font-size:14px;
+                            }
                     </style>
-                 </div>
-                 <div class="row">
+                </div>
+                <div class="row">
                     <button class="btn btn-vote" onClick="DownVote();" id="down"><i class="fa fa-arrow-circle-down fa-5x"></i></button>
-                 </div>
-             </div>
-
-        
-        
-            <div class="control-group">
-
-        </div>
+                </div>
+            </div>        
+            <div class="control-group"></div>
     
-    
-    <div class="ui-widget-content" id="logo" style="width:9em;height:auto;z-index:9999;top:-1em;left: 90%;">
-            <script type="text/javascript">
+            <div class="ui-widget-content" id="logo" style="width:9em;height:auto;z-index:9999;top:-1em;left: 90%;">
+<script type="text/javascript">
         var userData = <%- user %>;
 		var sessionId = <%- JSON.stringify(sessionId) %>;      
         var roomId = <%- JSON.stringify(roomId) %>;
