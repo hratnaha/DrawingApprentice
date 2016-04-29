@@ -162,29 +162,6 @@ put js files before css files
     
         <div id="container">
             <div id="logo_placeholder"></div>
-			  
-            <!--========V O T E==========-->
-            <div class="voting_btn"  style="position:absolute;z-index:9999;top:35%;right:3em;">
-                <div class="row">
-                    <button class="btn btn-vote" onClick="UpVote();" id="up"><i class="fa fa-arrow-circle-up fa-5x"></i></button>
-                </div>
-                
-                <div id="score">
-                    <p>testing</p>
-                    <style>
-                        #score{
-                            width:6em;
-                            height:4em;
-                            border:1px solid black;
-                            font-size:14px;
-                            }
-                    </style>
-                </div>
-                <div class="row">
-                    <button class="btn btn-vote" onClick="DownVote();" id="down"><i class="fa fa-arrow-circle-down fa-5x"></i></button>
-                </div>
-            </div>        
-            <div class="control-group"></div>
     
             <div class="ui-widget-content" id="logo" style="width:9em;height:auto;z-index:9999;top:-1em;left: 90%;">
 <script type="text/javascript">
@@ -193,7 +170,7 @@ put js files before css files
         var roomId = <%- JSON.stringify(roomId) %>;
 
         $(function() {
-        $( "#logo" ).draggable();
+            $( "#logo" ).draggable();
         });
         
         function onMouseMove(evt) {
@@ -328,6 +305,189 @@ put js files before css files
 		</script>
         </canvas>
     </div>
+
+ <a href="#user-panel" id="toggle">
+    	<span></span>
+        
+    </a>
+    <div id="user-panel">
+    	<div id="user-panel-content">
+        	<div class="row">
+        	<div class="user-panel-color col-lg-7">
+            	<ul class="nav navbar-nav color">
+                    <li>
+                        <div class="btn btn-md btn-color navbar-btn">
+                            <input type="button" name="colorBtn" class="btTxt submit colorBtn" id="color1" />
+                        </div>
+                    </li>
+                    <li>
+                        <div class="btn btn-md btn-color navbar-btn">
+                            <input type="button" name="colorBtn" class="btTxt submit colorBtn" id="color2" />
+                        </div>
+                    </li>
+                    <li>
+                        <div class="btn btn-md btn-color navbar-btn">
+                            <input type="button" name="colorBtn" class="btTxt submit colorBtn" id="color3" />
+                        </div>
+                    </li>
+                    <li>
+                        <div class="btn btn-md btn-color navbar-btn">
+                            <input type="button" name="colorBtn" class="btTxt submit colorBtn" id="color4" />
+                        </div>
+                    </li>
+                    <li>
+                        <div class="btn btn-md btn-color navbar-btn">
+                            <input type="button" name="colorBtn" class="btTxt submit colorBtn" id="color5" />
+                        </div>
+                    </li>
+                    <li>
+                        <div class="btn btn-md btn-color navbar-btn">
+                            <input type="button" name="colorBtn" class="btTxt submit colorBtn" id="color6" />
+                        </div>
+                    </li>
+                    <li>
+                        <div class="btn btn-md btn-color navbar-btn">
+                            <input type="button" name="colorBtn" class="btTxt submit colorBtn" id="color7" />
+                        </div>
+                    </li>
+                    <li>
+                        <div class="btn btn-md btn-color navbar-btn">
+                            <input type="button" name="colorBtn" class="btTxt submit colorBtn" id="color8" />
+                        </div>
+                    </li>
+                    <li>
+                        <div class="btn btn-md btn-color navbar-btn">
+                            <input type="button" name="colorBtn" class="btTxt submit colorBtn" id="color9" />
+                        </div>
+                    </li>
+                    <!--li>
+                        <div class="btn btn-md btn-color navbar-btn">
+                            <input type="button" name="saveForm" class="btTxt submit saveForm" id="color10" />
+                        </div>
+                    </li-->
+                  </ul><!--color-->
+            </div><!--user-panel-color col-lg-8-->
+        
+      
+        <div class="setting-button col-lg-5">
+        	<ul class="setting-button-content">
+            	<li><button class="btn" id ="trash" href="#"><i class="fa fa-trash fa-2x"></i></button></li>
+                <!--<li><button class="btn"  id="download" ><i class="fa fa-download fa-2x"></i></button></li>-->
+                <li><a class="btn" id="download"><i style="margin-top:.5em;"class="fa fa-download fa-2x"></i></a></li>
+                <li><button onClick="displaySpeech('house','cat');"class="btn" href="#"><i class="fa fa-plus-square-o fa-2x"></i></button></li>
+                 <li><button class="btn" href="#"><i class="fa fa-cogs fa-2x"></i></button></li>
+                <li>
+                    <button class="btn" id="myBtn" style="float:left;margin-left:1em;"><i class="fa fa-bar-chart fa-2x" aria-hidden="true"></i>
+                    </button>
+                </li>  
+               
+            </ul>
+        </div><!--setting-button col-lg-5-->
+    </div><!--row-->
+
+	
+            <div class="row thickness">
+                      	<h5>Thickness</h5>
+                 	 <section class="thickness-section">	
+
+                        <div id="slider-thickness"></div> <!-- the Slider -->
+                        <span class="thickness"></span> <!-- Volume -->
+                    </section>
+           </div>
+        </div><!--.user-panel-content-->
+    </div><!--user-panel-->
+
+
+    <div id="myModal" class="modal">
+
+        <!-- Modal content -->
+        <div id="innerModal" class="modal-content">
+            <span class="close">x</span>
+            <h3>Drawing Statistics</h3><br />
+
+
+            <ul class="nav nav-tabs" id="tabContent">
+                <li class="active"><a href="#myInnerModal" data-toggle="tab">Basic Info</a></li>
+                <li><a href="#outerchart" data-toggle="tab">Charts</a></li>
+                <li><a href="#funstuff" data-toggle="tab">Fun Stuff</a></li>
+            </ul>
+
+            <div class="tab-content">
+                <div class="tab-pane active" id="myInnerModal">
+                    Basic Info
+                    <p>Some other stuff</p>
+                </div>
+
+                <div class="tab-pane" id="outerchart">
+                    <h3 align="center"> Drawing Acvtivity Over Time</h3>
+                    <div align="center" id="ActivityChart">
+
+                    </div>
+                    <br />
+                    <h3 align="center"> Line Length Temporally Ordered</h3>
+
+
+                    <div align="center" id="LengthChart">
+                       
+                     </div>
+                    <!--
+                    <h3 align="center"> Drawing Activity Over Time (Interactive)</h3>
+                    <div align="center" id="ActivityChart2">
+                        <svg id="visualization3" width="1100" height="500"></svg>
+                    </div>
+                    -->
+                </div>
+
+                <div class="tab-pane" id="funstuff">
+                    This is fun!
+                </div>
+            </div>
+        </div>
+    </div>
+
+<script>
+        // Get the modal
+        var modal = document.getElementById('myModal');
+
+        // Get the button that opens the m
+        var btn = document.getElementById("myBtn");
+
+        // Get the  element that closes the modal
+        var span = document.getElementsByClassName("close")[0];
+
+        // When the user clicks the button, open the modal
+        btn.onclick = function() {
+        console.log("Calling get data no save");
+        getData_noSave();
+        //InitChart();
+
+        //var userLines = allData.userLines;
+        //var compLines = allData.computerLines;
+
+        modal.style.display = "block";
+        }
+
+        // When the user clicks on (x), close the modal
+        span.onclick = function() {
+        $("#myInnerModal").html("");
+        $("#ActivityChart").html("");
+        $("#LengthChart").html("");
+        console.log("Deleting the stuff");
+        modal.style.display = "none";
+        }
+
+        // When the user clicks anywhere outside of the modal, close it
+        window.onclick = function(event) {
+        if (event.target == modal) {
+        $("#myInnerModal").html("");
+        $("#ActivityChart").html("");
+        $("#LengthChart").html("");
+
+        modal.style.display = "none";
+        }
+        }
+
+</script>
 
 <script type="text/javascript" src="js/script.js"></script>
 <script type="text/javascript">

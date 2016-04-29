@@ -335,6 +335,7 @@ io.on('connection', function (so) {
         room.addStroke(stroke, so);
     }
 
+
     function vote(isUp) {
         //var value = JSON.parse(isUP); 
         console.log("In server. Votin up. Room = ");
