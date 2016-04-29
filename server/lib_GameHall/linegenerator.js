@@ -31,15 +31,110 @@ function getBBox(strokes){
 function findLeastUsageInQuadtree(quadtree, box, canvasSize){
     var boxWidth = box.right - box.left;
     var boxHeight = box.bottom - box.top;
-    
-    var widthInterval = (canvasSize.width - boxWidth) / 10;
+
+    console.log(box);    
+    /*var widthInterval = (canvasSize.width - boxWidth) / 10;
     var heightInterval = (canvasSize.height - boxHeight - 600) / 10;
     var curXpos = 0;
     var curYpos = 200; // account for the top bar
     var offset = {x: 0, y: 0};
+    var minCount = Number.MAX_VALUE;*/
+   
+    var limLeft = 0;
+    var limTop = 200;
+    var limRight = canvasSize.width - boxWidth;
+    var limBottom = canvasSize.height - boxHeight - 600; // 600 => empirical value;    
+ 
+    var curLeftPos = box.left;
+    var curTopPos = box.top;
+    var curRightPos = box.right;
+    var curBottomPos = box.bottom;
+
+    var curX = box.left - boxWidth;
+    var curY = box.top - boxHeight;
+
+    var doneLeft = false;
+    var doneTop = false;
+    var doneRight = false;
+    var doneBottom = false;
+
+    var finishLeft = false;
+    var finishTop = false;
+    var finishRight = false;
+    var finishBottom = false;
+
+    var offset = {x: 0, y: 0};
     var minCount = Number.MAX_VALUE;
     
-    while(curYpos < canvasSize.height){
+    
+
+    while(!finishLeft || !finishRight || !finishBottom || !finishTop){
+        if(!doneLeft){
+            curY = curY + boxHeight;
+            if(curY >= curBottomPos)
+                doneLeft = true;
+        }else if(!doneBottom){
+            curX = curX + boxWidth;            
+            if(curX >= curRightPos)
+                doneBottom = true;
+        }else if(!doneRight){
+            curY = curY - boxHeight;
+            if(curY <= curTopPos - boxHeight)
+                doneRight = true;
+        }else{
+            curX = curX - boxWidth;
+            if(curX <= curLeftPos - boxWidth){
+                console.log("done a cycle");
+                doneLeft = false;
+                doneRight = false;
+                doneBottom = false;
+                doneTop = false;
+                curLeftPos = curLeftPos - boxWidth;
+                curRightPos = curRightPos + boxWidth;
+                curTopPos = curTopPos - boxHeight;
+                curBottomPos = curBottomPos + boxHeight;
+                
+                if(curLeftPos <= limLeft){
+                    curLeftPos = limLeft;
+                    finishLeft = true;
+                }
+                if(curTopPos <= limTop){
+                    curTopPos = limTop;
+                    finishTop = true;
+                }
+                if(curRightPos >= limRight){
+                    curRightPos = limRight;
+                    finishRight = true;
+                }
+                if(curBottomPos >= limBottom){
+                    curBottomPos = limBottom;
+                    finishBottom = true;
+                }
+            }
+        }
+        console.log("checking pos: " + curX + ", " + curY);
+        var curBox = {
+            x: curX,
+            y: curY,
+            width: boxWidth,
+            height: boxHeight
+            };
+        var hitObjects = quadtree.retrieve(curBox);
+        if(hitObjects.length < minCount){
+            offset = {x: curX, y: curY};
+            minCount = hitObjects.length;
+        }
+
+    }
+    
+    offset.x = offset.x < 10 ? 10 : offset.x;
+    offset.x = offset.x > canvasSize.width - boxWidth ? canvasSize.width - boxWidth : offset.x;
+    offset.y = offset.y < 200 ? 200 : offset.y;
+    offset.y = offset.y > canvasSize.height - boxHeight ? canvasSize.height - boxHeight : offset.y;
+
+    console.log(offset);
+
+    /*while(curYpos < canvasSize.height){
         var curBox = {
             x: curXpos,
             y: curYpos,
@@ -57,7 +152,7 @@ function findLeastUsageInQuadtree(quadtree, box, canvasSize){
             curXpos = 0;
             curYpos = curYpos + heightInterval;
         }
-    }
+    }*/
     //console.log(offset);
     return offset;
 }
@@ -112,12 +207,12 @@ function decideCategory(oriCategory){
 }
 
 module.exports = {
-    GetSketchesInCategory : function(category, quadtree, canvasSize, callback){
+    GetSketchesInCategory : function(category, quadtree, canvasSize, objBox, callback){
         var newcate = category;
 	console.log(this.mode);
 	if(this.mode == 2) newcate = decideCategory(category);
 
-	var node = quadtree.findLeastUsageOnLevel(5);
+	    var node = quadtree.findLeastUsageOnLevel(5);
         var tolX = canvasSize.width / 8;
         var tolY = canvasSize.height / 8;
         var offsetX = node.bounds.x + tolX > canvasSize.width ? node.bounds.x - tolX : node.bounds.x;
@@ -126,7 +221,7 @@ module.exports = {
         offsetY = offsetY < tolY ? offsetY + tolY : offsetY;
         var offset = {x: offsetX, y: offsetY};
         
-	var dirpath = 'lib_GameHall/pre_sketch2/' + newcate + '/';
+	    var dirpath = 'lib_GameHall/pre_sketch2/' + newcate + '/';
         var parser = new xml2js.Parser();
         
         fs.readdir(dirpath, function(err, files){
@@ -144,7 +239,7 @@ module.exports = {
                 var strokes = JSON.parse(data).strokes;
                 var bbox = getBBox(strokes);
                  
-                var offset = findLeastUsageInQuadtree(quadtree, bbox, canvasSize);
+                var offset = findLeastUsageInQuadtree(quadtree, objBox, canvasSize, objBox);
                 offset = {
                     x: offset.x - bbox.left,
                     y: offset.y - bbox.top

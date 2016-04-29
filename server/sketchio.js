@@ -332,7 +332,8 @@ io.on('connection', function (so) {
 	function onDisconnect(){
 		utilDatabase.onSaveDataOnDb();
 		console.log("save to pic");
-		room.updateServerPic(true);		
+		if(room)
+            room.updateServerPic(true);		
 	}   
  
     so.on('onLabel', onLabel); 

@@ -43,6 +43,30 @@ function onReaching4thLevel(strokes){
     
     
 }
+function getBBox(strokes){
+    var top = Number.MAX_VALUE;
+    var left = Number.MAX_VALUE;
+    var bottom = Number.MIN_VALUE;
+    var right = Number.MIN_VALUE;
+
+    for(var i=0;i < strokes.length; i++){
+        for(var j=0;j<strokes[i].points.length;j++){ 
+            var pt = strokes[i].points[j];
+            top = pt.y < top ? pt.y : top;
+            bottom = pt.y > bottom ? pt.y : bottom;
+            left = pt.x < left ? pt.x : left;
+            right = pt.x > right ? pt.y : right;
+        }
+    }
+ 
+    return {
+        top: top,
+        bottom: bottom,
+        left: left,
+        right: right
+    };
+}
+
 function pushTurnStroke(stroke){
     if(stroke && stroke.allPoints && stroke.allPoints.length > 0){
         if(!this.bound){
@@ -236,6 +260,7 @@ class gameroom {
                 }
 		
 		        if(thisobj.creativity > 90){
+                    var objBox = thisobj.userTurnStrokes.bound;
 		            canvas2D.SaveToFile(turnContext, thisobj.roomInfo.id + "-tmp", false, function(filename, err1){
                         if(!err1){
                             // recognize the image using sketchClass
@@ -243,7 +268,7 @@ class gameroom {
                                 thisobj.sketchClassfier.invoke("recognize_Image", filename, function(err2, result) {
                                     // report back to the client
                                     if(!err2){
-                                        generator.GetSketchesInCategory(result, thisobj.quadtree, thisobj.canvasSize, function(strokes, err3){
+                                        generator.GetSketchesInCategory(result, thisobj.quadtree, thisobj.canvasSize, objBox, function(strokes, err3){
                                             console.log(err3);
 					                        if(!err3){
 					                            //console.log(strokes);
