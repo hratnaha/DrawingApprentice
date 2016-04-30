@@ -141,7 +141,7 @@ function onNewStroke(data) {
 	moveLogo.style.top = "3%";
     // decode the data into the new stroke
     var botStroke = JSON.parse(data);
-
+/*
 	if(botStroke.data){
 		$("#tmp_path").attr("d", botStroke.data);
 		var path = $('#tmp_path').get(0);
@@ -165,7 +165,8 @@ function onNewStroke(data) {
 		console.log(pts);
 		botStroke.allPoints = pts;
 		
-	}
+	}*/
+
 		curStroke.push(botStroke);
 		logo.style.position = "absolute";
 		logo.style.left = data.x;
