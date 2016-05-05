@@ -17,6 +17,7 @@ module.exports = {
     },
     onSaveDataOnDb: function () {
         if (userProfile && userProfile != "") {
+            try{
             var userId = userProfile.id;
 
             console.log(userId);
@@ -86,6 +87,9 @@ module.exports = {
                 });
                 req.write(postData);
                 req.end();
+            }
+            }catch(exception){
+                console.log(exception);
             }
         }
     }

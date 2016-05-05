@@ -66,9 +66,13 @@ function findLeastUsageInQuadtree(quadtree, box, canvasSize){
     var offset = {x: 0, y: 0};
     var minCount = Number.MAX_VALUE;
     
-    
+    var chkCount = 0; 
 
     while(!finishLeft || !finishRight || !finishBottom || !finishTop){
+        if(chkCount > 100) {
+            console.log("checking least usage location reaching limit!!");
+            break;
+        }
         if(!doneLeft){
             curY = curY + boxHeight;
             if(curY >= curBottomPos)
@@ -124,7 +128,7 @@ function findLeastUsageInQuadtree(quadtree, box, canvasSize){
             offset = {x: curX, y: curY};
             minCount = hitObjects.length;
         }
-
+        chkCount++;
     }
     
     offset.x = offset.x < 10 ? 10 : offset.x;
@@ -227,7 +231,7 @@ module.exports = {
         fs.readdir(dirpath, function(err, files){
             if(err){
                 //throw new Error('directory is not found!!');
-		return "";
+                return "";
             }
             var fileIndex = Math.floor(Math.random() * files.length);
             var filename = files[fileIndex];
@@ -244,8 +248,7 @@ module.exports = {
                     x: offset.x - bbox.left,
                     y: offset.y - bbox.top
                 };
-                //console.log("use offset");
-		//console.log(offset);
+
                 for(var i=0;i < strokes.length; i++){
         		    strokes[i]['offset'] = offset;
                     strokes[i]['data'] = strokes[i].data;
@@ -262,7 +265,11 @@ module.exports = {
                 }
 
                 if(callback != null && typeof callback === "function"){
-			        callback.call(this, strokes, err);
+                    var decision = {
+                        classification: category,
+                        selection:      newcate 
+                    };
+			        callback.call(this, strokes, decision, err);
                 }
             });
         });

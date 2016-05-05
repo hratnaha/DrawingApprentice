@@ -509,9 +509,9 @@ function onUpdateScore(newScore){
 }
 
 function onClassifyObject(label){
-    //var objToDraW = label.selection;
-    //var objRecognized = label.classification;
-    //displaySpeech(objRecognized, objToDraw); 
+    var objToDraw = label.selection;
+    var objRecognized = label.classification;
+    displaySpeech(objRecognized, objToDraw); 
     console.log("recognized as: ");
     console.log(label);
     //var newLabel = JSON.parse(label)

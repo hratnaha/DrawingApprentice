@@ -268,7 +268,7 @@ class gameroom {
                                 thisobj.sketchClassfier.invoke("recognize_Image", filename, function(err2, result) {
                                     // report back to the client
                                     if(!err2){
-                                        generator.GetSketchesInCategory(result, thisobj.quadtree, thisobj.canvasSize, objBox, function(strokes, err3){
+                                        generator.GetSketchesInCategory(result, thisobj.quadtree, thisobj.canvasSize, objBox, function(strokes, decision, err3){
                                             console.log(err3);
 					                        if(!err3){
 					                            //console.log(strokes);
@@ -291,12 +291,14 @@ class gameroom {
                                                             so.emit('respondStroke', resultmsg);
 						                                }
                                                     }
+                                                
+                                                    //var decisionMsg = JSON.stringify(decision);
+                                                    so.emit('classifyObject', decision);
 					                            }catch(err4){
 					    	                        console.log(err4);
 					                            }
                                             }
                                         });
-                                        so.emit('classifyObject', result);
                                     }
                                 });
                             }

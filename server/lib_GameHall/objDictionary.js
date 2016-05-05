@@ -12,7 +12,7 @@ module.exports = {
 	},
 	"Plants": ["cactus", "palm tree", "flower with stem", "leaf", "mushroom", "pumpkin", "tree"],
 	"Biology": ["arm", "brain", "ear", "eye", "eyeglasses", "face", "foot", "human-skeleton", "head", "hand", "tooth", "mouth", "nose", "skull"],
-	"Tools": ["axe", "lighter", "bulldozer", "crane (machine)", "hammer", "knife", "microscope", "parachute", "pipe (for smoking)", "scissors", "screwdriver", "shovel", "wheelbarrow", "toothbrush", "syringe", "cigarette", "ladder"],
+	"Tools": ["axe", "lighter", "bulldozer", "crane (machine)", "hammer", "knife", "microscope", "parachute", "scissors", "screwdriver", "shovel", "wheelbarrow", "toothbrush", "ladder"],
 	"Weapons": ["grenade", "cannon", "revolver", "rifle", "sword", "hammer", "knife", "scissors"],
 	"Sports": ["baseball bat", "basket", "snowboard", "tennis-racket", "binoculars", "boomerang", "beer-mug", "skateboard"],
 	"Music": ["guitar", "harp", "head-phones", "loudspeaker", "microphone", "megaphone", "saxophone:", "violin", "trumpet", "trombone", "piano"],
@@ -26,7 +26,7 @@ module.exports = {
 		}
 	},
 	"Technology": ["cell phone", "camera", "computer monitor", "computer-mouse", "keyboard", "laptop", "ipod", "satellite", "satellite dish", "walkie talkie", "calculator", "power outlet"],
-	"Outdoor Scenes": ["church", "castle", "barn", "house", "skyscraper", "cloud", "bridge", "bush", "bench", "fire hydrant", "mailbox", "streetlight", "moon", "parking meter", "person sitting", "person walking", "sun", "rainbow", "windmill", "tent", "feather", "traffic light", "snowman", "cactus", "palm tree", "flower with stem", "leaf", "mushroom", "pumpkin", "tree", "bulldozer", "crane (machine)", "parachute", "pipe (for smoking)", "bear (animal)", "camel", "cow", "cat", "dog", "dragon", "elephant", "horse", "giraffe", "hedgehog", "kangaroo", "lion", "mouse (animal)", "owl", "monkey", "parrot", "panda", "pig", "pigeon", "rabbit", "rooster", "sheep", "flying bird", "snake", "squirrel", "spider", "tiger", "standing bird", "zebra", "ant", "bee", "butterfly", "mosquito", "snail", "scorpion"],
+	"Outdoor Scenes": ["church", "castle", "barn", "house", "skyscraper", "cloud", "bridge", "bush", "bench", "fire hydrant", "mailbox", "streetlight", "moon", "parking meter", "person sitting", "person walking", "sun", "rainbow", "windmill", "tent", "feather", "traffic light", "snowman", "cactus", "palm tree", "flower with stem", "leaf", "mushroom", "pumpkin", "tree", "bulldozer", "crane (machine)", "parachute", "bear (animal)", "camel", "cow", "cat", "dog", "dragon", "elephant", "horse", "giraffe", "hedgehog", "kangaroo", "lion", "mouse (animal)", "owl", "monkey", "parrot", "panda", "pig", "pigeon", "rabbit", "rooster", "sheep", "flying bird", "snake", "squirrel", "spider", "tiger", "standing bird", "zebra", "ant", "bee", "butterfly", "mosquito", "snail", "scorpion"],
 	"Things People Wear": ["crown", "hat", "backpack", "helmet", "diamond", "purse", "socks", "shoe", "t-shirt", "trousers", "wrist-watch"],
 	"Christmas": ["angel", "santa claus", "snowman", "present"]
 };
