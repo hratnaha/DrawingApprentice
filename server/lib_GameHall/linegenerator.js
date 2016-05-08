@@ -32,13 +32,7 @@ function findLeastUsageInQuadtree(quadtree, box, canvasSize){
     var boxWidth = box.right - box.left;
     var boxHeight = box.bottom - box.top;
 
-    console.log(box);    
-    /*var widthInterval = (canvasSize.width - boxWidth) / 10;
-    var heightInterval = (canvasSize.height - boxHeight - 600) / 10;
-    var curXpos = 0;
-    var curYpos = 200; // account for the top bar
-    var offset = {x: 0, y: 0};
-    var minCount = Number.MAX_VALUE;*/
+    console.log(box);
    
     var limLeft = 0;
     var limTop = 200;
@@ -88,7 +82,7 @@ function findLeastUsageInQuadtree(quadtree, box, canvasSize){
         }else{
             curX = curX - boxWidth;
             if(curX <= curLeftPos - boxWidth){
-                console.log("done a cycle");
+                
                 doneLeft = false;
                 doneRight = false;
                 doneBottom = false;
@@ -116,7 +110,7 @@ function findLeastUsageInQuadtree(quadtree, box, canvasSize){
                 }
             }
         }
-        console.log("checking pos: " + curX + ", " + curY);
+
         var curBox = {
             x: curX,
             y: curY,
@@ -136,28 +130,8 @@ function findLeastUsageInQuadtree(quadtree, box, canvasSize){
     offset.y = offset.y < 200 ? 200 : offset.y;
     offset.y = offset.y > canvasSize.height - boxHeight ? canvasSize.height - boxHeight : offset.y;
 
+    console.log("find location");
     console.log(offset);
-
-    /*while(curYpos < canvasSize.height){
-        var curBox = {
-            x: curXpos,
-            y: curYpos,
-            width: boxWidth,
-            height: boxHeight};     
-
-        var hitObjects = quadtree.retrieve(curBox);
-        if(hitObjects.length < minCount){
-            offset = {x: curXpos, y: curYpos};
-            minCount = hitObjects.length;
-        }
-        //console.log(hitObjects.length); 
-        curXpos = curXpos + widthInterval;
-        if(curXpos >= canvasSize.width){
-            curXpos = 0;
-            curYpos = curYpos + heightInterval;
-        }
-    }*/
-    //console.log(offset);
     return offset;
 }
 

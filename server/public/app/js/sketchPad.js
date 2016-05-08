@@ -18,8 +18,8 @@ function sketchUtil() {
         img.onload = function(){
             bothInputContext.drawImage(img,0,0);
         };
-        // img.src = "/DrawingApprentice/session_pic/" + roomId + ".png"; // adam server
-        img.src = "/session_pic/" + roomId + ".png";                      // local
+        img.src = "/DrawingApprentice/session_pic/" + roomId + ".png"; // adam server
+        //img.src = "/session_pic/" + roomId + ".png";                      // local
     }
     
     var curstroke;

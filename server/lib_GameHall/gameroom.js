@@ -39,7 +39,7 @@ function CreatePacketPoint(newpt) {
     return pkpt;
 }
 function onReaching4thLevel(strokes){
-    console.log(strokes.length);
+    console.log("quad tree reaches 4th level: " + strokes.length);
     
     
 }
@@ -123,7 +123,6 @@ class gameroom {
         this.indexRLines = 0;   // for counting the number of recorded strokes used in the program
         this.indexPLines = 0;   // for counting the number strokes processed by apprentice
         this.isGrouping = false;
-        this.prevDrawn = 1;
         this.sketchClassfier = sketchClassfier;
         this.lineGenerator = lineGenerator;
         this.numTurnStrokes = 0;
@@ -284,15 +283,13 @@ class gameroom {
                                                             for(var j=0;j<thisobj.sockets.length;j++){
                                                                 var tarso = thisobj.sockets[j];
 							                                    tarso.emit('respondStroke', resultmsg);
-							                                    console.log("finish sending stroke");
+							                                    //console.log("finish sending stroke");
                                                             }
                                                         }else{
 						                                    console.log("prepare to send lines through so");
                                                             so.emit('respondStroke', resultmsg);
 						                                }
                                                     }
-                                                
-                                                    //var decisionMsg = JSON.stringify(decision);
                                                     so.emit('classifyObject', decision);
 					                            }catch(err4){
 					    	                        console.log(err4);
@@ -362,7 +359,7 @@ class gameroom {
                                             thisobj.compStrokes.push(compStroke);
                                             insertLineSegments(thisobj.quadtree, compStroke);
                                             
-                                            thisobj.updateServerPic();
+                                            //thisobj.updateServerPic();
                                             thisobj.indexRLines++;
                                         }
 				                    }
@@ -380,10 +377,13 @@ class gameroom {
             if(tarso != so)
                 tarso.emit('respondStroke', JSON.stringify(userStroke));
         }
+        this.updateServerPic();
     }
     updateServerPic(isForce){
 		isForce = typeof isForce !== 'undefined' ? isForce : false;
         // update the server pic /*every 10 user lines*/
+        //console.log("num user lines: " + this.userStrokes.length);
+        //console.log("num pre drawn lines: " + this.prevDrawn);
         if(this.userStrokes.length > 0 && (this.userStrokes.length / 10 > this.prevDrawn || isForce)){
             this.prevDrawn = Math.ceil(this.userStrokes.length / 10);
             // draw both user lines and computer lines
@@ -400,7 +400,8 @@ class gameroom {
             }
             this.indexCLines = 0;
             this.indexULines = 0;
-            var id = this.roomInfo.id; 
+            var id = this.roomInfo.id;
+            //console.log("saving entire pic filename: " + filename);
             canvas2D.SaveToFile(drawingContext, id, false, function(filename, err){
                 // draw the thumbnail
                 if(!err){
