@@ -1,0 +1,33 @@
+{
+  "name": "SketchService",
+  "version": "0.1.0",
+  "description": "A server that provide a capability to sketch and get the sketch classification results.",
+  "main": "sketchio.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified! Configure in package.json\" && exit 1"
+  },
+  "repository": "",
+  "keywords": [
+    "Node.js",
+    "Eclipse",
+    "Nodeclipse"
+  ],
+  "dependencies": {
+    "body-parser": "^1.7",
+    "cookie-parser": "1.3.2",
+    "ejs": "latest",
+    "express": "^4.13.3",
+    "express-session": "^1.7",
+    "mysql": "2.4.3",
+    "passport": "0.2.1",
+    "passport-facebook": "latest",
+    "passport-google-oauth": "latest",
+    "socket.io": "^1.0.6",
+    "websocket": "^1.0.8",
+    "node-uuid": "latest",
+    "xml2js": "latest"
+  },
+  "author": "Chih-Pin Hsiao",
+  "license": "BSD",
+  "readmeFilename": "README.md"
+}
