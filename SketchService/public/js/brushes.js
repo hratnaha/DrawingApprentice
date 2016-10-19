@@ -1,11 +1,11 @@
 var el = document.getElementsByTagName('canvas')[0];
 var ctx = el.getContext('2d');
-<<<<<<< HEAD
-var canvas3 = document.getElementById('canvas3');
-var ctx3 = canvas3.getContext('2d');var isDrawing;
-=======
+// <<<<<<< HEAD
+// var canvas3 = document.getElementById('canvas3');
+// var ctx3 = canvas3.getContext('2d');var isDrawing;
+// =======
 var isDrawing, points = [ ], lastPoint;
->>>>>>> 48c6d8c0cb8d5856027c55bd8510e2289bbe1bb8
+// >>>>>>> 48c6d8c0cb8d5856027c55bd8510e2289bbe1bb8
 
 var brushes = {};
 
@@ -56,9 +56,9 @@ brushes.SmoothShadow.onmouseup = function(e){
     isDrawing = false;
 };
 
-<<<<<<< HEAD
-el.onmousedown = brushes.SimplePencil.onmousedown;
-=======
+// <<<<<<< HEAD
+// el.onmousedown = brushes.SimplePencil.onmousedown;
+// =======
 brushes.EdgeSmoothing = {};
 brushes.EdgeSmoothing.onmousedown = function(e) {
   isDrawing = true;
@@ -262,7 +262,7 @@ el.onmousedown = brushes.SmoothShadow.onmousedown;
 //el.onmousedown = brushes.FurPen.onmousedown;
 //el.onmousedown = brushes.SlicedStrokes.onmousedown;
 //el.onmosuedown = brushes.MultiLine.onmousedown;
->>>>>>> 48c6d8c0cb8d5856027c55bd8510e2289bbe1bb8
+// >>>>>>> 48c6d8c0cb8d5856027c55bd8510e2289bbe1bb8
 el.onmousemove = brushes.SimplePencil.onmousemove;
 el.onmouseup = brushes.SimplePencil.onmouseup;
 
