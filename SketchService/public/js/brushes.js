@@ -1,42 +1,69 @@
-var el = document.getElementById('c');
-var ctx = el.getContext('2d');
+var buffer = document.getElementById('buffer');
+var bffrCtx = buffer.getContext('2d');
+var display = document.getElementById('display');
+var dplCtx = display.getContext('2d');
+var entire = document.getElementById('entire');
+var entireCtx = entire.getContext('2d');
 var isDrawing;
 
 var brushes = {};
 
+function brushUp(e){
+    isDrawing = false;
+    // draw the current brush from the buffer to the displaying canvas
+    dplCtx.save();
+    dplCtx.setTransform(1,0,0,1,0,0);
+    dplCtx.drawImage(buffer, 0, 0);
+    dplCtx.restore();
+
+    entireCtx.save();
+    var mtx = entireCtx.getTransform();
+    mtx = mtx.inverse();
+    entireCtx.setTransform(mtx.a, mtx.b, mtx.c, mtx.d, mtx.e, mtx.f);
+    entireCtx.drawImage(buffer, 0, 0, buffer.width, buffer.height);
+    entireCtx.restore();
+    
+    // clean the buffer context
+    bffrCtx.save();
+    bffrCtx.setTransform(1,0,0,1,0,0);
+    bffrCtx.clearRect(0,0,buffer.width,buffer.height);
+    bffrCtx.restore();
+}
+
 brushes.SimplePencil = {};
-brushes.SimplePencil.onmousedown = function(e){
+brushes.SimplePencil.onmousedown = function(e){    
     isDrawing = true;
-    ctx.moveTo(e.clientX, e.clientY);
+    bffrCtx.beginPath();
+    bffrCtx.moveTo(e.clientX, e.clientY);
 };
 brushes.SimplePencil.onmousemove = function(e){
     if (isDrawing) {
-        ctx.lineTo(e.clientX, e.clientY);
-        ctx.stroke();
+        bffrCtx.lineTo(e.clientX, e.clientY);
+        bffrCtx.stroke();
     }
+    moveCanvas(e);
 };
-brushes.SimplePencil.onmouseup = function(e){
-    isDrawing = false;
-};
+brushes.SimplePencil.onmouseup = brushUp;
 brushes.SmoothShadow = {};
 brushes.SmoothShadow.onmousedown = function(e){
     isDrawing = true;
-    ctx.lineWidth = 10;
-    ctx.lineJoin = ctx.lineCap = 'round';
-    ctx.shadowBlur = 10;
-    ctx.shadowColor = 'rgb(0, 0, 0)';
-    ctx.moveTo(e.clientX, e.clientY);
+
+    bffrCtx.beginPath();
+    bffrCtx.lineWidth = 10;
+    bffrCtx.lineJoin = bffrCtx.lineCap = 'round';
+    bffrCtx.shadowBlur = 10;
+    bffrCtx.shadowColor = 'rgb(0, 0, 0)';
+    bffrCtx.moveTo(e.clientX, e.clientY);
 };
 brushes.SmoothShadow.onmousemove = function(e){
     if (isDrawing) {
-        ctx.lineTo(e.clientX, e.clientY);
-        ctx.stroke();
+        bffrCtx.lineTo(e.clientX, e.clientY);
+        bffrCtx.stroke();
     }
+    moveCanvas(e);
 };
-brushes.SmoothShadow.onmouseup = function(e){
-    isDrawing = false;
-};
+brushes.SmoothShadow.onmouseup = brushUp;
 
-el.onmousedown = brushes.SmoothShadow.onmousedown;
-el.onmousemove = brushes.SimplePencil.onmousemove;
-el.onmouseup = brushes.SimplePencil.onmouseup;
+buffer.onmousedown = brushes.SimplePencil.onmousedown;
+buffer.onmousemove = brushes.SimplePencil.onmousemove;
+buffer.onmouseup = brushes.SimplePencil.onmouseup;
