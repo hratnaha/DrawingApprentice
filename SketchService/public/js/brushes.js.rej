@@ -1,0 +1,6 @@
+diff a/SketchService/public/js/brushes.js b/SketchService/public/js/brushes.js	(rejected hunks)
+@@ -1,4 +0,3 @@
+-var buffer = document.getElementById('buffer');
+ var el = document.getElementById('c');
+ var ctx = el.getContext('2d');
+ var isDrawing, points = [ ], lastPoint;
