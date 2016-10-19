@@ -1,22 +1,29 @@
-var el = document.getElementById('c');
+var el = document.getElementsByTagName('canvas')[0];
 var ctx = el.getContext('2d');
-var isDrawing;
+var canvas3 = document.getElementById('canvas3');
+var ctx3 = canvas3.getContext('2d');var isDrawing;
 
 var brushes = {};
 
 brushes.SimplePencil = {};
 brushes.SimplePencil.onmousedown = function(e){
     isDrawing = true;
+    ctx.beginPath();
+    ctx3.beginPath();
     ctx.moveTo(e.clientX, e.clientY);
+    ctx3.moveTo(e.clientX, e.clientY);
 };
 brushes.SimplePencil.onmousemove = function(e){
     if (isDrawing) {
         ctx.lineTo(e.clientX, e.clientY);
         ctx.stroke();
+        ctx3.lineTo(e.clientX, e.clientY);
+        ctx3.stroke();
     }
 };
 brushes.SimplePencil.onmouseup = function(e){
     isDrawing = false;
+    copyToBuffer();
 };
 brushes.SmoothShadow = {};
 brushes.SmoothShadow.onmousedown = function(e){
@@ -37,6 +44,7 @@ brushes.SmoothShadow.onmouseup = function(e){
     isDrawing = false;
 };
 
-el.onmousedown = brushes.SmoothShadow.onmousedown;
+el.onmousedown = brushes.SimplePencil.onmousedown;
 el.onmousemove = brushes.SimplePencil.onmousemove;
 el.onmouseup = brushes.SimplePencil.onmouseup;
+
