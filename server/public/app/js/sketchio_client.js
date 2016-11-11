@@ -45,15 +45,6 @@ function initWebSocket() {
     var ctx = botCanvas.getContext('2d');
 	var ctx2 = sketchPadCanvas.getContext('2d');
     ctx.lineWidth = 0.1;
-
-	
-	/*$('#slider').slider().on('slideStop', function (ev) {
-        console.log('Current Creativity Value:' + ' ' + ev.value / 100);
-        socket.emit("SetCreativty", ev.value);
-		
-    });*/
-	
-
 		
 		$('#slider').slider({
 			change: function(event, ui) {
@@ -61,13 +52,6 @@ function initWebSocket() {
        		     socket.emit("SetCreativty", ui.value);
 			}
 		});
-	
-
-
-   /* $('#ex8').slider().on('slideStop', function (ev) {
-        console.log('Current Creativity Value:' + ' ' + ev.value / 100);
-        socket.emit("SetCreativty", ev.value);
-    });*/
 
     var timer = setInterval(function () {
 
@@ -116,11 +100,11 @@ function initWebSocket() {
 				opacity: .5,
 				});
             i = 0;
-			//moveLogo.style.backgroundColor = "yellow";
+
 			MoveLogoBack();
+            undoManager.addStack(bothCanvas);
         }
     }, 20);
-    //
 }
 
 
@@ -141,36 +125,11 @@ function onNewStroke(data) {
 	moveLogo.style.top = "3%";
     // decode the data into the new stroke
     var botStroke = JSON.parse(data);
-/*
-	if(botStroke.data){
-		$("#tmp_path").attr("d", botStroke.data);
-		var path = $('#tmp_path').get(0);
-		var pathLen = path.getTotalLength();
 
-		var curLength = 0;
-		var pts = [];
-
-		while(curLength < pathLen){
-			var pt = path.getPointAtLength(curLength);
-			var newx = pt.x + botStroke.offset.x;
-			var newy = pt.y + botStroke.offset.y;
-			pts.push({x: newx, y: newy});
-			curLength += 7;
-		}
-		var pt = path.getPointAtLength(pathLen);
-		var newx = pt.x + botStroke.offset.x;
-		var newy = pt.y + botStroke.offset.y;
-		pts.push({x:newx, y:newy});
-
-		console.log(pts);
-		botStroke.allPoints = pts;
-		
-	}*/
-
-		curStroke.push(botStroke);
-		logo.style.position = "absolute";
-		logo.style.left = data.x;
-		logo.style.top = data.y;
+    curStroke.push(botStroke);
+	logo.style.position = "absolute";
+	logo.style.left = data.x;
+	logo.style.top = data.y;
 	
 }
 
@@ -437,29 +396,10 @@ function downloadData() {
 
 function downloadCanvas(link) {
     console.log("Working on downloading canvas");
-    var canvas = document.getElementById('both');
+    //var canvas = document.getElementById('both');
     var filename = 'test.png'; 
-    link.href = document.getElementById('both').toDataURL();
+    link.href = bothCanvas.toDataURL();//document.getElementById('both').toDataURL();
     link.download = filename;
-    /*
-    var context = canvas.getContext('2d'); 
-    var w = canvas.width;
-    var h = canvas.height;
-
-    var data = context.getImageData(0, 0, w, h);
-    var compositeOperation = canvas.globalCompositeOperation;
-    context.globalCompositeOperation = "destination-over";
-    context.fillStyle = "#FFFFFF";
-    context.fillRect(0, 0, w, h);
-    var imageData = canvas.toDataURL("image/PNG");
-    
-    context.clearRect(0, 0, w, h);
-    context.putImageData(data, 0, 0);
-    context.globalCompositeOperation = compositeOperation; 
-    
-    link.href = imageData; 
-    link.download = 'test.png';
-     * */
 }
 
 

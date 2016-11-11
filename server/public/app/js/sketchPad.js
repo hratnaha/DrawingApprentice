@@ -17,6 +17,7 @@ function sketchUtil() {
         var img = new Image();
         img.onload = function(){
             bothInputContext.drawImage(img,0,0);
+            undoManager.addStack(bothCanvas);
         };
         img.src = "/DrawingApprentice/session_pic/" + roomId + ".png"; // adam server
         //img.src = "/session_pic/" + roomId + ".png";                      // local
@@ -122,6 +123,7 @@ function sketchUtil() {
 				//if (document.getElementById('grouping').clicked == true) {
                 if (!$('#group').hasClass("active")) {
                     bothInputContext.drawImage(canvas, 0, 0);
+                    context.clearRect(0, 0, canvas.width, canvas.height);
                 }
                 else {
                     var label = prompt("Please enter the type of object you drew:", "Object");
@@ -237,3 +239,15 @@ function pressure1() {
 }
 pressure1();
 
+
+function UndoCanvas(){
+    var prevStateImg = undoManager.undo();
+    if(prevStateImg != null){ 
+        var img = new Image();
+        img.onload = function(){
+            bothInputContext.clearRect(0, 0, bothCanvas.width, bothCanvas.height);
+            bothInputContext.drawImage(img,0,0);
+        };
+        img.src = prevStateImg;
+    }
+}
