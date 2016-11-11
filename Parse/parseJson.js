@@ -1,5 +1,5 @@
 var fs = require('fs');
-var files = ["UserData/p7_T2_comp.txt", "UserData/p7_T2_user.txt"];
+var files = ["UserData/p3_T2_comp.txt", "UserData/p3_T2_user.txt"];
 var objs = [];
 
 //1443715920243userLines.json
@@ -19,12 +19,35 @@ function readJsonAndWriteCSV(filename) {
         objs.push(JSON.parse(str));
         
         if (objs.length === files.length) {
-            var stream = fs.createWriteStream("UserData/p7_T2_combined.csv");
+            var stream = fs.createWriteStream("UserData/p3_T2_combined.csv");
             stream.once('open', function (fd) {
                 
                 stream.write("strokeID, isCompGenerated, lineID, time, timeStamp, x, y, groupID\n");
                 var i = 0;
+                var firstTime;
+                var lastTime; 
                 
+                /*
+
+                for (var objID in objs) {
+                    var obj = objs[objID];
+                    for (var strokeID in obj) {
+                        var stroke = obj[strokeID];
+                        var points = stroke["allPoints"];
+                        var isComp = stroke["compGenerated"];
+                        if (!isComp) {
+                            for (var ptID in points) {
+                                var firstPoint = points[0];
+                                firstTime = firstPoint["time"];
+                                lastTime = points[points.length - 1];
+                            }
+                        }
+                        }
+                    }
+                */
+                
+                
+
                 for (var objID in objs) {
                     var obj = objs[objID];
                     for (var strokeID in obj) {
@@ -41,8 +64,9 @@ function readJsonAndWriteCSV(filename) {
                                 timeStamp = time;
                                 time = tmptime;
                             }
+                           // var adjustedTime = time - firstTime;
+                            //console.log("Adjusted Time: " + adjustedTime); 
                             if (isComp){
-                                
                                 if (ptID == 0 && strokeID != 0) {
                                     prevStroke = obj[strokeID - 1];
                                     console.log("Obj[strokeID] = " + obj[strokeID - 1]);

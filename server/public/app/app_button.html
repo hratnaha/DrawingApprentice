@@ -20,6 +20,7 @@ put js files before css files
     </script>
     <script src='http://d3js.org/d3.v3.min.js'>
     </script>
+    <script src="https://hammerjs.github.io/dist/hammer.js"></script>
 	
 	<!--script type="text/javascript" src="/js/vendor/bootstrap-slider.js"></script-->
     <script type="text/javascript" src="/js/vendor/FileSaver.min.js"></script>
@@ -423,6 +424,14 @@ put js files before css files
    		var myCanvasContext3 = myCanvas3.getContext('2d');
 		</script>
         </canvas>
+
+        <canvas id="entire">Sorry, your browser is not supported.
+        <script>
+        var myCanvas5 = document.getElementById("entire");
+   		var myCanvasContext5 = myCanvas5.getContext('2d');
+		</script>
+        </canvas>
+
     </div>
     
     
@@ -494,13 +503,15 @@ put js files before css files
             	<li><button class="btn" id ="trash" href="#"><i class="fa fa-trash fa-2x"></i></button></li>
                 <!--<li><button class="btn"  id="download" ><i class="fa fa-download fa-2x"></i></button></li>-->
                 <li><a class="btn" id="download"><i style="margin-top:.5em;"class="fa fa-download fa-2x"></i></a></li>
-                <li><button onClick="displaySpeech('house','cat');"class="btn" href="#"><i class="fa fa-plus-square-o fa-2x"></i></button></li>
+                <li><button onClick="downloadData()"class="btn" href="#"><i class="fa fa-plus-square-o fa-2x"></i></button></li>
                  <li><button class="btn" href="#"><i class="fa fa-cogs fa-2x"></i></button></li>
                 <li>
                     <button class="btn" id="myBtn" style="float:left;margin-left:1em;"><i class="fa fa-bar-chart fa-2x" aria-hidden="true"></i>
                     </button>
                 </li>  
-               
+                <li><a class="btn" id="undo"><i style="margin-top:.5em;" class="fa fa-undo fa-2x"></i></a></li>
+
+                fa fa-undo
             </ul>
         </div><!--setting-button col-lg-5-->
     </div><!--row-->

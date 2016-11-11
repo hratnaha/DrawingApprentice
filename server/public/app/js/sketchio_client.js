@@ -171,11 +171,15 @@ function onDataReceived(allData) {
 function onStatsQuery(allData) {
     var userLines = JSON.parse(allData.userLines);
     var computerLines = JSON.parse(allData.computerLines);
+    var data = {
+        userLines: userLines, 
+        computerLines: computerLines
+    }; 
     //var room = JSON.parse(allData.room);
     //var upVote = room.upVoteCount;
     //var downVote = room.downVoteCount;
     //console.log("Upvotes: " + upVote + "DownVotes: " + downVote); 
-    InitChart(userLines);
+    InitChart(data);
     InitChart2(userLines);
     InitChart3(userLines); 
     //var userLines = allData.userLines;
