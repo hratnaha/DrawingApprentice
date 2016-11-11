@@ -7,19 +7,147 @@ function sketchUtil() {
     bothCanvas.setAttribute('width', container.offsetWidth);
     bothCanvas.setAttribute('height', container.offsetHeight);
 
+    var both = document.getElementById('both');
+    both.setAttribute('width', container.offsetWidth);
+    both.setAttribute('height', container.offsetHeight);
+    var bothCtx = both.getContext('2d');
+
     var canvas = document.getElementById('sketchpad');
     canvas.setAttribute('width', container.offsetWidth);
     canvas.setAttribute('height', container.offsetHeight);
     var context = canvas.getContext('2d');
     context.lineWidth = 1;
 	
+    var entire = document.getElementById('entire');
+    entire.setAttribute('width', container.offsetWidth);
+    entire.setAttribute('height', container.offsetHeight);
+    entire.setAttribute('style', 'visibility:hidden');    
+    var entireCtx = entire.getContext('2d');
+
+    function trackTransforms(ctx){
+        var svg = document.createElementNS("http://www.w3.org/2000/svg",'svg');
+        var xform = svg.createSVGMatrix();
+        ctx.getTransform = function(){ return xform; };
+        
+        var savedTransforms = [];
+        var save = ctx.save;
+        ctx.save = function(){
+            savedTransforms.push(xform.translate(0,0));
+            return save.call(ctx);
+        };
+        var restore = ctx.restore;
+        ctx.restore = function(){
+            xform = savedTransforms.pop();
+            return restore.call(ctx);
+        };
+
+        var scale = ctx.scale;
+        ctx.scale = function(sx,sy){
+            xform = xform.scaleNonUniform(sx,sy);
+            return scale.call(ctx,sx,sy);
+        };
+        var rotate = ctx.rotate;
+        ctx.rotate = function(radians){
+            xform = xform.rotate(radians*180/Math.PI);
+            return rotate.call(ctx,radians);
+        };
+        var translate = ctx.translate;
+        ctx.translate = function(dx,dy){
+            xform = xform.translate(dx,dy);
+            return translate.call(ctx,dx,dy);
+        };
+        var transform = ctx.transform;
+        ctx.transform = function(a,b,c,d,e,f){
+            var m2 = svg.createSVGMatrix();
+            m2.a=a; m2.b=b; m2.c=c; m2.d=d; m2.e=e; m2.f=f;
+            xform = xform.multiply(m2);
+            return transform.call(ctx,a,b,c,d,e,f);
+        };
+        var setTransform = ctx.setTransform;
+        ctx.setTransform = function(a,b,c,d,e,f){
+            xform.a = a;
+            xform.b = b;
+            xform.c = c;
+            xform.d = d;
+            xform.e = e;
+            xform.f = f;
+            return setTransform.call(ctx,a,b,c,d,e,f);
+        };
+        var pt = svg.createSVGPoint();
+        ctx.transformedPoint = function(x,y){
+            pt.x=x; pt.y=y;
+            return pt.matrixTransform(xform.inverse());
+        }
+    }
+    trackTransforms(context);
+    trackTransforms(entireCtx);
+    trackTransforms(bothCtx);
+
+    function redraw(){
+        // Clear the entire canvas
+        var p1 = bothCtx.transformedPoint(0,0);
+        var p2 = bothCtx.transformedPoint(both.width,both.height);
+        bothCtx.fillStyle = "#CCCCCC";
+        bothCtx.fillRect(p1.x,p1.y,p2.x-p1.x,p2.y-p1.y);
+        bothCtx.clearRect(0, 0, both.width, both.height);
+        // find the portion of the entire canvas to draw on the display canvas
+        bothCtx.drawImage(entire, 0, 0, both.width, both.height);
+    }
+
+    var scaleFactor = 1.1;
+    var zoomPercentage = 1.0;
+    function handlePinch (evt) { // zooming
+        var clicks = evt.wheelDelta ? evt.wheelDelta/100 : 0;
+        clicks = Math.round(clicks * 10) / 10;
+        var factor = Math.pow(scaleFactor,clicks);
+        if (zoomPercentage * factor < 5 && zoomPercentage * factor > 0.3) {
+            zoomPercentage *= factor;
+            y = y * factor; // change brush width
+            var pt = entireCtx.transformedPoint(lastX,lastY);
+            entireCtx.translate(pt.x,pt.y);
+            bothCtx.translate(pt.x, pt.y);
+            entireCtx.scale(factor,factor);
+            bothCtx.scale(factor,factor);
+            entireCtx.translate(-pt.x,-pt.y);
+            bothCtx.translate(-pt.x,-pt.y);        
+            redraw();
+        }
+        return evt.preventDefault() && false;
+    }
+
+    function handleScroll (evt){ // panning
+        evt.preventDefault();
+        entireCtx.translate(evt.deltaX, evt.deltaY);
+        bothCtx.translate(evt.deltaX, evt.deltaY);
+        redraw();
+    };
+
+    function handleMouseWheel (evt) {
+        if (Math.abs(evt.wheelDelta) == 120) {
+            handlePinch(evt);
+        } else {
+            handleScroll(evt);
+        }
+    }
+    canvas.addEventListener('wheel',handleMouseWheel,false);
+
+    var lastX = both.width/2, lastY = both.height/2;
+    function moveCanvas (evt){
+        lastX = evt.x; //|| (evt.pageX - canvas.offsetLeft);
+        lastY = evt.y;// || (evt.pageY - canvas.offsetTop);
+    }
+
+    function checkInsideCanvas(pt) { // Check is point is inside drawable canvas
+        return pt.x > 0 && pt.x < both.width && pt.y > 0 && pt.y < both.height;
+    }
+
 	if(roomId != ""){
         var img = new Image();
         img.onload = function(){
             bothInputContext.drawImage(img,0,0);
         };
-        img.src = "/DrawingApprentice/session_pic/" + roomId + ".png"; // adam server
-        //img.src = "/session_pic/" + roomId + ".png";                      // local
+        // img.src = "/DrawingApprentice/session_pic/" + roomId + ".png"; // adam server
+        img.src = "/session_pic/" + roomId + ".png";                      // local
     }
     
     var curstroke;
@@ -37,7 +165,7 @@ function sketchUtil() {
         var now = (new Date()).getTime();
         var userid = userData == "" ? "unknown" : userData.id;
         var newstroke = {
-                       // create a temporary stroke for sending
+            // create a temporary stroke for sending
             type : "stroke",
             data : {
                 timestamp : now,
@@ -55,6 +183,7 @@ function sketchUtil() {
         };
         return newstroke;
     }
+
     function pushNewPacketPoint(coors) {
         var now = (new Date()).getTime();
         pkptCounter++;
@@ -67,42 +196,40 @@ function sketchUtil() {
             pressure : pressurevalue,
             color: tipColor          //passing color in hex form
         };
-        
         curstroke.data.allPoints.push(pkpt);
     }
-    
 	
     // create a drawer which tracks touch movements
     var drawer = {
         isDrawing: false,
         touchstart: function (coors) {
+            var pt = bothCtx.transformedPoint(coors.x, coors.y); // Current point on drawable canvas                
             colorline = document.getElementById('background').value;
             curstroke = createNewStroke();
 			if ($('#group').hasClass("active")){
-            //if ($("#cboxGrouping").attr('checked') == "checked") {
-                //alert("grouping checked");
-                console.log("Grouping checked"); 
                 context.setLineDash([5]);
                 context.strokeStyle = tipColor;
-				//console.log(tipColor);
-				context.globalAlpha = opacity2;
-				
-	
+				context.globalAlpha = opacity2;			
             } else {
                 colorline = document.getElementById('background').value;
                 context.strokeStyle = tipColor;
                 context.setLineDash([0]);
 				context.lineWidth = y;
 				context.globalAlpha = opacity2;
-			
             }
-            curstroke = createNewStroke();
-            context.beginPath();
-            context.moveTo(coors.x, coors.y);
-            this.isDrawing = true;
+
+            if (checkInsideCanvas(pt)) {
+                curstroke = createNewStroke();
+                context.beginPath();
+                context.moveTo(coors.x, coors.y);
+                this.isDrawing = true;
+            }
         },
         touchmove: function (coors) {
-            if (this.isDrawing) {
+            var pt = entireCtx.transformedPoint(coors.x, coors.y);
+            // console.log("overall x: " + coors.x + ", y: " + coors.y);
+            // console.log("transformed x: " + pt.x, ", y: " + pt.y);            
+            if (this.isDrawing && checkInsideCanvas(pt)) {
                 context.lineTo(coors.x, coors.y);
                 context.stroke();
 				context.lineWidth = y;
@@ -110,6 +237,7 @@ function sketchUtil() {
                 var json_coor = JSON.stringify(coors); //converting to json
                 pushNewPacketPoint(coors);
             }
+            moveCanvas(coors);
         },
         touchend: function (coors) {
             if (this.isDrawing) {
@@ -117,15 +245,29 @@ function sketchUtil() {
                 var stringStroke = JSON.stringify(curstroke);
                 onTouchUp(stringStroke);
                 var height = canvas.height;
-
                 this.isDrawing = false;
+                // draw the current brush from the buffer to the displaying canvas
+                bothCtx.save();
+                bothCtx.setTransform(1,0,0,1,0,0);
+                bothCtx.drawImage(canvas, 0, 0);
+                bothCtx.restore();
+                // draw the last stroke onto the entire canvas
+                entireCtx.save();
+                var mtx = entireCtx.getTransform();
+                mtx = mtx.inverse();
+                entireCtx.setTransform(mtx.a, mtx.b, mtx.c, mtx.d, mtx.e, mtx.f);
+                entireCtx.drawImage(canvas, 0, 0, canvas.width, canvas.height);
+                entireCtx.restore();
+                // clean the buffer context
+                context.save();
+                context.setTransform(1,0,0,1,0,0);
+                context.clearRect(0,0,canvas.width,canvas.height);
+                context.restore();
 				//if (document.getElementById('grouping').clicked == true) {
                 if (!$('#group').hasClass("active")) {
                     bothInputContext.drawImage(canvas, 0, 0);
-                }
-                else {
+                } else {
                     var label = prompt("Please enter the type of object you drew:", "Object");
-                    console.log("Label is: " + label); 
                     setGroupLabel(label); 
                     changeGrouping();
                     context.clearRect(0, 0, canvas.width, canvas.height);
@@ -137,7 +279,6 @@ function sketchUtil() {
     function draw(event) {
         var type = null;
         var timer = null;
-        
         var now = new Date();
         var now_utc = new Date(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate(), now.getUTCHours(), now.getUTCMinutes(), now.getUTCSeconds());
         
@@ -168,8 +309,7 @@ function sketchUtil() {
                 };
                 type = "touchend";
                 clearTimeout(timer);
-                break;
-            
+                break;            
         }
         
         // touchend clear the touches[0], so we need to use changedTouches[0]
@@ -225,9 +365,7 @@ var logtouch = function (evtype, t) {
 }
 
 var mouseIsDown = false;
-
 function pressure1() {
-    
     $(document).on("mousemove", function () { log("mousemove"); });
     $(document).on("touchstart touchmove touchend touchcancel", function (ev) {3
         $.each(ev.originalEvent.touches, function (i, t) { logtouch(ev.type + "-touches", t); });

@@ -261,7 +261,10 @@ $(function AdjustLineThickness() {
 
 $("#trash").click(function(){
 	clearCanvas();
-});
+    });
+    $("#undo").click(function () {
+        UndoCanvas();
+    });
 
     $("#download").click(function (){
         console.log("In the download function. This is: ");
@@ -350,19 +353,45 @@ $("#grouping").click(function(){
 
 //D3 viz stuff
 function InitChart(data) {
+    var userLines = data.userLines;
+    var compLines = data.compLines; 
     //Drawing Activity over Time
     $('#ActivityChart').append('<svg id="visualisation" width="1100" height="350"></svg>');
     console.log("in the initChart, starting to build the data: ");
     console.log(data); 
-    var startTime = data[0].allPoints[0].timestamp;
-    var lineData = []; 
+    var startTime = userLines[0].allPoints[0].timestamp;
+    var lineData = [];
+    //var lineData2 = []; 
     console.log("Start time: " + startTime);
-    console.log("Data.length = " + data.length); 
+    console.log("Data.length = " + userLines.length); 
     
+    var lineData2 = [{
+            'x': 1,
+            'y': 5
+        }, {
+            'x': 20,
+            'y': 20
+        }, {
+            'x': 40,
+            'y': 10
+        }, {
+            'x': 60,
+            'y': 40
+        }, {
+            'x': 80,
+            'y': 5
+        }, {
+            'x': 100,
+            'y': 60
+        }, {
+            'x': 150,
+            'y': 200
+        }
+    ];
 
-    for (var i = 0; i < data.length; i++) {
+    for (var i = 0; i < userLines.length; i++) {
         if (i != 0) {
-            var initialTime = data[i].allPoints[0].timestamp;
+            var initialTime = userLines[i].allPoints[0].timestamp;
             var normalTime = initialTime - startTime;
             var newPoint = {
                 'x': normalTime - 1,
@@ -370,8 +399,8 @@ function InitChart(data) {
             };
             lineData.push(newPoint); 
         }
-        for (var j = 0; j < data[i].allPoints.length ; j++) {
-            var curPoint = data[i].allPoints[j];
+        for (var j = 0; j < userLines[i].allPoints.length ; j++) {
+            var curPoint = userLines[i].allPoints[j];
             var initialTime = curPoint.timestamp;
             var normalTime = initialTime - startTime;
             var newPoint = {
@@ -382,7 +411,7 @@ function InitChart(data) {
         }
 
         //code for adding zero point after line
-        var lastPoint = data[i].allPoints[data[i].allPoints.length - 1];
+        var lastPoint = userLines[i].allPoints[userLines[i].allPoints.length - 1];
         var initialTime = lastPoint.timestamp;
         var normalTime = initialTime - startTime;
         var newPoint = {
@@ -450,6 +479,7 @@ function InitChart(data) {
             .attr("transform", "translate(" + (WIDTH / 2) + "," + (15 + HEIGHT - (1 / 3)) + ")")// centre below axis
             .text("Time (ms)");
     
+            //repeat 
     var lineFunc = d3.svg.line()
   .x(function (d) {
         return xRange(d.x);
@@ -464,6 +494,15 @@ function InitChart(data) {
   .attr("stroke", "blue")
   .attr("stroke-width", 2)
   .attr("fill", "none");
+  /*
+    vis.append("svg:path")
+  .attr("d", lineFunc(lineData))
+  .attr("stroke", "blue")
+  .attr("stroke-width", 2)
+  .attr("fill", "none");
+  */
+    
+    
 
 }
 
