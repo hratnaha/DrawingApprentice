@@ -123,13 +123,13 @@ function sketchUtil() {
     };
 
     function handleMouseWheel (evt) {
-        if (Math.abs(evt.wheelDelta) == 120) {
+        //if (Math.abs(evt.wheelDelta) == 120) {
             handlePinch(evt);
-        } else {
-            handleScroll(evt);
-        }
+        //} else {
+        //    handleScroll(evt);
+        //}
     }
-    canvas.addEventListener('wheel',handleMouseWheel,false);
+    canvas.addEventListener('mousewheel',handleMouseWheel,false);
 
     var lastX = both.width/2, lastY = both.height/2;
     function moveCanvas (evt){
