@@ -365,7 +365,9 @@ io.on('connection', function (so) {
     }
 
     function onClear() {
-        apprentice.clearSync();
+        console.log("clean the room");
+        //apprentice.clearSync();
+        room.cleanRoom();
     }
 
     function onSetMode(mode){

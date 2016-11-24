@@ -44,15 +44,22 @@ var undoManager = {
         try{
             var now = (new Date()).getTime();
             
-            if(undoStack.length > 10){
+            if(localStorage.length > 5 || this.undoStack.length > 10){
                 // remove the first item;
-                var firstStep = undoStack.shift();
+                var firstStep = this.undoStack.shift();
                 localStorage.removeItem(firstStep);
             }
             
-            undoStack.push(now); // push to the end of the stack for record
+            this.undoStack.push(now); // push to the end of the stack for record
             localStorage.setItem(now, imgAsDataURL); // store the image to the local storage
         }catch(err){
+            
+            if(localStorage.length > 5 || this.undoStack.length > 10){
+                // remove the first item;
+                var firstStep = this.undoStack.shift();
+                localStorage.removeItem(firstStep);
+            }
+
             console.log("save to local storage failed: " + err );
         }
     },

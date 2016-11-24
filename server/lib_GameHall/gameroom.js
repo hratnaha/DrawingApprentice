@@ -431,13 +431,18 @@ class gameroom {
             this.apprentice.setModeSync(m);
     }
     setCreativity(level){
-	console.log("set creativity level:" + level);
+	    console.log("set creativity level:" + level);
     	this.apprentice.setCreativityLevel(level);
-	this.creativity = level;
-	if(level == 100)
-		generator.mode = 2;
-	else
-		generator.mode = 1;
+	    this.creativity = level;
+    	if(level == 100)
+	    	generator.mode = 2;
+	    else
+		    generator.mode = 1;
+    }
+    cleanRoom(){
+        this.userStrokes.length = 0;
+        this.compStrokes.length = 0;
+        this.quadtree.clear();        
     }
 }
 module.exports = gameroom;
