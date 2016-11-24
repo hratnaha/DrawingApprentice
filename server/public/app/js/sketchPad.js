@@ -147,8 +147,8 @@ function sketchUtil() {
             bothInputContext.drawImage(img,0,0);
             undoManager.addStack(bothCanvas);
         };
-        // img.src = "/DrawingApprentice/session_pic/" + roomId + ".png"; // adam server
-        img.src = "/session_pic/" + roomId + ".png";                      // local
+         img.src = "/DrawingApprentice/session_pic/" + roomId + ".png"; // adam server
+        //img.src = "/session_pic/" + roomId + ".png";                      // local
     }
     
     var curstroke;

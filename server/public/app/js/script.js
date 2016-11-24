@@ -1091,13 +1091,13 @@ btnObjRecRelated.click(function () {
 	});
 	
 // Without JQuery
-var slider = new Slider("#ex8", {
+/*var slider = new Slider("#ex8", {
 	tooltip: 'always'
 });
 				
 var slider = new Slider("#ex15", {
 	tooltip: 'always'
-});
+});*/
 	
 
 function AppendSuccessMsg(){
