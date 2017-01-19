@@ -1,5 +1,6 @@
 var lastX = display.width/2, lastY = display.height/2;
 var scaleFactor = 1.1;
+var zoomPercentage = 0.0;
 function trackTransforms(ctx){
     var svg = document.createElementNS("http://www.w3.org/2000/svg",'svg');
     var xform = svg.createSVGMatrix();
@@ -53,6 +54,7 @@ function trackTransforms(ctx){
     var pt  = svg.createSVGPoint();
     ctx.transformedPoint = function(x,y){
         pt.x=x; pt.y=y;
+        console.log(xform.inverse());
         return pt.matrixTransform(xform.inverse());
     }
 }
@@ -65,34 +67,41 @@ function redraw(){
     // Clear the entire canvas
     var p1 = dplCtx.transformedPoint(0,0);
     var p2 = dplCtx.transformedPoint(display.width,display.height);
-    dplCtx.clearRect(p1.x,p1.y,p2.x-p1.x,p2.y-p1.y);
+    dplCtx.fillStyle = "#CCCCCC";
+    dplCtx.fillRect(p1.x,p1.y,p2.x-p1.x,p2.y-p1.y);
+    dplCtx.clearRect(0, 0, display.width, display.height);
 
     // find the portion of the entire canvas to draw on the display canvas
     dplCtx.drawImage(entire, 0, 0, display.width, display.height);
-    
 }
 
 var zoom = function(clicks){
-	var pt = entireCtx.transformedPoint(lastX,lastY);
-	entireCtx.translate(pt.x,pt.y);
-    dplCtx.translate(pt.x, pt.y);
-	
+    clicks = Math.round(clicks * 10) / 10;
     var factor = Math.pow(scaleFactor,clicks);
-	entireCtx.scale(factor,factor);
-    dplCtx.scale(factor,factor);
-    
-    entireCtx.translate(-pt.x,-pt.y);
-    dplCtx.translate(-pt.x,-pt.y);
-	
-	redraw();
+    if (zoomPercentage + clicks < 10
+        && zoomPercentage + clicks > -10) {
+        zoomPercentage += clicks;
+        var pt = entireCtx.transformedPoint(lastX,lastY);
+        entireCtx.translate(pt.x,pt.y);
+        dplCtx.translate(pt.x, pt.y);
+        
+        entireCtx.scale(factor,factor);
+        dplCtx.scale(factor,factor);
+        entireCtx.translate(-pt.x,-pt.y);
+        dplCtx.translate(-pt.x,-pt.y);
+        
+        redraw();
+   }
 }
+
 var handleScroll = function(evt){
-    var delta = evt.wheelDelta ? evt.wheelDelta/40 : evt.detail ? -evt.detail : 0;
+    var delta = evt.wheelDelta ? evt.wheelDelta/100 : 0;
 	if (delta) zoom(delta);
 	return evt.preventDefault() && false;
 };
 
 function moveCanvas (evt){
+    console.log(evt);
     lastX = evt.offsetX; //|| (evt.pageX - canvas.offsetLeft);
     lastY = evt.offsetY;// || (evt.pageY - canvas.offsetTop);
 }

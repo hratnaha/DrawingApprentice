@@ -1,7 +1,7 @@
 
 //CANVAS JAVASCTIPT
 var thickness = 0;
-var y = 2;
+var y = 10;
 var opacity = 1;
 var opacity2 = opacity/10;
 var lineThickness;
@@ -20,124 +20,124 @@ $(".colorBtn").click(function AddWhiteBorder(){
 		});
 });
 
+
+// $("#color1").click(function AddBorder(){
+// 			$(this).css({
+// 				'border':'4px solid #B40431'});
+// 			tipColor = "red";
+// 			console.log(tipColor);
+// 			//ctx.strokeStyle = tipColor;
+// });
+
+
+// $("#color2").click(function AddBorder(){
+// 			$(this).css({
+// 				'border':'4px solid #FF8000'});
+// 			tipColor = "orange";
+// 			console.log(tipColor);
+// 			//ctx.strokeStyle = tipColor;
+// });
+
+
+// $("#color3").click(function AddBorder(){
+// 			$(this).css({
+// 				'border':'4px solid #F7FE2E'});
+// 			tipColor = "yellow";
+// 			console.log(tipColor);
+// 			//ctx.strokeStyle = tipColor;
+// });
+
+// $("#color4").click(function AddBorder(){
+// 			$(this).css({
+// 				'border':'4px solid #81F781'});
+// 			tipColor = "green";
+// 			console.log(tipColor);
+// 			//ctx.strokeStyle = tipColor;
+// });
+
+// $("#color5").click(function AddBorder(){
+// 			$(this).css({
+// 				'border':'4px solid #A901DB'});
+// 			tipColor = "purple";
+// 			console.log(tipColor);
+// 			//ctx.strokeStyle = tipColor;
+// });
+
+
+// $("#color6").click(function AddBorder(){
+// 			$(this).css({
+// 				'border':'4px solid #2E64FE'});
 	
-$("#color1").click(function AddBorder(){
-			$(this).css({
-				'border':'4px solid #B40431'});
-			tipColor = "red";
-			console.log(tipColor);
-			//ctx.strokeStyle = tipColor;
-});
+// });
 
-
-$("#color2").click(function AddBorder(){
-			$(this).css({
-				'border':'4px solid #FF8000'});
-			tipColor = "orange";
-			console.log(tipColor);
-			//ctx.strokeStyle = tipColor;
-});
-
-
-$("#color3").click(function AddBorder(){
-			$(this).css({
-				'border':'4px solid #F7FE2E'});
-			tipColor = "yellow";
-			console.log(tipColor);
-			//ctx.strokeStyle = tipColor;
-});
-
-$("#color4").click(function AddBorder(){
-			$(this).css({
-				'border':'4px solid #81F781'});
-			tipColor = "green";
-			console.log(tipColor);
-			//ctx.strokeStyle = tipColor;
-});
-
-$("#color5").click(function AddBorder(){
-			$(this).css({
-				'border':'4px solid #A901DB'});
-			tipColor = "purple";
-			console.log(tipColor);
-			//ctx.strokeStyle = tipColor;
-});
-
-
-$("#color6").click(function AddBorder(){
-			$(this).css({
-				'border':'4px solid #2E64FE'});
+// $("#color7").click(function AddBorder(){
+// 			$(this).css({
+// 				'border':'4px solid #FFFFFF'});
 	
-});
-
-$("#color7").click(function AddBorder(){
-			$(this).css({
-				'border':'4px solid #FFFFFF'});
-	
-});
-	
-	
-$("#color8").click(function AddBorder(){
-			$(this).css({
-				'border':'4px solid #A4A4A4'});
-	
-});
-
-
-$("#color9").click(function AddBorder(){
-			$(this).css({
-				'border':'3px solid #000000'});
-	
-});
+// });
 	
 	
+// $("#color8").click(function AddBorder(){
+// 			$(this).css({
+// 				'border':'4px solid #A4A4A4'});
+	
+// });
 
+
+// $("#color9").click(function AddBorder(){
+// 			$(this).css({
+// 				'border':'3px solid #000000'});
+	
+// });
 	
 	
 
 	
-$("#color3").click(function Yellow(){
-		tipColor = "#FFFF33";
-		console.log(tipColor);
-		//ctx.strokeStyle = tipColor;
-	});
 	
-$("#color4").click(function Green(){
-		tipColor = "#33CC33";
-		console.log(tipColor);
-		//ctx.strokeStyle = tipColor;
-	});
+
 	
-$("#color5").click(function Purple(){
-		tipColor = "#9933CC";
-		console.log(tipColor);
-		//ctx.strokeStyle = tipColor;
-	});
+// $("#color3").click(function Yellow(){
+// 		tipColor = "#FFFF33";
+// 		console.log(tipColor);
+// 		//ctx.strokeStyle = tipColor;
+// 	});
+	
+// $("#color4").click(function Green(){
+// 		tipColor = "#33CC33";
+// 		console.log(tipColor);
+// 		//ctx.strokeStyle = tipColor;
+// 	});
+	
+// $("#color5").click(function Purple(){
+// 		tipColor = "#9933CC";
+// 		console.log(tipColor);
+// 		//ctx.strokeStyle = tipColor;
+// 	});
 	
 	
-$("#color6").click(function Blue(){
-		tipColor = "#3366FF";
-		console.log(tipColor);
-		//ctx.strokeStyle = tipColor;
-	});
+// $("#color6").click(function Blue(){
+// 		tipColor = "#3366FF";
+// 		console.log(tipColor);
+// 		//ctx.strokeStyle = tipColor;
+// 	});
 	
-$("#color7").click(function White(){
-		tipColor = "#FFFFFF ";
-		console.log(tipColor);
-		//ctx.strokeStyle = tipColor;
-	});
+// $("#color7").click(function White(){
+// 		tipColor = "#FFFFFF ";
+// 		console.log(tipColor);
+// 		//ctx.strokeStyle = tipColor;
+// 	});
 	
-$("#color8").click(function Grey(){
-		tipColor = "#A8A8A8";
-		console.log(tipColor);
-		//ctx.strokeStyle = tipColor;
-	});
+// $("#color8").click(function Grey(){
+// 		tipColor = "#A8A8A8";
+// 		console.log(tipColor);
+// 		//ctx.strokeStyle = tipColor;
+// 	});
 	
-$("#color9").click(function Black(){
-		tipColor = "#000000";
-		console.log(tipColor);
-		//ctx.strokeStyle = tipColor;
-	});
+// $("#color9").click(function Black(){
+// 		tipColor = "#000000";
+// 		console.log(tipColor);
+// 		//ctx.strokeStyle = tipColor;
+// 	});
 
 console.log("saveForms all loaded");
 
@@ -156,7 +156,21 @@ $( "#toggle_button" ).click(function() {
 });
  
 
+$("#thickness").click(function() {
+    y = 20 * this.value / 100.
+    console.log(y);
+});
 
+// $( "#thickness" ).draggable({
+//   drag: function() {
+//     y = 20 * this.value / 100.;
+//     console.log(y);
+//   }
+// });
+
+// $( function() {
+//     $( "#slider" ).slider();
+//   } );
 
 $(function AdjustOpacitySlider() {
 	var slider = $("#opacity_slider").slider({    
@@ -253,6 +267,7 @@ $(function AdjustLineThickness() {
    
    $('#ex15').slider().on('slideStop', function(ev){
 						y = ev.value/3;		
+                        console.log("thickness: " + y);
 	});	
 						
 });

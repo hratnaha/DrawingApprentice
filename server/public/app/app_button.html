@@ -13,6 +13,7 @@ put js files before css files
     <script src="https://cdn.socket.io/socket.io-1.0.6.js"></script>
     <script src="../bower_components/bootstrap/dist/js/bootstrap.js"></script>
 	<script type="text/javascript" src="js/sketchPad.js"></script>
+	<script type="text/javascript" src="js/brushes.js"></script>
 
     <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.0.3/angular.min.js">
     </script>
@@ -20,8 +21,9 @@ put js files before css files
     </script>
     <script src='http://d3js.org/d3.v3.min.js'>
     </script>
-    <script src="https://hammerjs.github.io/dist/hammer.js"></script>
-	
+    <script src="js/jscolor.js"></script>
+	<script src="js/colorWheel.js"></script>
+
 	<!--script type="text/javascript" src="/js/vendor/bootstrap-slider.js"></script-->
     <script type="text/javascript" src="/js/vendor/FileSaver.min.js"></script>
     
@@ -440,92 +442,59 @@ put js files before css files
         
     </a>
     <div id="user-panel">
-    	<div id="user-panel-content">
+    	<!--<div id="user-panel-content">-->
         	<div class="row">
-        	<div class="user-panel-color col-lg-7">
-            	<ul class="nav navbar-nav color">
-                    <li>
-                        <div class="btn btn-md btn-color navbar-btn">
-                            <input type="button" name="colorBtn" class="btTxt submit colorBtn" id="color1" />
-                        </div>
-                    </li>
-                    <li>
-                        <div class="btn btn-md btn-color navbar-btn">
-                            <input type="button" name="colorBtn" class="btTxt submit colorBtn" id="color2" />
-                        </div>
-                    </li>
-                    <li>
-                        <div class="btn btn-md btn-color navbar-btn">
-                            <input type="button" name="colorBtn" class="btTxt submit colorBtn" id="color3" />
-                        </div>
-                    </li>
-                    <li>
-                        <div class="btn btn-md btn-color navbar-btn">
-                            <input type="button" name="colorBtn" class="btTxt submit colorBtn" id="color4" />
-                        </div>
-                    </li>
-                    <li>
-                        <div class="btn btn-md btn-color navbar-btn">
-                            <input type="button" name="colorBtn" class="btTxt submit colorBtn" id="color5" />
-                        </div>
-                    </li>
-                    <li>
-                        <div class="btn btn-md btn-color navbar-btn">
-                            <input type="button" name="colorBtn" class="btTxt submit colorBtn" id="color6" />
-                        </div>
-                    </li>
-                    <li>
-                        <div class="btn btn-md btn-color navbar-btn">
-                            <input type="button" name="colorBtn" class="btTxt submit colorBtn" id="color7" />
-                        </div>
-                    </li>
-                    <li>
-                        <div class="btn btn-md btn-color navbar-btn">
-                            <input type="button" name="colorBtn" class="btTxt submit colorBtn" id="color8" />
-                        </div>
-                    </li>
-                    <li>
-                        <div class="btn btn-md btn-color navbar-btn">
-                            <input type="button" name="colorBtn" class="btTxt submit colorBtn" id="color9" />
-                        </div>
-                    </li>
-                    <!--li>
-                        <div class="btn btn-md btn-color navbar-btn">
-                            <input type="button" name="saveForm" class="btTxt submit saveForm" id="color10" />
-                        </div>
-                    </li-->
-                  </ul><!--color-->
+        	<div class="user-panel-color col-lg-3">
+            	<ul class="nav navbar-nav">
+                    <li><button class="colorPalette" id="palette1" style="margin-left: 20px; margin-right: 5px; margin-top: 30px; background-color:red; border: 5px solid white" /></li>
+                    <li><button class="colorPalette" id="palette2" style="margin-left: 5px; margin-right: 5px; margin-top: 30px; background-color:blue; border: 5px solid grey"/></li>
+                    <li><button class="colorPalette" id="palette3" style="margin-left: 5px; margin-right: 5px; margin-top: 30px; background-color:yellow; border: 5px solid grey"/></li>
+                    <li><canvas id="picker" var="4" width="100" height="100" style="margin-left: 15px; margin-top: 10px;"></canvas></li>
+                </ul>
             </div><!--user-panel-color col-lg-8-->
-        
-      
-        <div class="setting-button col-lg-5">
-        	<ul class="setting-button-content">
-            	<li><button class="btn" id ="trash" href="#"><i class="fa fa-trash fa-2x"></i></button></li>
-                <!--<li><button class="btn"  id="download" ><i class="fa fa-download fa-2x"></i></button></li>-->
-                <li><a class="btn" id="download"><i style="margin-top:.5em;"class="fa fa-download fa-2x"></i></a></li>
-                <li><button onClick="downloadData()"class="btn" href="#"><i class="fa fa-plus-square-o fa-2x"></i></button></li>
-                 <li><button class="btn" href="#"><i class="fa fa-cogs fa-2x"></i></button></li>
-                <li>
-                    <button class="btn" id="myBtn" style="float:left;margin-left:1em;"><i class="fa fa-bar-chart fa-2x" aria-hidden="true"></i>
-                    </button>
-                </li>  
-                <li><a class="btn" id="undo"><i style="margin-top:.5em;" class="fa fa-undo fa-2x"></i></a></li>
+        	<div class="col-lg-3">
+                <ul class='nav navbar-nav' id='brushesPanel'>
+                    <li><img src='images/bezierBrush.png' id='Bezier' style="margin-top:10px; margin-left:20px;"></li>
+                    <li><img src='images/oilBrush.png' id='Oil' style="margin-top:30px; margin-left:5px;"></li>
+                    <li><img src='images/rakeBrush.png' id='Rake' style="margin-top:30px; margin-left:5px;"></li>
+                    <li><img src='images/marker.png' id='Marker' style="margin-top:30px; margin-left:5px;"></li>
+                    <li><img src='images/inkPen.png' id='Ink' style="margin-top:30px; margin-left:5px;"></li>
+                    <li><img src='images/pencil.png' id='Sketch' style="margin-top:30px; margin-left:5px;"></li>
+                    <li><img src='images/charcolPencil.png' id='RealisticSketch' style="margin-top:30px; margin-left:5px;"></li>
+                </ul>
+            </div>
+            <div class='col-lg-2'>
+                <h4 style="color: white; margin-top: 30px;">Thickness</h4>
+                <input style="margin-left: 10px;" type="range" id="thickness" value="50"><br>
+                <h4 style="color: white; margin-top: 10px;">Opacity</h4>
+                <input style="margin-left: 30px;" type="range" id="opacity" value="5020">
+                
+                <!--<h5 color='white'>Thickness</h5>
+                <section class="thickness-section">	
+                <div id="slider-thickness"></div>
+                    <span class="thickness"></span>
+                </section>-->
+                <!--<div id="slider"></div>-->
 
-                fa fa-undo
-            </ul>
-        </div><!--setting-button col-lg-5-->
-    </div><!--row-->
+            </div>
+            <div class="setting-button col-lg-4">
+                <ul style="margin-top: 30px; margin-left: 20px" class="setting-button-content">
+                    <li><button class="btn" id ="trash" href="#"><i class="fa fa-trash fa-2x"></i></button></li>
+                    <li><a class="btn" id="download"><i style="margin-top:.5em;"class="fa fa-download fa-2x"></i></a></li>
+                    <!--<li><button onClick="downloadData()"class="btn" href="#"><i class="fa fa-plus-square-o fa-2x"></i></button></li>-->
+                    <!--<li><button class="btn" href="#"><i class="fa fa-cogs fa-2x"></i></button></li>-->
+                    <li>
+                        <button class="btn" id="myBtn" style="float:left;margin-left:1em;"><i class="fa fa-bar-chart fa-2x" aria-hidden="true"></i>
+                        </button>
+                    </li>  
+                    <li><a class="btn" id="undo"><i style="margin-top:.5em;" class="fa fa-undo fa-2x"></i></a></li>
+                </ul>
+            </div><!--setting-button col-lg-5-->
+        </div><!--row-->
 
 	
-            <div class="row thickness">
-                      	<h5>Thickness</h5>
-                 	 <section class="thickness-section">	
-
-                        <div id="slider-thickness"></div> <!-- the Slider -->
-                        <span class="thickness"></span> <!-- Volume -->
-                    </section>
-           </div>
-        </div><!--.user-panel-content-->
+    
+        <!--</div>.user-panel-content-->
     </div><!--user-panel-->
 
 

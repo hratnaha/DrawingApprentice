@@ -5,8 +5,27 @@
    src: url('../fonts/glyphicons-halflings-regular.eot');
    src: url('../fonts/glyphicons-halflings-regular.eot?#iefix') format('embedded-opentype'),url('../fonts/glyphicons-halflings-regular.woff') format('woff'), url('../fonts/glyphicons-halflings-regular.ttf') format('truetype'), url('../fonts/glyphicons-halflings-regular.svg#glyphicons-halflingsregular') format('svg');
 }
+.user-panel-color {
+	align-items: center;
+}
 
+#user-sliders {
 
+}
+#brushesPanel {
+	margin: 10px;
+}
+#picker {
+    cursor: crosshair;
+    float: left;
+    border: 0;
+}
+.colorPalette {
+	/*display: block;*/
+	height: 50;
+	width: 50;
+	border-radius: 50%;
+}
 /* CSS Document */
 
 body{
@@ -462,7 +481,7 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#5a5a5a', end
 		/* width:100%; */
 		/* height:100%; */
         border: 1px solid #000;
-		position: fixed;
+		position: fixed;		
         left: 0;
         top: 0;
         z-index: 0;
@@ -471,8 +490,7 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#5a5a5a', end
 #sketchpad {
 		/* width:100%; */
 		/* height:100%; */
-        border: 1px solid #000;
-        
+        border: 1px solid #000;        
 		position: fixed;
         left: 0;
         top: 0;
@@ -480,6 +498,27 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#5a5a5a', end
     }
 
 #botpad {
+		/* width:100%; */
+		/* height:100%; */
+        border: 1px solid #000;
+        
+		position: fixed;
+        left: 0;
+        top: 0;
+        z-index: 1;
+    }
+
+#entire {
+		/* width:100%; */
+		/* height:100%; */
+        border: 1px solid #000;;
+		position: fixed;
+        left: 0;
+        top: 0;
+        z-index: 1;
+    }
+
+#buffer {
 		/* width:100%; */
 		/* height:100%; */
         border: 1px solid #000;

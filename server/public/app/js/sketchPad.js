@@ -1,7 +1,7 @@
 //var canvas = "{}";
+var selectedPalette = 'palette1';
 
 function sketchUtil() {
-	
     // get the canvas element and its context
     var container = document.getElementById('container');
     bothCanvas.setAttribute('width', container.offsetWidth);
@@ -23,6 +23,11 @@ function sketchUtil() {
     entire.setAttribute('height', container.offsetHeight);
     entire.setAttribute('style', 'visibility:hidden');    
     var entireCtx = entire.getContext('2d');
+
+    $("#opacity").click(function() {
+        context.globalAlpha = this.value/100.;
+        console.log(this.value/100.);
+    });
 
     function trackTransforms(ctx){
         var svg = document.createElementNS("http://www.w3.org/2000/svg",'svg');
@@ -123,10 +128,13 @@ function sketchUtil() {
     };
 
     function handleMouseWheel (evt) {
+        console.log(evt);
         if (Math.abs(evt.wheelDelta) == 120) {
             handlePinch(evt);
+            console.log("zoom");
         } else {
             handleScroll(evt);
+            console.log("pan");
         }
     }
     canvas.addEventListener('wheel',handleMouseWheel,false);
@@ -153,7 +161,12 @@ function sketchUtil() {
     var curstroke;
     var strCounter = 0, pkptCounter = 0;
     var colorline;
-    
+    $('.colorPalette').click(function() {
+        var curPalette = document.getElementById(selectedPalette);
+        curPalette.style.border = '5px solid grey';
+        selectedPalette = this.id;
+        document.getElementById(selectedPalette).style.border = '5px solid white';        
+    });
     function createNewStroke() {
         strCounter++;
         pkptCounter = 0;
@@ -183,6 +196,14 @@ function sketchUtil() {
         };
         return newstroke;
     }
+    $('#brushesPanel').on('click','*',function(e) {
+        if (brushType != this.id) {
+            document.getElementById(brushType).style.marginTop = "30px";
+        }
+        brushType = this.id;
+        document.getElementById(this.id).style.marginTop = "10px";
+        e.stopPropagation();
+    });
 
     function pushNewPacketPoint(coors) {
         var now = (new Date()).getTime();
@@ -194,11 +215,31 @@ function sketchUtil() {
             y : coors.y,
             timestamp : now,
             pressure : pressurevalue,
-            color: tipColor          //passing color in hex form
+            color: document.getElementById(selectedPalette).style.backgroundColor          //passing color in hex form
         };
         curstroke.data.allPoints.push(pkpt);
     }
-	
+
+    var points = [ ];
+    var lastPoint;
+    var brushType = 'Bezier';
+    var img = new Image();
+    img.src = 'http://www.tricedesigns.com/wp-content/uploads/2012/01/brush2.png';
+
+    function distanceBetween(point1, point2) {
+    return Math.sqrt(Math.pow(point2.x - point1.x, 2) + Math.pow(point2.y - point1.y, 2));
+    }
+    function angleBetween(point1, point2) {
+    return Math.atan2( point2.x - point1.x, point2.y - point1.y );
+    }
+    function hexToRgb(hex) {
+        var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+        return result ? {
+            r: parseInt(result[1], 16),
+            g: parseInt(result[2], 16),
+            b: parseInt(result[3], 16)
+        } : null;
+    }    
     // create a drawer which tracks touch movements
     var drawer = {
         isDrawing: false,
@@ -208,32 +249,142 @@ function sketchUtil() {
             curstroke = createNewStroke();
 			if ($('#group').hasClass("active")){
                 context.setLineDash([5]);
-                context.strokeStyle = tipColor;
-				context.globalAlpha = opacity2;			
+                context.strokeStyle = document.getElementById(selectedPalette).style.backgroundColor;
             } else {
                 colorline = document.getElementById('background').value;
-                context.strokeStyle = tipColor;
+                context.strokeStyle = document.getElementById(selectedPalette).style.backgroundColor;
                 context.setLineDash([0]);
 				context.lineWidth = y;
-				context.globalAlpha = opacity2;
             }
-
-            if (checkInsideCanvas(pt)) {
-                curstroke = createNewStroke();
+            if (checkInsideCanvas(pt)) { // start drawing if inside canvas
+                this.isDrawing = true;
                 context.beginPath();
                 context.moveTo(coors.x, coors.y);
-                this.isDrawing = true;
+                if (brushType == 'Sketch' || brushType == 'Rake'
+                    || brushType == 'Ink' || brushType == 'Marker') {
+                    lastPoint = { x: coors.x, y: coors.y };
+                } else if (brushType == 'RealisticSketch') {
+                    points = [ ];
+                    points.push({ x: coors.x, y: coors.y });                    
+                }
             }
         },
         touchmove: function (coors) {
             var pt = entireCtx.transformedPoint(coors.x, coors.y);
-            // console.log("overall x: " + coors.x + ", y: " + coors.y);
-            // console.log("transformed x: " + pt.x, ", y: " + pt.y);            
             if (this.isDrawing && checkInsideCanvas(pt)) {
-                context.lineTo(coors.x, coors.y);
-                context.stroke();
-				context.lineWidth = y;
-				context.globalAlpha = opacity2;
+                context.lineWidth = y;
+                switch (brushType) {
+                    case 'RealisticSketch':
+                        context.lineWidth = 1;
+                        points.push({ x: coors.x, y: coors.y });
+                        context.beginPath();
+                        context.moveTo(points[points.length - 2].x, points[points.length - 2].y);
+                        context.lineTo(points[points.length - 1].x, points[points.length - 1].y);
+                        context.stroke();                        
+                        for (var i = 0, len = points.length; i < len; i++) {
+                            dx = points[i].x - points[points.length-1].x;
+                            dy = points[i].y - points[points.length-1].y;
+                            d = dx * dx + dy * dy;
+                            if (d < 1000) {
+                            context.beginPath();
+                            context.globalAlpha = 0.3;
+                            context.moveTo( points[points.length-1].x + (dx * 0.2), points[points.length-1].y + (dy * 0.2));
+                            context.lineTo( points[i].x - (dx * 0.2), points[i].y - (dy * 0.2));
+                            context.stroke();
+                            }
+                        }
+                        break;
+
+                    case 'Sketch':
+                        // context.lineWidth = 1;
+                        context.lineJoin = context.lineCap = 'round';
+                        context.beginPath();                        
+                        context.moveTo(lastPoint.x - getRandomInt(0, 2), lastPoint.y - getRandomInt(0, 2));
+                        context.lineTo(coors.x - getRandomInt(0, 2), coors.y - getRandomInt(0, 2));
+                        context.stroke();                        
+                        context.moveTo(lastPoint.x, lastPoint.y);
+                        context.lineTo(coors.x, coors.y);
+                        context.stroke();
+                        context.moveTo(lastPoint.x + getRandomInt(0, 2), lastPoint.y + getRandomInt(0, 2));
+                        context.lineTo(coors.x + getRandomInt(0, 2), coors.y + getRandomInt(0, 2));
+                        context.stroke();                            
+                        lastPoint = { x: coors.x, y: coors.y };
+                        break;
+                    
+                    case 'Rake':
+                        context.lineWidth = 1;
+                        context.lineJoin = context.lineCap = 'round';
+                        context.beginPath();
+                        var lines = y/2;
+                        for (i = 0; i < lines; i++) {
+                            var offset = (-y/2) + (3*i);
+                            context.moveTo(lastPoint.x + offset, lastPoint.y + offset);
+                            context.lineTo(coors.x + offset, coors.y + offset);
+                            context.stroke();
+                        }
+                        lastPoint = { x: coors.x, y: coors.y };
+                        break;
+                    
+                    case 'Ink':
+                        context.lineWidth = 2;
+                        context.lineJoin = context.lineCap = 'round';
+                        context.beginPath();
+                        var lines = y/2;
+                        for (i = 0; i < lines; i++) {
+                            var offset = (-y/2) + (2*i);
+                            context.moveTo(lastPoint.x + offset, lastPoint.y + offset);
+                            context.lineTo(coors.x + offset, coors.y + offset);
+                            context.stroke();
+                        }
+                        lastPoint = { x: coors.x, y: coors.y };
+                        break;
+
+                    case 'Marker':
+                        context.lineWidth = 3;
+                        context.lineJoin = context.lineCap = 'round';
+                        context.beginPath();
+                        var lines = y/2;
+                        var alphaOffset = 1.0/lines;
+                        for (i = 0; i < lines; i++) {
+                            context.globalAlpha = 1.0-(i*alphaOffset);
+                            var offset = (-y/2) + (2*i);
+                            context.moveTo(lastPoint.x + offset, lastPoint.y + offset);
+                            context.lineTo(coors.x + offset, coors.y + offset);
+                            context.stroke();
+                        }
+                        lastPoint = { x: coors.x, y: coors.y };
+                        break;
+                        
+                    case 'Oil':
+                        context.lineJoin = context.lineCap = 'round';
+                        context.shadowBlur = 10;
+                        var r = hexToRgb(context.strokeStyle).r;
+                        var g = hexToRgb(context.strokeStyle).g;
+                        var b = hexToRgb(context.strokeStyle).b;
+                        context.shadowColor = 'rgba('+r+','+g+','+b+',.25)';                    
+                        context.lineTo(coors.x, coors.y);
+                        context.stroke();                        
+                        break;
+
+                    case 'Bezier':
+                        // points.push({ x: coors.x, y: coors.y });
+                        context.lineJoin = context.lineCap = 'round';
+                        points.push({ x: coors.x, y: coors.y });
+                        context.clearRect(0, 0, canvas.width, canvas.height);
+                        var p1 = points[0];
+                        var p2 = points[1];                        
+                        context.beginPath();
+                        context.moveTo(p1.x, p1.y);
+                        for (var i = 1, len = points.length; i < len; i++) {
+                            var midPoint = midPointBtw(p1, p2);
+                            context.quadraticCurveTo(p1.x, p1.y, midPoint.x, midPoint.y);
+                            p1 = points[i];
+                            p2 = points[i+1];
+                        }
+                        context.lineTo(p1.x, p1.y);
+                        context.stroke();   
+                        break;
+                }
                 var json_coor = JSON.stringify(coors); //converting to json
                 pushNewPacketPoint(coors);
             }
@@ -241,11 +392,11 @@ function sketchUtil() {
         },
         touchend: function (coors) {
             if (this.isDrawing) {
+                this.isDrawing = false;
                 this.touchmove(coors);
                 var stringStroke = JSON.stringify(curstroke);
                 onTouchUp(stringStroke);
                 var height = canvas.height;
-                this.isDrawing = false;
                 // draw the current brush from the buffer to the displaying canvas
                 bothCtx.save();
                 bothCtx.setTransform(1,0,0,1,0,0);
@@ -272,9 +423,55 @@ function sketchUtil() {
                     changeGrouping();
                     context.clearRect(0, 0, canvas.width, canvas.height);
                 }
+                switch (brushType) {
+                    case 'Marker':
+                        context.globalAlpha = 1;
+                    case 'Oil':
+                        context.shadowBlur = 0;
+                        break;
+                    case 'Bezier':
+                        points.length = 0;
+                        break;
+                }
             }
         }
     };
+    function getRandomInt(min, max) {
+        return Math.floor(Math.random() * (max - min + 1)) + min;
+    }    
+    function midPointBtw(p1, p2) {
+        return {
+            x: p1.x + (p2.x - p1.x)/2,
+            y: p1.y + (p2.y - p1.y)/2
+        };
+    }
+
+    function offsetPoints(val) {
+        var offsetPoints = [ ];
+        for (var i = 0; i < points.length; i++) {
+            offsetPoints.push({ 
+                x: points[i].x + val,
+                y: points[i].y + val
+            });
+        }
+        return offsetPoints;
+    }
+
+    function stroke(points) {
+        var p1 = points[0];
+        var p2 = points[1];
+        context.beginPath();
+        context.moveTo(p1.x, p1.y);
+        for (var i = 1, len = points.length; i < len; i++) {
+            var midPoint = midPointBtw(p1, p2);
+            context.quadraticCurveTo(p1.x, p1.y, midPoint.x, midPoint.y);
+            p1 = points[i];
+            p2 = points[i+1];
+        }
+        context.lineTo(p1.x, p1.y);
+        context.stroke();
+    }
+    
     // create a function to pass touch events and coordinates to drawer
     function draw(event) {
         var type = null;
