@@ -10,7 +10,7 @@ function sketchUtil() {
     var both = document.getElementById('both');
     both.setAttribute('width', container.offsetWidth);
     both.setAttribute('height', container.offsetHeight);
-    var bothCtx = both.getContext('2d');
+    bothCtx = both.getContext('2d');
 
     var canvas = document.getElementById('sketchpad');
     canvas.setAttribute('width', container.offsetWidth);
@@ -18,11 +18,11 @@ function sketchUtil() {
     var context = canvas.getContext('2d');
     context.lineWidth = 1;
 	
-    var entire = document.getElementById('entire');
+    entire = document.getElementById('entire');
     entire.setAttribute('width', container.offsetWidth);
     entire.setAttribute('height', container.offsetHeight);
     entire.setAttribute('style', 'visibility:hidden');    
-    var entireCtx = entire.getContext('2d');
+    entireCtx = entire.getContext('2d');
 
     function trackTransforms(ctx){
         var svg = document.createElementNS("http://www.w3.org/2000/svg",'svg');
@@ -123,7 +123,7 @@ function sketchUtil() {
     };
 
     function handleMouseWheel (evt) {
-        //if (Math.abs(evt.wheelDelta) == 120) {
+        if (!bAgentDrawing)
             handlePinch(evt);
         //} else {
         //    handleScroll(evt);

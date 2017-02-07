@@ -341,6 +341,7 @@ class gameroom {
                                                 var newpt = result.getSync(i);
                                                 newpkpts.push(CreatePacketPoint(newpt));
                                             }
+                                            try{
                                             var compStroke = JSON.parse(JSON.stringify(curStroke));
                                             compStroke.allPoints = newpkpts;
                                             compStroke.time = (new Date()).getTime();
@@ -361,6 +362,10 @@ class gameroom {
                                             
                                             //thisobj.updateServerPic();
                                             thisobj.indexRLines++;
+                                            }
+                                            catch(e){
+                                               console.log(e);
+                                            }
                                         }
 				                    }
                                 }

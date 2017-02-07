@@ -186,6 +186,7 @@ function decideCategory(oriCategory){
 
 module.exports = {
     GetSketchesInCategory : function(category, quadtree, canvasSize, objBox, callback){
+        var category = category == "syringe" ? "pen" : category;
         var newcate = category;
 	console.log(this.mode);
 	if(this.mode == 2) newcate = decideCategory(category);

@@ -12,8 +12,10 @@ var lineThickness;
 var totalScore = 0;
 var scoreGiven = 0;
 var tipColor = "#000000";
-
-
+var entire = {};
+var entireCtx = {};
+var bothCtx = {};
+var bAgentDrawing = false;
 
 function initWebSocket() {
     
@@ -70,7 +72,7 @@ function initWebSocket() {
 			moveLogo.style.left = botStroke.allPoints[i].x - 70;
 			moveLogo.style.top = botStroke.allPoints[i].y - 130;
 			//moveLogo.style.backgroundColor = "blue";
-
+            bAgentDrawing = true;
             i++;
         } else if (curStroke.length > 0) {
             botStroke = curStroke.shift();
@@ -89,9 +91,23 @@ function initWebSocket() {
             i = 0;
 			//moveLogo.style.backgroundColor = "red";
 
-
+            bAgentDrawing = true;
         } else if (botStroke != "") {
-            bothInputContext.drawImage(botCanvas, 0, 0);
+            
+            //bothInputContext.drawImage(botCanvas, 0, 0);
+
+            bothCtx.save();
+            bothCtx.setTransform(1,0,0,1,0,0);
+            bothCtx.drawImage(botCanvas, 0, 0);
+            bothCtx.restore();
+
+            entireCtx.save();
+            var mtx = entireCtx.getTransform();
+            mtx = mtx.inverse();
+            entireCtx.setTransform(mtx.a, mtx.b, mtx.c, mtx.d, mtx.e, mtx.f);
+            entireCtx.drawImage(botCanvas, 0, 0, botCanvas.width, botCanvas.height);
+            entireCtx.restore();            
+
             ctx.clearRect(0, 0, botCanvas.width, botCanvas.height);
             botStroke = "";
 			$("#tip").css({fill: botColor});
@@ -100,7 +116,8 @@ function initWebSocket() {
 				opacity: .5,
 				});
             i = 0;
-
+            
+            bAgentDrawing = false;
 			MoveLogoBack();
             undoManager.addStack(bothCanvas);
         }
@@ -275,7 +292,7 @@ function clearCanvas() {
 	myCanvasContext1.clearRect(0, 0, myCanvas1.width, myCanvas1.height);
 	myCanvasContext2.clearRect(0, 0, myCanvas2.width, myCanvas2.height);
 	myCanvasContext3.clearRect(0, 0, myCanvas3.width, myCanvas3.height);
-	//context.clearRect(0, 0, canvas.width, canvas.height);
+	entireCtx.clearRect(0 ,0 , entire.width, entire.height);
     socket.emit('clear', 'all');
 }
 // change the mode base on the UI changes
