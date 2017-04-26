@@ -263,3 +263,6 @@ Website/Iconr
 **/Iconr
 Cornucopia
 **/Icon?
+SketchClassifier/data/png/
+SketchClassifier/model_VGG_50cat_30.npz
+server/lib_GameHall/gameroom.js.orig
