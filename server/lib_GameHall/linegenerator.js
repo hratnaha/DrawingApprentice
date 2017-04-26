@@ -16,7 +16,7 @@ function getBBox(strokes){
             top = pt.y < top ? pt.y : top;
             bottom = pt.y > bottom ? pt.y : bottom;
             left = pt.x < left ? pt.x : left;
-            right = pt.x > right ? pt.y : right;
+            right = pt.x > right ? pt.x : right;
         }
     }
     
@@ -220,8 +220,8 @@ module.exports = {
                  
                 var offset = findLeastUsageInQuadtree(quadtree, objBox, canvasSize, objBox);
                 offset = {
-                    x: offset.x - bbox.left,
-                    y: offset.y - bbox.top
+                    x: offset.x,
+                    y: offset.y
                 };
 
                 for(var i=0;i < strokes.length; i++){
@@ -242,7 +242,9 @@ module.exports = {
                 if(callback != null && typeof callback === "function"){
                     var decision = {
                         classification: category,
-                        selection:      newcate 
+                        selection:      newcate,
+                        rect:           bbox,
+                        offset:         offset 
                     };
 			        callback.call(this, strokes, decision, err);
                 }

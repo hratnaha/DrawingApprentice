@@ -272,6 +272,7 @@ class gameroom {
 					                        if(!err3){
 					                            //console.log(strokes);
                                                 try{
+                                                    so.emit('classifyObject', decision);
 					                                for(var i=0;i < strokes.length; i++){
                                                         var stroke = strokes[i];
 						                                stroke.timestamp = (new Date()).getTime();
@@ -290,7 +291,7 @@ class gameroom {
                                                             so.emit('respondStroke', resultmsg);
 						                                }
                                                     }
-                                                    so.emit('classifyObject', decision);
+                                                    //so.emit('classifyObject', decision);
 					                            }catch(err4){
 					    	                        console.log(err4);
 					                            }

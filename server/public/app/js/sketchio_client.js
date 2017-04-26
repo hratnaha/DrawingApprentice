@@ -58,7 +58,8 @@ function initWebSocket() {
     var timer = setInterval(function () {
 
         if (botStroke != "" && i < botStroke.allPoints.length ) {
-            ctx.lineTo(botStroke.allPoints[i].x, botStroke.allPoints[i].y);
+            ctx.lineTo(botStroke.allPoints[i].x - botStroke.offset.x, 
+                botStroke.allPoints[i].y - botStroke.offset.y);
 
             ctx.stroke();
 			//ctx.strokeStyle = botColor;
@@ -78,8 +79,10 @@ function initWebSocket() {
             botStroke = curStroke.shift();
             botColor = rgbDoubleToHex(botStroke.color.r, botStroke.color.g, botStroke.color.b);
             ctx.beginPath();
-            if(botStroke.allPoints.length > 0)
-                ctx.moveTo(botStroke.allPoints[0].x, botStroke.allPoints[0].y);
+            if(botStroke.allPoints.length > 0){
+                ctx.moveTo(botStroke.allPoints[0].x - botStroke.offset.x, 
+                    botStroke.allPoints[0].y - botStroke.offset.y);
+            }
 			ctx.strokeStyle = botColor;
             ctx.globalAlpha = opacity2;
             ctx.lineWidth = botStroke.lineWidth;
@@ -95,17 +98,18 @@ function initWebSocket() {
         } else if (botStroke != "") {
             
             //bothInputContext.drawImage(botCanvas, 0, 0);
+            //botCanvas.removeEventListener('mousedown', mouseDownOnCanvas, true);            
 
             bothCtx.save();
             bothCtx.setTransform(1,0,0,1,0,0);
-            bothCtx.drawImage(botCanvas, 0, 0);
+            bothCtx.drawImage(botCanvas, botCanvasOffset.x, botCanvasOffset.y);
             bothCtx.restore();
 
             entireCtx.save();
             var mtx = entireCtx.getTransform();
             mtx = mtx.inverse();
             entireCtx.setTransform(mtx.a, mtx.b, mtx.c, mtx.d, mtx.e, mtx.f);
-            entireCtx.drawImage(botCanvas, 0, 0, botCanvas.width, botCanvas.height);
+            entireCtx.drawImage(botCanvas, botCanvasOffset.x, botCanvasOffset.y, botCanvas.width, botCanvas.height);
             entireCtx.restore();            
 
             ctx.clearRect(0, 0, botCanvas.width, botCanvas.height);
@@ -469,9 +473,22 @@ function onUpdateScore(newScore){
 	//console.log("totalScore is:" + " " + totalScore);
 }
 
+var botCanvasOffset = {x: 0, y: 0};
+
 function onClassifyObject(label){
     var objToDraw = label.selection;
     var objRecognized = label.classification;
+    
+    botCanvas.setAttribute('width', label.rect.right );
+    botCanvas.setAttribute('height', label.rect.bottom );
+    botCanvas.style.left =  label.offset.x;
+    botCanvas.style.top =  label.offset.y;
+
+    //botCanvas.addEventListener('mousedown', mouseDownOnCanvas, false);
+    //botCanvas.addEventListener('mouseup', mouseUpOnCanvas, false);
+
+    botCanvasOffset = label.offset;
+
     displaySpeech(objRecognized, objToDraw); 
     console.log("recognized as: ");
     console.log(label);
@@ -479,6 +496,20 @@ function onClassifyObject(label){
     //document.getElementById('label').value = newLabel;
 }
 
+function mouseUpOnCanvas(){
+    botCanvas.removeEventListener('mousemove', canvasMove, true);
+}
+
+function mouseDownOnCanvas(e){
+    botCanvas.addEventListener('mousemove', canvasMove, true);
+}
+
+function canvasMove(e){
+    botCanvas.style.position = 'absolute';
+    botCanvas.style.top = e.clientY + 'px';
+    botCanvas.style.left = e.clientX + 'px';
+    botCanvasOffset = {x: e.clientX, y: e.clientY};
+}
 
 function ChooseCreativity(value){
 		 	console.log("Setting creativity" + value);

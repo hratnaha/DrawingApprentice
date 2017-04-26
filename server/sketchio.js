@@ -202,6 +202,12 @@ app.get('/logout', function (req, res) {
     req.logout();
     res.redirect('/DrawingApprentice/');
 });
+
+// redirect to CoCreativeWorkshop
+app.get('/cocreationworkshop/', function(req, res) {
+    res.redirect('https://sites.google.com/view/cocreationworkshop');
+});
+
 // Start to listen the app
 app.listen(3000);
 //===================== Finished Express App Set Up ===================\\
