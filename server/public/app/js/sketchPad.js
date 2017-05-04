@@ -395,7 +395,7 @@ function sketchUtil() {
                 this.isDrawing = false;
                 this.touchmove(coors);
                 var stringStroke = JSON.stringify(curstroke);
-                onTouchUp(stringStroke);
+                onTouchUp(stringStroke, curstroke);
                 var height = canvas.height;
                 // draw the current brush from the buffer to the displaying canvas
                 bothCtx.save();

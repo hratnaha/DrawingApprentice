@@ -1,4 +1,4 @@
-var ioUri = "http://localhost:8080"; //"http://130.207.124.45"; //
+var ioUri = "http://130.207.124.45:80"; //"http://localhost:8080"; //
 
 var output;
 var socket;
@@ -12,11 +12,20 @@ var lineThickness;
 var totalScore = 0;
 var scoreGiven = 0;
 var tipColor = "#000000";
-
+var canvas;
+var plotterQueue = [];
 
 
 function initWebSocket() {
-    
+    // Initialize CNC Server connection details
+    // (thanks to CORS support, this should be fully portable)
+    cncserver.api.server = {
+        domain: document.domain,
+        port: location.port ? location.port : 80,
+        protocol: 'http',
+        version: '1'
+    };
+
     botCanvas = document.getElementById('botpad');
 	sketchPadCanvas = document.getElementById('sketchpad');
 	moveLogo = document.getElementById("logo");
@@ -26,8 +35,8 @@ function initWebSocket() {
 
     output = document.getElementById("output");
 
-    socket = io.connect(ioUri); // for local version
-    //socket = io.connect(ioUri, { 'path': '/DrawingApprentice/socket.io' }); // for adam server
+    //socket = io.connect(ioUri); // for local version
+    socket = io.connect(ioUri, { 'path': '/DrawingApprentice/socket.io' }); // for adam server
     
     socket.on('newconnection', onOpen);
     socket.on('respondStroke', onNewStroke);
@@ -92,8 +101,11 @@ function initWebSocket() {
             botStroke = curStroke.shift();
             botColor = rgbDoubleToHex(botStroke.color.r, botStroke.color.g, botStroke.color.b);
             ctx.beginPath();
-            if(botStroke.allPoints.length > 0)
+            if(botStroke.allPoints.length > 0) {
+                addtoQueue(botStroke.allPoints, botCanvas.width, botCanvas.height);
+                console.log("Bot Stroke Added");
                 ctx.moveTo(botStroke.allPoints[0].x, botStroke.allPoints[0].y);
+            }
 			ctx.strokeStyle = botColor;
             ctx.globalAlpha = opacity2;
             ctx.lineWidth = botStroke.lineWidth;
@@ -120,7 +132,24 @@ function initWebSocket() {
 			MoveLogoBack();
         }
     }, 20);
-    //
+
+    var plotterTimer = setInterval(function () {
+        if (plotterQueue.length > 0) {
+            stroke = plotterQueue.shift();
+            cncserver.api.pen.up(cncserver.cmd.cb);
+            stroke.forEach(function(point) {
+                 var x = point[0];
+                 var y = point[1];
+                 cncserver.api.pen.move({
+                     x: x,
+                     y: y,
+                 });
+                 cncserver.api.pen.down(cncserver.cmd.cb);
+                 console.log("Point Drawn");
+            });
+            cncserver.api.pen.up(cncserver.cmd.cb);
+        }
+    }, 500);
 }
 
 
@@ -267,6 +296,12 @@ function onStatsQuery(allData) {
 
 function onTouchUp(message) {
     socket.emit('touchup', message);
+    
+    sketchPadCanvas = document.getElementById('sketchpad');
+
+    userStroke = userStrokes.data.allPoints;
+    addtoQueue(userStroke, sketchPadCanvas.width, sketchPadCanvas.height);
+    console.log("User Stroke Added");
 }
 
 function onTouchDown() {
@@ -290,6 +325,7 @@ function clearCanvas() {
 	myCanvasContext2.clearRect(0, 0, myCanvas2.width, myCanvas2.height);
 	myCanvasContext3.clearRect(0, 0, myCanvas3.width, myCanvas3.height);
 	//context.clearRect(0, 0, canvas.width, canvas.height);
+    cncserver.api.pen.park(cncserver.cmd.cb);
     socket.emit('clear', 'all');
 }
 // change the mode base on the UI changes
@@ -518,3 +554,17 @@ function ChooseCreativity(value){
 				}
 }
 	    
+function addtoQueue(stroke, canvasWidth, canvasHeight) {
+    var strokeList = [];
+    stroke.forEach(function(point) {
+
+        var percentX = (point.x / canvasWidth) * 50;
+        var percentY = (point.y / canvasHeight) * 50;
+
+        //console.log(point.x, point.y, canvasHeight, canvasWidth, percentX, percentY);
+
+        strokeList.push([percentX, percentY]);
+    });
+    plotterQueue.push(strokeList);
+    //console.log("Stroke Added To Buffer");
+}
