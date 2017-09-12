@@ -31,6 +31,7 @@ var express = require('express'),
     app = express(),
     canvas2D = require('./libImage'),
     uuid = require('node-uuid'),
+    zerorpc,
     curRooms = {},
     roomsInfo = [],
     onlineUsers = {},
@@ -51,8 +52,8 @@ if (zerorpc) {
     sketchClassfier = new zerorpc.Client(options);
     sketchClassfier.connect("tcp://127.0.0.1:4242");
     
-    lineGenerator = new zerorpc.Client(options);
-    lineGenerator.connect("tcp://127.0.0.1:4243");
+    // lineGenerator = new zerorpc.Client(options);
+    // lineGenerator.connect("tcp://127.0.0.1:4243");
 }
 // Passport session setup.
 passport.serializeUser(function (user, done) {
@@ -83,11 +84,11 @@ app.get('/', function (req, res) {
     res.render('index', { user: req });
 });
 
-app.get('/room/create', function (req, res) {
+app.get('/admin_room/create', function (req, res) {
     res.json(roomsInfo);
 });
 
-app.post('/room/create', function (req, res) {
+app.post('/admin_room/create', function (req, res) {
     var roomInfo = req.body;
     var newRoomInfo = {};
     newRoomInfo.name = roomInfo.name;
@@ -96,7 +97,7 @@ app.post('/room/create', function (req, res) {
     newRoomInfo.host = "chipin01"; // hard-coded for now;
     newRoomInfo.players = [];
     canvas2D.CreateBlankThumb(newRoomInfo.id);
-    newRoomInfo.thumb = '/session_pic/' + newRoomInfo.id + '_thumb.png';
+    newRoomInfo.thumb = '../session_pic/' + newRoomInfo.id + '_thumb.png';
     res.json(newRoomInfo);
     roomsInfo.push(newRoomInfo);
     // initialize apprentice
@@ -108,35 +109,70 @@ app.post('/room/create', function (req, res) {
     curRooms[newRoomInfo.id] = room;
 });
 
-app.post('/room/join', function (req, res) {
+app.post('/admin_room/join', function (req, res) {
     // 1. check if the room exists
     var msg = req.body;
-    var room = curRooms[msg.id];
+    var room = curRooms[msg.id]; 
     var roomInfo = room ? room.roomInfo : null;
+
+	function addIfPlayerExists(id, newPlayer){
+		var isExist = false;
+		for(var i=0;i<roomInfo.players.length;i++){
+			if(roomInfo.players == id){
+				isExist = true;
+				break;
+			}
+		}
+		if(!isExist){
+			roomInfo.players.push(msg.newPlayer.id);
+		}
+		newPlayer.curRoom = roomInfo.id;
+		room.players.push(newPlayer);
+	}
+
     // 2. if yes, then add a player inside of the room.players attributes
     //   so that the room knows there is a new player joining in.
     if (room && roomInfo && onlineUsers[msg.newPlayer.id]) {
+        console.log("player: " + msg.newPlayer.id + " is joining the room");
         var newPlayer = onlineUsers[msg.newPlayer.id];
-        roomInfo.players.push(msg.newPlayer.id);
-        newPlayer.curRoom = roomInfo.id;
-        room.players.push(newPlayer);
+        addIfPlayerExists(msg.newPlayer.id, newPlayer);
         // 3. tell the client to redirect to app page
         var rmsg = {isSucceed: true};
         res.json(rmsg);
     }
 });
+Array.prototype.remove = function(index){
+  this.splice(index,1);
+}
+app.post('/admin_room/delete', function (req, res){
+    var msg = req.body;
+    var rmsg = {isSucceed: false};
+    console.log(msg.requester);
+    if(curRooms[msg.id] && msg.requester == "105775598272793470839"){	        
+	delete curRooms[msg.id];
+	for(var i=0;i<roomsInfo.length;i++){
+	    if(roomsInfo[i].id == msg.id){
+	    	roomsInfo.remove(i);
+		break;
+	    }	
+	}
+    }
+    res.json(rmsg);
+});
 
 // ensure authentication
 function ensureAuthenticated(req, res, next) {
     if (req.isAuthenticated()) { return next(); }
-    res.redirect('/');
+    res.redirect('/DrawingApprentice/');
 }
 function authenticationSucceed(req, res){
+    console.log("user " + req.user.id + " logged in");
     onlineUsers[req.user.id] = req.user;
-    res.redirect('/admin_room');//res.redirect('/app');
+    res.redirect('/admin_room/');//res.redirect('/app');
 }
 // if the user pass thorugh authentication, render the app
 app.get('/app', ensureAuthenticated, function (req, res) {
+    console.log("client start accessing app resources");
     var user = onlineUsers[req.user.id];
     var roomID = '';
     if(user){
@@ -146,7 +182,7 @@ app.get('/app', ensureAuthenticated, function (req, res) {
     res.render('app', { user: req.user._raw, sessionId: req.sessionID, roomId: roomID});
 });
 app.get('/admin_room', ensureAuthenticated, function (req, res) {
-    res.render('admin_room', { user: req.user._raw });
+    res.render('admin_room', { user: req.user._raw, userid: req.user.id });
 });
 
 // facebook authentication
@@ -158,13 +194,13 @@ app.get('/auth/facebook/callback',
 // google authentication
 app.get('/auth/google', passport.authenticate('google', { scope: 'https://www.googleapis.com/auth/plus.login' }));
 app.get('/auth/google/callback',
-    passport.authenticate('google', { failureRedirect: '/login' }),
+    passport.authenticate('google', { failureRedirect: '/' }),
     authenticationSucceed
 );
 // when log-out
 app.get('/logout', function (req, res) {
     req.logout();
-    res.redirect('/');
+    res.redirect('/DrawingApprentice/');
 });
 // Start to listen the app
 app.listen(3000);
@@ -173,32 +209,32 @@ app.listen(3000);
 //===================== Set up socket io server =====================\\
 var server = http.Server(app);
 var io = require('socket.io')(server);
-server.listen(8080);
+server.listen(8080); // for local debug
 //server.listen(81); // for adam server
 
 io.on('connection', function (so) {
     // set up closure varialbes
     var utilDatabase = require('./libDatabase');
     var apprentice;
-    var room;
+    var room; //this is the game room, grab the data from here rather than apprentice 
     var userProfile;
     var sessionID;
     var totalScore = 0;
     
     console.log("new client connected");
-
+    
     so.emit('newconnection', { hello: "world" });
-
+    
     function onOpen(hello) {
         if (hello) {
             var thisPlayer;
-            if(onlineUsers[hello.user.id]){
+            if (onlineUsers[hello.user.id]) {
                 thisPlayer = onlineUsers[hello.user.id];
                 room = curRooms[thisPlayer.curRoom];
                 room.sockets.push(so);
             }
-
-            if(!room){
+            
+            if (!room) {
                 apprentice = new Apprentice();
                 room = new Room(null, apprentice, sketchClassfier);
             }
@@ -212,11 +248,11 @@ io.on('connection', function (so) {
             utilDatabase.initializeParameters(userProfile, sessionID, apprentice, room.canvasSize);
         }
     }
-
+    
     function getData() {
         var userLines;
         var computerLines;
-
+        
         apprentice.getUserLines(function (err, item) {
             if (err) {
                 console.log(err);
@@ -226,7 +262,7 @@ io.on('connection', function (so) {
                 afterUserLines();
             }
         });
-
+        
         function afterUserLines() {
             apprentice.getComputerLines(function (err, item) {
                 if (err) {
@@ -237,17 +273,60 @@ io.on('connection', function (so) {
                 }
             });
         }
-
+        
         function emitData() {
             var allData = {
                 userLines: userLines,
                 computerLines: computerLines, 
                 labeledGroups: apprentice.labeledGroups
             };
-
+            
             so.emit('allData', allData);
         }
     }
+    
+    function getData_noSave() {
+        //console.log("In getData_before");
+        
+        //instead of calling apprentice, grab data from room; 
+        //obj rec data is stored in the room, not apprentice 
+        //room.compStrokes
+        //!need array of recognizedObjects
+        
+        var userLines;
+        var computerLines;
+        
+        apprentice.getUserLines(function (err, item) {
+            if (err) {
+                console.log(err);
+
+            } else {
+                userLines = item;
+                afterUserLines();
+            }
+        });
+        
+        function afterUserLines() {
+            apprentice.getComputerLines(function (err, item) {
+                if (err) {
+                    console.log(err);
+                } else {
+                    computerLines = item;
+                    emitData();
+                }
+            });
+        }
+        
+        function emitData() {
+            var allData = {
+                userLines: userLines,
+                computerLines: computerLines, 
+                labeledGroups: apprentice.labeledGroups 
+            };
+            
+            so.emit('statsData', allData);
+        }
+}
 
     function onNewStrokeReceived(data) {
         var d = JSON.parse(data);
@@ -256,7 +335,23 @@ io.on('connection', function (so) {
         room.addStroke(stroke, so);
     }
 
-    function vote(isUp, score) {
+
+    function vote(isUp) {
+        //var value = JSON.parse(isUP); 
+        console.log("In server. Votin up. Room = ");
+        if (isUp==1) {
+            if (room.upVoteCount == null)
+                room.upVoteCount = 1;
+            else
+                room.upVoteCount = room.upVoteCount + 1; 
+        }
+        else {
+            if (room.downVoteCount == null)
+                room.downVoteCount = 1;
+            else
+                room.downVoteCount = room.downVoteCount + 1; 
+        }
+        /*
         var vote = isUp ? 1 : 0;
         if (isUp)
             totalScore += 10;
@@ -265,8 +360,8 @@ io.on('connection', function (so) {
         //totalScore = isUp ? (totalScore + 10) : (totalScore - 10); 
         if(room)
             room.broadcast('updateScore', JSON.stringify(totalScore));
-
-        apprentice.voteSync(vote);
+        */
+        apprentice.voteSync(isUp);
     }
 
     function onClear() {
@@ -297,7 +392,10 @@ io.on('connection', function (so) {
     so.on('onOpen', onOpen);
     so.on('SetCreativty', function (level) {
         var d = JSON.parse(level);
-        apprentice.setCreativityLevel(d);
+	if(room)
+	    room.setCreativity(d);
+	else
+            apprentice.setCreativityLevel(d);
     });
     so.on('setRoomType', function (type) {
         var t = JSON.parse(type);
@@ -315,6 +413,7 @@ io.on('connection', function (so) {
     so.on('clear', onClear);
     so.on('submit', submitResult);
     so.on('vote', vote);
+    so.on('getData_noSave', getData_noSave);
 });
 //===================== Finished Socket io server Set Up ====================\\
 
