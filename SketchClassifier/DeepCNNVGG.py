@@ -35,7 +35,7 @@ from lasagne.layers import DropoutLayer
 # This is just some way of getting the MNIST dataset from an online location
 # and loading it into numpy arrays. It doesn't involve Lasagne at all.
 
-num_categories = 100
+num_categories = 250
 batch_size = 50
 
 categories = ['airplane',    'alarm clock',    'angel',    'ant',    'apple',    'arm',    'armchair',    'ashtray',    'axe',    'backpack',    'banana',    'barn',    'baseball bat',    'basket',    'bathtub',    'bear (animal)',    'bed',    'bee',    'beer-mug',    'bell',    'bench',    'bicycle',    'binoculars',    'blimp',    'book',    'bookshelf',    'boomerang',    'bottle opener',    'bowl',    'brain',    'bread',    'bridge',    'bulldozer',    'bus',    'bush',    'butterfly',    'cabinet',    'cactus',    'cake',    'calculator',    'camel',    'camera',    'candle',    'cannon',    'canoe',    'car (sedan)',    'carrot',    'castle',    'cat',    'cell phone',    'chair',    'chandelier',    'church',    'cigarette',    'cloud',    'comb',    'computer monitor',    'computer-mouse',    'couch',    'cow',    'crab',    'crane (machine)',    'crocodile',    'crown',    'cup',    'diamond',    'dog',    'dolphin',    'donut',    'door',    'door handle',    'dragon',    'duck',    'ear',    'elephant',    'envelope',    'eye',    'eyeglasses',    'face',    'fan',    'feather',    'fire hydrant',    'fish',    'flashlight',    'floor lamp',    'flower with stem',    'flying bird',    'flying saucer',    'foot',    'fork',    'frog',    'frying-pan',    'giraffe',    'grapes',    'grenade',    'guitar',    'hamburger',    'hammer',    'hand',    'harp',    'hat',    'head',    'head-phones',    'hedgehog',    'helicopter',    'helmet',    'horse',    'hot air balloon',    'hot-dog',    'hourglass',    'house',    'human-skeleton',    'ice-cream-cone',    'ipod',    'kangaroo',    'key',    'keyboard',    'knife',    'ladder',    'laptop',    'leaf',    'lightbulb',    'lighter',    'lion',    'lobster',    'loudspeaker',    'mailbox',    'megaphone',    'mermaid',    'microphone',    'microscope',    'monkey',    'moon',    'mosquito',    'motorbike',    'mouse (animal)',    'mouth',    'mug',    'mushroom',    'nose',    'octopus',    'owl',    'palm tree',    'panda',    'paper clip',    'parachute',    'parking meter',    'parrot',    'pear',    'pen',    'penguin',    'person sitting',    'person walking',    'piano',    'pickup truck',    'pig',    'pigeon',    'pineapple',    'pipe (for smoking)',    'pizza',    'potted plant',    'power outlet',    'present',    'pretzel',    'pumpkin',    'purse',    'rabbit',    'race car',    'radio',    'rainbow',    'revolver',    'rifle',    'rollerblades',    'rooster',    'sailboat',    'santa claus',    'satellite',    'satellite dish',    'saxophone',    'scissors',    'scorpion',    'screwdriver',    'sea turtle',    'seagull',    'shark',    'sheep',    'ship',    'shoe',    'shovel',    'skateboard',    'skull',    'skyscraper',    'snail',    'snake',    'snowboard',    'snowman',    'socks',    'space shuttle',    'speed-boat',    'spider',    'sponge bob',    'spoon',    'squirrel',    'standing bird',    'stapler',    'strawberry',    'streetlight',    'submarine',    'suitcase',    'sun',    'suv',    'swan',    'sword',    'syringe',    't-shirt',    'table',    'tablelamp',    'teacup',    'teapot',    'teddy-bear',    'telephone',    'tennis-racket',    'tent',    'tiger',    'tire',    'toilet',    'tomato',    'tooth',    'toothbrush',    'tractor',    'traffic light',    'train',    'tree',    'trombone',    'trousers',    'truck',    'trumpet',    'tv',    'umbrella',    'van',    'vase',    'violin',    'walkie talkie',    'wheel',    'wheelbarrow',    'windmill',    'wine-bottle',    'wineglass',    'wrist-watch',    'zebra']
@@ -730,7 +730,7 @@ class SketchNet:
         #network = build_cnn(input_var)
         network = build_model_VGG_CNN_S(input_var)
         #load weights from file
-        param = np.load('model_VGGCNN.npz')
+        param = np.load('model_VGG_S_0901.npz')#'model_VGG_S_3_channels.npz')#.npz')#('model_VGGCNN.npz')#('model_VGGCNN_All250.npz')
         lasagne.layers.set_all_param_values(network, param['arr_0'])
         print("loaded paramters from saved model")
         self.load = True
@@ -790,10 +790,10 @@ s.run()
 #    diretories = []
 #    for (dirpath, dirnames, filenames) in walk(filepath):
 #        dirnames.sort()
-#	for dirname in dirnames:
+#        for dirname in dirnames:
 #            for (dirpath2, dirnames2, filenames2) in walk(filepath + dirname):
-#                if count > 200:
-#                    break
+#                #if count > 200:
+#                #    break
 #                rand1 = randint(0, 40)
 #                rand2 = randint(0, 40)
 #                result1 = testStart.recognize_Image(filepath + dirname + '/' + filenames2[rand1])
@@ -805,4 +805,4 @@ s.run()
 #                    corr = corr + 1
 #                accuracy = corr / count
 #                print(accuracy)
-#        break
+#            #break
